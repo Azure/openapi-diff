@@ -10,7 +10,12 @@
     <TargetFrameworks>netcoreapp1.0</TargetFrameworks>
     <TargetFramework>netcoreapp1.0</TargetFramework>
     <AssemblyName>OpenApiDiff</AssemblyName>
-    <PackageTags>Microsoft AutoRest Generator</PackageTags>
+    <PackageTags>Microsoft OpenApiDiff</PackageTags>
+    <Version>0.1.0</Version>
+    <Authors>Microsoft Corporation</Authors>
+    <Company>Microsoft Corporation</Company>
+    <Description>Compares two openapi documents for breaking change detection</Description>
+    <PackageProjectUrl>https://github.com/Azure/openapi-diff</PackageProjectUrl>
   </PropertyGroup>
  
   <ItemGroup>
