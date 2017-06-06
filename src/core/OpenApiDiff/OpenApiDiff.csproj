@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <TargetFrameworks>netcoreapp1.0</TargetFrameworks>
     <TargetFramework>netcoreapp1.0</TargetFramework>
-    <AssemblyName>AutoRest</AssemblyName>
+    <AssemblyName>OpenApiDiff</AssemblyName>
     <PackageTags>Microsoft AutoRest Generator</PackageTags>
   </PropertyGroup>
  
@@ -22,8 +22,8 @@
     <PackageReference Include="Microsoft.Rest.ClientRuntime.Azure" Version="3.3.4" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)src/core/AutoRest.Core/AutoRest.Core.csproj" />
     <ProjectReference Include="$(SolutionDir)src/modeler/AutoRest.Swagger/AutoRest.Swagger.csproj" />
+    <ProjectReference Include="..\OpenApiDiff.Core\OpenApiDiff.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">

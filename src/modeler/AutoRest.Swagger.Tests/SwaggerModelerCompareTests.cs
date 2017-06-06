@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using Xunit;
 using System.Collections.Generic;
-using AutoRest.Core.Logging;
+using OpenApiDiff.Core.Logging;
 using System.Reflection;
 
 namespace AutoRest.Swagger.Tests

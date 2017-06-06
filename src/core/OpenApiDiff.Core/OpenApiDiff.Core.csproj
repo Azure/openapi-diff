@@ -6,7 +6,7 @@
   <Import Project="$(common)package-fallback.proj" />
   
   <PropertyGroup>
-    <AssemblyName>AutoRest.Core</AssemblyName>
+    <AssemblyName>OpenApiDiff.Core</AssemblyName>
     <PackageTags>Microsoft AutoRest</PackageTags>
   </PropertyGroup>
   

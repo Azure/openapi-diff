@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using YamlDotNet.RepresentationModel;
 
-namespace AutoRest.Core.Logging
+namespace OpenApiDiff.Core.Logging
 {
     /// <summary>
     /// Represents a path into an object.

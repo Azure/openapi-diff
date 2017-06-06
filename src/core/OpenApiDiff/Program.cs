@@ -5,7 +5,7 @@ using AutoRest.Swagger;
 using System;
 using System.IO;
 
-namespace AutoRest
+namespace OpenApiDiff
 {
     internal class Program
     {

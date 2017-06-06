@@ -1,4 +1,4 @@
-﻿using AutoRest.Core.Logging;
+﻿using OpenApiDiff.Core.Logging;
 using System;
 using System.Collections.Generic;
 

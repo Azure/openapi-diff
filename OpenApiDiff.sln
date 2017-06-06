@@ -1,10 +1,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.0
+VisualStudioVersion = 15.0.26217.2
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoRest", "src\core\AutoRest\AutoRest.csproj", "{BE85FEB6-C008-4202-8799-CFA9D292D0B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenApiDiff", "src\core\OpenApiDiff\OpenApiDiff.csproj", "{BE85FEB6-C008-4202-8799-CFA9D292D0B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoRest.Core", "src\core\AutoRest.Core\AutoRest.Core.csproj", "{79280E61-2D1D-4864-90A2-7B675F82E9D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenApiDiff.Core", "src\core\OpenApiDiff.Core\OpenApiDiff.Core.csproj", "{79280E61-2D1D-4864-90A2-7B675F82E9D8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{F7D005C7-81E6-4840-BCDE-228210FB9204}"
 EndProject

@@ -3,7 +3,7 @@
 
 using YamlDotNet.RepresentationModel;
 
-namespace AutoRest.Core.Logging
+namespace OpenApiDiff.Core.Logging
 {
     public abstract class ObjectPathPart
     {

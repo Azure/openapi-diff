@@ -10,8 +10,8 @@
   </PropertyGroup>
  
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)src/core/AutoRest.Core/AutoRest.Core.csproj" />
     <ProjectReference Include="$(SolutionDir)src/modeler/AutoRest.Swagger/AutoRest.Swagger.csproj" />
+    <ProjectReference Include="..\..\core\OpenApiDiff.Core\OpenApiDiff.Core.csproj" />
   </ItemGroup>
  
   <ProjectExtensions><VisualStudio><UserProperties Resource_4Swagger_4swagger-x-ms-discriminator-value_1json__JSONSchema="..\..\..\..\..\schema\swagger-extensions.json" /></VisualStudio></ProjectExtensions>
