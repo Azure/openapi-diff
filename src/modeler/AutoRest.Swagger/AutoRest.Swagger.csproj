@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), common/common.proj ))/common/common.proj"  />
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), common/common.proj ))/common/common.proj" />
   <Import Project="$(common)common-package-references.proj" />
   <Import Project="$(common)project-library.proj" />
   <Import Project="$(common)package-info.proj" />
@@ -13,6 +13,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)src/core/AutoRest.Core/AutoRest.Core.csproj" />
+    <ProjectReference Include="..\..\core\OpenApiDiff.Core\OpenApiDiff.Core.csproj" />
   </ItemGroup>
 </Project>

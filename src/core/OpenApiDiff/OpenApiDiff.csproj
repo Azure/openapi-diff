@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), common/common.proj ))/common/common.proj" />
+  <Import Project="$(common)common-package-references.proj" />
+  <Import Project="$(common)package-info.proj" />
+  <Import Project="$(common)package-fallback.proj" />
+ 
+  <PropertyGroup>
+    <RuntimeIdentifiers>win7-x64</RuntimeIdentifiers> 
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>netcoreapp1.0</TargetFrameworks>
+    <TargetFramework>netcoreapp1.0</TargetFramework>
+    <AssemblyName>OpenApiDiff</AssemblyName>
+    <PackageTags>Microsoft OpenApiDiff</PackageTags>
+    <Version>0.1.0</Version>
+    <Authors>Microsoft Corporation</Authors>
+    <Company>Microsoft Corporation</Company>
+    <Description>Compares two openapi documents for breaking change detection</Description>
+    <PackageProjectUrl>https://github.com/Azure/openapi-diff</PackageProjectUrl>
+  </PropertyGroup>
+ 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="2.0.0-rc2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="2.0.0-rc2" />
+    <PackageReference Include="Microsoft.Composition" Version="1.0.30" />
+    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.4" />
+    <PackageReference Include="Microsoft.Rest.ClientRuntime.Azure" Version="3.3.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)src/modeler/AutoRest.Swagger/AutoRest.Swagger.csproj" />
+    <ProjectReference Include="..\OpenApiDiff.Core\OpenApiDiff.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
