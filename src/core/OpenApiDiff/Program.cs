@@ -20,7 +20,6 @@ namespace OpenApiDiff
                 Console.WriteLine(message.Message);
             }
 
-            Console.ReadKey();
             return 0;
         }
     }
