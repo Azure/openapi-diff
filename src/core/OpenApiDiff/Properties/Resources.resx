@@ -163,8 +163,7 @@ $example$
 $examples-end$</value>
   </data>
   <data name="HelpTextTemplate" xml:space="preserve">
-    <value>Microsoft (R) AutoRest $version$
-Copyright (C) Microsoft Corporation. All rights reserved.
+    <value>Copyright (C) Microsoft Corporation. All rights reserved.
 
 Usage: $syntax$
 
@@ -172,16 +171,6 @@ Parameters:
 $parameters-start$
   -$parameter$: $parameter-desc$
 $parameters-end$
-
-Code Generators:
-$generators-start$
-  -$generator$: $generator-desc$ 
-  Parameters:
- $generator-parameters-start$
-  -$generator-parameters-name$: $generator-parameters-desc$
- $generator-parameters-end$
-
-$generators-end$
 
 Examples:
 $examples-start$

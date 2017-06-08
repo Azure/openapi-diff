@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AutoRest.Core.Properties {
+namespace OpenApiDiff.Core.Properties {
     using System;
     using System.Reflection;
     
@@ -40,7 +40,7 @@ namespace AutoRest.Core.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AutoRest.Core.Properties.Resources", typeof(Resources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenApiDiff.Core.Properties.Resources", typeof(Resources).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -290,6 +290,15 @@ namespace AutoRest.Core.Properties {
         public static string InitializingModeler {
             get {
                 return ResourceManager.GetString("InitializingModeler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input parameter &apos;{0}&apos; must be a valid file path..
+        /// </summary>
+        public static string InputMustBeAFile {
+            get {
+                return ResourceManager.GetString("InputMustBeAFile", resourceCulture);
             }
         }
         
