@@ -16,6 +16,7 @@
     <Company>Microsoft Corporation</Company>
     <Description>Compares two openapi documents for breaking change detection</Description>
     <PackageProjectUrl>https://github.com/Azure/openapi-diff</PackageProjectUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
  
   <ItemGroup>

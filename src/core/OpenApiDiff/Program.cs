@@ -3,6 +3,8 @@
 
 using AutoRest.Swagger;
 using System;
+using OpenApiDiff.Core;
+using OpenApiDiff.Properties;
 using System.IO;
 
 namespace OpenApiDiff
@@ -11,13 +13,32 @@ namespace OpenApiDiff
     {
         private static int Main(string[] args)
         {
-            var modeler = new SwaggerModeler();
+            Settings settings = Settings.GetInstance(args);
 
-            var swaggerPrev = File.ReadAllText(args[0]);
-            var swaggerNew = File.ReadAllText(args[1]);
-            foreach (var message in modeler.Compare(swaggerPrev, swaggerNew))
+            if (settings.ShowHelp)
             {
-                Console.WriteLine(message.Message);
+                Console.WriteLine(HelpGenerator.Generate(Resources.HelpTextTemplate, settings));
+                return 0;
+            }
+
+            try
+            {
+                settings.Validate();
+            } catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return 1;
+            }
+
+            SwaggerModeler modeler = new SwaggerModeler();
+
+            string swaggerPrev = File.ReadAllText(settings.OldSpec);
+            string swaggerNew = File.ReadAllText(settings.NewSpec);
+
+            var messages = modeler.Compare(swaggerPrev, swaggerNew);
+            foreach (var msg in messages)
+            {
+                Console.WriteLine(settings.JsonValidationMessages ? msg.GetValidationMessagesAsJson() : msg.ToString());
             }
 
             return 0;

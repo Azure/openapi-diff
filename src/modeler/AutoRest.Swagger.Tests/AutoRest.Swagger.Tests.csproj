@@ -14,5 +14,5 @@
     <ProjectReference Include="..\..\core\OpenApiDiff.Core\OpenApiDiff.Core.csproj" />
   </ItemGroup>
  
-  <ProjectExtensions><VisualStudio><UserProperties Resource_4Swagger_4swagger-x-ms-discriminator-value_1json__JSONSchema="..\..\..\..\..\schema\swagger-extensions.json" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 </Project>
