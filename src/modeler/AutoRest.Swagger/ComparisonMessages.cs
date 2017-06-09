@@ -18,7 +18,7 @@
 
         public static MessageTemplate RemovedClientParameter = new MessageTemplate { Id = 1007, Message = "The new version is missing a client parameter that was found in the old version. Was '{0}' removed or renamed?" };
 
-        public static MessageTemplate ModifiedOperationId = new MessageTemplate { Id = 1008, Message = "The operation id has been changed. This will impact generated code." };
+        public static MessageTemplate ModifiedOperationId = new MessageTemplate { Id = 1008, Message = "The operation id has been changed from '{0}' to '{1}'. This will impact generated code." };
 
         public static MessageTemplate RemovedRequiredParameter = new MessageTemplate { Id = 1009, Message = "The required parameter '{0}' was removed." };
 

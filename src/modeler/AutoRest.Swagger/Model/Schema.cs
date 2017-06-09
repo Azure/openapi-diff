@@ -91,16 +91,24 @@ namespace AutoRest.Swagger.Model
             {
                 thisSchema = FindReferencedSchema(thisSchema.Reference, (context.CurrentRoot as ServiceDefinition).Definitions);
                 referenced += 1;
+                if (thisSchema == null)
+                {
+                    return context.Messages;
+                }
             }
             if (!string.IsNullOrWhiteSpace(priorSchema.Reference))
             {
                 priorSchema = FindReferencedSchema(priorSchema.Reference, (context.PreviousRoot as ServiceDefinition).Definitions);
                 referenced += 1;
+                if (priorSchema == null)
+                {
+                    return context.Messages;
+                }
             }
 
             // Avoid doing the comparison repeatedly by marking for which direction it's already been done.
 
-            if (context.Direction != DataDirection.None && referenced == 2)
+            if ((context.Direction != DataDirection.None && referenced == 2))
             {
                 // Comparing two referenced schemas in the context of a parameter or response -- did we already do this?
 
@@ -111,7 +119,7 @@ namespace AutoRest.Swagger.Model
                 _compareDirection |= context.Direction;
             }
 
-            if (thisSchema != this || priorSchema != previous)
+            if ((thisSchema != this || priorSchema != previous))
             {
                 return thisSchema.Compare(context, priorSchema);
             }
@@ -206,7 +214,7 @@ namespace AutoRest.Swagger.Model
                 foreach (var def in Properties.Keys)
                 {
                     Schema model = null;
-                    if (priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(def, out model) && Required.Contains(def))
+                    if (priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(def, out model) && (Required != null && Required.Contains(def)))
                     {
                         context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty1, def);
                     }
