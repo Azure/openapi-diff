@@ -13,4 +13,4 @@ install:
     sudo apt-get install dotnet-dev-1.0.0-rc4-004769 -y
 script:
   - npm install
-  - gulp
+  - ./node_modules/gulp/bin/gulp.js
