@@ -12,6 +12,7 @@ install:
     sudo apt-get update
     sudo apt-get install dotnet-dev-1.0.0-rc4-004769 -y
 script:
+  - npm install
   - dotnet clean openapi-diff/OpenApiDiff.sln
   - dotnet restore openapi-diff/OpenApiDiff.sln
   - dotnet build -c debug openapi-diff/OpenApiDiff.sln /nologo /clp:NoSummary
