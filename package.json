@@ -27,7 +27,11 @@
     "mocha": "^3.2.0",
     "should": "5.2.0",
     "@types/mocha": "^2.2.40",
-    "@types/should": "^8.1.30"
+    "@types/should": "^8.1.30",
+    "gulp": "3.9.1",
+    "gulp-run": "1.7.1",
+    "gulp-clean": "0.3.2",
+    "gulp-mocha": "4.3.1"
   },
   "homepage": "https://github.com/Azure/openapi-diff",
   "repository": {
