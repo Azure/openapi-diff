@@ -1,0 +1,47 @@
+{
+  "name": "oad",
+  "version": "0.1.0",
+  "author": {
+    "name": "Microsoft Corporation",
+    "email": "azsdkteam@microsoft.com",
+    "url": "https://github.com/Azure/openapi-diff"
+  },
+  "description": "OpenApi Specification Diff tool",
+  "license": "MIT",
+  "dependencies": {
+    "autorest": "^1.1.0",
+    "json-pointer": "^0.6.0",
+    "js-yaml": "^3.8.2",
+    "moment": "^2.14.1",
+    "request": "^2.79.0",
+    "winston": "^2.3.0",
+    "yargs": "^6.6.0",
+    "glob": "^5.0.14",
+    "uuid": "^3.0.1",
+    "recursive-readdir": "^2.1.0",
+    "swagger-parser": "^3.4.1",
+    "swagger-tools": "^0.10.1"
+  },
+  "devDependencies": {
+    "jshint": "2.9.4",
+    "mocha": "^3.2.0",
+    "should": "5.2.0",
+    "@types/mocha": "^2.2.40",
+    "@types/should": "^8.1.30"
+  },
+  "homepage": "https://github.com/Azure/openapi-diff",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Azure/openapi-diff.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Azure/openapi-diff/issues"
+  },
+  "main": "./index.js",
+  "bin": { "oad": "./cli.js" },
+  "scripts": {
+    "jshint": "jshint index.js --reporter=jslint",
+    "test": "npm -s run-script jshint && mocha -t 50000",
+    "postinstall": "node ./lib/scripts/postInstall.js"
+  }
+}
