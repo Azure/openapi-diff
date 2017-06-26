@@ -41,6 +41,14 @@
   "bugs": {
     "url": "https://github.com/Azure/openapi-diff/issues"
   },
+  "files": [
+    "lib",
+    "index.js",
+    "cli.js",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
   "main": "./index.js",
   "bin": { "oad": "./cli.js" },
   "scripts": {
