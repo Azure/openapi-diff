@@ -219,3 +219,4 @@ src/next-gen
 
 package/nuget/tools
 package/chocolatey/*.nupkg
+lib/dlls/**/*
