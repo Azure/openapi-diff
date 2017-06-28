@@ -49,7 +49,7 @@ namespace AutoRest.Swagger
 
         public override string ToString()
         {
-            return $"id = {Id}, message = {Message}, type = {Severity}";
+            return $"id = {Id}, type = {Severity}, message = {Message}";
         }
     }
 }

@@ -60,6 +60,12 @@ namespace OpenApiDiff.Core
         [SettingsAlias("JsonValidationMessages")]
         public bool JsonValidationMessages { get; set; }
 
+        /// <summary>
+        /// If true, then checking should be strict, in other words, breaking changes are errors intead of warnings.
+        /// </summary>
+        [SettingsInfo("If true, then checking should be strict, in other words, breaking changes are errors intead of warnings.", false)]
+        [SettingsAlias("Strict")]
+        public bool Strict { get; set; }
         #endregion
 
         /// <summary>
