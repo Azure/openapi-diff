@@ -53,7 +53,6 @@
   "bin": { "oad": "./cli.js" },
   "scripts": {
     "jshint": "jshint index.js --reporter=jslint",
-    "test": "npm -s run-script jshint && mocha -t 50000",
-    "postinstall": "node ./lib/scripts/postInstall.js"
+    "test": "npm -s run-script jshint && mocha -t 50000"
   }
 }
