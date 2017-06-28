@@ -1,4 +1,5 @@
-﻿using OpenApiDiff.Core.Logging;
+﻿using OpenApiDiff.Core;
+using OpenApiDiff.Core.Logging;
 using System;
 using System.Collections.Generic;
 
@@ -14,10 +15,15 @@ namespace AutoRest.Swagger
         /// Initializes a top level context for comparisons
         /// </summary>
         /// <param name="oldRoot"></param>
-        public ComparisonContext(object oldRoot, object newRoot)
+        public ComparisonContext(object oldRoot, object newRoot, Settings settings = null)
         {
             this.CurrentRoot = newRoot;
             this.PreviousRoot = oldRoot;
+            
+            if (settings != null)
+            {
+                this.Strict = settings.Strict;
+            }
         }
 
         /// <summary>
