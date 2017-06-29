@@ -185,10 +185,14 @@ namespace AutoRest.Swagger.Model
             }
         }
 
+        /// <summary>
+        /// Comapres properties of the previous Schema to detect removed / added required properties
+        /// </summary>
+        /// <param name="context">Comaprision Context</param>
+        /// <param name="priorSchema">Schema of the old model</param>
         private void CompareProperties(ComparisonContext context, Schema priorSchema)
         {
-            // Were any properties removed?
-
+            // Case: Were any properties removed?
             if (priorSchema.Properties != null)
             {
                 foreach (var def in priorSchema.Properties)
@@ -196,7 +200,7 @@ namespace AutoRest.Swagger.Model
                     Schema model = null;
                     if (Properties == null || !Properties.TryGetValue(def.Key, out model))
                     {
-                        context.LogBreakingChange(ComparisonMessages.RemovedProperty1, def.Key);
+                        context.LogBreakingChange(ComparisonMessages.RemovedProperty, def.Key);
                     }
                     else
                     {
@@ -207,16 +211,16 @@ namespace AutoRest.Swagger.Model
                 }
             }
 
-            // Were any required properties added?
-
+            // Case: Were any required properties added?
             if (Properties != null)
             {
                 foreach (var def in Properties.Keys)
                 {
                     Schema model = null;
-                    if (priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(def, out model) && (Required != null && Required.Contains(def)))
+                    if (priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(def, out model) &&
+                        (Required != null && Required.Contains(def)))
                     {
-                        context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty1, def);
+                        context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, def);
                     }
                 }
             }

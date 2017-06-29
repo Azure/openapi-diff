@@ -52,4 +52,17 @@ namespace AutoRest.Swagger
             return $"id = {Id}, type = {Severity}, message = {Message}";
         }
     }
+
+    public class CustomComparer : IEqualityComparer<ComparisonMessage>
+    {
+        public bool Equals(ComparisonMessage message1, ComparisonMessage message2)
+        {
+            return message1.Message == message2.Message;
+        }
+
+        public int GetHashCode(ComparisonMessage obj)
+        {
+            return obj.Message.GetHashCode();
+        }
+    }
 }
