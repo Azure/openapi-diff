@@ -35,8 +35,8 @@ namespace AutoRest.Swagger.Tests
             var modeler = new SwaggerModeler();
             var baseDir = Directory.GetParent(typeof(SwaggerModelerCompareTests).GetTypeInfo().Assembly.Location.ToString()).ToString();
             return modeler.Compare(
-                File.ReadAllText(Path.Combine(baseDir, "Resource", "Swagger", "Comparison", "Original", input)),
-                File.ReadAllText(Path.Combine(baseDir, "Resource", "Swagger", "Comparison", "Modified", input))
+                File.ReadAllText(Path.Combine(baseDir, "Resource", "Swagger", "old", input)),
+                File.ReadAllText(Path.Combine(baseDir, "Resource", "Swagger", "new", input))
             );
         }
 
@@ -585,6 +585,13 @@ namespace AutoRest.Swagger.Tests
             Assert.Equal(15, relaxed.Length);
             Assert.Equal(8, breaking.Length);
             Assert.Equal(13, info.Length);
+        }
+
+        [Fact]
+        public void RemovedPropertyTest()
+        {
+            var messages = CompareSwagger("removed_property.json").ToArray();
+            Assert.Equal(true, messages.Where(m => m.Id == ComparisonMessages.RemovedProperty.Id).Any());
         }
     }
 }

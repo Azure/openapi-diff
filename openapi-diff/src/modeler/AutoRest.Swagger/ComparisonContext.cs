@@ -2,6 +2,7 @@
 using OpenApiDiff.Core.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AutoRest.Swagger
 {
@@ -65,7 +66,15 @@ namespace AutoRest.Swagger
             _messages.Add(new ComparisonMessage(template, new FileObjectPath(File, Path), Strict ? Category.Error : Category.Warning, formatArguments));
         }
 
-        public IEnumerable<ComparisonMessage> Messages { get { return _messages; } }
+        public IEnumerable<ComparisonMessage> Messages
+        {
+            get
+            {
+                // TODO: How to eliminate duplicate messages
+                // Issue: https://github.com/Azure/openapi-diff/issues/48
+                return _messages; //.Distinct(new CustomComparer());
+            }
+        }
 
         private IList<ComparisonMessage> _messages = new List<ComparisonMessage>();
     }

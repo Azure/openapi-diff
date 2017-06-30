@@ -2,6 +2,16 @@
 {
     public static class ComparisonMessages
     {
+        public static MessageTemplate RemovedProperty = new MessageTemplate {
+            Id = 1033,
+            Message = "The new version is missing a property found in the old version. Was '{0}' renamed or removed?"
+        };
+
+        public static MessageTemplate AddedRequiredProperty = new MessageTemplate {
+            Id = 1034,
+            Message = "The new version has a new required property '{0}' not found in the old version."
+        };
+
         public static MessageTemplate VersionsReversed = new MessageTemplate { Id = 1000, Message = "The new version has a lower value than the old: {0} -> {1}" };
 
         public static MessageTemplate NoVersionChange = new MessageTemplate { Id = 1001, Message = "The versions have not changed." };
@@ -56,8 +66,6 @@
         public static MessageTemplate DifferentDiscriminator = new MessageTemplate { Id = 1030, Message = "The new version has a different discriminator than the previous one" };
         public static MessageTemplate DifferentExtends = new MessageTemplate { Id = 1031, Message = "The new version has a different 'extends' property than the previous one" };
         public static MessageTemplate DifferentAllOf = new MessageTemplate { Id = 1032, Message = "The new version has a different 'allOf' property than the previous one" };
-        public static MessageTemplate RemovedProperty1 = new MessageTemplate { Id = 1033, Message = "The new version is missing a property found in the old version. Was '{0}' renamed or removed?" };
-        public static MessageTemplate AddedRequiredProperty1 = new MessageTemplate { Id = 1034, Message = "The new version has a new required property '{0}' not found in the old version" };
 
         public static MessageTemplate RemovedOperation = new MessageTemplate { Id = 1035, Message = "The new version is misting an operation that was found in the old version. Was '{0}' removed or restructured?" };
 

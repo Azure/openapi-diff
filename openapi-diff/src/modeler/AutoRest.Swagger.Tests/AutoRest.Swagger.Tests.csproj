@@ -8,6 +8,61 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp1.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Resource\Swagger\new\misc_checks_01.json" />
+    <Content Include="Resource\Swagger\new\misc_checks_02.json" />
+    <Content Include="Resource\Swagger\new\operation_check_01.json" />
+    <Content Include="Resource\Swagger\new\operation_check_02.json" />
+    <Content Include="Resource\Swagger\new\operation_check_03.json" />
+    <Content Include="Resource\Swagger\new\operation_check_04.json" />
+    <Content Include="Resource\Swagger\new\operation_check_05.json" />
+    <Content Include="Resource\Swagger\new\param_check_01.json" />
+    <Content Include="Resource\Swagger\new\response_check_01.json" />
+    <Content Include="Resource\Swagger\new\version_check_01.json" />
+    <Content Include="Resource\Swagger\new\version_check_02.json" />
+    <Content Include="Resource\Swagger\new\version_check_03.json" />
+    <Content Include="Resource\Swagger\new\version_check_04.json" />
+    <Content Include="Resource\Swagger\new\misc_checks_01.json" />
+    <Content Include="Resource\Swagger\new\misc_checks_02.json" />
+    <Content Include="Resource\Swagger\new\operation_check_01.json" />
+    <Content Include="Resource\Swagger\new\operation_check_02.json" />
+    <Content Include="Resource\Swagger\new\operation_check_03.json" />
+    <Content Include="Resource\Swagger\new\operation_check_04.json" />
+    <Content Include="Resource\Swagger\new\operation_check_05.json" />
+    <Content Include="Resource\Swagger\new\param_check_01.json" />
+    <Content Include="Resource\Swagger\new\response_check_01.json" />
+    <Content Include="Resource\Swagger\new\version_check_01.json" />
+    <Content Include="Resource\Swagger\new\version_check_02.json" />
+    <Content Include="Resource\Swagger\new\version_check_03.json" />
+    <Content Include="Resource\Swagger\new\version_check_04.json" />
+    <Content Include="Resource\Swagger\old\misc_checks_01.json" />
+    <Content Include="Resource\Swagger\old\misc_checks_02.json" />
+    <Content Include="Resource\Swagger\old\operation_check_01.json" />
+    <Content Include="Resource\Swagger\old\operation_check_02.json" />
+    <Content Include="Resource\Swagger\old\operation_check_03.json" />
+    <Content Include="Resource\Swagger\old\operation_check_04.json" />
+    <Content Include="Resource\Swagger\old\operation_check_05.json" />
+    <Content Include="Resource\Swagger\old\param_check_01.json" />
+    <Content Include="Resource\Swagger\old\response_check_01.json" />
+    <Content Include="Resource\Swagger\old\version_check_01.json" />
+    <Content Include="Resource\Swagger\old\version_check_02.json" />
+    <Content Include="Resource\Swagger\old\version_check_03.json" />
+    <Content Include="Resource\Swagger\old\version_check_04.json" />
+    <Content Include="Resource\Swagger\old\misc_checks_01.json" />
+    <Content Include="Resource\Swagger\old\misc_checks_02.json" />
+    <Content Include="Resource\Swagger\old\operation_check_01.json" />
+    <Content Include="Resource\Swagger\old\operation_check_02.json" />
+    <Content Include="Resource\Swagger\old\operation_check_03.json" />
+    <Content Include="Resource\Swagger\old\operation_check_04.json" />
+    <Content Include="Resource\Swagger\old\operation_check_05.json" />
+    <Content Include="Resource\Swagger\old\param_check_01.json" />
+    <Content Include="Resource\Swagger\old\response_check_01.json" />
+    <Content Include="Resource\Swagger\old\version_check_01.json" />
+    <Content Include="Resource\Swagger\old\version_check_02.json" />
+    <Content Include="Resource\Swagger\old\version_check_03.json" />
+    <Content Include="Resource\Swagger\old\version_check_04.json" />
+  </ItemGroup>
  
   <ItemGroup>
     <ProjectReference Include="$(SolutionDir)src/modeler/AutoRest.Swagger/AutoRest.Swagger.csproj" />
