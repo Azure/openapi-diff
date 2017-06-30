@@ -122,7 +122,9 @@ namespace AutoRest.Swagger.Model
 
             if (prior.Type.HasValue != Type.HasValue || (Type.HasValue && prior.Type.Value != Type.Value))
             {
-                context.LogBreakingChange(ComparisonMessages.TypeChanged);
+                context.LogBreakingChange(ComparisonMessages.TypeChanged, 
+                    Type.HasValue ? Type.Value.ToString().ToLower() : "",
+                    prior.Type.HasValue ? prior.Type.Value.ToString().ToLower() : "");
             }
 
             // What about the formats?

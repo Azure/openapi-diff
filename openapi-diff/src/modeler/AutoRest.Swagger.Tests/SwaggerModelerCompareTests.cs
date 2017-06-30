@@ -105,13 +105,13 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void PropertyTypeChanged()
         {
-            var messages = CompareSwagger("misc_checks_01.json").ToArray();
+            var messages = CompareSwagger("type_changed.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.TypeChanged.Id);
             Assert.NotEmpty(missing);
             var error = missing.Where(err => err.Path.JsonReference.StartsWith("#/definitions/")).FirstOrDefault();
             Assert.NotNull(error);
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/definitions/Database/properties/b", error.Path.JsonReference);
+            Assert.Equal("#/definitions/Database/properties/a", error.Path.JsonReference);
         }
 
         /// <summary>

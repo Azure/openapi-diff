@@ -2,49 +2,64 @@
 {
     public static class ComparisonMessages
     {
-        public static MessageTemplate RemovedProperty = new MessageTemplate {
+        public static MessageTemplate RemovedProperty = new MessageTemplate
+        {
             Id = 1033,
             Message = "The new version is missing a property found in the old version. Was '{0}' renamed or removed?"
         };
 
-        public static MessageTemplate AddedRequiredProperty = new MessageTemplate {
+        public static MessageTemplate AddedRequiredProperty = new MessageTemplate
+        {
             Id = 1034,
             Message = "The new version has a new required property '{0}' not found in the old version."
         };
 
-        public static MessageTemplate RemovedDefinition = new MessageTemplate {
+        public static MessageTemplate RemovedDefinition = new MessageTemplate
+        {
             Id = 1006,
             Message = "The new version is missing a definition that was found in the old version. Was '{0}' removed or renamed?"
         };
 
-        public static MessageTemplate RemovedPath = new MessageTemplate {
+        public static MessageTemplate RemovedPath = new MessageTemplate
+        {
             Id = 1005,
             Message = "The new version is missing a path that was found in the old version. Was path '{0}' removed or restructured?"
         };
 
-        public static MessageTemplate RemovedOperation = new MessageTemplate {
+        public static MessageTemplate RemovedOperation = new MessageTemplate
+        {
             Id = 1035,
             Message = "The new version is missing an operation that was found in the old version. Was operationId '{0}' removed or restructured?"
         };
 
-        public static MessageTemplate ModifiedOperationId = new MessageTemplate {
+        public static MessageTemplate ModifiedOperationId = new MessageTemplate
+        {
             Id = 1008,
             Message = "The operation id has been changed from '{0}' to '{1}'. This will impact generated code."
         };
 
-        public static MessageTemplate RemovedRequiredParameter = new MessageTemplate {
+        public static MessageTemplate RemovedRequiredParameter = new MessageTemplate
+        {
             Id = 1009,
             Message = "The required parameter '{0}' was removed in the new version."
         };
 
-        public static MessageTemplate AddingRequiredParameter = new MessageTemplate {
+        public static MessageTemplate AddingRequiredParameter = new MessageTemplate
+        {
             Id = 1010,
             Message = "The required parameter '{0}' was added in the new version."
         };
 
-        public static MessageTemplate RequiredStatusChange = new MessageTemplate {
+        public static MessageTemplate RequiredStatusChange = new MessageTemplate
+        {
             Id = 1025,
             Message = "The 'required' status changed from the old version('{0}') to the new version('{1}')."
+        };
+
+        public static MessageTemplate TypeChanged = new MessageTemplate
+        {
+            Id = 1026,
+            Message = "The new version has a different type '{0}' than the previous one '{1}'."
         };
 
         public static MessageTemplate VersionsReversed = new MessageTemplate { Id = 1000, Message = "The new version has a lower value than the old: {0} -> {1}" };
@@ -82,8 +97,6 @@
 
         public static MessageTemplate ConstraintIsStronger = new MessageTemplate { Id = 1024, Message = "The new version has a more constraining '{0}' value than the previous one" };
 
-
-        public static MessageTemplate TypeChanged = new MessageTemplate { Id = 1026, Message = "The new version has a different type than the previous one" };
         public static MessageTemplate DefaultValueChanged = new MessageTemplate { Id = 1027, Message = "The new version has a different default value than the previous one" };
         public static MessageTemplate ArrayCollectionFormatChanged = new MessageTemplate { Id = 1028, Message = "The new version has a different array collection format than the previous one" };
 
