@@ -70,7 +70,9 @@ namespace AutoRest.Swagger
         {
             get
             {
-                return _messages.Distinct(new CustomComparer());
+                // TODO: How to eliminate duplicate messages
+                // Issue: https://github.com/Azure/openapi-diff/issues/48
+                return _messages; //.Distinct(new CustomComparer());
             }
         }
 
