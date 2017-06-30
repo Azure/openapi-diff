@@ -93,7 +93,7 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void DefinitionRemoved()
         {
-            var messages = CompareSwagger("misc_checks_01.json").ToArray();
+            var messages = CompareSwagger("removed_definition.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedDefinition.Id);
             Assert.NotEmpty(missing);
             Assert.Equal(Category.Error, missing.First().Severity);

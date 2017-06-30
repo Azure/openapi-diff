@@ -12,6 +12,11 @@
             Message = "The new version has a new required property '{0}' not found in the old version."
         };
 
+        public static MessageTemplate RemovedDefinition = new MessageTemplate {
+            Id = 1006,
+            Message = "The new version is missing a definition that was found in the old version. Was '{0}' removed or renamed?"
+        };
+
         public static MessageTemplate VersionsReversed = new MessageTemplate { Id = 1000, Message = "The new version has a lower value than the old: {0} -> {1}" };
 
         public static MessageTemplate NoVersionChange = new MessageTemplate { Id = 1001, Message = "The versions have not changed." };
@@ -23,8 +28,6 @@
         public static MessageTemplate ResponseBodyFormatNowSupported = new MessageTemplate { Id = 1004, Message = "The old version did not support '{0}' as a response body format." };
 
         public static MessageTemplate RemovedPath = new MessageTemplate { Id = 1005, Message = "The new version is missing a path that was found in the old version. Was '{0}' removed or restructured?" };
-
-        public static MessageTemplate RemovedDefinition = new MessageTemplate { Id = 1006, Message = "The new version is missing a definition that was found in the old version. Was '{0}' removed or renamed?" };
 
         public static MessageTemplate RemovedClientParameter = new MessageTemplate { Id = 1007, Message = "The new version is missing a client parameter that was found in the old version. Was '{0}' removed or renamed?" };
 

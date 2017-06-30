@@ -18,6 +18,7 @@
     <Content Include="Resource\Swagger\new\operation_check_04.json" />
     <Content Include="Resource\Swagger\new\operation_check_05.json" />
     <Content Include="Resource\Swagger\new\param_check_01.json" />
+    <Content Include="Resource\Swagger\new\removed_definition.json" />
     <Content Include="Resource\Swagger\new\response_check_01.json" />
     <Content Include="Resource\Swagger\new\version_check_01.json" />
     <Content Include="Resource\Swagger\new\version_check_02.json" />
@@ -36,6 +37,7 @@
     <Content Include="Resource\Swagger\new\version_check_02.json" />
     <Content Include="Resource\Swagger\new\version_check_03.json" />
     <Content Include="Resource\Swagger\new\version_check_04.json" />
+    <Content Include="Resource\Swagger\old\removed_definition.json" />
     <Content Include="Resource\Swagger\old\misc_checks_01.json" />
     <Content Include="Resource\Swagger\old\misc_checks_02.json" />
     <Content Include="Resource\Swagger\old\operation_check_01.json" />
