@@ -591,7 +591,7 @@ namespace AutoRest.Swagger.Tests
         public void RemovedPropertyTest()
         {
             var messages = CompareSwagger("removed_property.json").ToArray();
-            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.RemovedProperty.Id).Count);
+            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.RemovedProperty.Id).Count());
         }
     }
 }
