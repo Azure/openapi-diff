@@ -139,6 +139,11 @@ namespace AutoRest.Swagger.Model
             return context.Messages;
         }
 
+        /// <summary>
+        /// Check that no parameters were removed or reordered, and compare them if it's not the case
+        /// </summary>
+        /// <param name="context">Comaprision Context</param>
+        /// <param name="priorOperation">Operation object of old swagger</param>
         private void CheckParameters(ComparisonContext context, Operation priorOperation)
         {
             // Check that no parameters were removed or reordered, and compare them if it's not the case.
@@ -146,8 +151,10 @@ namespace AutoRest.Swagger.Model
             var currentRoot = (context.CurrentRoot as ServiceDefinition);
             var previousRoot = (context.PreviousRoot as ServiceDefinition);
 
-            foreach (var oldParam in priorOperation.Parameters
-                .Select(p => string.IsNullOrEmpty(p.Reference) ? p : FindReferencedParameter(p.Reference, previousRoot.Parameters)))
+            var priorOperationParameters = priorOperation.Parameters.Select(param => 
+                                             string.IsNullOrWhiteSpace(param.Reference) ? 
+                                             param : FindReferencedParameter(param.Reference, previousRoot.Parameters));
+            foreach (var oldParam in priorOperationParameters)
             {
                 SwaggerParameter newParam = FindParameter(oldParam.Name, Parameters, currentRoot.Parameters);
 
@@ -159,6 +166,7 @@ namespace AutoRest.Swagger.Model
                 }
                 else if (oldParam.IsRequired)
                 {
+                    // Removed required parameter
                     context.LogBreakingChange(ComparisonMessages.RemovedRequiredParameter, oldParam.Name);
                 }
 
@@ -166,10 +174,11 @@ namespace AutoRest.Swagger.Model
             }
 
             // Check that no required parameters were added.
-
-            foreach (var newParam in Parameters
-                .Select(p => string.IsNullOrEmpty(p.Reference) ? p : FindReferencedParameter(p.Reference, currentRoot.Parameters))
-                .Where(p => p != null && p.IsRequired))
+            var requiredParamters = Parameters.Select(param => 
+                                        string.IsNullOrWhiteSpace(param.Reference) ? 
+                                        param : FindReferencedParameter(param.Reference, currentRoot.Parameters))
+                                        .Where(p => p != null && p.IsRequired);
+            foreach (var newParam in requiredParamters)
             {
                 if (newParam == null) continue;
 
@@ -177,6 +186,7 @@ namespace AutoRest.Swagger.Model
 
                 if (oldParam == null)
                 {
+                    // Did not find required parameter in the old swagger i.e required parameter is added
                     context.PushProperty(newParam.Name);
                     context.LogBreakingChange(ComparisonMessages.AddingRequiredParameter, newParam.Name);
                     context.Pop();
@@ -184,6 +194,13 @@ namespace AutoRest.Swagger.Model
             }
         }
 
+        /// <summary>
+        /// Finds give parameter name in the list of operation parameters or global parameters
+        /// </summary>
+        /// <param name="name">name of the parameter to search</param>
+        /// <param name="operationParameters">list of operation parameters to search</param>
+        /// <param name="clientParameters">Dictionary of global paramters to search</param>
+        /// <returns>Swagger Parameter if found; otherwise null</returns>
         private SwaggerParameter FindParameter(string name, IEnumerable<SwaggerParameter> operationParameters, IDictionary<string, SwaggerParameter> clientParameters)
         {
             if (Parameters != null)
@@ -211,7 +228,12 @@ namespace AutoRest.Swagger.Model
             return response;
         }
 
-
+        /// <summary>
+        /// Finds referenced parameter
+        /// </summary>
+        /// <param name="reference">Name of the reference to search for</param>
+        /// <param name="parameters">Dictionary of parameters for the search</param>
+        /// <returns>Swagger Parameter if found; otherwise null</returns>
         private static SwaggerParameter FindReferencedParameter(string reference, IDictionary<string, SwaggerParameter> parameters)
         {
             if (reference != null && reference.StartsWith("#", StringComparison.Ordinal))

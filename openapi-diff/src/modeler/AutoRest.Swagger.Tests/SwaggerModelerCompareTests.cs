@@ -195,12 +195,10 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void RequiredParameterRemoved()
         {
-            var messages = CompareSwagger("operation_check_01.json").ToArray();
+            var messages = CompareSwagger("required_parameter.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedRequiredParameter.Id);
-            Assert.NotEmpty(missing);
-            var error = missing.First();
-            Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/paths/~1api~1Parameters~1{a}/get/a", error.Path.JsonReference);
+            Assert.Equal(1, missing.Count());
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.ReadablePath == "#/paths/api/Parameters/{a}/get/f"));
         }
 
         /// <summary>
@@ -224,12 +222,10 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void RequiredParameterAdded()
         {
-            var messages = CompareSwagger("operation_check_01.json").ToArray();
+            var messages = CompareSwagger("required_parameter.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.AddingRequiredParameter.Id);
-            Assert.NotEmpty(missing);
-            var error = missing.First();
-            Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/paths/~1api~1Parameters~1{a}/get/c", error.Path.JsonReference);
+            Assert.Equal(1, missing.Count());
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.ReadablePath == "#/paths/api/Parameters/{a}/get/g"));
         }
 
         /// <summary>
@@ -266,12 +262,10 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void ParameterStatusLess()
         {
-            var messages = CompareSwagger("operation_check_01.json").ToArray();
+            var messages = CompareSwagger("required_parameter.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.RequiredStatusChange.Id);
-            Assert.NotEmpty(missing);
-            var error = missing.First();
-            Assert.Equal(Category.Info, error.Severity);
-            Assert.Equal("#/paths/~1api~1Parameters~1{a}/get/d", error.Path.JsonReference);
+            Assert.Equal(1, missing.Count());
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.ReadablePath == "#/paths/api/Parameters/{a}/get/e"));
         }
 
         /// <summary>
