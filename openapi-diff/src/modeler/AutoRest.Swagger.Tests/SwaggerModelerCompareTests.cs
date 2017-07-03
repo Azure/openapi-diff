@@ -182,12 +182,11 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void OperationIdChanged()
         {
-            var messages = CompareSwagger("operation_check_01.json").ToArray();
+            var messages = CompareSwagger("changed_operation_id.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.ModifiedOperationId.Id);
-            Assert.NotEmpty(missing);
-            var error = missing.First();
-            Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/paths/~1api~1Operations/post", error.Path.JsonReference);
+            Assert.Equal(2, missing.Count());
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.ReadablePath == "#/paths/api/Paths/get"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.ReadablePath == "#/paths/api/Operations/post"));
         }
 
         /// <summary>

@@ -27,6 +27,11 @@
             Message = "The new version is missing an operation that was found in the old version. Was operationId '{0}' removed or restructured?"
         };
 
+        public static MessageTemplate ModifiedOperationId = new MessageTemplate {
+            Id = 1008,
+            Message = "The operation id has been changed from '{0}' to '{1}'. This will impact generated code."
+        };
+
         public static MessageTemplate VersionsReversed = new MessageTemplate { Id = 1000, Message = "The new version has a lower value than the old: {0} -> {1}" };
 
         public static MessageTemplate NoVersionChange = new MessageTemplate { Id = 1001, Message = "The versions have not changed." };
@@ -38,8 +43,6 @@
         public static MessageTemplate ResponseBodyFormatNowSupported = new MessageTemplate { Id = 1004, Message = "The old version did not support '{0}' as a response body format." };
 
         public static MessageTemplate RemovedClientParameter = new MessageTemplate { Id = 1007, Message = "The new version is missing a client parameter that was found in the old version. Was '{0}' removed or renamed?" };
-
-        public static MessageTemplate ModifiedOperationId = new MessageTemplate { Id = 1008, Message = "The operation id has been changed from '{0}' to '{1}'. This will impact generated code." };
 
         public static MessageTemplate RemovedRequiredParameter = new MessageTemplate { Id = 1009, Message = "The required parameter '{0}' was removed." };
 

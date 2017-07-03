@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="Resource\Swagger\new\changed_operation_id.json" />
     <Content Include="Resource\Swagger\new\misc_checks_01.json" />
     <Content Include="Resource\Swagger\new\misc_checks_02.json" />
     <Content Include="Resource\Swagger\new\operation_check_01.json" />
@@ -39,6 +40,7 @@
     <Content Include="Resource\Swagger\new\version_check_02.json" />
     <Content Include="Resource\Swagger\new\version_check_03.json" />
     <Content Include="Resource\Swagger\new\version_check_04.json" />
+    <Content Include="Resource\Swagger\old\changed_operation_id.json" />
     <Content Include="Resource\Swagger\old\removed_operation.json" />
     <Content Include="Resource\Swagger\old\removed_path.json" />
     <Content Include="Resource\Swagger\old\removed_definition.json" />
