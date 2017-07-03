@@ -191,6 +191,7 @@ namespace AutoRest.Swagger.Model
                 Dictionary<string, Operation> operations = null;
                 if (!newPaths.TryGetValue(p, out operations))
                 {
+                    // Entrie path was removeed
                     context.LogBreakingChange(ComparisonMessages.RemovedPath, path);
                 }
                 else
@@ -201,6 +202,7 @@ namespace AutoRest.Swagger.Model
                         Operation newOperation = null;
                         if (!operations.TryGetValue(previousOperation.Key, out newOperation))
                         {
+                            // Operation was removed from the path
                             context.LogBreakingChange(ComparisonMessages.RemovedOperation, previousOperation.Value.OperationId);
                         }
                     }
@@ -220,6 +222,7 @@ namespace AutoRest.Swagger.Model
             }
             context.Pop();
 
+            // Check for custom paths : x-ms-paths
             newPaths = RemovePathVariables(CustomPaths);
 
             context.PushProperty("x-ms-paths");
