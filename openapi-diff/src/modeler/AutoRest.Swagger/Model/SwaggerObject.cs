@@ -109,11 +109,11 @@ namespace AutoRest.Swagger.Model
                 {
                     if (IsRequired && !prior.IsRequired)
                     {
-                        context.LogBreakingChange(ComparisonMessages.RequiredStatusChange);
+                        context.LogBreakingChange(ComparisonMessages.RequiredStatusChange, prior.IsRequired, IsRequired);
                     }
                     else
                     {
-                        context.LogInfo(ComparisonMessages.RequiredStatusChange);
+                        context.LogInfo(ComparisonMessages.RequiredStatusChange, prior.IsRequired, IsRequired);
                     }
                 }
             }

@@ -32,6 +32,21 @@
             Message = "The operation id has been changed from '{0}' to '{1}'. This will impact generated code."
         };
 
+        public static MessageTemplate RemovedRequiredParameter = new MessageTemplate {
+            Id = 1009,
+            Message = "The required parameter '{0}' was removed in the new version."
+        };
+
+        public static MessageTemplate AddingRequiredParameter = new MessageTemplate {
+            Id = 1010,
+            Message = "The required parameter '{0}' was added in the new version."
+        };
+
+        public static MessageTemplate RequiredStatusChange = new MessageTemplate {
+            Id = 1025,
+            Message = "The 'required' status changed from the old version('{0}') to the new version('{1}')."
+        };
+
         public static MessageTemplate VersionsReversed = new MessageTemplate { Id = 1000, Message = "The new version has a lower value than the old: {0} -> {1}" };
 
         public static MessageTemplate NoVersionChange = new MessageTemplate { Id = 1001, Message = "The versions have not changed." };
@@ -43,10 +58,6 @@
         public static MessageTemplate ResponseBodyFormatNowSupported = new MessageTemplate { Id = 1004, Message = "The old version did not support '{0}' as a response body format." };
 
         public static MessageTemplate RemovedClientParameter = new MessageTemplate { Id = 1007, Message = "The new version is missing a client parameter that was found in the old version. Was '{0}' removed or renamed?" };
-
-        public static MessageTemplate RemovedRequiredParameter = new MessageTemplate { Id = 1009, Message = "The required parameter '{0}' was removed." };
-
-        public static MessageTemplate AddingRequiredParameter = new MessageTemplate { Id = 1010, Message = "The new version adds a required parameter '{0}'." };
 
         public static MessageTemplate AddingResponseCode = new MessageTemplate { Id = 1011, Message = "The new version adds a response code '{0}'" };
 
@@ -71,7 +82,7 @@
 
         public static MessageTemplate ConstraintIsStronger = new MessageTemplate { Id = 1024, Message = "The new version has a more constraining '{0}' value than the previous one" };
 
-        public static MessageTemplate RequiredStatusChange = new MessageTemplate { Id = 1025, Message = "The 'required' status changed from the old version to the new" };
+
         public static MessageTemplate TypeChanged = new MessageTemplate { Id = 1026, Message = "The new version has a different type than the previous one" };
         public static MessageTemplate DefaultValueChanged = new MessageTemplate { Id = 1027, Message = "The new version has a different default value than the previous one" };
         public static MessageTemplate ArrayCollectionFormatChanged = new MessageTemplate { Id = 1028, Message = "The new version has a different array collection format than the previous one" };
