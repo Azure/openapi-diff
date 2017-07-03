@@ -17,6 +17,16 @@
             Message = "The new version is missing a definition that was found in the old version. Was '{0}' removed or renamed?"
         };
 
+        public static MessageTemplate RemovedPath = new MessageTemplate {
+            Id = 1005,
+            Message = "The new version is missing a path that was found in the old version. Was path '{0}' removed or restructured?"
+        };
+
+        public static MessageTemplate RemovedOperation = new MessageTemplate {
+            Id = 1035,
+            Message = "The new version is missing an operation that was found in the old version. Was operationId '{0}' removed or restructured?"
+        };
+
         public static MessageTemplate VersionsReversed = new MessageTemplate { Id = 1000, Message = "The new version has a lower value than the old: {0} -> {1}" };
 
         public static MessageTemplate NoVersionChange = new MessageTemplate { Id = 1001, Message = "The versions have not changed." };
@@ -26,8 +36,6 @@
         public static MessageTemplate RequestBodyFormatNoLongerSupported = new MessageTemplate { Id = 1003, Message = "The new version does not support '{0}' as a request body format." };
 
         public static MessageTemplate ResponseBodyFormatNowSupported = new MessageTemplate { Id = 1004, Message = "The old version did not support '{0}' as a response body format." };
-
-        public static MessageTemplate RemovedPath = new MessageTemplate { Id = 1005, Message = "The new version is missing a path that was found in the old version. Was '{0}' removed or restructured?" };
 
         public static MessageTemplate RemovedClientParameter = new MessageTemplate { Id = 1007, Message = "The new version is missing a client parameter that was found in the old version. Was '{0}' removed or renamed?" };
 
@@ -69,8 +77,6 @@
         public static MessageTemplate DifferentDiscriminator = new MessageTemplate { Id = 1030, Message = "The new version has a different discriminator than the previous one" };
         public static MessageTemplate DifferentExtends = new MessageTemplate { Id = 1031, Message = "The new version has a different 'extends' property than the previous one" };
         public static MessageTemplate DifferentAllOf = new MessageTemplate { Id = 1032, Message = "The new version has a different 'allOf' property than the previous one" };
-
-        public static MessageTemplate RemovedOperation = new MessageTemplate { Id = 1035, Message = "The new version is misting an operation that was found in the old version. Was '{0}' removed or restructured?" };
 
         public static MessageTemplate ConstraintChanged = new MessageTemplate { Id = 1036, Message = "The new version has a different '{0}' value than the previous one" };
 

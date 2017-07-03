@@ -157,12 +157,11 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void PathRemoved()
         {
-            var messages = CompareSwagger("operation_check_01.json").ToArray();
+            var messages = CompareSwagger("removed_path.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedPath.Id);
-            Assert.NotEmpty(missing);
-            var error = missing.First();
-            Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/paths/~1api~1Paths", error.Path.JsonReference);
+            Assert.Equal(2, missing.Count());
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.ReadablePath == "#/paths/api/Parameters/{a}"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.ReadablePath == "#/paths/api/Responses"));
         }
 
         /// <summary>
@@ -171,12 +170,10 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void OperationRemoved()
         { 
-            var messages = CompareSwagger("operation_check_01.json").ToArray();
+            var messages = CompareSwagger("removed_operation.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedOperation.Id);
-            Assert.NotEmpty(missing);
-            var error = missing.First();
-            Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/paths/~1api~1Operations", error.Path.JsonReference);
+            Assert.Equal(1, missing.Count());
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.ReadablePath == "#/paths/api/Operations"));
         }
 
         /// <summary>
