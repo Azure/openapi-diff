@@ -62,6 +62,18 @@
             Message = "The new version has a different type '{0}' than the previous one '{1}'."
         };
 
+        public static MessageTemplate RemovedEnumValue = new MessageTemplate {
+            Id = 1019,
+            Message = "The new version is removing enum value(s) '{0}' from the old version."
+        };
+
+        public static MessageTemplate AddedEnumValue = new MessageTemplate {
+            Id = 1020,
+            Message = "The new version is adding enum value(s) '{0}' from the old version."
+        };
+
+        public static MessageTemplate ConstraintIsStronger = new MessageTemplate { Id = 1024, Message = "The new version has a more constraining '{0}' value than the previous one" };
+
         public static MessageTemplate VersionsReversed = new MessageTemplate { Id = 1000, Message = "The new version has a lower value than the old: {0} -> {1}" };
 
         public static MessageTemplate NoVersionChange = new MessageTemplate { Id = 1001, Message = "The versions have not changed." };
@@ -88,14 +100,10 @@
 
         public static MessageTemplate ReferenceRedirection = new MessageTemplate { Id = 1017, Message = "The '$ref' property points to different models in the old and new versions" };
 
-        public static MessageTemplate RemovedEnumValues = new MessageTemplate { Id = 1018, Message = "The new version does not specify a list of valid values" };
-        public static MessageTemplate RemovedEnumValue = new MessageTemplate { Id = 1019, Message = "The new version does not include some of the previous values in its list of valid values" };
-        public static MessageTemplate AddedEnumValues = new MessageTemplate { Id = 1020, Message = "The new version places constraints on valid values while the old doesn't" };
+
         public static MessageTemplate AddedAdditionalProperties = new MessageTemplate { Id = 1021, Message = "The new version adds an 'additionalProperties' element" };
         public static MessageTemplate RemovedAdditionalProperties = new MessageTemplate { Id = 1022, Message = "The new version removes the 'additionalProperties' element" };
         public static MessageTemplate TypeFormatChanged = new MessageTemplate { Id = 1023, Message = "The new version has a different format than the previous one" };
-
-        public static MessageTemplate ConstraintIsStronger = new MessageTemplate { Id = 1024, Message = "The new version has a more constraining '{0}' value than the previous one" };
 
         public static MessageTemplate DefaultValueChanged = new MessageTemplate { Id = 1027, Message = "The new version has a different default value than the previous one" };
         public static MessageTemplate ArrayCollectionFormatChanged = new MessageTemplate { Id = 1028, Message = "The new version has a different array collection format than the previous one" };

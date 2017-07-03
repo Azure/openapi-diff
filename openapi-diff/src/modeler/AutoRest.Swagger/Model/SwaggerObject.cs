@@ -161,12 +161,12 @@ namespace AutoRest.Swagger.Model
 
             if (!relaxes && !constrains)
             {
-                // 1. Look for removed elements (constraining). 
+                // It was enum and it is still enum i.e check for addition/removal
 
+                // 1. Look for removed elements (constraining).
                 constrains = prior.Enum.Any(str => !this.Enum.Contains(str));
 
                 // 2. Look for added elements (relaxing).
-
                 relaxes = this.Enum.Any(str => !prior.Enum.Contains(str));
             }
 
@@ -174,7 +174,11 @@ namespace AutoRest.Swagger.Model
             {
                 if (constrains)
                 {
-                    context.LogBreakingChange(relaxes ? ComparisonMessages.ConstraintChanged : ComparisonMessages.ConstraintIsStronger, "enum");
+                    IEnumerable<string> removedEnums = prior.Enum.Except(this.Enum);
+                    if (removedEnums.Any())
+                    {
+                        context.LogBreakingChange(ComparisonMessages.RemovedEnumValue, String.Join(", ", removedEnums.ToList()));
+                    }
                     return;
                 }
             }
@@ -182,7 +186,11 @@ namespace AutoRest.Swagger.Model
             {
                 if (relaxes)
                 {
-                    context.LogBreakingChange(constrains ? ComparisonMessages.ConstraintChanged : ComparisonMessages.ConstraintIsWeaker, "enum");
+                    IEnumerable<string> addedEnums = this.Enum.Except(prior.Enum);
+                    if (addedEnums.Any())
+                    {
+                        context.LogBreakingChange(ComparisonMessages.AddedEnumValue, String.Join(", ", addedEnums.ToList()));
+                    }
                     return;
                 }
             }
