@@ -190,6 +190,22 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
+        /// Verifies that if you added new paths / operations, it's caught.
+        /// </summary>
+        [Fact]
+        public void AddedPaths()
+        {
+            var messages = CompareSwagger("added_path.json").ToArray();
+            var missing = messages.Where(m => m.Id == ComparisonMessages.AddedPath.Id);
+            Assert.Equal(1, missing.Count());
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.Path.ReadablePath == "#/paths/api/Paths"));
+
+            missing = messages.Where(m => m.Id == ComparisonMessages.AddedOperation.Id);
+            Assert.Equal(1, missing.Count());
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.Path.ReadablePath == "#/paths/api/Operations/post"));
+        }
+
+        /// <summary>
         /// Verifies that if you remove a required parameter, it's found.
         /// </summary>
         [Fact]

@@ -26,6 +26,12 @@
             Message = "The new version is missing a path that was found in the old version. Was path '{0}' removed or restructured?"
         };
 
+        public static MessageTemplate AddedPath = new MessageTemplate
+        {
+            Id = 1038,
+            Message = "The new version is adding a path that was not found in the old version."
+        };
+
         public static MessageTemplate RemovedOperation = new MessageTemplate
         {
             Id = 1035,
@@ -36,6 +42,12 @@
         {
             Id = 1008,
             Message = "The operation id has been changed from '{0}' to '{1}'. This will impact generated code."
+        };
+
+        public static MessageTemplate AddedOperation = new MessageTemplate
+        {
+            Id = 1039,
+            Message = "The new version is adding an operation that was not found in the old version."
         };
 
         public static MessageTemplate RemovedRequiredParameter = new MessageTemplate

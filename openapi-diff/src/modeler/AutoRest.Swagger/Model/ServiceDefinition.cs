@@ -196,6 +196,11 @@ namespace AutoRest.Swagger.Model
                 }
                 else
                 {
+                    // 1. Remove this path from the current list to find the added paths
+                    newPaths.Remove(p);
+                    Dictionary<string, Operation> copyOfOperations = operations.ToDictionary(e => e.Key, e => e.Value);
+
+                    // 2. look for operation match inside this path
                     Dictionary<string, Operation> previousOperations = previousDefinition.Paths[path];
                     foreach (var previousOperation in previousOperations)
                     {
@@ -205,8 +210,21 @@ namespace AutoRest.Swagger.Model
                             // Operation was removed from the path
                             context.LogBreakingChange(ComparisonMessages.RemovedOperation, previousOperation.Value.OperationId);
                         }
+                        else
+                        {
+                            copyOfOperations.Remove(previousOperation.Key);
+                        }
                     }
 
+                    // Look for added operations
+                    foreach (var copyOfOperation in copyOfOperations)
+                    {
+                        context.PushProperty(copyOfOperation.Key);
+                        context.LogInfo(ComparisonMessages.AddedOperation);
+                        context.Pop();
+                    }
+
+                    // Compare operations
                     foreach (var operation in operations)
                     {
                         Operation previousOperation = null;
@@ -220,10 +238,20 @@ namespace AutoRest.Swagger.Model
                 }
                 context.Pop();
             }
+
+            // Check wether any new paths are being added
+            foreach (var path in newPaths.Keys)
+            {
+                context.PushProperty(path);
+                context.LogInfo(ComparisonMessages.AddedPath);
+                context.Pop();
+            }
+
+
             context.Pop();
 
             // Check for custom paths : x-ms-paths
-            newPaths = RemovePathVariables(CustomPaths);
+            var newCustomPaths = RemovePathVariables(CustomPaths);
 
             context.PushProperty("x-ms-paths");
             foreach (var path in previousDefinition.CustomPaths.Keys)
@@ -233,12 +261,17 @@ namespace AutoRest.Swagger.Model
                 context.PushProperty(path);
 
                 Dictionary<string, Operation> operations = null;
-                if (!newPaths.TryGetValue(p, out operations))
+                if (!newCustomPaths.TryGetValue(p, out operations))
                 {
                     context.LogBreakingChange(ComparisonMessages.RemovedPath, path);
                 }
                 else
                 {
+                    // 1. Remove this custom path from the current list to find the added paths
+                    newCustomPaths.Remove(p);
+                    Dictionary<string, Operation> copyOfOperations = operations.ToDictionary(e => e.Key, e => e.Value);
+
+                    // 2. look for operation match inside this path
                     Dictionary<string, Operation> previousOperations = previousDefinition.CustomPaths[path];
                     foreach (var previousOperation in previousOperations)
                     {
@@ -249,6 +282,15 @@ namespace AutoRest.Swagger.Model
                         }
                     }
 
+                    // Look for added operations
+                    foreach (var copyOfOperation in copyOfOperations)
+                    {
+                        context.PushProperty(copyOfOperation.Key);
+                        context.LogInfo(ComparisonMessages.AddedOperation);
+                        context.Pop();
+                    }
+
+                    // Compare operations
                     foreach (var operation in operations)
                     {
                         Operation previousOperation = null;
@@ -262,6 +304,15 @@ namespace AutoRest.Swagger.Model
                 }
                 context.Pop();
             }
+
+            // Check wether any new paths are being added into x-ms-paths
+            foreach (var path in newCustomPaths.Keys)
+            {
+                context.PushProperty(path);
+                context.LogInfo(ComparisonMessages.AddedPath);
+                context.Pop();
+            }
+
             context.Pop();
 
             ReferenceTrackSchemas(this);
