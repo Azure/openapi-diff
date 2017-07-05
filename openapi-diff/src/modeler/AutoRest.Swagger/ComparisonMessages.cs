@@ -62,17 +62,29 @@
             Message = "The new version has a different type '{0}' than the previous one '{1}'."
         };
 
-        public static MessageTemplate RemovedEnumValue = new MessageTemplate {
+        public static MessageTemplate RemovedEnumValue = new MessageTemplate
+        {
             Id = 1019,
             Message = "The new version is removing enum value(s) '{0}' from the old version."
         };
 
-        public static MessageTemplate AddedEnumValue = new MessageTemplate {
+        public static MessageTemplate AddedEnumValue = new MessageTemplate
+        {
             Id = 1020,
             Message = "The new version is adding enum value(s) '{0}' from the old version."
         };
 
-        public static MessageTemplate ConstraintIsStronger = new MessageTemplate { Id = 1024, Message = "The new version has a more constraining '{0}' value than the previous one" };
+        public static MessageTemplate ConstraintIsStronger = new MessageTemplate
+        {
+            Id = 1024,
+            Message = "The new version has a more constraining '{0}' value than the previous one"
+        };
+
+        public static MessageTemplate ConstraintIsWeaker = new MessageTemplate
+        {
+            Id = 1037,
+            Message = "The new version has a less constraining '{0}' value than the previous one"
+        };
 
         public static MessageTemplate VersionsReversed = new MessageTemplate { Id = 1000, Message = "The new version has a lower value than the old: {0} -> {1}" };
 
@@ -114,7 +126,5 @@
         public static MessageTemplate DifferentAllOf = new MessageTemplate { Id = 1032, Message = "The new version has a different 'allOf' property than the previous one" };
 
         public static MessageTemplate ConstraintChanged = new MessageTemplate { Id = 1036, Message = "The new version has a different '{0}' value than the previous one" };
-
-        public static MessageTemplate ConstraintIsWeaker = new MessageTemplate { Id = 1037, Message = "The new version has a less constraining '{0}' value than the previous one" };
     }
 }

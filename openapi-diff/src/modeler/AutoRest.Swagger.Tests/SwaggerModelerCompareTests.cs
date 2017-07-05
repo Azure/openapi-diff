@@ -531,7 +531,7 @@ namespace AutoRest.Swagger.Tests
             var breaking = messages.Where(m => m.Id == ComparisonMessages.ConstraintChanged.Id && m.Severity == Category.Error).ToArray();
             var info = messages.Where(m => m.Id > 0 && m.Severity == Category.Info).ToArray();
 
-            Assert.Equal(13, stricter.Length);
+            Assert.Equal(11, stricter.Length);
             Assert.Equal(8, breaking.Length);
             Assert.Equal(15, info.Length);
         }
@@ -572,7 +572,7 @@ namespace AutoRest.Swagger.Tests
             var breaking = messages.Where(m => m.Id == ComparisonMessages.ConstraintChanged.Id && m.Severity == Category.Error).ToArray();
             var info = messages.Where(m => m.Id > 0 && m.Severity == Category.Info).ToArray();
 
-            Assert.Equal(15, relaxed.Length);
+            Assert.Equal(13, relaxed.Length);
             Assert.Equal(8, breaking.Length);
             Assert.Equal(13, info.Length);
         }
