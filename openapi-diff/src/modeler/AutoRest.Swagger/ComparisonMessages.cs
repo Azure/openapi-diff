@@ -2,49 +2,88 @@
 {
     public static class ComparisonMessages
     {
-        public static MessageTemplate RemovedProperty = new MessageTemplate {
+        public static MessageTemplate RemovedProperty = new MessageTemplate
+        {
             Id = 1033,
             Message = "The new version is missing a property found in the old version. Was '{0}' renamed or removed?"
         };
 
-        public static MessageTemplate AddedRequiredProperty = new MessageTemplate {
+        public static MessageTemplate AddedRequiredProperty = new MessageTemplate
+        {
             Id = 1034,
             Message = "The new version has a new required property '{0}' not found in the old version."
         };
 
-        public static MessageTemplate RemovedDefinition = new MessageTemplate {
+        public static MessageTemplate RemovedDefinition = new MessageTemplate
+        {
             Id = 1006,
             Message = "The new version is missing a definition that was found in the old version. Was '{0}' removed or renamed?"
         };
 
-        public static MessageTemplate RemovedPath = new MessageTemplate {
+        public static MessageTemplate RemovedPath = new MessageTemplate
+        {
             Id = 1005,
             Message = "The new version is missing a path that was found in the old version. Was path '{0}' removed or restructured?"
         };
 
-        public static MessageTemplate RemovedOperation = new MessageTemplate {
+        public static MessageTemplate RemovedOperation = new MessageTemplate
+        {
             Id = 1035,
             Message = "The new version is missing an operation that was found in the old version. Was operationId '{0}' removed or restructured?"
         };
 
-        public static MessageTemplate ModifiedOperationId = new MessageTemplate {
+        public static MessageTemplate ModifiedOperationId = new MessageTemplate
+        {
             Id = 1008,
             Message = "The operation id has been changed from '{0}' to '{1}'. This will impact generated code."
         };
 
-        public static MessageTemplate RemovedRequiredParameter = new MessageTemplate {
+        public static MessageTemplate RemovedRequiredParameter = new MessageTemplate
+        {
             Id = 1009,
             Message = "The required parameter '{0}' was removed in the new version."
         };
 
-        public static MessageTemplate AddingRequiredParameter = new MessageTemplate {
+        public static MessageTemplate AddingRequiredParameter = new MessageTemplate
+        {
             Id = 1010,
             Message = "The required parameter '{0}' was added in the new version."
         };
 
-        public static MessageTemplate RequiredStatusChange = new MessageTemplate {
+        public static MessageTemplate RequiredStatusChange = new MessageTemplate
+        {
             Id = 1025,
             Message = "The 'required' status changed from the old version('{0}') to the new version('{1}')."
+        };
+
+        public static MessageTemplate TypeChanged = new MessageTemplate
+        {
+            Id = 1026,
+            Message = "The new version has a different type '{0}' than the previous one '{1}'."
+        };
+
+        public static MessageTemplate RemovedEnumValue = new MessageTemplate
+        {
+            Id = 1019,
+            Message = "The new version is removing enum value(s) '{0}' from the old version."
+        };
+
+        public static MessageTemplate AddedEnumValue = new MessageTemplate
+        {
+            Id = 1020,
+            Message = "The new version is adding enum value(s) '{0}' from the old version."
+        };
+
+        public static MessageTemplate ConstraintIsStronger = new MessageTemplate
+        {
+            Id = 1024,
+            Message = "The new version has a more constraining '{0}' value than the previous one"
+        };
+
+        public static MessageTemplate ConstraintIsWeaker = new MessageTemplate
+        {
+            Id = 1037,
+            Message = "The new version has a less constraining '{0}' value than the previous one"
         };
 
         public static MessageTemplate VersionsReversed = new MessageTemplate { Id = 1000, Message = "The new version has a lower value than the old: {0} -> {1}" };
@@ -73,17 +112,11 @@
 
         public static MessageTemplate ReferenceRedirection = new MessageTemplate { Id = 1017, Message = "The '$ref' property points to different models in the old and new versions" };
 
-        public static MessageTemplate RemovedEnumValues = new MessageTemplate { Id = 1018, Message = "The new version does not specify a list of valid values" };
-        public static MessageTemplate RemovedEnumValue = new MessageTemplate { Id = 1019, Message = "The new version does not include some of the previous values in its list of valid values" };
-        public static MessageTemplate AddedEnumValues = new MessageTemplate { Id = 1020, Message = "The new version places constraints on valid values while the old doesn't" };
+
         public static MessageTemplate AddedAdditionalProperties = new MessageTemplate { Id = 1021, Message = "The new version adds an 'additionalProperties' element" };
         public static MessageTemplate RemovedAdditionalProperties = new MessageTemplate { Id = 1022, Message = "The new version removes the 'additionalProperties' element" };
         public static MessageTemplate TypeFormatChanged = new MessageTemplate { Id = 1023, Message = "The new version has a different format than the previous one" };
 
-        public static MessageTemplate ConstraintIsStronger = new MessageTemplate { Id = 1024, Message = "The new version has a more constraining '{0}' value than the previous one" };
-
-
-        public static MessageTemplate TypeChanged = new MessageTemplate { Id = 1026, Message = "The new version has a different type than the previous one" };
         public static MessageTemplate DefaultValueChanged = new MessageTemplate { Id = 1027, Message = "The new version has a different default value than the previous one" };
         public static MessageTemplate ArrayCollectionFormatChanged = new MessageTemplate { Id = 1028, Message = "The new version has a different array collection format than the previous one" };
 
@@ -93,7 +126,5 @@
         public static MessageTemplate DifferentAllOf = new MessageTemplate { Id = 1032, Message = "The new version has a different 'allOf' property than the previous one" };
 
         public static MessageTemplate ConstraintChanged = new MessageTemplate { Id = 1036, Message = "The new version has a different '{0}' value than the previous one" };
-
-        public static MessageTemplate ConstraintIsWeaker = new MessageTemplate { Id = 1037, Message = "The new version has a less constraining '{0}' value than the previous one" };
     }
 }
