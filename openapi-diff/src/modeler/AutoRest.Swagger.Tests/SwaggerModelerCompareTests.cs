@@ -245,6 +245,18 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
+        /// Verifies that if you add a new property in the response model, it is flagged as info
+        /// </summary>
+        [Fact]
+        public void ReadonlyPropertyInResponse()
+        {
+            var messages = CompareSwagger("readonly_changes.json").ToArray();
+            var missing = messages.Where(m => m.Id == ComparisonMessages.AddedReadOnlyPropertyInResponse.Id);
+            Assert.Equal(1, missing.Count());
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.Path.ReadablePath == "#/paths/subscriptions/{subscriptionId}/providers/Microsoft.Storage/checkNameAvailability/post/200/properties"));
+        }
+
+        /// <summary>
         /// Verifies that if you add a required request header, it is flagged
         /// </summary>
         [Fact]
