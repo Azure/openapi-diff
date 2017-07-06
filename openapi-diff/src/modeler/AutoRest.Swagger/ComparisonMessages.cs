@@ -14,10 +14,10 @@
             Message = "The new version has a new required property '{0}' that was not found in the old version."
         };
 
-        public static MessageTemplate AddedProperty = new MessageTemplate
+        public static MessageTemplate AddedReadOnlyPropertyInResponse = new MessageTemplate
         {
             Id = 1040,
-            Message = "The new version has a new property '{0}' that was not found in the old version."
+            Message = "The new version has a new read-only property '{0}' in response that was not found in the old version."
         };
 
         public static MessageTemplate RemovedDefinition = new MessageTemplate

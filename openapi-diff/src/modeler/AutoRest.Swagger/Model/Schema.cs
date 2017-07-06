@@ -211,21 +211,26 @@ namespace AutoRest.Swagger.Model
                 }
             }
 
-            // Case: Were any required properties added?
+            // Case: Were any properties added?
             if (Properties != null)
             {
-                foreach (var def in Properties.Keys)
+                foreach (KeyValuePair<string, Schema> property in Properties)
                 {
+                    // Case: Were any required properties added?
                     Schema model = null;
-                    if (priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(def, out model) &&
-                        (Required != null && Required.Contains(def)))
+                    if (priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(property.Key, out model) &&
+                        (Required != null && Required.Contains(property.Key)))
                     {
-                        context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, def);
+                        context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, property.Key);
                     }
 
-                    if (priorSchema.Properties != null && !priorSchema.Properties.TryGetValue(def, out model))
+                    // Case: Were any readOnly properties added in response direction?
+                    if (priorSchema.Properties != null && !priorSchema.Properties.TryGetValue(property.Key, out model))
                     {
-                        context.LogInfo(ComparisonMessages.AddedProperty, def);
+                        if (context.Direction == DataDirection.Response && property.Value != null && property.Value.ReadOnly == true)
+                        {
+                            context.LogInfo(ComparisonMessages.AddedReadOnlyPropertyInResponse, property.Key);
+                        }
                     }
                 }
             }
