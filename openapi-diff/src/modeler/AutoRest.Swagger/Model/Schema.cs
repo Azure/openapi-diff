@@ -128,7 +128,7 @@ namespace AutoRest.Swagger.Model
 
             if (priorSchema.ReadOnly != ReadOnly)
             {
-                context.LogBreakingChange(ComparisonMessages.ReadonlyPropertyChanged2, priorSchema.ReadOnly.ToString().ToLower(), ReadOnly.ToString().ToLower());
+                context.LogBreakingChange(ComparisonMessages.ReadonlyPropertyChanged, priorSchema.ReadOnly.ToString().ToLower(), ReadOnly.ToString().ToLower());
             }
 
             if ((priorSchema.Discriminator == null && Discriminator != null) ||
@@ -221,6 +221,11 @@ namespace AutoRest.Swagger.Model
                         (Required != null && Required.Contains(def)))
                     {
                         context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, def);
+                    }
+
+                    if (priorSchema.Properties != null && !priorSchema.Properties.TryGetValue(def, out model))
+                    {
+                        context.LogInfo(ComparisonMessages.AddedProperty, def);
                     }
                 }
             }

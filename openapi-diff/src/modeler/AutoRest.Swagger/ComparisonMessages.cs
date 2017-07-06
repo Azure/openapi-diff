@@ -11,7 +11,13 @@
         public static MessageTemplate AddedRequiredProperty = new MessageTemplate
         {
             Id = 1034,
-            Message = "The new version has a new required property '{0}' not found in the old version."
+            Message = "The new version has a new required property '{0}' that was not found in the old version."
+        };
+
+        public static MessageTemplate AddedProperty = new MessageTemplate
+        {
+            Id = 1040,
+            Message = "The new version has a new property '{0}' that was not found in the old version."
         };
 
         public static MessageTemplate RemovedDefinition = new MessageTemplate
@@ -89,13 +95,19 @@
         public static MessageTemplate ConstraintIsStronger = new MessageTemplate
         {
             Id = 1024,
-            Message = "The new version has a more constraining '{0}' value than the previous one"
+            Message = "The new version has a more constraining '{0}' value than the previous one."
         };
 
         public static MessageTemplate ConstraintIsWeaker = new MessageTemplate
         {
             Id = 1037,
-            Message = "The new version has a less constraining '{0}' value than the previous one"
+            Message = "The new version has a less constraining '{0}' value than the previous one."
+        };
+
+        public static MessageTemplate ReadonlyPropertyChanged = new MessageTemplate
+        {
+            Id = 1029,
+            Message = "The read only property has changed from '{0}' to '{1}'."
         };
 
         public static MessageTemplate VersionsReversed = new MessageTemplate { Id = 1000, Message = "The new version has a lower value than the old: {0} -> {1}" };
@@ -132,7 +144,6 @@
         public static MessageTemplate DefaultValueChanged = new MessageTemplate { Id = 1027, Message = "The new version has a different default value than the previous one" };
         public static MessageTemplate ArrayCollectionFormatChanged = new MessageTemplate { Id = 1028, Message = "The new version has a different array collection format than the previous one" };
 
-        public static MessageTemplate ReadonlyPropertyChanged2 = new MessageTemplate { Id = 1029, Message = "The read only property has changed from '{0}' to '{1}'." };
         public static MessageTemplate DifferentDiscriminator = new MessageTemplate { Id = 1030, Message = "The new version has a different discriminator than the previous one" };
         public static MessageTemplate DifferentExtends = new MessageTemplate { Id = 1031, Message = "The new version has a different 'extends' property than the previous one" };
         public static MessageTemplate DifferentAllOf = new MessageTemplate { Id = 1032, Message = "The new version has a different 'allOf' property than the previous one" };
