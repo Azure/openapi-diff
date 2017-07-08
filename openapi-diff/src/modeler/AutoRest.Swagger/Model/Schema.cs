@@ -64,6 +64,8 @@ namespace AutoRest.Swagger.Model
 
         private DataDirection _compareDirection = DataDirection.None;
 
+        private LinkedList<Schema> _visitedSchemas = new LinkedList<Schema>();
+
         /// <summary>
         /// Compare a modified document node (this) to a previous one and look for breaking as well as non-breaking changes.
         /// </summary>
@@ -121,6 +123,11 @@ namespace AutoRest.Swagger.Model
 
             if ((thisSchema != this || priorSchema != previous))
             {
+                if (_visitedSchemas.Contains(priorSchema))
+                {
+                    return context.Messages;
+                }
+                _visitedSchemas.AddFirst(priorSchema);
                 return thisSchema.Compare(context, priorSchema);
             }
 
@@ -227,9 +234,12 @@ namespace AutoRest.Swagger.Model
                     // Case: Were any readOnly properties added in response direction?
                     if (priorSchema.Properties != null && !priorSchema.Properties.TryGetValue(property.Key, out model))
                     {
-                        if (context.Direction == DataDirection.Response && property.Value != null && property.Value.ReadOnly == true)
+                        if (context.Direction == DataDirection.Response && property.Value != null)
                         {
-                            context.LogInfo(ComparisonMessages.AddedReadOnlyPropertyInResponse, property.Key);
+                            if (property.Value.ReadOnly == true)
+                                context.LogInfo(ComparisonMessages.AddedReadOnlyPropertyInResponse, property.Key);
+                            else
+                                context.LogBreakingChange(ComparisonMessages.AddedPropertyInResponse, property.Key);
                         }
                     }
                 }

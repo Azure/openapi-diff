@@ -20,6 +20,12 @@
             Message = "The new version has a new read-only property '{0}' in response that was not found in the old version."
         };
 
+        public static MessageTemplate AddedPropertyInResponse = new MessageTemplate
+        {
+            Id = 1041,
+            Message = "The new version has a new property '{0}' in response that was not found in the old version."
+        };
+
         public static MessageTemplate RemovedDefinition = new MessageTemplate
         {
             Id = 1006,
