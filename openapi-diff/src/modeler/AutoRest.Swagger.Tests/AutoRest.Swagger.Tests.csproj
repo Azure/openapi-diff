@@ -44,6 +44,7 @@
     <Content Include="Resource\Swagger\new\version_check_02.json" />
     <Content Include="Resource\Swagger\new\version_check_03.json" />
     <Content Include="Resource\Swagger\new\version_check_04.json" />
+    <Content Include="Resource\Swagger\old\recursive_model.json" />
     <Content Include="Resource\Swagger\old\changed_operation_id.json" />
     <Content Include="Resource\Swagger\old\added_path.json" />
     <Content Include="Resource\Swagger\old\required_parameter.json" />

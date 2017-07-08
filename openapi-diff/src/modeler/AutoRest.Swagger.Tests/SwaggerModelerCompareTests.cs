@@ -245,7 +245,7 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
-        /// Verifies that if you add a new property in the response model, it is flagged as info
+        /// Verifies that if you add a new readOnly property in the response model, it is flagged as info
         /// </summary>
         [Fact]
         public void ReadonlyPropertyInResponse()
@@ -254,6 +254,31 @@ namespace AutoRest.Swagger.Tests
             var missing = messages.Where(m => m.Id == ComparisonMessages.AddedReadOnlyPropertyInResponse.Id);
             Assert.Equal(1, missing.Count());
             Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.Path.ReadablePath == "#/paths/subscriptions/{subscriptionId}/providers/Microsoft.Storage/checkNameAvailability/post/200/properties"));
+        }
+
+        /// <summary>
+        /// Verifies that if you add a new property in the response model, it is flagged as info
+        /// </summary>
+        [Fact]
+        public void AddedPropertyInResponse()
+        {
+            var messages = CompareSwagger("added_property_in_response.json").ToArray();
+            var missing = messages.Where(m => m.Id == ComparisonMessages.AddedPropertyInResponse.Id);
+            Assert.Equal(1, missing.Count());
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.ReadablePath == "#/paths/subscriptions/{subscriptionId}/providers/Microsoft.Storage/checkNameAvailability/post/200/properties"));
+        }
+
+        /// <summary>
+        /// Verifies that rules work on the recurive models
+        /// </summary>
+        public void RecursiveModels()
+        {
+            var messages = CompareSwagger("recursive_model.json").ToArray();
+            var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedProperty.Id);
+            Assert.Equal(2, missing.Count());
+
+            missing = messages.Where(m => m.Id == ComparisonMessages.ReadonlyPropertyChanged.Id);
+            Assert.Equal(2, missing.Count());
         }
 
         /// <summary>
