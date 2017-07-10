@@ -97,8 +97,7 @@ namespace AutoRest.Swagger.Model
 
             if (!OperationId.Equals(priorOperation.OperationId))
             {
-                context.LogBreakingChange(new MessageTemplate(ComparisonMessages.ModifiedOperationId.Id,
-                    String.Format(ComparisonMessages.ModifiedOperationId.Message, priorOperation.OperationId, OperationId)));
+                context.LogBreakingChange(ComparisonMessages.ModifiedOperationId, priorOperation.OperationId, OperationId);
             }
 
             CheckParameters(context, priorOperation);
