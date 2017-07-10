@@ -19,6 +19,7 @@ namespace AutoRest.Swagger
             Message = $"{string.Format(CultureInfo.CurrentCulture, template.Message, formatArguments)}";
             Path = path;
             Id = template.Id;
+            Code = template.Code;
         }
 
         public Category Severity { get; }
@@ -35,10 +36,16 @@ namespace AutoRest.Swagger
         /// </summary>
         public int Id { get; private set; }
 
+        /// <summary>
+        /// The code of the validation message
+        /// </summary>
+        public string Code { get; private set; }
+
         public string GetValidationMessagesAsJson()
         {
             var rawMessage = new Dictionary<string, string>();
             rawMessage["id"] = Id.ToString();
+            rawMessage["code"] = Code.ToString();
             rawMessage["message"] = Message;
             rawMessage["jsonref"] = Path?.JsonReference;
             rawMessage["json-path"] = Path?.ReadablePath;
@@ -49,7 +56,7 @@ namespace AutoRest.Swagger
 
         public override string ToString()
         {
-            return $"id = {Id}, type = {Severity}, message = {Message}";
+            return $"code = {Code}, type = {Severity}, message = {Message}";
         }
     }
 
