@@ -43,9 +43,6 @@ Options:
                      at "/Users/vishrut/oad_output".
   -j, --inJson       A boolean flag indicating whether output format of the
                      messages is json.                 [boolean] [default: true]
-  -s, --strict       If true, then checking should be strict, in other words,
-                     breaking changes are errors intead of warnings.
-                                                      [boolean] [default: false]
   -h, --help         Show help                                         [boolean]
 
 ```
