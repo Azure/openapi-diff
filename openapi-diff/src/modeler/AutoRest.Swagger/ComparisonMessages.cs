@@ -13,7 +13,7 @@
         {
             Id = 1034,
             Code = nameof(ComparisonMessages.AddedRequiredProperty),
-            Message = "The new version has a new required property '{0}' that was not found in the old version."
+            Message = "The new version has new required property '{0}' that was not found in the old version."
         };
 
         public static MessageTemplate AddedReadOnlyPropertyInResponse = new MessageTemplate

@@ -11,6 +11,9 @@
 
   <ItemGroup>
     <Content Include="Resource\Swagger\new\added_path.json" />
+    <Content Include="Resource\Swagger\new\added_required_property.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resource\Swagger\new\changed_operation_id.json" />
     <Content Include="Resource\Swagger\new\enum_values_changed.json" />
     <Content Include="Resource\Swagger\new\misc_checks_01.json" />
@@ -44,6 +47,9 @@
     <Content Include="Resource\Swagger\new\version_check_02.json" />
     <Content Include="Resource\Swagger\new\version_check_03.json" />
     <Content Include="Resource\Swagger\new\version_check_04.json" />
+    <Content Include="Resource\Swagger\old\added_required_property.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resource\Swagger\old\recursive_model.json" />
     <Content Include="Resource\Swagger\old\changed_operation_id.json" />
     <Content Include="Resource\Swagger\old\added_path.json" />

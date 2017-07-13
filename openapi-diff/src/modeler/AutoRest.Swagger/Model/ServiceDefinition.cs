@@ -528,6 +528,12 @@ namespace AutoRest.Swagger.Model
 
                 foreach (var schema in service.Definitions.Values.Where(d => d.IsReferenced))
                 {
+                    // If schema does not have properties then do not recurse
+                    if (schema.Properties == null)
+                    {
+                        continue;
+                    }
+
                     foreach (var property in schema.Properties.Values)
                     {
                         if (!string.IsNullOrWhiteSpace(property.Reference))
