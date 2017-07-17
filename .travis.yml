@@ -14,3 +14,14 @@ install:
 script:
   - npm install
   - ./node_modules/gulp/bin/gulp.js
+before_deploy:
+  - ./node_modules/gulp/bin/gulp.js pack
+deploy:
+  provider: npm
+  email: azuresdk@outlook.com
+  api_key:
+    secure: jPTufsMKVanWi/yiOBnyVwU0lNnNPUsfCEaBk5S6m/WRpaQqDQ5+QSVrTUe1wEsSGtLwoM2zXulNg9SQDrOmqKemC+iXdqNByEqU65JR2pdhmnOpLVfQC8HWbVK82pLULIVhhF/Z8cnVuZY75E6r7vna1kn9zS1027I7r6u4gDSk6QTvjMN2KlyjWaXR/zw5Hp79U0ve2LrmduC7cWmtEdK6X+1G/kd5+oXwukCDHupSb46tUmNxtlm58YelGDfyY7WYXKp3a88iZlOejIW9BNpeDZ/gnKudlv7ryFlU8qsDFDYA25PtZxUULCo9M7OtTqDw82tuFXQDb4uVpI7X8ytxYPeHldGHeMjjYdTssRngTm86rrmjl3r1egUrXGk0oEWVZF5cffNvXEI6ti6yJqP5fU133LOdpBzY753YYwZTiiQp6zkHAoKosgDhHDB8cYKE4NoeNAqoo5wtcclB5PwUnquQbL68Og7soarY/sAvUPRVlkDA+u1w1j325y3jPVfMIPzB1pEK3Ilcc0HBgu3X6oproxRfOSUuUyEkUzU7oCMCuzIOPMQIQNbBdfXsxaSFh9QWYb/4pehPbhQCUCgq8lqjp2ycOaBKRLc2wZkn0SxzAXsyCqOPHMHRuV+tzXUSF23wj5ZqzvZSS4EFJJa886S9o1q26OnQ3V07d54=
+  on:
+    tags: true
+    branch: master
+  tag: next
