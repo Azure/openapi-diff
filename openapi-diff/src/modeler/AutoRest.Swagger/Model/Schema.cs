@@ -160,13 +160,41 @@ namespace AutoRest.Swagger.Model
                 CompareAllOfs(context, priorSchema);
             }
 
+            // Compare each properties of the model
             context.PushProperty("properties");
             CompareProperties(context, priorSchema);
             context.Pop();
 
+            // Compare `required` list of properties of the model
+            CompareRequired(context, priorSchema);
+
             return context.Messages;
         }
 
+        /// <summary>
+        /// Comapares list of required properties of this model
+        /// </summary>
+        /// <param name="context">Comaprision Context</param>
+        /// <param name="priorSchema">Schema of the old model</param>
+        private void CompareRequired(ComparisonContext context, Schema priorSchema)
+        {
+            if (Required == null && priorSchema.Required == null)
+            {
+                return;
+            }
+
+            if (Required != null && priorSchema.Required == null)
+            {
+                context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, String.Join(", ", Required));
+                return;
+            }
+
+            List<string> addedRequiredProperties = Required.Except(priorSchema.Required).ToList();
+            if (addedRequiredProperties.Count > 0)
+            {
+                context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, String.Join(", ", addedRequiredProperties));
+            }
+        }
 
         private void CompareAllOfs(ComparisonContext context, Schema priorSchema)
         {

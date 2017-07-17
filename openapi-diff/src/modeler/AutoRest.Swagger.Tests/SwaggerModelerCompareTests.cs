@@ -218,6 +218,19 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
+        /// Verifies that if you add a required property in the model, it's found.
+        /// </summary>
+        [Fact]
+        public void AddedRequiredProperty()
+        {
+            var messages = CompareSwagger("added_required_property.json").ToArray();
+            var missing = messages.Where(m => m.Severity == Category.Error && m.Id == ComparisonMessages.AddedRequiredProperty.Id);
+            Assert.Equal(2, missing.Count());
+            var error = missing.First();
+            Assert.Equal("#/paths/api/Parameters/put/database", error.Path.ReadablePath);
+        }
+
+        /// <summary>
         /// Verifies that if you remove a required request header, it's found.
         /// </summary>
         [Fact]
