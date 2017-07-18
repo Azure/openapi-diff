@@ -42,34 +42,24 @@
   </ItemGroup>
   <Target Name="CleanBuildDlls" BeforeTargets="Build">
       <Message Importance="High" Text="Deleting the build dlls from Node library..." />
-      <Microsoft.Build.Tasks.RemoveDir Directories="$(SolutionDir)../lib/dlls/."/>
+      <Microsoft.Build.Tasks.RemoveDir Directories="$(SolutionDir)../lib/dlls/." />
   </Target>
   <Target Name="CopyBuildDlls" AfterTargets="Build">
       <Message Importance="High" Text="Copying the build dlls into Node library..." />
         <ItemGroup>
           <Files Include="$(OutDir)/**/*" />
         </ItemGroup>
-        <Microsoft.Build.Tasks.Copy SourceFiles="@(Files)"
-                                    DestinationFolder="$(SolutionDir)../lib/dlls/%(RecursiveDir)"
-                                    SkipUnchangedFiles="true"
-                                    OverwriteReadOnlyFiles="true" 
-                                    Retries="3"
-                                    RetryDelayMilliseconds="300"/>
+        <Microsoft.Build.Tasks.Copy SourceFiles="@(Files)" DestinationFolder="$(SolutionDir)../lib/dlls/%(RecursiveDir)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Retries="3" RetryDelayMilliseconds="300" />
   </Target>
     <Target Name="CleanPublishDlls" BeforeTargets="Publish">
       <Message Importance="High" Text="Deleting the publish dlls from Node library..." />
-      <Microsoft.Build.Tasks.RemoveDir Directories="$(SolutionDir)../lib/dlls/."/>
+      <Microsoft.Build.Tasks.RemoveDir Directories="$(SolutionDir)../lib/dlls/." />
   </Target>
   <Target Name="CopyPublishDlls" AfterTargets="Publish">
       <Message Importance="High" Text="Copying the publish dlls into Node library..." />
         <ItemGroup>
-          <Files Include="$(OutDir)/**/*" />
+          <Files Include="$(OutDir)/Publish/**/*" />
         </ItemGroup>
-        <Microsoft.Build.Tasks.Copy SourceFiles="@(Files)"
-                                    DestinationFolder="$(SolutionDir)../lib/dlls/%(RecursiveDir)"
-                                    SkipUnchangedFiles="true"
-                                    OverwriteReadOnlyFiles="true" 
-                                    Retries="3"
-                                    RetryDelayMilliseconds="300"/>
+        <Microsoft.Build.Tasks.Copy SourceFiles="@(Files)" DestinationFolder="$(SolutionDir)../lib/dlls/%(RecursiveDir)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Retries="3" RetryDelayMilliseconds="300" />
   </Target>
 </Project>
