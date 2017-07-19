@@ -58,7 +58,7 @@
   <Target Name="CopyPublishDlls" AfterTargets="Publish">
       <Message Importance="High" Text="Copying the publish dlls into Node library..." />
         <ItemGroup>
-          <Files Include="$(OutDir)/Publish/**/*" />
+          <Files Include="$(OutDir)/publish/**/*" />
         </ItemGroup>
         <Microsoft.Build.Tasks.Copy SourceFiles="@(Files)" DestinationFolder="$(SolutionDir)../lib/dlls/%(RecursiveDir)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Retries="3" RetryDelayMilliseconds="300" />
   </Target>
