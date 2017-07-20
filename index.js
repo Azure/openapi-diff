@@ -11,7 +11,7 @@ exports.log = require('./lib/util/logging');
 exports.compare = validate.compare;
 
 // Classes
-exports.OpenApiDiff = require('./lib/validators/OpenApiDiff');
+exports.OpenApiDiff = require('./lib/validators/openApiDiff');
 
 // Constants
 exports.Constants = require('./lib/util/constants');
