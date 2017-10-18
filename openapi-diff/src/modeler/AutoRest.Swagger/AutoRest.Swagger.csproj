@@ -3,8 +3,7 @@
   <Import Project="$(common)common-package-references.proj" />
   <Import Project="$(common)project-library.proj" />
   <Import Project="$(common)package-info.proj" />
-  <Import Project="$(common)package-fallback.proj" />
-  
+
   <PropertyGroup>
     <AssemblyName>AutoRest.Swagger</AssemblyName>
     <PackageTags>Microsoft AutoRest Generator Extensions</PackageTags>

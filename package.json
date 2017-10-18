@@ -9,7 +9,7 @@
   "description": "OpenApi Specification Diff tool",
   "license": "MIT",
   "dependencies": {
-    "autorest": "^1.1.0",
+    "autorest": "^2.0.0",
     "json-pointer": "^0.6.0",
     "js-yaml": "^3.8.2",
     "request": "^2.79.0",
@@ -35,6 +35,9 @@
   },
   "bugs": {
     "url": "https://github.com/Azure/openapi-diff/issues"
+  },
+  "engines": {
+    "node": ">=7.10.0"
   },
   "files": [
     "lib",

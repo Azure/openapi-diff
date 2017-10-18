@@ -3,29 +3,28 @@
   <Import Project="$(common)common-package-references.proj" />
   <Import Project="$(common)project-library.proj" />
   <Import Project="$(common)package-info.proj" />
-  <Import Project="$(common)package-fallback.proj" />
-  
+
   <PropertyGroup>
     <AssemblyName>OpenApiDiff.Core</AssemblyName>
     <PackageTags>Microsoft AutoRest</PackageTags>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <Compile Remove="Extensibility\**" />
     <EmbeddedResource Remove="Extensibility\**" />
     <None Remove="Extensibility\**" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="YamlDotNet.Signed" Version="3.8.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.0" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Reference Include="AutoRest.Swagger">
-      <HintPath>..\..\modeler\AutoRest.Swagger\bin\Debug\netstandard1.3\AutoRest.Swagger.dll</HintPath>
+      <HintPath>..\..\modeler\AutoRest.Swagger\bin\Debug\netstandard2.0\AutoRest.Swagger.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
