@@ -1,6 +1,6 @@
 ### How to install
 ```
-npm install -g oad@0.1.8
+npm install -g oad@0.1.7
 ```
 
 ### Command Usage
@@ -25,7 +25,7 @@ Options:
 ```
 
 ## Build dependencies
-- [Node](https://nodejs.org) (6.9.5 or higher)
+- [Node](https://nodejs.org) (7.10.0 or higher)
 - [Node Package Manager](https://www.npmjs.com/package/npm)
 - [.NET CLI tools](https://github.com/dotnet/cli/releases) version 2.0.0 or higher
 > You want the **.NET Core SDK Binaries** for your platform <br>
