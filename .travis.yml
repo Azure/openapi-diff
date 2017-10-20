@@ -8,6 +8,7 @@ install:
     # Install runtime
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install 7.10.0
   - npm install -g npm@'>=5.4.0'
+    # Install dotnet 2.0.0 according to https://www.microsoft.com/net/core#linuxubuntu
   - curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
   - sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
   - sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-trusty-prod trusty main" > /etc/apt/sources.list.d/dotnetdev.list'

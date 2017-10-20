@@ -1,6 +1,6 @@
 ### How to install
 ```
-npm install -g oad@0.1.7
+npm install -g oad@0.1.8
 ```
 
 ### Command Usage
