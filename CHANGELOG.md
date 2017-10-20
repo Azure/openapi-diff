@@ -1,3 +1,7 @@
+## 0.1.8
+Released on 2017-08-10.
+- Updating to use AutoRest 2. This solves [#105](https://github.com/Azure/openapi-diff/issues/105)
+
 ## 0.1.7
 Released on 2017-08-10.
 - Chaining the promises upto `compare` method and gracefully exiting application [#88](https://github.com/Azure/openapi-diff/issues/88)

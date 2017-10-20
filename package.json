@@ -1,6 +1,6 @@
 {
   "name": "oad",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "author": {
     "name": "Microsoft Corporation",
     "email": "azsdkteam@microsoft.com",
@@ -9,7 +9,7 @@
   "description": "OpenApi Specification Diff tool",
   "license": "MIT",
   "dependencies": {
-    "autorest": "^1.1.0",
+    "autorest": "^2.0.0",
     "json-pointer": "^0.6.0",
     "js-yaml": "^3.8.2",
     "request": "^2.79.0",
@@ -36,6 +36,9 @@
   "bugs": {
     "url": "https://github.com/Azure/openapi-diff/issues"
   },
+  "engines": {
+    "node": ">=7.10.0"
+  },
   "files": [
     "lib",
     "index.js",
@@ -45,7 +48,9 @@
     "LICENSE"
   ],
   "main": "./index.js",
-  "bin": { "oad": "./cli.js" },
+  "bin": {
+    "oad": "./cli.js"
+  },
   "scripts": {
     "jshint": "jshint index.js --reporter=jslint",
     "test": "npm -s run-script jshint && mocha -t 50000"
