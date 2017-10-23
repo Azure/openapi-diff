@@ -1,5 +1,9 @@
+## 0.1.9
+Released on 2017-10-23.
+- Fix publishing issue of 0.1.8 where some dlls were missing.
+
 ## 0.1.8
-Released on 2017-08-10.
+Released on 2017-10-20.
 - Updating to use AutoRest 2. This solves [#105](https://github.com/Azure/openapi-diff/issues/105)
 
 ## 0.1.7
