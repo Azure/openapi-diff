@@ -1,5 +1,5 @@
 ﻿{
-  "swagger": 2.0,
+  "swagger": "2.0",
   "info": {
     "title": "operation_check_01",
     "version": "1.0"
@@ -9,7 +9,7 @@
   "paths": {
     "/api/Parameters": {
       "put": {
-        "tag": [ "Parameters" ],
+        "tags": [ "Parameters" ],
         "operationId": "Parameters_Put",
         "produces": [
           "text/plain"
@@ -19,13 +19,17 @@
             "name": "database",
             "in": "body",
             "required": true,
-            "type": "object",
             "schema": { "$ref": "#/definitions/DatabaseRenamed" }
           }
-        ]
+        ],
+        "responses": {
+          "200" : {
+            "description" : "Ok"
+          }
+        }
       },
       "post": {
-        "tag": [ "Parameters" ],
+        "tags": [ "Parameters" ],
         "operationId": "Parameters_Post",
         "produces": [
           "text/plain"
@@ -35,15 +39,19 @@
             "name": "registry",
             "in": "body",
             "required": true,
-            "type": "object",
             "schema": { "$ref": "#/definitions/Register" }
           }
-        ]
+        ],
+        "responses": {
+          "200" : {
+            "description" : "Ok"
+          }
+        }
       }
     },
     "/api/Responses": {
       "get": {
-        "tag": [ "Responses" ],
+        "tags": [ "Responses" ],
         "operationId": "Responses_Get",
         "produces": [
           "text/plain"
@@ -51,16 +59,19 @@
         "parameters": [],
         "responses": {
           "200": {
+            "description" : "Ok",
             "schema": {
               "type": "integer"
             }
           },
           "201": {
+            "description" : "Created",
             "schema": {
               "type": "integer"
             }
           },
           "400": {
+            "description" : "Bad Request",
             "schema": { "$ref": "#/definitions/Error" }
           }
         }

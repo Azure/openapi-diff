@@ -1,5 +1,5 @@
 ﻿{
-  "swagger": 2.0,
+  "swagger": "2.0",
   "info": {
     "title": "changed_operation_id",
     "version": "1.0"
@@ -9,33 +9,45 @@
   "paths": {
     "/api/Paths": {
       "get": {
-        "tag": [ "Paths" ],
+        "tags": [ "Paths" ],
         "operationId": "Paths_List",
         "produces": [
           "text/plain"
         ],
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200" : {
+            "description" : "Ok"
+          }
+        }
       }
     },
     "/api/Operations": {
       "get": {
-        "tag": [ "Operations" ],
+        "tags": [ "Operations" ],
         "operationId": "Operations_Get",
         "produces": [
           "text/plain"
         ],
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200" : {
+            "description" : "Ok"
+          }
+        }
       },
       "post": {
-        "tag": [ "Operations" ],
+        "tags": [ "Operations" ],
         "operationId": "Operations_Update",
         "produces": [
           "text/plain"
         ],
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200" : {
+            "description" : "Ok"
+          }
+        }
       }
     }
   }

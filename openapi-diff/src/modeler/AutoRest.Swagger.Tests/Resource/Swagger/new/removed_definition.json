@@ -1,5 +1,5 @@
 ﻿{
-  "swagger": 2.0,
+  "swagger": "2.0",
   "info": {
     "title": "removed_definition",
     "version": "1.0"
@@ -11,7 +11,7 @@
   "paths": {
     "/api/Parameters": {
       "put": {
-        "tag": [ "Parameters" ],
+        "tags": [ "Parameters" ],
         "operationId": "Parameters_Put",
         "produces": [
           "text/plain"
@@ -21,10 +21,14 @@
             "name": "database",
             "in": "body",
             "required": true,
-            "type": "object",
             "schema": { "$ref": "#/definitions/Database" }
           }
-        ]
+        ],
+        "responses": {
+          "200" : {
+            "description" : "Ok"
+          }
+        }
       }
     }
   },

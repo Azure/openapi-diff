@@ -1,5 +1,5 @@
 ﻿{
-  "swagger": 2.0,
+  "swagger": "2.0",
   "info": {
     "title": "operation_check_04",
     "version": "1.0"
@@ -9,7 +9,7 @@
   "paths": {
     "/api/Parameters": {
       "get": {
-        "tag": [ "Parameters" ],
+        "tags": [ "Parameters" ],
         "operationId": "Parameters_Get",
         "produces": [
           "text/plain"
@@ -21,7 +21,6 @@
             "type": "array",
             "minItems": 11,
             "maxItems": 5000,
-            "collectionFormat": "pipes",
             "items": {
               "type": "integer",
               "minimum": 11,
@@ -35,7 +34,6 @@
             "type": "array",
             "minItems": 15,
             "maxItems": 4000,
-            "collectionFormat": "pipes",
             "items": {
               "type": "string",
               "minLength": 0,
@@ -59,10 +57,15 @@
             "maxLength": 21,
             "pattern": "[a-z][a-z]*"
           }
-        ]
+        ],
+        "responses": {
+          "200" : {
+            "description" : "Ok"
+          }
+        }
       },
       "put": {
-        "tag": [ "Parameters" ],
+        "tags": [ "Parameters" ],
         "operationId": "Parameters_Put",
         "consumes": [
           "application/json"
@@ -70,11 +73,15 @@
         "parameters": [
           {
             "name": "a",
-            "type": "object",
             "in": "body",
             "schema": { "$ref": "#/definitions/A" }
           }
-        ]
+        ],
+        "responses": {
+          "200" : {
+            "description" : "Ok"
+          }
+        }
       }
     }
   },
@@ -86,7 +93,6 @@
           "type": "array",
           "minItems": 11,
           "maxItems": 5000,
-          "collectionFormat": "pipes",
           "items": {
             "type": "integer",
             "minimum": 11,
@@ -98,7 +104,6 @@
           "type": "array",
           "minItems": 15,
           "maxItems": 5000,
-          "collectionFormat": "pipes",
           "items": {
             "type": "string",
             "minLength": 0,

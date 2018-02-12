@@ -1,5 +1,5 @@
 ﻿{
-  "swagger": 2.0,
+  "swagger": "2.0",
   "info": {
     "title": "recursive_model",
     "version": "1.0"
@@ -9,7 +9,7 @@
   "paths": {
     "/api/Operations": {
       "post": {
-        "tag": [ "Operations" ],
+        "tags": [ "Operations" ],
         "operationId": "Operations_Post",
         "produces": [
           "text/plain"

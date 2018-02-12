@@ -1,5 +1,5 @@
 ﻿{
-  "swagger": 2.0,
+  "swagger": "2.0",
   "info": {
     "title": "misc_checks_01",
     "version": "1.0"
@@ -11,7 +11,7 @@
   "paths": {
     "/api/Parameters": {
       "put": {
-        "tag": [ "Parameters" ],
+        "tags": [ "Parameters" ],
         "operationId": "Parameters_Put",
         "produces": [
           "text/plain"
@@ -21,13 +21,17 @@
             "name": "database",
             "in": "body",
             "required": true,
-            "type": "object",
             "schema": { "$ref": "#/definitions/DatabaseList" }
           }
-        ]
+        ],
+        "responses": {
+          "200" : {
+            "description" : "Ok"
+          }
+        }
       },
       "post": {
-        "tag": [ "Parameters" ],
+        "tags": [ "Parameters" ],
         "operationId": "Parameters_Post",
         "produces": [
           "text/plain"
@@ -37,10 +41,14 @@
             "name": "registry",
             "in": "body",
             "required": true,
-            "type": "object",
             "schema": { "$ref": "#/definitions/Database" }
           }
-        ]
+        ],
+        "responses": {
+          "200" : {
+            "description" : "Ok"
+          }
+        }
       }
     }
   },

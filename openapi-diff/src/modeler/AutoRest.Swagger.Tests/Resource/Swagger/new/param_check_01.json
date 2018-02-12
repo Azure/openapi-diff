@@ -1,11 +1,12 @@
 ﻿{
-  "swagger": 2.0,
+  "swagger": "2.0",
   "info": {
     "title": "operation_check_04",
     "version": "1.0"
   },
   "host": "localhost:8000",
   "schemes": [ "http", "https" ],
+  "paths": {},
   "definitions": {
     "A": {
       "type": "object",
@@ -14,7 +15,6 @@
           "type": "array",
           "minItems": 11,
           "maxItems": 5000,
-          "collectionFormat": "pipes",
           "items": {
             "type": "integer",
             "minimum": 11,
@@ -26,7 +26,6 @@
           "type": "array",
           "minItems": 15,
           "maxItems": 5000,
-          "collectionFormat": "pipes",
           "items": {
             "type": "string",
             "minLength": 0,
@@ -64,7 +63,6 @@
       "type": "array",
       "minItems": 11,
       "maxItems": 5000,
-      "collectionFormat": "pipes",
       "items": {
         "type": "integer",
         "minimum": 11,
@@ -78,7 +76,6 @@
       "type": "array",
       "minItems": 15,
       "maxItems": 4000,
-      "collectionFormat": "pipes",
       "items": {
         "type": "string",
         "minLength": 0,
@@ -104,16 +101,17 @@
     },
     "e": {
       "name": "e",
-      "type": "object",
       "in": "body",
       "schema": { "$ref": "#/definitions/A" }
     },
     "f": {
+      "name": "f",
       "type": "string",
       "in": "header",
       "enum": [ "A", "B", "C" ]
     },
     "g": {
+      "name": "g",
       "type": "string",
       "in": "header",
       "enum": [ "A", "B" ]

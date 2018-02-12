@@ -1,11 +1,12 @@
 ﻿{
-  "swagger": 2.0,
+  "swagger": "2.0",
   "info": {
     "title": "misc_checks_01",
     "version": "1.0"
   },
   "host": "localhost:8000",
   "schemes": [ "http", "https" ],
+  "paths": {},
   "definitions": {
     "Database": {
       "required": [ "id" ],
