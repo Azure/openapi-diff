@@ -66,6 +66,7 @@ namespace AutoRest.Swagger.Model
 
         private LinkedList<Schema> _visitedSchemas = new LinkedList<Schema>();
 
+        /// <inheritdoc />
         /// <summary>
         /// Compare a modified document node (this) to a previous one and look for breaking as well as non-breaking changes.
         /// </summary>
@@ -74,9 +75,7 @@ namespace AutoRest.Swagger.Model
         /// <returns>A list of messages from the comparison.</returns>
         public override IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
         {
-            var priorSchema = previous as Schema;
-
-            if (priorSchema == null)
+            if (!(previous is Schema priorSchema))
             {
                 throw new ArgumentNullException("priorVersion");
             }
@@ -178,7 +177,7 @@ namespace AutoRest.Swagger.Model
         /// <param name="priorSchema">Schema of the old model</param>
         private void CompareRequired(ComparisonContext context, Schema priorSchema)
         {
-            if (Required == null && priorSchema.Required == null)
+            if (Required == null)
             {
                 return;
             }
@@ -232,8 +231,7 @@ namespace AutoRest.Swagger.Model
             {
                 foreach (var def in priorSchema.Properties)
                 {
-                    Schema model = null;
-                    if (Properties == null || !Properties.TryGetValue(def.Key, out model))
+                    if (Properties == null || !Properties.TryGetValue(def.Key, out var model))
                     {
                         context.LogBreakingChange(ComparisonMessages.RemovedProperty, def.Key);
                     }
