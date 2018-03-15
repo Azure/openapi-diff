@@ -1,3 +1,7 @@
+## 0.1.10
+Released on 2018-03-15.
+- Fix crash when there are no required parameters. [#107](https://github.com/Azure/openapi-diff/issues/107)
+
 ## 0.1.9
 Released on 2017-10-23.
 - Fix publishing issue of 0.1.8 where some dlls were missing.
