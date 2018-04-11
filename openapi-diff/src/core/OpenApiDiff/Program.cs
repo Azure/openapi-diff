@@ -6,6 +6,7 @@ using System;
 using OpenApiDiff.Core;
 using OpenApiDiff.Properties;
 using System.IO;
+using System.Net.Http;
 
 namespace OpenApiDiff
 {
@@ -13,7 +14,7 @@ namespace OpenApiDiff
     {
         private static int Main(string[] args)
         {
-            Settings settings = Settings.GetInstance(args);
+            var settings = Settings.GetInstance(args);
 
             if (settings.ShowHelp)
             {
@@ -30,10 +31,10 @@ namespace OpenApiDiff
                 return 1;
             }
 
-            SwaggerModeler modeler = new SwaggerModeler();
+            var modeler = new SwaggerModeler();
 
-            string swaggerPrev = File.ReadAllText(settings.OldSpec);
-            string swaggerNew = File.ReadAllText(settings.NewSpec);
+            var swaggerPrev = GetOpenApiSpec(settings.OldSpec);
+            var swaggerNew = GetOpenApiSpec(settings.NewSpec);
 
             var messages = modeler.Compare(swaggerPrev, swaggerNew, settings);
             foreach (var msg in messages)
@@ -42,6 +43,27 @@ namespace OpenApiDiff
             }
 
             return 0;
+        }
+
+
+        private static string GetOpenApiSpec(Uri uri)
+        {
+            if (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
+            {
+                using (var client = new HttpClient())
+                {
+                    var response = client.GetAsync(uri).Result;
+                    return response.Content.ReadAsStringAsync().Result;
+                }
+            }
+
+            if (uri.Scheme == Uri.UriSchemeFile)
+            {
+                return File.ReadAllText(uri.AbsolutePath);
+            }
+
+            // unsupported Uri scheme
+            throw new NotImplementedException($"Given Uri scheme ({uri.Scheme}) is not supported yet.");
         }
     }
 }

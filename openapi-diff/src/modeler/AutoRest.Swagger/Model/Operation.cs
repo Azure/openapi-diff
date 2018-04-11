@@ -52,7 +52,7 @@ namespace AutoRest.Swagger.Model
         /// If a parameter is already defined at the Path Item, the 
         /// new definition will override it, but can never remove it.
         /// </summary>
-        public IList<SwaggerParameter> Parameters { get; set; }
+        public IList<SwaggerParameter> Parameters { get; set; } = new List<SwaggerParameter>();
 
         /// <summary>
         /// The list of possible responses as they are returned from executing this operation.
