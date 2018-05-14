@@ -23,8 +23,8 @@ namespace AutoRest.Swagger.Model
         public IList<string> Tags { get; set; }
 
         /// <summary>
-        /// A friendly serviceTypeName for the operation. The id MUST be unique among all 
-        /// operations described in the API. Tools and libraries MAY use the 
+        /// A friendly serviceTypeName for the operation. The id MUST be unique among all
+        /// operations described in the API. Tools and libraries MAY use the
         /// operation id to uniquely identify an operation.
         /// </summary>
         public string OperationId { get; set; }
@@ -43,16 +43,16 @@ namespace AutoRest.Swagger.Model
         public IList<string> Consumes { get; set; }
 
         /// <summary>
-        /// A list of MIME types the operation can produce. 
+        /// A list of MIME types the operation can produce.
         /// </summary>
         public IList<string> Produces { get; set; }
 
         /// <summary>
-        /// A list of parameters that are applicable for this operation. 
-        /// If a parameter is already defined at the Path Item, the 
+        /// A list of parameters that are applicable for this operation.
+        /// If a parameter is already defined at the Path Item, the
         /// new definition will override it, but can never remove it.
         /// </summary>
-        public IList<SwaggerParameter> Parameters { get; set; }
+        public IList<SwaggerParameter> Parameters { get; set; } = new List<SwaggerParameter>();
 
         /// <summary>
         /// The list of possible responses as they are returned from executing this operation.
@@ -60,17 +60,17 @@ namespace AutoRest.Swagger.Model
         public Dictionary<string, OperationResponse> Responses { get; set; }
 
         /// <summary>
-        /// The transfer protocol for the operation. 
+        /// The transfer protocol for the operation.
         /// </summary>
         public IList<TransferProtocolScheme> Schemes { get; set; }
 
         public bool Deprecated { get; set; }
 
         /// <summary>
-        /// A declaration of which security schemes are applied for this operation. 
-        /// The list of values describes alternative security schemes that can be used 
-        /// (that is, there is a logical OR between the security requirements). 
-        /// This definition overrides any declared top-level security. To remove a 
+        /// A declaration of which security schemes are applied for this operation.
+        /// The list of values describes alternative security schemes that can be used
+        /// (that is, there is a logical OR between the security requirements).
+        /// This definition overrides any declared top-level security. To remove a
         /// top-level security declaration, an empty array can be used.
         /// </summary>
         public IList<Dictionary<string, List<string>>> Security { get; set; }
@@ -150,8 +150,8 @@ namespace AutoRest.Swagger.Model
             var currentRoot = (context.CurrentRoot as ServiceDefinition);
             var previousRoot = (context.PreviousRoot as ServiceDefinition);
 
-            var priorOperationParameters = priorOperation.Parameters.Select(param => 
-                                             string.IsNullOrWhiteSpace(param.Reference) ? 
+            var priorOperationParameters = priorOperation.Parameters.Select(param =>
+                                             string.IsNullOrWhiteSpace(param.Reference) ?
                                              param : FindReferencedParameter(param.Reference, previousRoot.Parameters));
             foreach (var oldParam in priorOperationParameters)
             {
@@ -173,8 +173,8 @@ namespace AutoRest.Swagger.Model
             }
 
             // Check that no required parameters were added.
-            var requiredParamters = Parameters.Select(param => 
-                                        string.IsNullOrWhiteSpace(param.Reference) ? 
+            var requiredParamters = Parameters.Select(param =>
+                                        string.IsNullOrWhiteSpace(param.Reference) ?
                                         param : FindReferencedParameter(param.Reference, currentRoot.Parameters))
                                         .Where(p => p != null && p.IsRequired);
             foreach (var newParam in requiredParamters)
