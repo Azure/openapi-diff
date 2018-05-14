@@ -29,7 +29,7 @@ namespace OpenApiDiff.Core
         [SettingsInfo("The location of the old specification.", true)]
         [SettingsAlias("o")]
         [SettingsAlias("old")]
-        public string OldSpec { get; set; }
+        public Uri OldSpec { get; set; }
 
         /// <summary>
         /// Gets or sets the path to the new specification file.
@@ -37,7 +37,7 @@ namespace OpenApiDiff.Core
         [SettingsInfo("The location of the new specification.", true)]
         [SettingsAlias("n")]
         [SettingsAlias("new")]
-        public string NewSpec { get; set; }
+        public Uri NewSpec { get; set; }
 
         /// <summary>
         /// If set to true, print out help message.
@@ -185,6 +185,10 @@ namespace OpenApiDiff.Core
                             {
                                 property.SetValue(entityToPopulate, true);
                             }
+                            else if (property.PropertyType == typeof(Uri))
+                            {
+                                property.SetValue(entityToPopulate, new Uri(setting.Value.ToString()));
+                            }
                             else if (property.PropertyType.GetTypeInfo().IsEnum)
                             {
                                 property.SetValue(entityToPopulate, Enum.Parse(property.PropertyType, setting.Value.ToString(), true));
@@ -240,21 +244,37 @@ namespace OpenApiDiff.Core
                 var doc = property.GetCustomAttributes<SettingsInfoAttribute>().FirstOrDefault();
                 if (doc != null && doc.IsRequired && property.GetValue(this) == null)
                 {
-                    Console.WriteLine(String.Format(Resources.ParameterValueIsMissing, property.Name));
+                    Console.WriteLine(string.Format(Resources.ParameterValueIsMissing, property.Name));
                     throw new Exception(string.Format(Resources.ParameterValueIsMissing, property.Name));
                 }
             }
 
-            // Validate input Files
-            if (!File.Exists(Instance.OldSpec))
+            if (!ValidateUri(Instance.OldSpec))
             {
-                throw new Exception(String.Format(Resources.InputMustBeAFile, "-old"));
+                throw new Exception(string.Format(Resources.InputMustBeAFileOrUrl, "-old"));
             }
 
-            if (!File.Exists(Instance.NewSpec))
+            if (!ValidateUri(Instance.NewSpec))
             {
-                throw new Exception(String.Format(Resources.InputMustBeAFile, "-new"));
+                throw new Exception(string.Format(Resources.InputMustBeAFileOrUrl, "-new"));
             }
+        }
+
+        private bool ValidateUri(Uri uri)
+        {
+            if (Instance.OldSpec.Scheme == Uri.UriSchemeFile &&
+                File.Exists(uri.AbsolutePath))
+            {
+                return true;
+            }
+
+            if (Instance.OldSpec.Scheme == Uri.UriSchemeHttp || Instance.OldSpec.Scheme == Uri.UriSchemeHttps)
+            {
+                // todo: validate the uri
+                return true;
+            }
+
+            return false;
         }
     }
 }

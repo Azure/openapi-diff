@@ -123,6 +123,9 @@
   <data name="InputMustBeAFile" xml:space="preserve">
     <value>Input parameter '{0}' must be a valid file path.</value>
   </data>
+  <data name="InputMustBeAFileOrUrl" xml:space="preserve">
+    <value>Input parameter '{0}' must be a valid file path or url.</value>
+  </data>
   <data name="AllowedTopLevelProperties" xml:space="preserve">
     <value>Top level properties should be one of name, type, id, location, properties, tags, plan, sku, etag, managedBy, identity. Model definition '{0}' has extra properties ['{1}'].</value>
   </data>
