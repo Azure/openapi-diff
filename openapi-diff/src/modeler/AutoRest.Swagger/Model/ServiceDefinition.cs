@@ -124,7 +124,10 @@ namespace AutoRest.Swagger.Model
             if (previousDefinition == null)
                 throw new ArgumentException("Comparing a service definition with something else.");
 
-            if (Info != null && previousDefinition.Info != null)
+            if (Info != null && 
+                previousDefinition.Info != null &&
+                Info.Version != null && 
+                previousDefinition.Info.Version != null)
             {
                 context.PushProperty("info");
                 context.PushProperty("version");
