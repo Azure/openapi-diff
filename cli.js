@@ -28,6 +28,16 @@ yargs
     describe: `Set the log file path. It must be an absolute filepath. ` +
     `By default the logs will stored in a timestamp based log file at "${defaultLogDir}".`
   })
+  .option('o', {
+    alias: 'oldTagName',
+    describe: `The tag name for the old specification file.  If include it ` +
+    `indicates that the old spec file is a readme file`
+  })
+  .option('n', {
+    alias: 'newTagName',
+    describe: `The tag name for the new specification file.  If include it ` +
+    `indicates that the new spec file is a readme file`
+  })
   .global(['h', 'l', 'f'])
   .help()
   .argv;
