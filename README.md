@@ -1,7 +1,7 @@
 # How to install
 
 ```javascript
-npm install -g oad@0.1.11
+npm install -g oad@0.1.12
 ```
 
 ## git Usage
