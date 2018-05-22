@@ -1,4 +1,7 @@
 # Changelog
+## 0.1.12 Released on 2018-05-19.
+
+* Added support for readme tags.
 
 ## 0.1.11 Released on 2018-05-14
 

@@ -9,6 +9,7 @@ var utils = require('./lib/util/utils');
 // Easy to use methods from validate.js
 exports.log = require('./lib/util/logging');
 exports.compare = validate.compare;
+exports.compareTags = validate.compareTags;
 
 // Classes
 exports.OpenApiDiff = require('./lib/validators/openApiDiff');

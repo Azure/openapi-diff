@@ -23,6 +23,10 @@ Options:
   -j, --inJson       A boolean flag indicating whether output format of the
                      messages is json.                 [boolean] [default: true]
   -h, --help         Show help                                         [boolean]
+  -o, --oldTagName   The tag name for the old specification file.  If include it 
+                     indicates that the old spec file is a readme file
+  -n, --newTagName   The tag name for the new specification file.  If include it 
+                     indicates that the new spec file is a readme file
 ```
 
 ## Build dependencies
