@@ -1,4 +1,8 @@
 # Changelog
+## 0.1.13 Released on 2019-01-03.
+
+* Fixed security vulnerability issue reported in github. [#121](https://github.com/Azure/openapi-diff/pull/121)
+
 ## 0.1.12 Released on 2018-05-19.
 
 * Added support for readme tags.
