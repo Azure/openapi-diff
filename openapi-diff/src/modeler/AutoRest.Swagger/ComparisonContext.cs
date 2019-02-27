@@ -29,9 +29,9 @@ namespace AutoRest.Swagger
         /// <summary>
         /// The original root object in the graph that is being compared
         /// </summary>
-        public T CurrentRoot { get; set; }
+        public T CurrentRoot { get; }
 
-        public T PreviousRoot { get; set; }
+        public T PreviousRoot { get; }
 
         /// <summary>
         /// If true, then checking should be strict, in other words, breaking changes are errors

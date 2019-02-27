@@ -114,8 +114,14 @@ namespace AutoRest.Swagger.Model
             ServiceDefinition previousDefinition
         )
         {
-            context.CurrentRoot = this;
-            context.PreviousRoot = previousDefinition;
+            if (context.CurrentRoot != this)
+            {
+                throw new ArgumentException("context.CurrentRoot != this");
+            }
+            if (context.PreviousRoot != previousDefinition)
+            {
+                throw new ArgumentException("context.PreviousRoot != previousDefinition");
+            }
 
             base.Compare(context, previousDefinition);
 
