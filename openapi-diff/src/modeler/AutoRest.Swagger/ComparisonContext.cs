@@ -42,28 +42,37 @@ namespace AutoRest.Swagger
         public DataDirection Direction { get; set; } = DataDirection.None;
 
         public Uri File { get; set; }
-        public ObjectPath Path { get { return _path.Peek(); } }
+        public ObjectPath Path => _path.Peek();
 
-        public void PushIndex(int index) { _path.Push(Path.AppendIndex(index)); }
-        public void PushProperty(string property) { _path.Push(Path.AppendProperty(property)); }
-        public void Pop() { _path.Pop(); }
+        public void PushIndex(int index) => _path.Push(Path.AppendIndex(index));
+        public void PushProperty(string property) => _path.Push(Path.AppendProperty(property));
+        public void Pop() => _path.Pop();
 
         private Stack<ObjectPath> _path = new Stack<ObjectPath>(new[] { ObjectPath.Empty });
 
-        public void LogInfo(MessageTemplate template, params object[] formatArguments)
-        {
-            _messages.Add(new ComparisonMessage(template, new FileObjectPath(File, Path), Category.Info, formatArguments));
-        }
+        public void LogInfo(MessageTemplate template, params object[] formatArguments) 
+            => _messages.Add(new ComparisonMessage(
+                template, 
+                new FileObjectPath(File, Path), 
+                Category.Info, 
+                formatArguments
+            ));
 
         public void LogError(MessageTemplate template, params object[] formatArguments)
-        {
-            _messages.Add(new ComparisonMessage(template, new FileObjectPath(File, Path), Category.Error, formatArguments));
-        }
+            => _messages.Add(new ComparisonMessage(
+                template, 
+                new FileObjectPath(File, Path), 
+                Category.Error, 
+                formatArguments
+            ));
 
         public void LogBreakingChange(MessageTemplate template, params object[] formatArguments)
-        {
-            _messages.Add(new ComparisonMessage(template, new FileObjectPath(File, Path), Strict ? Category.Error : Category.Warning, formatArguments));
-        }
+            => _messages.Add(new ComparisonMessage(
+                template, 
+                new FileObjectPath(File, Path),
+                Strict ? Category.Error : Category.Warning,
+                formatArguments
+            ));
 
         public IEnumerable<ComparisonMessage> Messages
         {

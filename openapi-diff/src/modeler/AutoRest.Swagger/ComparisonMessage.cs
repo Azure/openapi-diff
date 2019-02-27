@@ -13,7 +13,12 @@ namespace AutoRest.Swagger
     /// </summary>
     public class ComparisonMessage
     {
-        public ComparisonMessage(MessageTemplate template, FileObjectPath path, Category severity, params object[] formatArguments)
+        public ComparisonMessage(
+            MessageTemplate template, 
+            FileObjectPath path, 
+            Category severity, 
+            params object[] formatArguments
+        )
         {
             Severity = severity;
             Message = $"{string.Format(CultureInfo.CurrentCulture, template.Message, formatArguments)}";
@@ -43,33 +48,29 @@ namespace AutoRest.Swagger
 
         public string GetValidationMessagesAsJson()
         {
-            var rawMessage = new Dictionary<string, string>();
-            rawMessage["id"] = Id.ToString();
-            rawMessage["code"] = Code.ToString();
-            rawMessage["message"] = Message;
-            rawMessage["jsonref"] = Path?.JsonReference;
-            rawMessage["json-path"] = Path?.ReadablePath;
-            rawMessage["type"] = Severity.ToString();
+            var rawMessage = new Dictionary<string, string>
+            {
+                ["id"] = Id.ToString(),
+                ["code"] = Code.ToString(),
+                ["message"] = Message,
+                ["jsonref"] = Path?.JsonReference,
+                ["json-path"] = Path?.ReadablePath,
+                ["type"] = Severity.ToString()
+            };
 
             return JsonConvert.SerializeObject(rawMessage, Formatting.Indented);
         }
 
         public override string ToString()
-        {
-            return $"code = {Code}, type = {Severity}, message = {Message}";
-        }
+            => $"code = {Code}, type = {Severity}, message = {Message}";
     }
 
     public class CustomComparer : IEqualityComparer<ComparisonMessage>
     {
         public bool Equals(ComparisonMessage message1, ComparisonMessage message2)
-        {
-            return message1.Message == message2.Message;
-        }
+            => message1.Message == message2.Message;
 
         public int GetHashCode(ComparisonMessage obj)
-        {
-            return obj.Message.GetHashCode();
-        }
+            => obj.Message.GetHashCode();
     }
 }
