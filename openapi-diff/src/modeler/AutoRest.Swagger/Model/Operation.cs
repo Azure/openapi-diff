@@ -9,7 +9,7 @@ namespace AutoRest.Swagger.Model
     /// <summary>
     /// Describes a single API operation on a path.
     /// </summary>
-    public class Operation : SwaggerBase
+    public class Operation : SwaggerBase<Operation>
     {
         public Operation()
         {
@@ -81,12 +81,15 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public override IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
+        public override IEnumerable<ComparisonMessage> Compare(
+            ComparisonContext<ServiceDefinition> context,
+            Operation previous
+        )
         {
-            var priorOperation = previous as Operation;
+            var priorOperation = previous;
 
-            var currentRoot = (context.CurrentRoot as ServiceDefinition);
-            var previousRoot = (context.PreviousRoot as ServiceDefinition);
+            var currentRoot = context.CurrentRoot;
+            var previousRoot = context.PreviousRoot;
 
             if (priorOperation == null)
             {
@@ -143,12 +146,12 @@ namespace AutoRest.Swagger.Model
         /// </summary>
         /// <param name="context">Comaprision Context</param>
         /// <param name="priorOperation">Operation object of old swagger</param>
-        private void CheckParameters(ComparisonContext context, Operation priorOperation)
+        private void CheckParameters(ComparisonContext<ServiceDefinition> context, Operation priorOperation)
         {
             // Check that no parameters were removed or reordered, and compare them if it's not the case.
 
-            var currentRoot = (context.CurrentRoot as ServiceDefinition);
-            var previousRoot = (context.PreviousRoot as ServiceDefinition);
+            var currentRoot = context.CurrentRoot;
+            var previousRoot = context.PreviousRoot;
 
             var priorOperationParameters = priorOperation.Parameters.Select(param =>
                                              string.IsNullOrWhiteSpace(param.Reference) ?

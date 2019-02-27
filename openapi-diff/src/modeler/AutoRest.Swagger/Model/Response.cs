@@ -9,7 +9,7 @@ namespace AutoRest.Swagger.Model
     /// <summary>
     /// Describes a single response from an API Operation.
     /// </summary>
-    public class OperationResponse : SwaggerBase
+    public class OperationResponse : SwaggerBase<OperationResponse>
     {
         public string Description { get; set; }
 
@@ -25,9 +25,10 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public override IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
+        public override IEnumerable<ComparisonMessage> Compare(
+            ComparisonContext<ServiceDefinition> context, OperationResponse previous)
         {
-            var priorResponse = previous as OperationResponse;
+            var priorResponse = previous;
 
             if (priorResponse == null)
             {

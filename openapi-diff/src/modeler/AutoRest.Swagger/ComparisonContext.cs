@@ -2,7 +2,6 @@
 using OpenApiDiff.Core.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AutoRest.Swagger
 {
@@ -10,13 +9,13 @@ namespace AutoRest.Swagger
     /// Provides context for a comparison, such as the ancestors in the validation tree, the root object
     ///   and information about the key or index that locate this object in the parent's list or dictionary
     /// </summary>
-    public class ComparisonContext
+    public class ComparisonContext<T>
     {
         /// <summary>
         /// Initializes a top level context for comparisons
         /// </summary>
         /// <param name="oldRoot"></param>
-        public ComparisonContext(object oldRoot, object newRoot, Settings settings = null)
+        public ComparisonContext(T oldRoot, T newRoot, Settings settings = null)
         {
             this.CurrentRoot = newRoot;
             this.PreviousRoot = oldRoot;
@@ -30,9 +29,9 @@ namespace AutoRest.Swagger
         /// <summary>
         /// The original root object in the graph that is being compared
         /// </summary>
-        public object CurrentRoot { get; set; }
+        public T CurrentRoot { get; set; }
 
-        public object PreviousRoot { get; set; }
+        public T PreviousRoot { get; set; }
 
         /// <summary>
         /// If true, then checking should be strict, in other words, breaking changes are errors

@@ -5,7 +5,7 @@ using System;
 
 namespace AutoRest.Swagger.Model
 {
-    public abstract class SpecObject : SwaggerBase
+    public abstract class SpecObject : SwaggerBase<ServiceDefinition>
     {
     }
 }

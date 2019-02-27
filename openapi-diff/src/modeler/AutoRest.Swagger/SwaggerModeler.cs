@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using AutoRest.Swagger.Model;
 using OpenApiDiff.Core;
 using System.Collections.Generic;
 
@@ -18,7 +19,7 @@ namespace AutoRest.Swagger
             var oldDefintion = SwaggerParser.Parse(swaggerPrevious);
             var newDefintion = SwaggerParser.Parse(swaggerNew);
 
-            var context = new ComparisonContext(oldDefintion, newDefintion, settings);
+            var context = new ComparisonContext<ServiceDefinition>(oldDefintion, newDefintion, settings);
 
             var comparisonMessages = newDefintion.Compare(context, oldDefintion);
 

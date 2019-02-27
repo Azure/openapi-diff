@@ -11,7 +11,7 @@ namespace AutoRest.Swagger.Model
     /// Describes a single operation parameter.
     /// https://github.com/wordnik/swagger-spec/blob/master/versions/2.0.md#parameterObject 
     /// </summary>
-    public class SwaggerParameter : SwaggerObject
+    public class SwaggerParameter : SwaggerObject<SwaggerParameter>
     {
         private bool _isRequired;
         public string Name { get; set; }
@@ -42,9 +42,12 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public override IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
+        public override IEnumerable<ComparisonMessage> Compare(
+            ComparisonContext<ServiceDefinition> context,
+            SwaggerParameter previous
+        )
         {
-            var priorParameter = previous as SwaggerParameter;
+            var priorParameter = previous;
 
             if (priorParameter == null)
             {
@@ -61,7 +64,11 @@ namespace AutoRest.Swagger.Model
             
             if (In != priorParameter.In)
             {
-                context.LogBreakingChange(ComparisonMessages.ParameterInHasChanged, priorParameter.In.ToString().ToLower(), In.ToString().ToLower());
+                context.LogBreakingChange(
+                    ComparisonMessages.ParameterInHasChanged,
+                    priorParameter.In.ToString().ToLower(),
+                    In.ToString().ToLower()
+                );
             }
 
             if (this.IsConstant != priorParameter.IsConstant)
