@@ -23,16 +23,16 @@ namespace AutoRest.Swagger
             }
         }
 
-        public static ServiceDefinition Parse(string swaggerDocument)
+        public static ParsedJson<ServiceDefinition> Parse(string swaggerDocument)
         {
             var raw = JToken.Parse(swaggerDocument);
             var converters = new JsonConverterCollection { };
             converters.Add(new ObjectConverter());
-            return raw.ToObject<ServiceDefinition>(JsonSerializer.Create(new JsonSerializerSettings
+            return raw.ToParsedJson(raw.ToObject<ServiceDefinition>(JsonSerializer.Create(new JsonSerializerSettings
             {
                 Converters = converters,
                 MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            }));
+            })));
             /*
             return JsonConvert.DeserializeObject<ServiceDefinition>(swaggerDocument, new JsonSerializerSettings
             {
