@@ -11,14 +11,17 @@ namespace AutoRest.Swagger
     /// </summary>
     public class ComparisonContext<T>
     {
+        private readonly T _CurrentRoot;
+        private readonly T _PreviousRoot; 
+
         /// <summary>
         /// Initializes a top level context for comparisons
         /// </summary>
         /// <param name="oldRoot"></param>
         public ComparisonContext(T oldRoot, T newRoot, Settings settings = null)
         {
-            this.CurrentRoot = newRoot;
-            this.PreviousRoot = oldRoot;
+            this._CurrentRoot = newRoot;
+            this._PreviousRoot = oldRoot;
             
             if (settings != null)
             {
@@ -29,9 +32,9 @@ namespace AutoRest.Swagger
         /// <summary>
         /// The original root object in the graph that is being compared
         /// </summary>
-        public T CurrentRoot { get; }
+        public T CurrentRoot => _CurrentRoot;
 
-        public T PreviousRoot { get; }
+        public T PreviousRoot => _PreviousRoot;
 
         /// <summary>
         /// If true, then checking should be strict, in other words, breaking changes are errors
