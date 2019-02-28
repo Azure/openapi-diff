@@ -11,14 +11,14 @@ namespace AutoRest.Swagger
     /// </summary>
     public class ComparisonContext<T>
     {
-        private readonly T _CurrentRoot;
-        private readonly T _PreviousRoot; 
+        private readonly ParsedJson<T> _CurrentRoot;
+        private readonly ParsedJson<T> _PreviousRoot; 
 
         /// <summary>
         /// Initializes a top level context for comparisons
         /// </summary>
         /// <param name="oldRoot"></param>
-        public ComparisonContext(T oldRoot, T newRoot, Settings settings = null)
+        public ComparisonContext(ParsedJson<T> oldRoot, ParsedJson<T> newRoot, Settings settings = null)
         {
             this._CurrentRoot = newRoot;
             this._PreviousRoot = oldRoot;
@@ -32,9 +32,9 @@ namespace AutoRest.Swagger
         /// <summary>
         /// The original root object in the graph that is being compared
         /// </summary>
-        public T CurrentRoot => _CurrentRoot;
+        public T CurrentRoot => _CurrentRoot.Typed;
 
-        public T PreviousRoot => _PreviousRoot;
+        public T PreviousRoot => _PreviousRoot.Typed;
 
         /// <summary>
         /// If true, then checking should be strict, in other words, breaking changes are errors

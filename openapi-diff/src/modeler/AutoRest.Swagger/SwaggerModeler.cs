@@ -19,7 +19,7 @@ namespace AutoRest.Swagger
             var oldDefintion = SwaggerParser.Parse(swaggerPrevious);
             var newDefintion = SwaggerParser.Parse(swaggerNew);
 
-            var context = new ComparisonContext<ServiceDefinition>(oldDefintion.Typed, newDefintion.Typed, settings);
+            var context = new ComparisonContext<ServiceDefinition>(oldDefintion, newDefintion, settings);
 
             var comparisonMessages = newDefintion.Typed.Compare(context, oldDefintion.Typed);
 
