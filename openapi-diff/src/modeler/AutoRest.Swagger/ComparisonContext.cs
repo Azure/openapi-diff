@@ -56,7 +56,9 @@ namespace AutoRest.Swagger
         public void LogInfo(MessageTemplate template, params object[] formatArguments) 
             => _messages.Add(new ComparisonMessage(
                 template, 
-                new FileObjectPath(File, Path), 
+                new FileObjectPath(File, Path),
+                _CurrentRoot.GetPosition(Path),
+                _PreviousRoot.GetPosition(Path),
                 Category.Info, 
                 formatArguments
             ));
@@ -64,7 +66,9 @@ namespace AutoRest.Swagger
         public void LogError(MessageTemplate template, params object[] formatArguments)
             => _messages.Add(new ComparisonMessage(
                 template, 
-                new FileObjectPath(File, Path), 
+                new FileObjectPath(File, Path),
+                _CurrentRoot.GetPosition(Path),
+                _PreviousRoot.GetPosition(Path),
                 Category.Error, 
                 formatArguments
             ));
@@ -73,6 +77,8 @@ namespace AutoRest.Swagger
             => _messages.Add(new ComparisonMessage(
                 template, 
                 new FileObjectPath(File, Path),
+                _CurrentRoot.GetPosition(Path),
+                _PreviousRoot.GetPosition(Path),
                 Strict ? Category.Error : Category.Warning,
                 formatArguments
             ));

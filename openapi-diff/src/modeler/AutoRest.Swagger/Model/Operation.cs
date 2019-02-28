@@ -153,6 +153,8 @@ namespace AutoRest.Swagger.Model
             var currentRoot = context.CurrentRoot;
             var previousRoot = context.PreviousRoot;
 
+            context.PushProperty("parameters");
+
             var priorOperationParameters = priorOperation.Parameters.Select(param =>
                                              string.IsNullOrWhiteSpace(param.Reference) ?
                                              param : FindReferencedParameter(param.Reference, previousRoot.Parameters));
@@ -194,6 +196,7 @@ namespace AutoRest.Swagger.Model
                     context.Pop();
                 }
             }
+            context.Pop();
         }
 
         /// <summary>

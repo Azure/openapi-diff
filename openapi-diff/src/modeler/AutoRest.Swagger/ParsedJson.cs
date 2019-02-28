@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
+using OpenApiDiff.Core.Logging;
+using System.Linq;
 
 namespace AutoRest.Swagger
 {
@@ -12,6 +14,18 @@ namespace AutoRest.Swagger
         {
             Token = token;
             Typed = typed;
+        }
+
+        public JToken GetPosition(ObjectPath path)
+        {
+            var r = path.Path.Aggregate(
+                Token,
+                (t, part) =>
+                    t is JArray a ? (part is ObjectPathPartIndex index ? a[index.Index] : null) :
+                    t is JObject o ? (part is ObjectPathPartProperty property ? o[property.Property] : null) :
+                    null
+                );
+            return r;
         }
     }
 

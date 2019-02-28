@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using AutoRest.Swagger.Model;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OpenApiDiff.Core.Logging;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,7 +17,9 @@ namespace AutoRest.Swagger
     {
         public ComparisonMessage(
             MessageTemplate template, 
-            FileObjectPath path, 
+            FileObjectPath path,
+            JToken current,
+            JToken @new,
             Category severity, 
             params object[] formatArguments
         )
@@ -23,9 +27,14 @@ namespace AutoRest.Swagger
             Severity = severity;
             Message = $"{string.Format(CultureInfo.CurrentCulture, template.Message, formatArguments)}";
             Path = path;
+            Current = current;
+            New = @new;
             Id = template.Id;
             Code = template.Code;
         }
+
+        public JToken Current { get; }
+        public JToken New { get; }
 
         public Category Severity { get; }
 
@@ -39,12 +48,12 @@ namespace AutoRest.Swagger
         /// <summary>
         /// The id of the validation message
         /// </summary>
-        public int Id { get; private set; }
+        public int Id { get; }
 
         /// <summary>
         /// The code of the validation message
         /// </summary>
-        public string Code { get; private set; }
+        public string Code { get; }
 
         public string GetValidationMessagesAsJson()
         {
@@ -55,7 +64,7 @@ namespace AutoRest.Swagger
                 ["message"] = Message,
                 ["jsonref"] = Path?.JsonReference,
                 // ["json-path"] = Path?.JsonPath,
-                ["type"] = Severity.ToString()
+                ["type"] = Severity.ToString(),
             };
 
             return JsonConvert.SerializeObject(rawMessage, Formatting.Indented);
