@@ -25,7 +25,7 @@ namespace OpenApiDiff.Core.Logging
 
         public override string JsonPath => regexValidES3DotNotationPropertyName.IsMatch(Property) ? $".{Property}" : $"[{JsonConvert.SerializeObject(Property)}]";
 
-        public override string ReadablePath => Property.StartsWith("/") ? Property : $"/{Property}";
+        // public override string ReadablePath => Property.StartsWith("/") ? Property : $"/{Property}";
 
         public override object RawPath => Property;
 

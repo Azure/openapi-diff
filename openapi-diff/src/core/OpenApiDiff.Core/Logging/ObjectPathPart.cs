@@ -11,7 +11,7 @@ namespace OpenApiDiff.Core.Logging
 
         public abstract string JsonPath { get; }
 
-        public abstract string ReadablePath { get; }
+        // public abstract string ReadablePath { get; }
 
         public abstract object RawPath { get; }
 

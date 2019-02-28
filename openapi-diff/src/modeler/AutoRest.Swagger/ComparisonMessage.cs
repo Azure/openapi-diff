@@ -54,7 +54,7 @@ namespace AutoRest.Swagger
                 ["code"] = Code.ToString(),
                 ["message"] = Message,
                 ["jsonref"] = Path?.JsonReference,
-                ["json-path"] = Path?.ReadablePath,
+                // ["json-path"] = Path?.JsonPath,
                 ["type"] = Severity.ToString()
             };
 

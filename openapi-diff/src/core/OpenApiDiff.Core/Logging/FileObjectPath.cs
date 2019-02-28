@@ -26,6 +26,6 @@ namespace OpenApiDiff.Core.Logging
         // https://tools.ietf.org/id/draft-pbryan-zyp-json-ref-03.html
         public string JsonReference => $"{FilePath}#{ObjectPath.JsonPointer}";
 
-        public string ReadablePath => $"{FilePath}#{ObjectPath.ReadablePath}";
+        // public string ReadablePath => $"{FilePath}#{ObjectPath.ReadablePath}";
     }
 }

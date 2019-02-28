@@ -21,7 +21,7 @@ namespace OpenApiDiff.Core.Logging
 
         public override string JsonPath => $"[{Index + 1}]";
 
-        public override string ReadablePath => JsonPath;
+        // public override string ReadablePath => JsonPath;
 
         public override object RawPath => Index;
 
