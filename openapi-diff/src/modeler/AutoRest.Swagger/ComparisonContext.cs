@@ -1,4 +1,5 @@
-﻿using OpenApiDiff.Core;
+﻿using Newtonsoft.Json.Linq;
+using OpenApiDiff.Core;
 using OpenApiDiff.Core.Logging;
 using System;
 using System.Collections.Generic;
@@ -47,8 +48,9 @@ namespace AutoRest.Swagger
         public Uri File { get; set; }
         public ObjectPath Path => _path.Peek();
 
-        public void PushIndex(int index) => _path.Push(Path.AppendIndex(index));
+        // public void PushIndex(int index) => _path.Push(Path.AppendIndex(index));
         public void PushProperty(string property) => _path.Push(Path.AppendProperty(property));
+        public void PushExpression(Func<JToken, string> func) => _path.Push(Path.AppendExpression(func));
         public void Pop() => _path.Pop();
 
         private Stack<ObjectPath> _path = new Stack<ObjectPath>(new[] { ObjectPath.Empty });
@@ -57,8 +59,8 @@ namespace AutoRest.Swagger
             => _messages.Add(new ComparisonMessage(
                 template, 
                 new FileObjectPath(File, Path),
-                _CurrentRoot.GetPosition(Path),
-                _PreviousRoot.GetPosition(Path),
+                _PreviousRoot.Token,
+                _CurrentRoot.Token,
                 Category.Info, 
                 formatArguments
             ));
@@ -67,8 +69,8 @@ namespace AutoRest.Swagger
             => _messages.Add(new ComparisonMessage(
                 template, 
                 new FileObjectPath(File, Path),
-                _CurrentRoot.GetPosition(Path),
-                _PreviousRoot.GetPosition(Path),
+                _PreviousRoot.Token,
+                _CurrentRoot.Token,
                 Category.Error, 
                 formatArguments
             ));
@@ -77,8 +79,8 @@ namespace AutoRest.Swagger
             => _messages.Add(new ComparisonMessage(
                 template, 
                 new FileObjectPath(File, Path),
-                _CurrentRoot.GetPosition(Path),
-                _PreviousRoot.GetPosition(Path),
+                _PreviousRoot.Token,
+                _CurrentRoot.Token,
                 Strict ? Category.Error : Category.Warning,
                 formatArguments
             ));

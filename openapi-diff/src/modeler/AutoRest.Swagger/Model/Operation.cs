@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace AutoRest.Swagger.Model
 {
@@ -192,7 +193,20 @@ namespace AutoRest.Swagger.Model
                 if (oldParam == null)
                 {
                     // Did not find required parameter in the old swagger i.e required parameter is added
-                    context.PushProperty(newParam.Name);
+                    var key = newParam.Name;
+                    /*
+                    context.PushExpression(
+                        t =>
+                        {
+                            return t
+                                .Select((v, i) => (v, i))
+                                .First(vi => vi.v["name"].Value<string>() == key)
+                                .i
+                                .ToString();
+                        }
+                    );
+                    */
+                    context.PushProperty(key);
                     context.LogBreakingChange(ComparisonMessages.AddingRequiredParameter, newParam.Name);
                     context.Pop();
                 }

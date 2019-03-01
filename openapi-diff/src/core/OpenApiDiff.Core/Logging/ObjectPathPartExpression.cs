@@ -1,11 +1,17 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using YamlDotNet.RepresentationModel;
 
 namespace OpenApiDiff.Core.Logging
 {
     public sealed class ObjectPathPartExpression : ObjectPathPart
     {
-        public override string JsonPointer(JToken t) => throw new NotImplementedException();
+        private readonly Func<JToken, string> _GetPropertyName;
+
+        public ObjectPathPartExpression(Func<JToken, string> getPropertyName)
+        {
+            _GetPropertyName = getPropertyName;
+        }
+
+        public override string GetPropertyName(JToken t) => _GetPropertyName(t);
     }
 }

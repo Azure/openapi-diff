@@ -16,17 +16,18 @@ namespace AutoRest.Swagger
             Typed = typed;
         }
 
+        /*
         public JToken GetPosition(ObjectPath path)
         {
             var r = path.Path.Aggregate(
                 Token,
-                (t, part) =>
-                    t is JArray a ? (part is ObjectPathPartIndex index ? a[index.Index] : null) :
+                (t, part) =>                    
                     t is JObject o ? (part is ObjectPathPartProperty property ? o[property.Property] : null) :
                     null
                 );
             return r;
         }
+        */
     }
 
     internal static class ParsedJson
