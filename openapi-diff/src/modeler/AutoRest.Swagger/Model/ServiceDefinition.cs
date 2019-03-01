@@ -109,7 +109,7 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public override IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
+        public override ComparisonMessagesV2 Compare(ComparisonContext context, SwaggerBase previous)
         {
             if (previous == null)
                 throw new ArgumentNullException("previous");
@@ -117,7 +117,7 @@ namespace AutoRest.Swagger.Model
             context.CurrentRoot = this;
             context.PreviousRoot = previous;
 
-            base.Compare(context, previous);
+            base.Validate(context, previous);
 
             var previousDefinition = previous as ServiceDefinition;
 
@@ -376,7 +376,7 @@ namespace AutoRest.Swagger.Model
 
             context.Pop();
 
-            return context.Messages;
+            return context.MessagesV2;
         }
 
 

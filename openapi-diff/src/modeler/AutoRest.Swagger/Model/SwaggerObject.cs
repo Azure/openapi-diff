@@ -82,9 +82,8 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public override IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
+        public override ComparisonMessagesV2 Compare(ComparisonContext context, SwaggerBase previous)
         {
-
             var prior = previous as SwaggerObject;
 
             if (prior == null)
@@ -96,7 +95,7 @@ namespace AutoRest.Swagger.Model
                 throw new ArgumentNullException("context");
             }
 
-            base.Compare(context, previous);
+            base.Validate(context, previous);
 
             if (Reference != null && !Reference.Equals(prior.Reference))
             {
@@ -149,7 +148,7 @@ namespace AutoRest.Swagger.Model
 
             CompareEnums(context, prior);
 
-            return context.Messages;
+            return context.MessagesV2;
         }
 
         private void CompareEnums(ComparisonContext context, SwaggerObject prior)

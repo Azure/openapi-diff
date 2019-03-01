@@ -13,7 +13,7 @@ namespace AutoRest.Swagger
         /// </summary>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public IEnumerable<ComparisonMessage> Compare(string swaggerPrevious, string swaggerNew, Settings settings = null)
+        public ComparisonMessagesV2 Compare(string swaggerPrevious, string swaggerNew, Settings settings = null)
         {
             var oldDefintion = SwaggerParser.Parse(swaggerPrevious);
             var newDefintion = SwaggerParser.Parse(swaggerNew);

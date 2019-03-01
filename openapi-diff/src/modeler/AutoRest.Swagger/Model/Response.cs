@@ -25,7 +25,7 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public override IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
+        public override ComparisonMessagesV2 Compare(ComparisonContext context, SwaggerBase previous)
         {
             var priorResponse = previous as OperationResponse;
 
@@ -40,7 +40,7 @@ namespace AutoRest.Swagger.Model
 
             context.Direction = DataDirection.Response;
 
-            base.Compare(context, previous);
+            base.Validate(context, previous);
 
             var headers = Headers != null ? Headers : new Dictionary<string, Header>();
             var priorHeaders = priorResponse.Headers != null ? priorResponse.Headers : new Dictionary<string, Header>();
@@ -82,7 +82,7 @@ namespace AutoRest.Swagger.Model
 
             context.Direction = DataDirection.None;
 
-            return context.Messages;
+            return context.MessagesV2;
         }
     }
 }

@@ -73,7 +73,7 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public override IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
+        public override ComparisonMessagesV2 Compare(ComparisonContext context, SwaggerBase previous)
         {
             if (!(previous is Schema priorSchema))
             {
@@ -94,7 +94,7 @@ namespace AutoRest.Swagger.Model
                 referenced += 1;
                 if (thisSchema == null)
                 {
-                    return context.Messages;
+                    return context.MessagesV2;
                 }
             }
             if (!string.IsNullOrWhiteSpace(priorSchema.Reference))
@@ -103,7 +103,7 @@ namespace AutoRest.Swagger.Model
                 referenced += 1;
                 if (priorSchema == null)
                 {
-                    return context.Messages;
+                    return context.MessagesV2;
                 }
             }
 
@@ -115,7 +115,7 @@ namespace AutoRest.Swagger.Model
 
                 if (thisSchema._compareDirection == context.Direction || thisSchema._compareDirection == DataDirection.Both)
                 {
-                    return new ComparisonMessage[0];
+                    return new ComparisonMessagesV2();
                 }
                 _compareDirection |= context.Direction;
             }
@@ -124,7 +124,7 @@ namespace AutoRest.Swagger.Model
             {
                 if (_visitedSchemas.Contains(priorSchema))
                 {
-                    return context.Messages;
+                    return context.MessagesV2;
                 }
                 _visitedSchemas.AddFirst(priorSchema);
                 return thisSchema.Compare(context, priorSchema);
@@ -167,7 +167,7 @@ namespace AutoRest.Swagger.Model
             // Compare `required` list of properties of the model
             CompareRequired(context, priorSchema);
 
-            return context.Messages;
+            return context.MessagesV2;
         }
 
         /// <summary>

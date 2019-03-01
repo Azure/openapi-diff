@@ -81,7 +81,7 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public override IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
+        public override ComparisonMessagesV2 Compare(ComparisonContext context, SwaggerBase previous)
         {
             var priorOperation = previous as Operation;
 
@@ -93,7 +93,7 @@ namespace AutoRest.Swagger.Model
                 throw new ArgumentException("previous");
             }
 
-            base.Compare(context, previous);
+            base.Validate(context, previous);
 
             if (!OperationId.Equals(priorOperation.OperationId))
             {
@@ -135,7 +135,7 @@ namespace AutoRest.Swagger.Model
                 }
             }
 
-            return context.Messages;
+            return context.MessagesV2;
         }
 
         /// <summary>
