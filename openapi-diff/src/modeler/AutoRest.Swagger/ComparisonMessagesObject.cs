@@ -46,7 +46,7 @@ namespace AutoRest.Swagger
 
         public override string ToString()
         {
-            return $"additions : {this.Additions.ToString()}, updates : {this.Updates.ToString()}, removals : {this.Removals.ToString()}";
+            return $"additions : {this.Additions.ToString()}; updates : {this.Updates.ToString()}; removals : {this.Removals.ToString()}";
         }
     }
 }
