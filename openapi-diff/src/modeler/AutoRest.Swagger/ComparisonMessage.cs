@@ -27,7 +27,7 @@ namespace AutoRest.Swagger
 
         public string DocUrl { get; }
 
-        public string GetValidationMessagesAsJson()
+        public object GetValidationMessagesAsJson()
         {
             var rawMessage = new Dictionary<string, string>();
             rawMessage["message"] = Message;
@@ -36,7 +36,7 @@ namespace AutoRest.Swagger
             rawMessage["id"] = Id.ToString();
             rawMessage["code"] = Code.ToString();
             rawMessage["docurl"] = DocUrl.ToString();
-            return JsonConvert.SerializeObject(rawMessage, Formatting.Indented);
+            return rawMessage;
         }
 
         public override string ToString()

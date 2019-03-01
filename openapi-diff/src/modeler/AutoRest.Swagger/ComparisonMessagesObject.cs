@@ -37,7 +37,7 @@ namespace AutoRest.Swagger
 
         public string GetValidationMessagesAsJson()
         {
-            var rawMessage = new Dictionary<string, string>();
+            var rawMessage = new Dictionary<string, object>();
             rawMessage["additions"] = this.Additions.GetValidationMessagesAsJson();
             rawMessage["updates"] = this.Updates.GetValidationMessagesAsJson();
             rawMessage["removals"] = this.Removals.GetValidationMessagesAsJson();
@@ -46,7 +46,7 @@ namespace AutoRest.Swagger
 
         public override string ToString()
         {
-            return $"additions = {this.Additions.ToString()}, updates = {this.Updates.ToString()}, removals = {this.Removals.ToString()}";
+            return $"additions : {this.Additions.ToString()}, updates : {this.Updates.ToString()}, removals : {this.Removals.ToString()}";
         }
     }
 }

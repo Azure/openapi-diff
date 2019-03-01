@@ -34,30 +34,41 @@ namespace AutoRest.Swagger
             }
         }
 
-        private string GetFormattedMessage(IList<ComparisonMessage> list)
+        private object GetFormattedMessage(IList<ComparisonMessage> list)
         {
-            string formattedMessage = "[";
+            IList<object> array = new List<object>();
             foreach (var message in list)
             {
-                formattedMessage = $"{formattedMessage},{message.GetValidationMessagesAsJson()}";
+                array.Add(message.GetValidationMessagesAsJson());
             }
-            formattedMessage = $"{formattedMessage}]";
-            return formattedMessage;
+            return array;
         }
 
-        public string GetValidationMessagesAsJson()
+        private string GetFormattedMessageString(IList<ComparisonMessage> list)
         {
-            var rawMessage = new Dictionary<string, string>();
+            string output = "[";
+            foreach (var message in list)
+            {
+                output = output == "[" ? $"{output}{message.ToString()}" : $"{output},{message.ToString()}";
+            }
+            output = $"{output}]";
+            return output;
+        }
+
+        public object GetValidationMessagesAsJson()
+        {
+            var rawMessage = new Dictionary<string, object>();
 
             rawMessage["errors"] = GetFormattedMessage(this.Errors);
             rawMessage["warnings"] = GetFormattedMessage(this.Warnings);
             rawMessage["info"] = GetFormattedMessage(this.Info);
-            return JsonConvert.SerializeObject(rawMessage, Formatting.Indented);
+
+            return rawMessage;
         }
 
         public override string ToString()
         {
-            return $"errors = {this.Errors.ToString()}, warnings = {this.Warnings.ToString()}, info = {this.Info.ToString()}";
+            return $"errors = {GetFormattedMessageString(this.Errors)}, warnings = {GetFormattedMessageString(this.Warnings)}, info = {GetFormattedMessageString(this.Info)}";
         }
     }
 }
