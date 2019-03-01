@@ -109,10 +109,10 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("type_changed.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.TypeChanged.Id);
             Assert.NotEmpty(missing);
-            var error = missing.Where(err => err.Path.JsonReference.StartsWith("#/definitions/")).FirstOrDefault();
+            var error = missing.Where(err => err.NewJsonRef.StartsWith("#/definitions/")).FirstOrDefault();
             Assert.NotNull(error);
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/definitions/Database/properties/a", error.Path.JsonReference);
+            Assert.Equal("#/definitions/Database/properties/a", error.NewJsonRef);
         }
 
         /// <summary>
@@ -124,10 +124,10 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("misc_checks_01.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.TypeFormatChanged.Id);
             Assert.NotEmpty(missing);
-            var error = missing.Where(err => err.Path.JsonReference.StartsWith("#/definitions/")).FirstOrDefault();
+            var error = missing.Where(err => err.NewJsonRef.StartsWith("#/definitions/")).FirstOrDefault();
             Assert.NotNull(error);
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/definitions/Database/properties/c", error.Path.JsonReference);
+            Assert.Equal("#/definitions/Database/properties/c", error.NewJsonRef);
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace AutoRest.Swagger.Tests
         public void UnreferencedDefinitionRemoved()
         {
             var messages = CompareSwagger("misc_checks_02.json").ToArray();
-            var missing = messages.Where(m => m.Id > 0 && m.Path.JsonReference.StartsWith("#/definitions/Unreferenced"));
+            var missing = messages.Where(m => m.Id > 0 && m.NewJsonRef.StartsWith("#/definitions/Unreferenced"));
             Assert.Empty(missing);
         }
 
@@ -148,7 +148,7 @@ namespace AutoRest.Swagger.Tests
         public void UnreferencedTypeChanged()
         {
             var messages = CompareSwagger("misc_checks_02.json").ToArray();
-            var missing = messages.Where(m => m.Id > 0 && m.Path.JsonReference.StartsWith("#/definitions/Database"));
+            var missing = messages.Where(m => m.Id > 0 && m.NewJsonRef.StartsWith("#/definitions/Database"));
             Assert.Empty(missing);
         }
 
@@ -161,8 +161,8 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("removed_path.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedPath.Id);
             Assert.Equal(2, missing.Count());
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.JsonReference == "#/paths/~1api~1Parameters~1{a}"));
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.JsonReference == "#/paths/~1api~1Responses"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.NewJsonRef == "#/paths/~1api~1Parameters~1{a}"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.NewJsonRef == "#/paths/~1api~1Responses"));
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("removed_operation.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedOperation.Id);
             Assert.Single(missing);
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.JsonReference == "#/paths/~1api~1Operations"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.NewJsonRef == "#/paths/~1api~1Operations"));
         }
 
         /// <summary>
@@ -186,8 +186,8 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("changed_operation_id.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.ModifiedOperationId.Id);
             Assert.Equal(2, missing.Count());
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.JsonReference == "#/paths/~1api~1Paths/get"));
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.JsonReference == "#/paths/~1api~1Operations/post"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.NewJsonRef == "#/paths/~1api~1Paths/get"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.NewJsonRef == "#/paths/~1api~1Operations/post"));
             IJsonLineInfo current = messages[0].Old;
             IJsonLineInfo previous = messages[0].New;
         }
@@ -201,11 +201,11 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("added_path.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.AddedPath.Id);
             Assert.Single(missing);
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.Path.JsonReference == "#/paths/~1api~1Paths"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.NewJsonRef == "#/paths/~1api~1Paths"));
 
             missing = messages.Where(m => m.Id == ComparisonMessages.AddedOperation.Id);
             Assert.Single(missing);
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.Path.JsonReference == "#/paths/~1api~1Operations/post"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.NewJsonRef == "#/paths/~1api~1Operations/post"));
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("required_parameter.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedRequiredParameter.Id);
             Assert.Single(missing);
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.JsonReference == "#/paths/~1api~1Parameters~1{a}/get/parameters/f"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.NewJsonRef == "#/paths/~1api~1Parameters~1{a}/get/parameters/f"));
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace AutoRest.Swagger.Tests
             var missing = messages.Where(m => m.Severity == Category.Error && m.Id == ComparisonMessages.AddedRequiredProperty.Id);
             Assert.Equal(2, missing.Count());
             var error = missing.First();
-            Assert.Equal("#/paths/~1api~1Parameters/put/parameters/database", error.Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Parameters/put/parameters/database", error.NewJsonRef);
         }
 
         /// <summary>
@@ -244,7 +244,7 @@ namespace AutoRest.Swagger.Tests
             Assert.NotEmpty(missing);
             var error = missing.First();
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/paths/~1api~1Parameters/get/parameters/x-ar", error.Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Parameters/get/parameters/x-ar", error.NewJsonRef);
         }
 
 
@@ -257,7 +257,7 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("required_parameter.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.AddingRequiredParameter.Id);
             Assert.Single(missing);
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.JsonReference == "#/paths/~1api~1Parameters~1{a}/get/parameters/g"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.NewJsonRef == "#/paths/~1api~1Parameters~1{a}/get/parameters/g"));
         }
 
         /// <summary>
@@ -269,7 +269,7 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("readonly_changes.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.AddedReadOnlyPropertyInResponse.Id);
             Assert.Single(missing);
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.Path.JsonReference == "#/paths/~1subscriptions~1{subscriptionId}~1providers~1Microsoft.Storage~1checkNameAvailability/post/200/properties"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.NewJsonRef == "#/paths/~1subscriptions~1{subscriptionId}~1providers~1Microsoft.Storage~1checkNameAvailability/post/200/properties"));
         }
 
         /// <summary>
@@ -281,7 +281,7 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("added_property_in_response.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.AddedPropertyInResponse.Id);
             Assert.Single(missing);
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.JsonReference == "#/paths/~1subscriptions~1{subscriptionId}~1providers~1Microsoft.Storage~1checkNameAvailability/post/200/properties"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.NewJsonRef == "#/paths/~1subscriptions~1{subscriptionId}~1providers~1Microsoft.Storage~1checkNameAvailability/post/200/properties"));
         }
 
         /// <summary>
@@ -309,7 +309,7 @@ namespace AutoRest.Swagger.Tests
             Assert.NotEmpty(missing);
             var error = missing.First();
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/paths/~1api~1Parameters/get/parameters/x-cr", error.Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Parameters/get/parameters/x-cr", error.NewJsonRef);
         }
 
         /// <summary>
@@ -323,7 +323,7 @@ namespace AutoRest.Swagger.Tests
             Assert.NotEmpty(missing);
             var error = missing.First();
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/paths/~1api~1Parameters~1{a}/get/parameters/b", error.Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Parameters~1{a}/get/parameters/b", error.NewJsonRef);
         }
 
         /// <summary>
@@ -335,7 +335,7 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("required_parameter.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.RequiredStatusChange.Id);
             Assert.Single(missing);
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.JsonReference == "#/paths/~1api~1Parameters~1{a}/get/parameters/e"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.NewJsonRef == "#/paths/~1api~1Parameters~1{a}/get/parameters/e"));
         }
 
         /// <summary>
@@ -349,7 +349,7 @@ namespace AutoRest.Swagger.Tests
             Assert.NotEmpty(missing);
             var error = missing.Skip(1).First();
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/paths/~1api~1Parameters~1{a}/get/parameters/e", error.Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Parameters~1{a}/get/parameters/e", error.NewJsonRef);
         }
 
         /// <summary>
@@ -364,7 +364,7 @@ namespace AutoRest.Swagger.Tests
             Assert.NotEmpty(missing);
             var error = missing.First();
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/paths/~1api~1Parameters~1{a}/get/parameters/f", error.Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Parameters~1{a}/get/parameters/f", error.NewJsonRef);
         }
 
         /// <summary>
@@ -391,7 +391,7 @@ namespace AutoRest.Swagger.Tests
             Assert.NotEmpty(changed);
             var error = changed.First();
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/paths/~1api~1Parameters/post/parameters/registry/properties/b", error.Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Parameters/post/parameters/registry/properties/b", error.NewJsonRef);
         }
 
         /// <summary>
@@ -405,7 +405,7 @@ namespace AutoRest.Swagger.Tests
             Assert.NotEmpty(removed);
             var error = removed.First();
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/200", error.Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Responses/get/200", error.NewJsonRef);
         }
 
         /// <summary>
@@ -419,7 +419,7 @@ namespace AutoRest.Swagger.Tests
             Assert.NotEmpty(removed);
             var error = removed.First();
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/202", error.Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Responses/get/202", error.NewJsonRef);
         }
 
         /// <summary>
@@ -433,10 +433,10 @@ namespace AutoRest.Swagger.Tests
             Assert.Equal(2, removed.Length);
 
             Assert.Equal(Category.Error, removed[0].Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/201", removed[0].Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Responses/get/201", removed[0].NewJsonRef);
 
             Assert.Equal(Category.Error, removed[1].Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/400/properties/id", removed[1].Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Responses/get/400/properties/id", removed[1].NewJsonRef);
         }
 
         /// <summary>
@@ -446,10 +446,10 @@ namespace AutoRest.Swagger.Tests
         public void ResponseSchemaChanged()
         {
             var messages = CompareSwagger("operation_check_02.json").ToArray();
-            var removed = messages.Where(m => m.Id == ComparisonMessages.TypeChanged.Id && m.Path.JsonReference.Contains("Responses")).ToArray();
+            var removed = messages.Where(m => m.Id == ComparisonMessages.TypeChanged.Id && m.NewJsonRef.Contains("Responses")).ToArray();
             Assert.Single(removed);
             Assert.Equal(Category.Error, removed[0].Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/400/properties/id", removed[0].Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Responses/get/400/properties/id", removed[0].NewJsonRef);
         }
 
         /// <summary>
@@ -462,7 +462,7 @@ namespace AutoRest.Swagger.Tests
             var added = messages.Where(m => m.Id == ComparisonMessages.AddingHeader.Id).ToArray();
             Assert.Single(added);
             Assert.Equal(Category.Info, added[0].Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/200/x-c", added[0].Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Responses/get/200/x-c", added[0].NewJsonRef);
         }
 
         /// <summary>
@@ -475,7 +475,7 @@ namespace AutoRest.Swagger.Tests
             var removed = messages.Where(m => m.Id == ComparisonMessages.RemovingHeader.Id).ToArray();
             Assert.Single(removed);
             Assert.Equal(Category.Error, removed[0].Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/200/x-a", removed[0].Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Responses/get/200/x-a", removed[0].NewJsonRef);
         }
 
         /// <summary>
@@ -485,10 +485,10 @@ namespace AutoRest.Swagger.Tests
         public void ResponseHeaderTypeChanged()
         {
             var messages = CompareSwagger("operation_check_03.json").ToArray();
-            var changed = messages.Where(m => m.Id == ComparisonMessages.TypeChanged.Id && m.Path.JsonReference.Contains("Responses")).ToArray();
+            var changed = messages.Where(m => m.Id == ComparisonMessages.TypeChanged.Id && m.NewJsonRef.Contains("Responses")).ToArray();
             Assert.Single(changed);
             Assert.Equal(Category.Error, changed[0].Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/200/x-b", changed[0].Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Responses/get/200/x-b", changed[0].NewJsonRef);
         }
 
         /// <summary>
@@ -498,7 +498,7 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void RequestArrayFormatChanged()
         {
-            var messages = CompareSwagger("operation_check_04.json").Where(m => m.Path.JsonReference.Contains("Parameters")).ToArray();
+            var messages = CompareSwagger("operation_check_04.json").Where(m => m.NewJsonRef.Contains("Parameters")).ToArray();
             var changed = messages.Where(m => m.Id == ComparisonMessages.ArrayCollectionFormatChanged.Id).ToArray();
 
             Assert.Equal(4, changed.Length);
@@ -506,10 +506,10 @@ namespace AutoRest.Swagger.Tests
             Assert.Equal(Category.Error, changed[1].Severity);
             Assert.Equal(Category.Error, changed[2].Severity);
             Assert.Equal(Category.Error, changed[3].Severity);
-            Assert.Equal("#/paths/~1api~1Parameters/get/parameters/a", changed[0].Path.JsonReference);
-            Assert.Equal("#/paths/~1api~1Parameters/get/parameters/b", changed[1].Path.JsonReference);
-            Assert.Equal("#/paths/~1api~1Parameters/put/parameters/a/properties/a", changed[2].Path.JsonReference);
-            Assert.Equal("#/paths/~1api~1Parameters/put/parameters/a/properties/b", changed[3].Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Parameters/get/parameters/a", changed[0].NewJsonRef);
+            Assert.Equal("#/paths/~1api~1Parameters/get/parameters/b", changed[1].NewJsonRef);
+            Assert.Equal("#/paths/~1api~1Parameters/put/parameters/a/properties/a", changed[2].NewJsonRef);
+            Assert.Equal("#/paths/~1api~1Parameters/put/parameters/a/properties/b", changed[3].NewJsonRef);
         }
 
         /// <summary>
@@ -519,7 +519,7 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void RequestTypeConstraintsChanged()
         {
-            var messages = CompareSwagger("operation_check_04.json").Where(m => m.Path.JsonReference.Contains("Parameters")).ToArray();
+            var messages = CompareSwagger("operation_check_04.json").Where(m => m.NewJsonRef.Contains("Parameters")).ToArray();
             var stricter = messages.Where(m => m.Id == ComparisonMessages.ConstraintIsStronger.Id && m.Severity == Category.Error).ToArray();
             var breaking = messages.Where(m => m.Id == ComparisonMessages.ConstraintChanged.Id && m.Severity == Category.Error).ToArray();
             var info = messages.Where(m => m.Id > 0 && m.Severity == Category.Info).ToArray();
@@ -536,7 +536,7 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void ResponseArrayFormatChanged()
         {
-            var messages = CompareSwagger("operation_check_05.json").Where(m => m.Path.JsonReference.Contains("Responses")).ToArray();
+            var messages = CompareSwagger("operation_check_05.json").Where(m => m.NewJsonRef.Contains("Responses")).ToArray();
             var changed = messages.Where(m => m.Id == ComparisonMessages.ArrayCollectionFormatChanged.Id).ToArray();
 
             Assert.Equal(4, changed.Length);
@@ -544,8 +544,8 @@ namespace AutoRest.Swagger.Tests
             Assert.Equal(Category.Error, changed[1].Severity);
             Assert.Equal(Category.Error, changed[2].Severity);
             Assert.Equal(Category.Error, changed[3].Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/200/properties/a", changed[0].Path.JsonReference);
-            Assert.Equal("#/paths/~1api~1Responses/get/200/properties/b", changed[1].Path.JsonReference);
+            Assert.Equal("#/paths/~1api~1Responses/get/200/properties/a", changed[0].NewJsonRef);
+            Assert.Equal("#/paths/~1api~1Responses/get/200/properties/b", changed[1].NewJsonRef);
         }
 
         /// <summary>
@@ -554,7 +554,7 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void ResponseTypeConstraintsChanged()
         {
-            var messages = CompareSwagger("operation_check_05.json").Where(m => m.Path.JsonReference.Contains("Responses")).ToArray();
+            var messages = CompareSwagger("operation_check_05.json").Where(m => m.NewJsonRef.Contains("Responses")).ToArray();
             var relaxed = messages.Where(m => m.Id == ComparisonMessages.ConstraintIsWeaker.Id && m.Severity == Category.Error).ToArray();
             var breaking = messages.Where(m => m.Id == ComparisonMessages.ConstraintChanged.Id && m.Severity == Category.Error).ToArray();
             var info = messages.Where(m => m.Id > 0 && m.Severity == Category.Info).ToArray();
@@ -581,12 +581,12 @@ namespace AutoRest.Swagger.Tests
             Assert.Equal(Category.Error, changed[3].Severity);
             Assert.Equal(Category.Error, changed[4].Severity);
             Assert.Equal(Category.Error, changed[5].Severity);
-            Assert.Equal("#/parameters/a", changed[0].Path.JsonReference);
-            Assert.Equal("#/parameters/b", changed[1].Path.JsonReference);
-            Assert.Equal("#/parameters/e/properties/a", changed[2].Path.JsonReference);
-            Assert.Equal("#/parameters/e/properties/b", changed[3].Path.JsonReference);
-            Assert.Equal("#/definitions/A/properties/a", changed[4].Path.JsonReference);
-            Assert.Equal("#/definitions/A/properties/b", changed[5].Path.JsonReference);
+            Assert.Equal("#/parameters/a", changed[0].NewJsonRef);
+            Assert.Equal("#/parameters/b", changed[1].NewJsonRef);
+            Assert.Equal("#/parameters/e/properties/a", changed[2].NewJsonRef);
+            Assert.Equal("#/parameters/e/properties/b", changed[3].NewJsonRef);
+            Assert.Equal("#/definitions/A/properties/a", changed[4].NewJsonRef);
+            Assert.Equal("#/definitions/A/properties/b", changed[5].NewJsonRef);
         }
 
         /// <summary>
@@ -596,7 +596,7 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void GobalParamTypeConstraintsChanged()
         {
-            var messages = CompareSwagger("param_check_01.json").Where(m => m.Path.JsonReference.Contains("parameters")).ToArray();
+            var messages = CompareSwagger("param_check_01.json").Where(m => m.NewJsonRef.Contains("parameters")).ToArray();
             var stricter = messages.Where(m => m.Id == ComparisonMessages.ConstraintIsStronger.Id && m.Severity == Category.Error).ToArray();
             var breaking = messages.Where(m => m.Id == ComparisonMessages.ConstraintChanged.Id && m.Severity == Category.Error).ToArray();
             var info = messages.Where(m => m.Id > 0 && m.Severity == Category.Info).ToArray();
@@ -623,12 +623,12 @@ namespace AutoRest.Swagger.Tests
             Assert.Equal(Category.Error, changed[3].Severity);
             Assert.Equal(Category.Error, changed[4].Severity);
             Assert.Equal(Category.Error, changed[5].Severity);
-            Assert.Equal("#/responses/200/properties/a", changed[0].Path.JsonReference);
-            Assert.Equal("#/responses/200/properties/b", changed[1].Path.JsonReference);
-            Assert.Equal("#/responses/201/properties/a", changed[2].Path.JsonReference);
-            Assert.Equal("#/responses/201/properties/b", changed[3].Path.JsonReference);
-            Assert.Equal("#/definitions/A/properties/a", changed[4].Path.JsonReference);
-            Assert.Equal("#/definitions/A/properties/b", changed[5].Path.JsonReference);
+            Assert.Equal("#/responses/200/properties/a", changed[0].NewJsonRef);
+            Assert.Equal("#/responses/200/properties/b", changed[1].NewJsonRef);
+            Assert.Equal("#/responses/201/properties/a", changed[2].NewJsonRef);
+            Assert.Equal("#/responses/201/properties/b", changed[3].NewJsonRef);
+            Assert.Equal("#/definitions/A/properties/a", changed[4].NewJsonRef);
+            Assert.Equal("#/definitions/A/properties/b", changed[5].NewJsonRef);
         }
 
         /// <summary>
@@ -637,7 +637,7 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void GlobalResponseTypeConstraintsChanged()
         {
-            var messages = CompareSwagger("response_check_01.json").Where(m => m.Path.JsonReference.Contains("responses")).ToArray();
+            var messages = CompareSwagger("response_check_01.json").Where(m => m.NewJsonRef.Contains("responses")).ToArray();
             var relaxed = messages.Where(m => m.Id == ComparisonMessages.ConstraintIsWeaker.Id && m.Severity == Category.Error).ToArray();
             var breaking = messages.Where(m => m.Id == ComparisonMessages.ConstraintChanged.Id && m.Severity == Category.Error).ToArray();
             var info = messages.Where(m => m.Id > 0 && m.Severity == Category.Info).ToArray();

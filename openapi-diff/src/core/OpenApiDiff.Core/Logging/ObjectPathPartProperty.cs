@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -21,10 +22,9 @@ namespace OpenApiDiff.Core.Logging
 
         public string Property { get; }
 
-        public override string JsonPointer => $"/{Property.Replace("~", "~0").Replace("/", "~1")}";
+        public override string JsonPointer(JToken _) => $"/{Property.Replace("~", "~0").Replace("/", "~1")}";
 
-        public override string JsonPath => regexValidES3DotNotationPropertyName.IsMatch(Property) ? $".{Property}" : $"[{JsonConvert.SerializeObject(Property)}]";
-
-        public override object RawPath => Property;
+        public override string JsonPath(JToken _) 
+            => regexValidES3DotNotationPropertyName.IsMatch(Property) ? $".{Property}" : $"[{JsonConvert.SerializeObject(Property)}]";
     }
 }

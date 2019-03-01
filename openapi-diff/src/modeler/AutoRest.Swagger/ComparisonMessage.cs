@@ -46,6 +46,10 @@ namespace AutoRest.Swagger
         /// </summary>
         public FileObjectPath Path { get; }
 
+        public string OldJsonRef => Path.JsonReference(Old);
+
+        public string NewJsonRef => Path.JsonReference(New);
+
         /// <summary>
         /// The id of the validation message
         /// </summary>
@@ -63,7 +67,8 @@ namespace AutoRest.Swagger
                 ["id"] = Id.ToString(),
                 ["code"] = Code.ToString(),
                 ["message"] = Message,
-                ["jsonref"] = Path?.JsonReference,
+                ["jsonref-old"] = Path?.JsonReference(Old),
+                ["jsonref-new"] = Path?.JsonReference(New),
                 // ["json-path"] = Path?.JsonPath,
                 ["type"] = Severity.ToString(),
             };

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,9 +30,9 @@ namespace OpenApiDiff.Core.Logging
         public IEnumerable<ObjectPathPart> Path { get; }
 
         // https://tools.ietf.org/html/draft-ietf-appsawg-json-pointer-04
-        public string JsonPointer => string.Concat(Path.Select(p => p.JsonPointer));
+        public string JsonPointer(JToken t) => string.Concat(Path.Select(p => p.JsonPointer(t)));
 
         // http://goessner.net/articles/JsonPath/, https://github.com/jayway/JsonPath
-        public string JsonPath => "$" + string.Concat(Path.Select(p => p.JsonPath));
+        public string JsonPath(JToken t) => "$" + string.Concat(Path.Select(p => p.JsonPath(t)));
     }
 }

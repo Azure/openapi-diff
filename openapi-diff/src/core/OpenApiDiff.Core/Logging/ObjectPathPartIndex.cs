@@ -1,10 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using YamlDotNet.RepresentationModel;
+using Newtonsoft.Json.Linq;
 
 namespace OpenApiDiff.Core.Logging
 {
@@ -17,10 +14,8 @@ namespace OpenApiDiff.Core.Logging
 
         public int Index { get; }
 
-        public override string JsonPointer => $"/{Index + 1}";
+        public override string JsonPointer(JToken _) => $"/{Index + 1}";
 
-        public override string JsonPath => $"[{Index + 1}]";
-
-        public override object RawPath => Index;
+        public override string JsonPath(JToken _) => $"[{Index + 1}]";
     }
 }

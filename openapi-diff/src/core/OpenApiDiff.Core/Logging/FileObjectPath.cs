@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace OpenApiDiff.Core.Logging
@@ -21,8 +22,6 @@ namespace OpenApiDiff.Core.Logging
         public ObjectPath ObjectPath { get; }
 
         // https://tools.ietf.org/id/draft-pbryan-zyp-json-ref-03.html
-        public string JsonReference => $"{FilePath}#{ObjectPath.JsonPointer}";
-
-        // public string ReadablePath => $"{FilePath}#{ObjectPath.ReadablePath}";
+        public string JsonReference(JToken t) => $"{FilePath}#{ObjectPath.JsonPointer(t)}";
     }
 }
