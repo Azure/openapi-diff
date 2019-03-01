@@ -31,8 +31,5 @@ namespace OpenApiDiff.Core.Logging
 
         // https://tools.ietf.org/html/draft-ietf-appsawg-json-pointer-04
         public string JsonPointer(JToken t) => string.Concat(Path.Select(p => p.JsonPointer(t)));
-
-        // http://goessner.net/articles/JsonPath/, https://github.com/jayway/JsonPath
-        public string JsonPath(JToken t) => "$" + string.Concat(Path.Select(p => p.JsonPath(t)));
     }
 }

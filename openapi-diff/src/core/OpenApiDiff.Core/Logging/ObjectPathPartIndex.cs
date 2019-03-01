@@ -15,7 +15,5 @@ namespace OpenApiDiff.Core.Logging
         public int Index { get; }
 
         public override string JsonPointer(JToken _) => $"/{Index + 1}";
-
-        public override string JsonPath(JToken _) => $"[{Index + 1}]";
     }
 }

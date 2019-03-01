@@ -9,7 +9,5 @@ namespace OpenApiDiff.Core.Logging
     public abstract class ObjectPathPart
     {
         public abstract string JsonPointer(JToken t);
-
-        public abstract string JsonPath(JToken t);
     }
 }

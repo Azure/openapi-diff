@@ -23,8 +23,5 @@ namespace OpenApiDiff.Core.Logging
         public string Property { get; }
 
         public override string JsonPointer(JToken _) => $"/{Property.Replace("~", "~0").Replace("/", "~1")}";
-
-        public override string JsonPath(JToken _) 
-            => regexValidES3DotNotationPropertyName.IsMatch(Property) ? $".{Property}" : $"[{JsonConvert.SerializeObject(Property)}]";
     }
 }

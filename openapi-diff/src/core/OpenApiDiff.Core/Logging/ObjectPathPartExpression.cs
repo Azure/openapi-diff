@@ -7,7 +7,5 @@ namespace OpenApiDiff.Core.Logging
     public sealed class ObjectPathPartExpression : ObjectPathPart
     {
         public override string JsonPointer(JToken t) => throw new NotImplementedException();
-
-        public override string JsonPath(JToken t) => throw new NotImplementedException();
     }
 }
