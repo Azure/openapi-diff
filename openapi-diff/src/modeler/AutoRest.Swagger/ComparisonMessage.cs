@@ -18,7 +18,7 @@ namespace AutoRest.Swagger
         public ComparisonMessage(
             MessageTemplate template, 
             FileObjectPath path,
-            JToken current,
+            JToken old,
             JToken @new,
             Category severity, 
             params object[] formatArguments
@@ -27,13 +27,14 @@ namespace AutoRest.Swagger
             Severity = severity;
             Message = $"{string.Format(CultureInfo.CurrentCulture, template.Message, formatArguments)}";
             Path = path;
-            Current = current;
+            Old = old;
             New = @new;
             Id = template.Id;
             Code = template.Code;
         }
 
-        public JToken Current { get; }
+        public JToken Old { get; }
+
         public JToken New { get; }
 
         public Category Severity { get; }

@@ -156,8 +156,9 @@ namespace AutoRest.Swagger.Model
             context.PushProperty("parameters");
 
             var priorOperationParameters = priorOperation.Parameters.Select(param =>
-                                             string.IsNullOrWhiteSpace(param.Reference) ?
-                                             param : FindReferencedParameter(param.Reference, previousRoot.Parameters));
+                string.IsNullOrWhiteSpace(param.Reference) ? param : 
+                FindReferencedParameter(param.Reference, previousRoot.Parameters)
+            );
             foreach (var oldParam in priorOperationParameters)
             {
                 SwaggerParameter newParam = FindParameter(oldParam.Name, Parameters, currentRoot.Parameters);
@@ -239,7 +240,9 @@ namespace AutoRest.Swagger.Model
         /// <param name="reference">Name of the reference to search for</param>
         /// <param name="parameters">Dictionary of parameters for the search</param>
         /// <returns>Swagger Parameter if found; otherwise null</returns>
-        private static SwaggerParameter FindReferencedParameter(string reference, IDictionary<string, SwaggerParameter> parameters)
+        private static SwaggerParameter FindReferencedParameter(
+            string reference, IDictionary<string, SwaggerParameter> parameters
+        )
         {
             if (reference != null && reference.StartsWith("#", StringComparison.Ordinal))
             {

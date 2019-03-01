@@ -188,7 +188,7 @@ namespace AutoRest.Swagger.Tests
             Assert.Equal(2, missing.Count());
             Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.JsonReference == "#/paths/~1api~1Paths/get"));
             Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.Path.JsonReference == "#/paths/~1api~1Operations/post"));
-            IJsonLineInfo current = messages[0].Current;
+            IJsonLineInfo current = messages[0].Old;
             IJsonLineInfo previous = messages[0].New;
         }
 
