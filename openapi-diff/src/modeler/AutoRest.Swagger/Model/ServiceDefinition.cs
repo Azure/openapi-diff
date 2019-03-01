@@ -109,7 +109,7 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public override ComparisonMessagesV2 Compare(ComparisonContext context, SwaggerBase previous)
+        public override ComparisonMessagesObject Compare(ComparisonContext context, SwaggerBase previous)
         {
             if (previous == null)
                 throw new ArgumentNullException("previous");
@@ -376,7 +376,7 @@ namespace AutoRest.Swagger.Model
 
             context.Pop();
 
-            return context.MessagesV2;
+            return context.Messages;
         }
 
 

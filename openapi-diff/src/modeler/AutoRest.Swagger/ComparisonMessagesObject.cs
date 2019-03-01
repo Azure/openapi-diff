@@ -5,9 +5,9 @@ using System.Collections;
 
 namespace AutoRest.Swagger
 {
-    public class ComparisonMessagesV2
+    public class ComparisonMessagesObject
     {
-        public ComparisonMessagesV2() {
+        public ComparisonMessagesObject() {
             this.Additions = new ComparisonMessagesType();
             this.Updates = new ComparisonMessagesType();
             this.Removals = new ComparisonMessagesType();

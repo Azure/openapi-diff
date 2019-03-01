@@ -17,7 +17,7 @@ namespace AutoRest.Swagger.Model
         
         public string Version { get; set; }
 
-        public override ComparisonMessagesV2 Compare(ComparisonContext context, SwaggerBase previous)
+        public override ComparisonMessagesObject Compare(ComparisonContext context, SwaggerBase previous)
         {
             throw new NotImplementedException();
         }

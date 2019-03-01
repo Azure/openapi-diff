@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace AutoRest.Swagger
 {
-    public class ComparisonMessageV2
+    public class ComparisonMessage
     {
         public static string DocBaseUrl = "https://github.com/Azure/openapi-diff/tree/master/docs/rules/";
 
-        public ComparisonMessageV2(MessageTemplate template, FileObjectPath path, Category category, params object[] formatArguments) {
+        public ComparisonMessage(MessageTemplate template, FileObjectPath path, Category category, params object[] formatArguments) {
             Message = $"{string.Format(CultureInfo.CurrentCulture, template.Message, formatArguments)}";
             Path = path;
             Id = template.Id;

@@ -30,7 +30,7 @@ namespace AutoRest.Swagger.Tests
         /// </summary>
         /// <param name="input">The name of the swagger document file. The file name must be the same in both the 'modified' and 'original' folder.</param>
         /// <returns>A list of messages from the comparison logic.</returns>
-        private ComparisonMessagesV2 CompareSwagger(string input)
+        private ComparisonMessagesObject CompareSwagger(string input)
         {
             var modeler = new SwaggerModeler();
             var baseDir = Directory.GetParent(typeof(SwaggerModelerCompareTests).GetTypeInfo().Assembly.Location.ToString()).ToString();
@@ -47,10 +47,9 @@ namespace AutoRest.Swagger.Tests
         public void SameMajorVersionNumberStrict()
         {
             var messages = CompareSwagger("version_check_02.json");
-            Assert.True(
-                messages.Additions.Warnings.Count == 0 && 
-                messages.Removals.Warnings.Count == 0 && 
-                messages.Updates.Warnings.Count == 0);
+            Assert.Empty(messages.Additions.Warnings);
+            Assert.Empty(messages.Removals.Warnings);
+            Assert.Empty(messages.Updates.Warnings);
         }
 
         /// <summary>

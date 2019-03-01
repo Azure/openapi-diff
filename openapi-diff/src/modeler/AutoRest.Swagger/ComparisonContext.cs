@@ -53,30 +53,30 @@ namespace AutoRest.Swagger
 
         public void LogInfo(MessageTemplate template, params object[] formatArguments)
         {
-            _messagesV2.Add(template, new FileObjectPath(File, Path), Category.Info, formatArguments);
+            _messages.Add(template, new FileObjectPath(File, Path), Category.Info, formatArguments);
         }
 
         public void LogError(MessageTemplate template, params object[] formatArguments)
         {
-            _messagesV2.Add(template, new FileObjectPath(File, Path), Category.Error, formatArguments);
+            _messages.Add(template, new FileObjectPath(File, Path), Category.Error, formatArguments);
         }
 
         public void LogBreakingChange(MessageTemplate template, params object[] formatArguments)
         {
-            _messagesV2.Add(template, new FileObjectPath(File, Path), Strict ? Category.Error : Category.Warning, formatArguments);
+            _messages.Add(template, new FileObjectPath(File, Path), Strict ? Category.Error : Category.Warning, formatArguments);
         }
 
-        public ComparisonMessagesV2 MessagesV2
+        public ComparisonMessagesObject Messages
         {
             get
             {
                 // TODO: How to eliminate duplicate messages
                 // Issue: https://github.com/Azure/openapi-diff/issues/48
-                return _messagesV2; //.Distinct(new CustomComparer());
+                return _messages; //.Distinct(new CustomComparer());
             }
         }
 
-        private ComparisonMessagesV2 _messagesV2 = new ComparisonMessagesV2();
+        private ComparisonMessagesObject _messages = new ComparisonMessagesObject();
     }
 
     public enum DataDirection

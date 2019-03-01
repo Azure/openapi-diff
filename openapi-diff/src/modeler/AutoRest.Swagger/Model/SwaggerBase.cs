@@ -32,6 +32,6 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public abstract ComparisonMessagesV2 Compare(ComparisonContext context, SwaggerBase previous);
+        public abstract ComparisonMessagesObject Compare(ComparisonContext context, SwaggerBase previous);
     }
 }
