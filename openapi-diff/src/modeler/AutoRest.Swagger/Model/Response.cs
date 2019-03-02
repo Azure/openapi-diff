@@ -50,8 +50,7 @@ namespace AutoRest.Swagger.Model
             {
                 context.PushProperty(header.Key);
 
-                Header oldHeader = null;
-                if (!priorHeaders.TryGetValue(header.Key, out oldHeader))
+                if (!priorHeaders.TryGetValue(header.Key, out var oldHeader))
                 {
                     context.LogInfo(ComparisonMessages.AddingHeader, header.Key);
                 }
@@ -67,8 +66,7 @@ namespace AutoRest.Swagger.Model
             {
                 context.PushProperty(header.Key);
 
-                Header newHeader = null;
-                if (!headers.TryGetValue(header.Key, out newHeader))
+                if (!headers.TryGetValue(header.Key, out var newHeader))
                 {
                     context.LogBreakingChange(ComparisonMessages.RemovingHeader, header.Key);
                 }
@@ -76,10 +74,12 @@ namespace AutoRest.Swagger.Model
                 context.Pop();
             }
 
+            context.PushProperty("schema");
             if (Schema != null && priorResponse.Schema != null)
             {
                 Schema.Compare(context, priorResponse.Schema);
             }
+            context.Pop();
 
             context.Direction = DataDirection.None;
 
