@@ -186,10 +186,12 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("changed_operation_id.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.ModifiedOperationId.Id);
             Assert.Equal(2, missing.Count());
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.NewJsonRef == "#/paths/~1api~1Paths/get"));
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.NewJsonRef == "#/paths/~1api~1Operations/post"));
-            IJsonLineInfo current = messages[0].Old;
-            IJsonLineInfo previous = messages[0].New;
+            var x = missing.First(m => m.Severity == Category.Error && m.NewJsonRef == "#/paths/~1api~1Paths/get");
+            Assert.NotNull(x.NewJson());
+            Assert.NotNull(x.OldJson());
+            var y = missing.First(m => m.Severity == Category.Error && m.NewJsonRef == "#/paths/~1api~1Operations/post");
+            Assert.NotNull(y.NewJson());
+            Assert.NotNull(y.OldJson());
         }
 
         /// <summary>

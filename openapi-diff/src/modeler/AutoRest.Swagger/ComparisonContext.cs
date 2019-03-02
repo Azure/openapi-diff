@@ -21,12 +21,12 @@ namespace AutoRest.Swagger
         /// <param name="oldRoot"></param>
         public ComparisonContext(ParsedJson<T> oldRoot, ParsedJson<T> newRoot, Settings settings = null)
         {
-            this._CurrentRoot = newRoot;
-            this._PreviousRoot = oldRoot;
+            _CurrentRoot = newRoot;
+            _PreviousRoot = oldRoot;
             
             if (settings != null)
             {
-                this.Strict = settings.Strict;
+                Strict = settings.Strict;
             }
         }
 

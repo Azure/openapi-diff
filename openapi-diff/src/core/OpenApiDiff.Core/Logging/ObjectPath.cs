@@ -27,15 +27,31 @@ namespace OpenApiDiff.Core.Logging
 
         public IEnumerable<Func<JToken, string>> Path { get; }
 
-        public IEnumerable<(JToken token, string name)> CompletePath(JToken t)
-            => Path.Select(v => {
+        private static IEnumerable<Func<JToken, string>> ParseRef(string s)
+            => s
+                .Split('/')
+                .Where(v => v != "#")
+                .Select<string, Func<JToken, string>>(v => _ => v.Replace("~1", "/").Replace("~0", "~"));
+
+        private static JToken FromObject(JObject o, string name)
+        {
+            var @ref = o["$ref"];
+            var unrefed = @ref != null ? CompletePath(ParseRef(@ref.Value<string>()), o.Root).Last().token : o;
+            return unrefed[name];
+        }
+
+        private static IEnumerable<(JToken token, string name)> CompletePath(IEnumerable<Func<JToken, string>> p, JToken t)
+            => p.Select(v => {
                 var name = v(t);
                 t =
                     t is JArray a ? int.TryParse(name, out var i) ? a[i] : null :
-                    t is JObject o ? o[name] :
+                    t is JObject o ? FromObject(o, name) :
                     null;
                 return (t, name);
             });
+
+        public IEnumerable<(JToken token, string name)> CompletePath(JToken t)
+            => CompletePath(Path, t);
 
         // https://tools.ietf.org/html/draft-ietf-appsawg-json-pointer-04
         public string JsonPointer(JToken t) => CompletePath(t)

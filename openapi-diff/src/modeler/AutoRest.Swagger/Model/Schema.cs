@@ -113,7 +113,7 @@ namespace AutoRest.Swagger.Model
 
             // Avoid doing the comparison repeatedly by marking for which direction it's already been done.
 
-            if ((context.Direction != DataDirection.None && referenced == 2))
+            if (context.Direction != DataDirection.None && referenced == 2)
             {
                 // Comparing two referenced schemas in the context of a parameter or response -- did we already do this?
 
@@ -124,7 +124,7 @@ namespace AutoRest.Swagger.Model
                 _compareDirection |= context.Direction;
             }
 
-            if ((thisSchema != this || priorSchema != previous))
+            if (thisSchema != this || priorSchema != previous)
             {
                 if (_visitedSchemas.Contains(priorSchema))
                 {
@@ -254,8 +254,7 @@ namespace AutoRest.Swagger.Model
                 foreach (KeyValuePair<string, Schema> property in Properties)
                 {
                     // Case: Were any required properties added?
-                    Schema model = null;
-                    if (priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(property.Key, out model) &&
+                    if (priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(property.Key, out var model) &&
                         (Required != null && Required.Contains(property.Key)))
                     {
                         context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, property.Key);
@@ -283,8 +282,7 @@ namespace AutoRest.Swagger.Model
                 var parts = reference.Split('/');
                 if (parts.Length == 3 && parts[1].Equals("definitions"))
                 {
-                    Schema p = null;
-                    if (definitions.TryGetValue(parts[2], out p))
+                    if (definitions.TryGetValue(parts[2], out var p))
                     {
                         return p;
                     }
