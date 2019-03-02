@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using OpenApiDiff.Core.Logging;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace AutoRest.Swagger
 {
@@ -48,7 +49,11 @@ namespace AutoRest.Swagger
 
         public string OldJsonRef => Path.JsonReference(Old);
 
+        public JToken OldJson() => Path.ObjectPath.CompletePath(Old).Last().token;
+
         public string NewJsonRef => Path.JsonReference(New);
+
+        public JToken NewJson() => Path.ObjectPath.CompletePath(New).Last().token;
 
         /// <summary>
         /// The id of the validation message

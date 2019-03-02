@@ -108,6 +108,7 @@ namespace AutoRest.Swagger.Model
 
             if (Responses != null && priorOperation.Responses != null)
             {
+                context.PushProperty("responses");
                 foreach (var response in Responses)
                 {
                     var oldResponse = priorOperation.FindResponse(response.Key, priorOperation.Responses);
@@ -137,6 +138,7 @@ namespace AutoRest.Swagger.Model
                         context.Pop();
                     }
                 }
+                context.Pop();
             }
 
             return context.Messages;

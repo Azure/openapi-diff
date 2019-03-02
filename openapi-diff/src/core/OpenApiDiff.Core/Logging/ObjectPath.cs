@@ -14,26 +14,36 @@ namespace OpenApiDiff.Core.Logging
     /// </summary>
     public class ObjectPath
     {
-        public static ObjectPath Empty => new ObjectPath(Enumerable.Empty<ObjectPathPart>());
+        public static ObjectPath Empty => new ObjectPath(Enumerable.Empty<Func<JToken, string>>());
 
-        private ObjectPath(IEnumerable<ObjectPathPart> path)
+        private ObjectPath(IEnumerable<Func<JToken, string>> path)
         {
             Path = path;
         }
 
-        private ObjectPath Append(ObjectPathPart part) => new ObjectPath(Path.Concat(new[] { part }));
+        private ObjectPath Append(Func<JToken, string> f) => new ObjectPath(Path.Concat(new[] { f }));
 
-        public ObjectPath AppendProperty(string property) => Append(new ObjectPathPartProperty(property));
+        public ObjectPath AppendProperty(string property) => Append((_) => property);
 
-        public IEnumerable<ObjectPathPart> Path { get; }
+        public IEnumerable<Func<JToken, string>> Path { get; }
+
+        public IEnumerable<(JToken token, string name)> CompletePath(JToken t)
+            => Path.Select(v => {
+                var name = v(t);
+                t =
+                    t is JArray a ? int.TryParse(name, out var i) ? a[i] : null :
+                    t is JObject o ? o[name] :
+                    null;
+                return (t, name);
+            });
 
         // https://tools.ietf.org/html/draft-ietf-appsawg-json-pointer-04
-        public string JsonPointer(JToken t) => Path.Aggregate(
-            "", 
-            (s, p) => s + "/" + p.GetPropertyName(t).Replace("~", "~0").Replace("/", "~1")
-        );
+        public string JsonPointer(JToken t) => CompletePath(t)
+            .Select(v => v.name.Replace("~", "~0").Replace("/", "~1"))
+            .Aggregate("", (a, b) => a + "/" + b);
+            
 
         public ObjectPath AppendExpression(Func<JToken, string> func)
-            => Append(new ObjectPathPartExpression(func));
+            => Append(func);
     }
 }

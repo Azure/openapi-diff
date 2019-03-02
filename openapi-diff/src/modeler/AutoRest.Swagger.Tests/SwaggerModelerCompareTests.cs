@@ -201,11 +201,18 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("added_path.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.AddedPath.Id);
             Assert.Single(missing);
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.NewJsonRef == "#/paths/~1api~1Paths"));
+            var x = missing.First(
+                m => m.Severity == Category.Info &&
+                m.NewJsonRef == "#/paths/~1api~1Paths"
+            );
+            Assert.NotNull(x.NewJson());
+            Assert.Null(x.OldJson());
 
             missing = messages.Where(m => m.Id == ComparisonMessages.AddedOperation.Id);
             Assert.Single(missing);
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.NewJsonRef == "#/paths/~1api~1Operations/post"));
+            x = missing.First(m => m.Severity == Category.Info && m.NewJsonRef == "#/paths/~1api~1Operations/post");
+            Assert.NotNull(x.NewJson());
+            Assert.Null(x.OldJson());
         }
 
         /// <summary>
@@ -269,7 +276,9 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("readonly_changes.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.AddedReadOnlyPropertyInResponse.Id);
             Assert.Single(missing);
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.NewJsonRef == "#/paths/~1subscriptions~1{subscriptionId}~1providers~1Microsoft.Storage~1checkNameAvailability/post/200/properties"));
+            Assert.NotEmpty(missing.Where(
+                m => m.Severity == Category.Info && 
+                m.NewJsonRef == "#/paths/~1subscriptions~1{subscriptionId}~1providers~1Microsoft.Storage~1checkNameAvailability/post/responses/200/properties"));
         }
 
         /// <summary>
@@ -281,7 +290,12 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("added_property_in_response.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.AddedPropertyInResponse.Id);
             Assert.Single(missing);
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.NewJsonRef == "#/paths/~1subscriptions~1{subscriptionId}~1providers~1Microsoft.Storage~1checkNameAvailability/post/200/properties"));
+            var x = missing.First(
+                m => m.Severity == Category.Error && 
+                m.NewJsonRef == "#/paths/~1subscriptions~1{subscriptionId}~1providers~1Microsoft.Storage~1checkNameAvailability/post/responses/200/properties"
+            );
+            // Assert.NotNull(x.NewJson());
+            // Assert.Null(x.OldJson());
         }
 
         /// <summary>
@@ -405,7 +419,7 @@ namespace AutoRest.Swagger.Tests
             Assert.NotEmpty(removed);
             var error = removed.First();
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/200", error.NewJsonRef);
+            Assert.Equal("#/paths/~1api~1Responses/get/responses/200", error.NewJsonRef);
         }
 
         /// <summary>
@@ -419,7 +433,7 @@ namespace AutoRest.Swagger.Tests
             Assert.NotEmpty(removed);
             var error = removed.First();
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/202", error.NewJsonRef);
+            Assert.Equal("#/paths/~1api~1Responses/get/responses/202", error.NewJsonRef);
         }
 
         /// <summary>
@@ -433,10 +447,10 @@ namespace AutoRest.Swagger.Tests
             Assert.Equal(2, removed.Length);
 
             Assert.Equal(Category.Error, removed[0].Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/201", removed[0].NewJsonRef);
+            Assert.Equal("#/paths/~1api~1Responses/get/responses/201", removed[0].NewJsonRef);
 
             Assert.Equal(Category.Error, removed[1].Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/400/properties/id", removed[1].NewJsonRef);
+            Assert.Equal("#/paths/~1api~1Responses/get/responses/400/properties/id", removed[1].NewJsonRef);
         }
 
         /// <summary>
@@ -449,7 +463,7 @@ namespace AutoRest.Swagger.Tests
             var removed = messages.Where(m => m.Id == ComparisonMessages.TypeChanged.Id && m.NewJsonRef.Contains("Responses")).ToArray();
             Assert.Single(removed);
             Assert.Equal(Category.Error, removed[0].Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/400/properties/id", removed[0].NewJsonRef);
+            Assert.Equal("#/paths/~1api~1Responses/get/responses/400/properties/id", removed[0].NewJsonRef);
         }
 
         /// <summary>
@@ -462,7 +476,7 @@ namespace AutoRest.Swagger.Tests
             var added = messages.Where(m => m.Id == ComparisonMessages.AddingHeader.Id).ToArray();
             Assert.Single(added);
             Assert.Equal(Category.Info, added[0].Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/200/x-c", added[0].NewJsonRef);
+            Assert.Equal("#/paths/~1api~1Responses/get/responses/200/x-c", added[0].NewJsonRef);
         }
 
         /// <summary>
@@ -475,7 +489,7 @@ namespace AutoRest.Swagger.Tests
             var removed = messages.Where(m => m.Id == ComparisonMessages.RemovingHeader.Id).ToArray();
             Assert.Single(removed);
             Assert.Equal(Category.Error, removed[0].Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/200/x-a", removed[0].NewJsonRef);
+            Assert.Equal("#/paths/~1api~1Responses/get/responses/200/x-a", removed[0].NewJsonRef);
         }
 
         /// <summary>
@@ -488,7 +502,7 @@ namespace AutoRest.Swagger.Tests
             var changed = messages.Where(m => m.Id == ComparisonMessages.TypeChanged.Id && m.NewJsonRef.Contains("Responses")).ToArray();
             Assert.Single(changed);
             Assert.Equal(Category.Error, changed[0].Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/200/x-b", changed[0].NewJsonRef);
+            Assert.Equal("#/paths/~1api~1Responses/get/responses/200/x-b", changed[0].NewJsonRef);
         }
 
         /// <summary>
@@ -544,8 +558,8 @@ namespace AutoRest.Swagger.Tests
             Assert.Equal(Category.Error, changed[1].Severity);
             Assert.Equal(Category.Error, changed[2].Severity);
             Assert.Equal(Category.Error, changed[3].Severity);
-            Assert.Equal("#/paths/~1api~1Responses/get/200/properties/a", changed[0].NewJsonRef);
-            Assert.Equal("#/paths/~1api~1Responses/get/200/properties/b", changed[1].NewJsonRef);
+            Assert.Equal("#/paths/~1api~1Responses/get/responses/200/properties/a", changed[0].NewJsonRef);
+            Assert.Equal("#/paths/~1api~1Responses/get/responses/200/properties/b", changed[1].NewJsonRef);
         }
 
         /// <summary>
