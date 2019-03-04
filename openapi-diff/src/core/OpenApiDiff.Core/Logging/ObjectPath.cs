@@ -25,6 +25,15 @@ namespace OpenApiDiff.Core.Logging
 
         public ObjectPath AppendProperty(string property) => Append((_) => property);
 
+        public ObjectPath AppendItemByName(string value) => Append(t =>
+        {
+            var list = t
+                ?.Select((v, i) => (v, i))
+                ?.Where(vi => vi.v?["name"]?.Value<string>() == value)
+                ?.ToList();
+            return list == null || list.Count == 0 ? null : list[0].i.ToString();
+        });
+
         public IEnumerable<Func<JToken, string>> Path { get; }
 
         private static IEnumerable<Func<JToken, string>> ParseRef(string s)

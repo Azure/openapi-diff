@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using OpenApiDiff.Core.Logging;
 
 namespace AutoRest.Swagger.Model
 {
@@ -167,18 +168,7 @@ namespace AutoRest.Swagger.Model
                 SwaggerParameter newParam = FindParameter(oldParam.Name, Parameters, currentRoot.Parameters);
 
                 // context.PushProperty(oldParam.Name);
-                var key = oldParam.Name;
-
-                context.PushExpression(
-                    t =>
-                    {
-                        var list = t
-                            ?.Select((v, i) => (v, i))
-                            ?.Where(vi => vi.v?["name"]?.Value<string>() == key)
-                            ?.ToList();
-                        return list == null || list.Count == 0 ? null : list[0].i.ToString();
-                    }
-                );
+                context.PushItemByName(oldParam.Name);
 
                 if (newParam != null)
                 {
@@ -206,20 +196,8 @@ namespace AutoRest.Swagger.Model
 
                 if (oldParam == null)
                 {
-                    // Did not find required parameter in the old swagger i.e required parameter is added
-                    var key = newParam.Name;
-                    
-                    context.PushExpression(
-                        t =>
-                        {
-                            var list = t
-                                ?.Select((v, i) => (v, i))
-                                ?.Where(vi => vi.v?["name"]?.Value<string>() == key)
-                                ?.ToList();
-                            return list == null || list.Count == 0 ? null : list[0].i.ToString();
-                        }
-                    );
-                    // context.PushProperty(key);
+                    // Did not find required parameter in the old swagger i.e required parameter is added                    
+                    context.PushItemByName(newParam.Name);
                     context.LogBreakingChange(ComparisonMessages.AddingRequiredParameter, newParam.Name);
                     context.Pop();
                 }
@@ -276,8 +254,7 @@ namespace AutoRest.Swagger.Model
                 var parts = reference.Split('/');
                 if (parts.Length == 3 && parts[1].Equals("parameters"))
                 {
-                    SwaggerParameter p = null;
-                    if (parameters.TryGetValue(parts[2], out p))
+                    if (parameters.TryGetValue(parts[2], out var p))
                     {
                         return p;
                     }

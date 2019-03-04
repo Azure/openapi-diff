@@ -261,7 +261,6 @@ namespace AutoRest.Swagger.Tests
             Assert.Equal("#/paths/~1api~1Parameters/get/parameters/1", error.OldJsonRef);
         }
 
-
         /// <summary>
         /// Verifies that if you add a required parameter, it is flagged
         /// </summary>
