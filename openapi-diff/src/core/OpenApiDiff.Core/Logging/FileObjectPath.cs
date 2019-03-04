@@ -22,6 +22,9 @@ namespace OpenApiDiff.Core.Logging
         public ObjectPath ObjectPath { get; }
 
         // https://tools.ietf.org/id/draft-pbryan-zyp-json-ref-03.html
-        public string JsonReference(JToken t) => $"{FilePath}#{ObjectPath.JsonPointer(t)}";
+        public string JsonReference(JToken t) {
+            var p = ObjectPath.JsonPointer(t);
+            return p == null ? null : $"{FilePath}#{p}";
+        }
     }
 }

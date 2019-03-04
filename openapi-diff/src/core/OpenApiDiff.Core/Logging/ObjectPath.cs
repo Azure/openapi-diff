@@ -55,8 +55,8 @@ namespace OpenApiDiff.Core.Logging
 
         // https://tools.ietf.org/html/draft-ietf-appsawg-json-pointer-04
         public string JsonPointer(JToken t) => CompletePath(t)
-            .Select(v => v.name.Replace("~", "~0").Replace("/", "~1"))
-            .Aggregate("", (a, b) => a + "/" + b);
+            .Select(v => v.name?.Replace("~", "~0")?.Replace("/", "~1"))
+            .Aggregate("", (a, b) => a == null || b == null ? null : a + "/" + b);
             
 
         public ObjectPath AppendExpression(Func<JToken, string> func)

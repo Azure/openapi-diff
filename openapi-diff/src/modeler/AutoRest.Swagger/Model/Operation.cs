@@ -166,7 +166,19 @@ namespace AutoRest.Swagger.Model
             {
                 SwaggerParameter newParam = FindParameter(oldParam.Name, Parameters, currentRoot.Parameters);
 
-                context.PushProperty(oldParam.Name);
+                // context.PushProperty(oldParam.Name);
+                var key = oldParam.Name;
+
+                context.PushExpression(
+                    t =>
+                    {
+                        var list = t
+                            ?.Select((v, i) => (v, i))
+                            ?.Where(vi => vi.v?["name"]?.Value<string>() == key)
+                            ?.ToList();
+                        return list == null || list.Count == 0 ? null : list[0].i.ToString();
+                    }
+                );
 
                 if (newParam != null)
                 {
@@ -196,19 +208,18 @@ namespace AutoRest.Swagger.Model
                 {
                     // Did not find required parameter in the old swagger i.e required parameter is added
                     var key = newParam.Name;
-                    /*
+                    
                     context.PushExpression(
                         t =>
                         {
-                            return t
-                                .Select((v, i) => (v, i))
-                                .First(vi => vi.v["name"].Value<string>() == key)
-                                .i
-                                .ToString();
+                            var list = t
+                                ?.Select((v, i) => (v, i))
+                                ?.Where(vi => vi.v?["name"]?.Value<string>() == key)
+                                ?.ToList();
+                            return list == null || list.Count == 0 ? null : list[0].i.ToString();
                         }
                     );
-                    */
-                    context.PushProperty(key);
+                    // context.PushProperty(key);
                     context.LogBreakingChange(ComparisonMessages.AddingRequiredParameter, newParam.Name);
                     context.Pop();
                 }
