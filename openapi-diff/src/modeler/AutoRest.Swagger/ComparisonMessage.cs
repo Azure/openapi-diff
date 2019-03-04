@@ -16,12 +16,14 @@ namespace AutoRest.Swagger
     /// </summary>
     public class ComparisonMessage
     {
+        public static string DocBaseUrl = "https://github.com/Azure/openapi-diff/tree/master/docs/rules/";
+
         public ComparisonMessage(
-            MessageTemplate template, 
+            MessageTemplate template,
             FileObjectPath path,
             JToken old,
             JToken @new,
-            Category severity, 
+            Category severity,
             params object[] formatArguments
         )
         {
@@ -32,6 +34,8 @@ namespace AutoRest.Swagger
             New = @new;
             Id = template.Id;
             Code = template.Code;
+            DocUrl = $"{DocBaseUrl}{template.Id}.md";
+            Mode = template.Type;
         }
 
         public JToken Old { get; }
@@ -65,24 +69,34 @@ namespace AutoRest.Swagger
         /// </summary>
         public string Code { get; }
 
+        /// <summary>
+        /// Documentation Url for the Message
+        /// </summary>
+        public string DocUrl { get; }
+
+        /// <summary>
+        /// Type for the Message
+        /// </summary>
+        public MessageType Mode { get; }
+
         public string GetValidationMessagesAsJson()
         {
-            var rawMessage = new Dictionary<string, string>
-            {
-                ["id"] = Id.ToString(),
-                ["code"] = Code.ToString(),
-                ["message"] = Message,
-                ["jsonref-old"] = Path?.JsonReference(Old),
-                ["jsonref-new"] = Path?.JsonReference(New),
-                // ["json-path"] = Path?.JsonPath,
-                ["type"] = Severity.ToString(),
-            };
+            var rawMessage = new Dictionary<string, string>();
+            rawMessage["id"] = Id.ToString();
+            rawMessage["code"] = Code.ToString();
+            rawMessage["message"] = Message;
+            rawMessage["jsonref-old"] = Path?.JsonReference(Old);
+            rawMessage["jsonref-new"] = Path?.JsonReference(New);
+            // rawMessage["json-path"] = Path?.ReadablePath;
+            rawMessage["type"] = Severity.ToString();
+            rawMessage["docurl"] = DocUrl.ToString();
+            rawMessage["mode"] = Mode.ToString();
 
             return JsonConvert.SerializeObject(rawMessage, Formatting.Indented);
         }
 
         public override string ToString()
-            => $"code = {Code}, type = {Severity}, message = {Message}";
+            => $"code = {Code}, type = {Severity}, message = {Message}, docurl = {DocUrl}, mode = {Mode}";
     }
 
     public class CustomComparer : IEqualityComparer<ComparisonMessage>
