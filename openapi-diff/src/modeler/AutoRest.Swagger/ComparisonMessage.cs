@@ -13,6 +13,8 @@ namespace AutoRest.Swagger
     /// </summary>
     public class ComparisonMessage
     {
+        public static string DocBaseUrl = "https://github.com/Azure/openapi-diff/tree/master/docs/rules/";
+
         public ComparisonMessage(MessageTemplate template, FileObjectPath path, Category severity, params object[] formatArguments)
         {
             Severity = severity;
@@ -20,6 +22,8 @@ namespace AutoRest.Swagger
             Path = path;
             Id = template.Id;
             Code = template.Code;
+            DocUrl = $"{DocBaseUrl}{template.Id}.md";
+            Mode = template.Type;
         }
 
         public Category Severity { get; }
@@ -41,6 +45,16 @@ namespace AutoRest.Swagger
         /// </summary>
         public string Code { get; private set; }
 
+        /// <summary>
+        /// Documentation Url for the Message
+        /// </summary>
+        public string DocUrl { get; }
+
+        /// <summary>
+        /// Type for the Message
+        /// </summary>
+        public MessageType Mode { get; }
+
         public string GetValidationMessagesAsJson()
         {
             var rawMessage = new Dictionary<string, string>();
@@ -50,13 +64,15 @@ namespace AutoRest.Swagger
             rawMessage["jsonref"] = Path?.JsonReference;
             rawMessage["json-path"] = Path?.ReadablePath;
             rawMessage["type"] = Severity.ToString();
+            rawMessage["docurl"] = DocUrl.ToString();
+            rawMessage["mode"] = Mode.ToString();
 
             return JsonConvert.SerializeObject(rawMessage, Formatting.Indented);
         }
 
         public override string ToString()
         {
-            return $"code = {Code}, type = {Severity}, message = {Message}";
+            return $"code = {Code}, type = {Severity}, message = {Message}, docurl = {DocUrl}, mode = {Mode}";
         }
     }
 
