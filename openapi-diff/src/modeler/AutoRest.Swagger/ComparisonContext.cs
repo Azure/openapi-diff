@@ -45,7 +45,7 @@ namespace AutoRest.Swagger
 
         public DataDirection Direction { get; set; } = DataDirection.None;
 
-        public Uri File { get; }
+        // public Uri File { get; }
         public ObjectPath Path => _path.Peek();
 
         // public void PushIndex(int index) => _path.Push(Path.AppendIndex(index));
@@ -58,7 +58,7 @@ namespace AutoRest.Swagger
         public void LogInfo(MessageTemplate template, params object[] formatArguments) 
             => _messages.Add(new ComparisonMessage(
                 template, 
-                new FileObjectPath(File, Path),
+                Path,
                 _PreviousRoot,
                 _CurrentRoot,
                 Category.Info, 
@@ -68,7 +68,7 @@ namespace AutoRest.Swagger
         public void LogError(MessageTemplate template, params object[] formatArguments)
             => _messages.Add(new ComparisonMessage(
                 template, 
-                new FileObjectPath(File, Path),
+                Path,
                 _PreviousRoot,
                 _CurrentRoot,
                 Category.Error, 
@@ -78,7 +78,7 @@ namespace AutoRest.Swagger
         public void LogBreakingChange(MessageTemplate template, params object[] formatArguments)
             => _messages.Add(new ComparisonMessage(
                 template, 
-                new FileObjectPath(File, Path),
+                Path,
                 _PreviousRoot,
                 _CurrentRoot,
                 Strict ? Category.Error : Category.Warning,

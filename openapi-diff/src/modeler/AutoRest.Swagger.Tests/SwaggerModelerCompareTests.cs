@@ -38,9 +38,9 @@ namespace AutoRest.Swagger.Tests
             var oldFileName = Path.Combine(baseDir, "Resource", "Swagger", "old", input);
             var newFileName = Path.Combine(baseDir, "Resource", "Swagger", "new", input);
             return modeler.Compare(
-                oldFileName,
+                "",
                 File.ReadAllText(oldFileName),
-                newFileName,
+                "",
                 File.ReadAllText(newFileName)
             );
         }

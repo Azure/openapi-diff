@@ -21,7 +21,7 @@ namespace AutoRest.Swagger
 
         public ComparisonMessage(
             MessageTemplate template,
-            FileObjectPath path,
+            ObjectPath path,
             IParsedJson old,
             IParsedJson @new,
             Category severity,
@@ -50,15 +50,15 @@ namespace AutoRest.Swagger
         /// <summary>
         /// The JSON document path to the element being validated.
         /// </summary>
-        public FileObjectPath Path { get; }
+        public ObjectPath Path { get; }
 
-        public string OldJsonRef => Path.JsonReference(Old);
+        public string OldJsonRef => Path.JsonPointer(Old);
 
-        public JToken OldJson() => Path.ObjectPath.CompletePath(Old.Token).Last().token;
+        public JToken OldJson() => Path.CompletePath(Old.Token).Last().token;
 
-        public string NewJsonRef => Path.JsonReference(New);
+        public string NewJsonRef => Path.JsonPointer(New);
 
-        public JToken NewJson() => Path.ObjectPath.CompletePath(New.Token).Last().token;
+        public JToken NewJson() => Path.CompletePath(New.Token).Last().token;
 
         /// <summary>
         /// The id of the validation message
