@@ -45,7 +45,7 @@ namespace AutoRest.Swagger
 
         public DataDirection Direction { get; set; } = DataDirection.None;
 
-        public Uri File { get; set; }
+        public Uri File { get; }
         public ObjectPath Path => _path.Peek();
 
         // public void PushIndex(int index) => _path.Push(Path.AppendIndex(index));
@@ -59,8 +59,8 @@ namespace AutoRest.Swagger
             => _messages.Add(new ComparisonMessage(
                 template, 
                 new FileObjectPath(File, Path),
-                _PreviousRoot.Token,
-                _CurrentRoot.Token,
+                _PreviousRoot,
+                _CurrentRoot,
                 Category.Info, 
                 formatArguments
             ));
@@ -69,8 +69,8 @@ namespace AutoRest.Swagger
             => _messages.Add(new ComparisonMessage(
                 template, 
                 new FileObjectPath(File, Path),
-                _PreviousRoot.Token,
-                _CurrentRoot.Token,
+                _PreviousRoot,
+                _CurrentRoot,
                 Category.Error, 
                 formatArguments
             ));
@@ -79,8 +79,8 @@ namespace AutoRest.Swagger
             => _messages.Add(new ComparisonMessage(
                 template, 
                 new FileObjectPath(File, Path),
-                _PreviousRoot.Token,
-                _CurrentRoot.Token,
+                _PreviousRoot,
+                _CurrentRoot,
                 Strict ? Category.Error : Category.Warning,
                 formatArguments
             ));

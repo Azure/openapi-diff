@@ -35,9 +35,13 @@ namespace AutoRest.Swagger.Tests
         {
             var modeler = new SwaggerModeler();
             var baseDir = Directory.GetParent(typeof(SwaggerModelerCompareTests).GetTypeInfo().Assembly.Location.ToString()).ToString();
+            var oldFileName = Path.Combine(baseDir, "Resource", "Swagger", "old", input);
+            var newFileName = Path.Combine(baseDir, "Resource", "Swagger", "new", input);
             return modeler.Compare(
-                File.ReadAllText(Path.Combine(baseDir, "Resource", "Swagger", "old", input)),
-                File.ReadAllText(Path.Combine(baseDir, "Resource", "Swagger", "new", input))
+                oldFileName,
+                File.ReadAllText(oldFileName),
+                newFileName,
+                File.ReadAllText(newFileName)
             );
         }
 

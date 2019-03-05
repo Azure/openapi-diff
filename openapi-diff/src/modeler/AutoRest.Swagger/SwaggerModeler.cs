@@ -14,10 +14,16 @@ namespace AutoRest.Swagger
         /// </summary>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public IEnumerable<ComparisonMessage> Compare(string swaggerPrevious, string swaggerNew, Settings settings = null)
+        public IEnumerable<ComparisonMessage> Compare(
+            string fileNamePrevious,
+            string swaggerPrevious,
+            string fileNameNew,
+            string swaggerNew,
+            Settings settings = null
+        )
         {
-            var oldDefintion = SwaggerParser.Parse(swaggerPrevious);
-            var newDefintion = SwaggerParser.Parse(swaggerNew);
+            var oldDefintion = SwaggerParser.Parse(swaggerPrevious, fileNamePrevious);
+            var newDefintion = SwaggerParser.Parse(swaggerNew, fileNameNew);
 
             var context = new ComparisonContext<ServiceDefinition>(oldDefintion, newDefintion, settings);
 

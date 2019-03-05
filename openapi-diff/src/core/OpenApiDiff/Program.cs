@@ -35,7 +35,13 @@ namespace OpenApiDiff
             string swaggerPrev = File.ReadAllText(settings.OldSpec);
             string swaggerNew = File.ReadAllText(settings.NewSpec);
 
-            var messages = modeler.Compare(swaggerPrev, swaggerNew, settings);
+            var messages = modeler.Compare(
+                settings.OldSpec,
+                swaggerPrev, 
+                settings.NewSpec, 
+                swaggerNew,
+                settings
+            );
             foreach (var msg in messages)
             {
                 Console.WriteLine(settings.JsonValidationMessages ? msg.GetValidationMessagesAsJson() : msg.ToString());

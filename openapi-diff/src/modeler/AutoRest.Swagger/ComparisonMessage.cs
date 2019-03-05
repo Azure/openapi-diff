@@ -4,6 +4,7 @@
 using AutoRest.Swagger.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OpenApiDiff.Core;
 using OpenApiDiff.Core.Logging;
 using System.Collections.Generic;
 using System.Globalization;
@@ -21,8 +22,8 @@ namespace AutoRest.Swagger
         public ComparisonMessage(
             MessageTemplate template,
             FileObjectPath path,
-            JToken old,
-            JToken @new,
+            IParsedJson old,
+            IParsedJson @new,
             Category severity,
             params object[] formatArguments
         )
@@ -38,9 +39,9 @@ namespace AutoRest.Swagger
             Mode = template.Type;
         }
 
-        public JToken Old { get; }
+        public IParsedJson Old { get; }
 
-        public JToken New { get; }
+        public IParsedJson New { get; }
 
         public Category Severity { get; }
 
@@ -53,11 +54,11 @@ namespace AutoRest.Swagger
 
         public string OldJsonRef => Path.JsonReference(Old);
 
-        public JToken OldJson() => Path.ObjectPath.CompletePath(Old).Last().token;
+        public JToken OldJson() => Path.ObjectPath.CompletePath(Old.Token).Last().token;
 
         public string NewJsonRef => Path.JsonReference(New);
 
-        public JToken NewJson() => Path.ObjectPath.CompletePath(New).Last().token;
+        public JToken NewJson() => Path.ObjectPath.CompletePath(New.Token).Last().token;
 
         /// <summary>
         /// The id of the validation message
@@ -85,9 +86,8 @@ namespace AutoRest.Swagger
             rawMessage["id"] = Id.ToString();
             rawMessage["code"] = Code.ToString();
             rawMessage["message"] = Message;
-            rawMessage["jsonref-old"] = Path?.JsonReference(Old);
-            rawMessage["jsonref-new"] = Path?.JsonReference(New);
-            // rawMessage["json-path"] = Path?.ReadablePath;
+            rawMessage["jsonref-old"] = OldJsonRef;
+            rawMessage["jsonref-new"] = NewJsonRef;
             rawMessage["type"] = Severity.ToString();
             rawMessage["docurl"] = DocUrl.ToString();
             rawMessage["mode"] = Mode.ToString();

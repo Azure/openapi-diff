@@ -5,18 +5,22 @@ using System;
 using AutoRest.Swagger.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OpenApiDiff.Core;
 
 namespace AutoRest.Swagger
 {
     public static class SwaggerParser
     {
-        public static ParsedJson<ServiceDefinition> Parse(string swaggerDocument)
+        public static ParsedJson<ServiceDefinition> Parse(string swaggerDocument, string fileName)
         {
             var raw = JToken.Parse(swaggerDocument);
-            return raw.ToParsedJson(raw.ToObject<ServiceDefinition>(new JsonSerializer 
-            {
-                MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            }));
+            return raw.ToParsedJson(
+                raw.ToObject<ServiceDefinition>(new JsonSerializer 
+                {
+                    MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
+                }),
+                fileName
+            );
         }
     }
 }
