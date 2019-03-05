@@ -80,11 +80,15 @@ namespace AutoRest.Swagger
         /// </summary>
         public MessageType Mode { get; }
 
-        private static string Location(JToken t)
+        private static string Location(IParsedJson j, JToken t)
         {
             IJsonLineInfo x = t;
-            return x == null ? "" : $"{x.LineNumber}:{x.LinePosition}";
+            return x == null ? "" : $"{j.FileName}:{x.LineNumber}:{x.LinePosition}";
         }
+
+        public string OldLocation() => Location(Old, OldJson());
+
+        public string NewLocation() => Location(New, NewJson());
 
         public string GetValidationMessagesAsJson()
         {
@@ -93,9 +97,9 @@ namespace AutoRest.Swagger
             rawMessage["code"] = Code.ToString();
             rawMessage["message"] = Message;
             rawMessage["jsonref-old"] = OldJsonRef;
-            rawMessage["location-old"] = Location(OldJson()); 
+            rawMessage["location-old"] = OldLocation(); 
             rawMessage["jsonref-new"] = NewJsonRef;
-            rawMessage["location-old"] = Location(NewJson());
+            rawMessage["location-old"] = NewLocation();
             rawMessage["type"] = Severity.ToString();
             rawMessage["docurl"] = DocUrl.ToString();
             rawMessage["mode"] = Mode.ToString();

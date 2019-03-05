@@ -212,6 +212,7 @@ namespace AutoRest.Swagger.Tests
                 m.NewJsonRef == "new/added_path.json#/paths/~1api~1Paths"
             );
             Assert.NotNull(x.NewJson());
+            Assert.NotNull(x.NewLocation());
             Assert.Null(x.OldJson());
 
             missing = messages.Where(m => m.Id == ComparisonMessages.AddedOperation.Id);
