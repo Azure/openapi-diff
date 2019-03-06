@@ -12,17 +12,17 @@ namespace AutoRest.Swagger
     /// </summary>
     public class ComparisonContext<T>
     {
-        private readonly JsonDocument<T> _CurrentRootParsedJson;
-        private readonly JsonDocument<T> _PreviousRootParsedJson; 
+        private readonly JsonDocument<T> _CurrentRootDoc;
+        private readonly JsonDocument<T> _PreviousRootDoc; 
 
         /// <summary>
         /// Initializes a top level context for comparisons
         /// </summary>
-        /// <param name="oldRoot"></param>
-        public ComparisonContext(JsonDocument<T> oldRoot, JsonDocument<T> newRoot, Settings settings = null)
+        /// <param name="oldRootDoc"></param>
+        public ComparisonContext(JsonDocument<T> oldRootDoc, JsonDocument<T> newRootDoc, Settings settings = null)
         {
-            _CurrentRootParsedJson = newRoot;
-            _PreviousRootParsedJson = oldRoot;
+            _CurrentRootDoc = newRootDoc;
+            _PreviousRootDoc = oldRootDoc;
             
             if (settings != null)
             {
@@ -33,9 +33,9 @@ namespace AutoRest.Swagger
         /// <summary>
         /// The original root object in the graph that is being compared
         /// </summary>
-        public T CurrentRoot => _CurrentRootParsedJson.Typed;
+        public T CurrentRoot => _CurrentRootDoc.Typed;
 
-        public T PreviousRoot => _PreviousRootParsedJson.Typed;
+        public T PreviousRoot => _PreviousRootDoc.Typed;
 
         /// <summary>
         /// If true, then checking should be strict, in other words, breaking changes are errors
@@ -59,8 +59,8 @@ namespace AutoRest.Swagger
             => _messages.Add(new ComparisonMessage(
                 template, 
                 Path,
-                _PreviousRootParsedJson,
-                _CurrentRootParsedJson,
+                _PreviousRootDoc,
+                _CurrentRootDoc,
                 Category.Info, 
                 formatArguments
             ));
@@ -69,8 +69,8 @@ namespace AutoRest.Swagger
             => _messages.Add(new ComparisonMessage(
                 template, 
                 Path,
-                _PreviousRootParsedJson,
-                _CurrentRootParsedJson,
+                _PreviousRootDoc,
+                _CurrentRootDoc,
                 Category.Error, 
                 formatArguments
             ));
@@ -79,8 +79,8 @@ namespace AutoRest.Swagger
             => _messages.Add(new ComparisonMessage(
                 template, 
                 Path,
-                _PreviousRootParsedJson,
-                _CurrentRootParsedJson,
+                _PreviousRootDoc,
+                _CurrentRootDoc,
                 Strict ? Category.Error : Category.Warning,
                 formatArguments
             ));
