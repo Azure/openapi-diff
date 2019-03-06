@@ -11,10 +11,10 @@ namespace AutoRest.Swagger
 {
     public static class SwaggerParser
     {
-        public static ParsedJson<ServiceDefinition> Parse(string swaggerDocument, string fileName)
+        public static JsonDocument<ServiceDefinition> Parse(string swaggerDocument, string fileName)
         {
             var raw = JToken.Parse(swaggerDocument);
-            return raw.ToParsedJson(
+            return raw.ToJsonDocument(
                 raw.ToObject<ServiceDefinition>(new JsonSerializer 
                 {
                     MetadataPropertyHandling = MetadataPropertyHandling.Ignore,

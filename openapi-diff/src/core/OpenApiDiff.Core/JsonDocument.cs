@@ -5,7 +5,7 @@ namespace OpenApiDiff.Core
     /// <summary>
     /// An interface for untyped parsed JSON.
     /// </summary>
-    public interface IParsedJson
+    public interface IJsonDocument
     {
         JToken Token { get; }
 
@@ -13,10 +13,10 @@ namespace OpenApiDiff.Core
     }
 
     /// <summary>
-    /// A representation of parsed JSON.
+    /// A representation of parsed JSON document.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public sealed class ParsedJson<T>: IParsedJson
+    public sealed class JsonDocument<T>: IJsonDocument
     {
         /// <summary>
         /// Untyped raw parsed JSON. The Token also includes information about 
@@ -34,7 +34,7 @@ namespace OpenApiDiff.Core
         /// </summary>
         public string FileName { get; }
 
-        public ParsedJson(JToken token, T typed, string fileName)
+        public JsonDocument(JToken token, T typed, string fileName)
         {
             Token = token;
             Typed = typed;
@@ -42,17 +42,17 @@ namespace OpenApiDiff.Core
         }
     }
 
-    public static class ParsedJson
+    public static class JsonDocument
     {
         /// <summary>
-        /// Creates a `ParsedJson` object.
+        /// Creates a `JsonDocument` object. It's a syntax sugar for `new JsonDocument`.
         /// </summary>
         /// <typeparam name="T">Deserialization type.</typeparam>
         /// <param name="token">Raw JSON object. The object includes information about JSON token locations</param>
         /// <param name="typed">Representation of the JSON as `T` type.</param>
         /// <param name="fileName">A JSON source file name.</param>
         /// <returns></returns>
-        public static ParsedJson<T> ToParsedJson<T>(this JToken token, T typed, string fileName)
-            => new ParsedJson<T>(token, typed, fileName);
+        public static JsonDocument<T> ToJsonDocument<T>(this JToken token, T typed, string fileName)
+            => new JsonDocument<T>(token, typed, fileName);
     }
 }

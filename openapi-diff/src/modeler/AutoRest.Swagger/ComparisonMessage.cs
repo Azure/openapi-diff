@@ -22,8 +22,8 @@ namespace AutoRest.Swagger
         public ComparisonMessage(
             MessageTemplate template,
             ObjectPath path,
-            IParsedJson old,
-            IParsedJson @new,
+            IJsonDocument old,
+            IJsonDocument @new,
             Category severity,
             params object[] formatArguments
         )
@@ -39,9 +39,9 @@ namespace AutoRest.Swagger
             Mode = template.Type;
         }
 
-        public IParsedJson Old { get; }
+        public IJsonDocument Old { get; }
 
-        public IParsedJson New { get; }
+        public IJsonDocument New { get; }
 
         public Category Severity { get; }
 
@@ -80,7 +80,7 @@ namespace AutoRest.Swagger
         /// </summary>
         public MessageType Mode { get; }
 
-        private static string Location(IParsedJson j, JToken t)
+        private static string Location(IJsonDocument j, JToken t)
         {
             IJsonLineInfo x = t;
             return x == null ? "" : $"{j.FileName}:{x.LineNumber}:{x.LinePosition}";
