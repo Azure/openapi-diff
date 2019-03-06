@@ -54,10 +54,20 @@ namespace AutoRest.Swagger
 
         public string OldJsonRef => Path.JsonPointer(Old);
 
+        /// <summary>
+        /// A JToken from the old document that contains such information as location.
+        /// </summary>
+        /// <seealso cref="IJsonLineInfo"/>
+        /// <returns></returns>
         public JToken OldJson() => Path.CompletePath(Old.Token).Last().token;
 
         public string NewJsonRef => Path.JsonPointer(New);
 
+        /// <summary>
+        /// A JToken from the new document that contains such information as location.
+        /// </summary>
+        /// <seealso cref="IJsonLineInfo"/>
+        /// <returns></returns>
         public JToken NewJson() => Path.CompletePath(New.Token).Last().token;
 
         /// <summary>
