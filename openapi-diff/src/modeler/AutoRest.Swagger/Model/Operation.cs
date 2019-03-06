@@ -167,7 +167,8 @@ namespace AutoRest.Swagger.Model
             {
                 SwaggerParameter newParam = FindParameter(oldParam.Name, Parameters, currentRoot.Parameters);
 
-                // context.PushProperty(oldParam.Name);
+                // we should use PushItemByName instead of PushProperty because Swagger `parameters` is 
+                // an array of paremters.  
                 context.PushItemByName(oldParam.Name);
 
                 if (newParam != null)

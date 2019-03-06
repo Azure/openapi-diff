@@ -74,6 +74,7 @@ namespace AutoRest.Swagger.Model
                 context.Pop();
             }
 
+            // switch context to `schema` property.
             context.PushProperty("schema");
             if (Schema != null && priorResponse.Schema != null)
             {

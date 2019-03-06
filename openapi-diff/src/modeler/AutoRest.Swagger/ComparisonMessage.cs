@@ -22,8 +22,8 @@ namespace AutoRest.Swagger
         public ComparisonMessage(
             MessageTemplate template,
             ObjectPath path,
-            IJsonDocument old,
-            IJsonDocument @new,
+            IJsonDocument oldDoc,
+            IJsonDocument newDoc,
             Category severity,
             params object[] formatArguments
         )
@@ -31,17 +31,17 @@ namespace AutoRest.Swagger
             Severity = severity;
             Message = $"{string.Format(CultureInfo.CurrentCulture, template.Message, formatArguments)}";
             Path = path;
-            Old = old;
-            New = @new;
+            OldDoc = oldDoc;
+            NewDoc = newDoc;
             Id = template.Id;
             Code = template.Code;
             DocUrl = $"{DocBaseUrl}{template.Id}.md";
             Mode = template.Type;
         }
 
-        public IJsonDocument Old { get; }
+        public IJsonDocument OldDoc { get; }
 
-        public IJsonDocument New { get; }
+        public IJsonDocument NewDoc { get; }
 
         public Category Severity { get; }
 
@@ -52,23 +52,23 @@ namespace AutoRest.Swagger
         /// </summary>
         private ObjectPath Path { get; }
 
-        public string OldJsonRef => Path.JsonPointer(Old);
+        public string OldJsonRef => Path.JsonPointer(OldDoc);
 
         /// <summary>
         /// A JToken from the old document that contains such information as location.
         /// </summary>
         /// <seealso cref="IJsonLineInfo"/>
         /// <returns></returns>
-        public JToken OldJson() => Path.CompletePath(Old.Token).Last().token;
+        public JToken OldJson() => Path.CompletePath(OldDoc.Token).Last().token;
 
-        public string NewJsonRef => Path.JsonPointer(New);
+        public string NewJsonRef => Path.JsonPointer(NewDoc);
 
         /// <summary>
         /// A JToken from the new document that contains such information as location.
         /// </summary>
         /// <seealso cref="IJsonLineInfo"/>
         /// <returns></returns>
-        public JToken NewJson() => Path.CompletePath(New.Token).Last().token;
+        public JToken NewJson() => Path.CompletePath(NewDoc.Token).Last().token;
 
         /// <summary>
         /// The id of the validation message
@@ -103,9 +103,9 @@ namespace AutoRest.Swagger
             return x == null ? "" : $"{jsonDoc.FileName}:{x.LineNumber}:{x.LinePosition}";
         }
 
-        public string OldLocation() => Location(Old, OldJson());
+        public string OldLocation() => Location(OldDoc, OldJson());
 
-        public string NewLocation() => Location(New, NewJson());
+        public string NewLocation() => Location(NewDoc, NewJson());
 
         public string GetValidationMessagesAsJson()
         {
