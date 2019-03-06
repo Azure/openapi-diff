@@ -123,10 +123,10 @@ namespace AutoRest.Swagger.Model
                 throw new ArgumentException("context.PreviousRoot != previousDefinition");
             }
 
-            base.Compare(context, previousDefinition);
-
             if (previousDefinition == null)
                 throw new ArgumentException("Comparing a service definition with something else.");
+
+            base.Compare(context, previousDefinition);
 
             if (Info?.Version != null && 
                 previousDefinition.Info?.Version != null)

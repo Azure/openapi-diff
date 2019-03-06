@@ -12,17 +12,21 @@ namespace AutoRest.Swagger
         /// <summary>
         /// Copares two versions of the same service specification.
         /// </summary>
+        /// <param name="fileNameOld">a file name of the old swagger document</param>
+        /// <param name="swaggerOld">a content of the old swagger document</param>
+        /// <param name="fileNameNew">a file name of the new swagger document</param>
+        /// <param name="swaggerNew">a content of the new swagger document</param>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public IEnumerable<ComparisonMessage> Compare(
-            string fileNamePrevious,
-            string swaggerPrevious,
+            string fileNameOld,
+            string swaggerOld,
             string fileNameNew,
             string swaggerNew,
             Settings settings = null
         )
         {
-            var oldDefintion = SwaggerParser.Parse(swaggerPrevious, fileNamePrevious);
+            var oldDefintion = SwaggerParser.Parse(swaggerOld, fileNameOld);
             var newDefintion = SwaggerParser.Parse(swaggerNew, fileNameNew);
 
             var context = new ComparisonContext<ServiceDefinition>(oldDefintion, newDefintion, settings);

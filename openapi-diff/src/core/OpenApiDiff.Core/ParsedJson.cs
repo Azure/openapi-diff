@@ -44,6 +44,14 @@ namespace OpenApiDiff.Core
 
     public static class ParsedJson
     {
+        /// <summary>
+        /// Creates a `ParsedJson` object.
+        /// </summary>
+        /// <typeparam name="T">Deserialization type.</typeparam>
+        /// <param name="token">Raw JSON object. The object includes information about JSON token locations</param>
+        /// <param name="typed">Representation of the JSON as `T` type.</param>
+        /// <param name="fileName">A JSON source file name.</param>
+        /// <returns></returns>
         public static ParsedJson<T> ToParsedJson<T>(this JToken token, T typed, string fileName)
             => new ParsedJson<T>(token, typed, fileName);
     }
