@@ -116,7 +116,7 @@ namespace AutoRest.Swagger
             rawMessage["jsonref-old"] = OldJsonRef;
             rawMessage["location-old"] = OldLocation(); 
             rawMessage["jsonref-new"] = NewJsonRef;
-            rawMessage["location-old"] = NewLocation();
+            rawMessage["location-new"] = NewLocation();
             rawMessage["type"] = Severity.ToString();
             rawMessage["docurl"] = DocUrl.ToString();
             rawMessage["mode"] = Mode.ToString();

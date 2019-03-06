@@ -220,6 +220,8 @@ namespace AutoRest.Swagger.Tests
             x = missing.First(m => m.Severity == Category.Info && m.NewJsonRef == "new/added_path.json#/paths/~1api~1Operations/post");
             Assert.NotNull(x.NewJson());
             Assert.Null(x.OldJson());
+
+            var output = x.GetValidationMessagesAsJson();
         }
 
         /// <summary>
