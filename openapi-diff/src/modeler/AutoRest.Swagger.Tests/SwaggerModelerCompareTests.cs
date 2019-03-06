@@ -222,6 +222,7 @@ namespace AutoRest.Swagger.Tests
             Assert.Null(x.OldJson());
 
             var output = x.GetValidationMessagesAsJson();
+            Assert.NotNull(output);
         }
 
         /// <summary>
