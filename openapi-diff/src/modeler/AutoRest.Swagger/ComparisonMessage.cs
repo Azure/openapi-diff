@@ -50,7 +50,7 @@ namespace AutoRest.Swagger
         /// <summary>
         /// The JSON document path to the element being validated.
         /// </summary>
-        public ObjectPath Path { get; }
+        private ObjectPath Path { get; }
 
         public string OldJsonRef => Path.JsonPointer(Old);
 
