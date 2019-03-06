@@ -90,10 +90,17 @@ namespace AutoRest.Swagger
         /// </summary>
         public MessageType Mode { get; }
 
-        private static string Location(IJsonDocument j, JToken t)
+        /// <summary>
+        /// Return a location of the given JSON token `t` in the document `j`.
+        /// </summary>
+        /// <param name="jsonDoc"></param>
+        /// <param name="jsonToken"></param>
+        /// <returns>a string in this format `fileName:lineNumber:linePosition`</returns>
+        private static string Location(IJsonDocument jsonDoc, JToken jsonToken)
         {
-            IJsonLineInfo x = t;
-            return x == null ? "" : $"{j.FileName}:{x.LineNumber}:{x.LinePosition}";
+            // up cast.
+            IJsonLineInfo x = jsonToken;
+            return x == null ? "" : $"{jsonDoc.FileName}:{x.LineNumber}:{x.LinePosition}";
         }
 
         public string OldLocation() => Location(Old, OldJson());

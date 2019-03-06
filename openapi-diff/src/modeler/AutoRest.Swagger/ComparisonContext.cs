@@ -18,7 +18,8 @@ namespace AutoRest.Swagger
         /// <summary>
         /// Initializes a top level context for comparisons
         /// </summary>
-        /// <param name="oldRootDoc"></param>
+        /// <param name="oldRootDoc">an old document of type T.</param>
+        /// <param name="newRootDoc">a new document of type T</param>
         public ComparisonContext(JsonDocument<T> oldRootDoc, JsonDocument<T> newRootDoc, Settings settings = null)
         {
             _CurrentRootDoc = newRootDoc;
