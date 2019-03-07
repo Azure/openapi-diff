@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using OpenApiDiff.Core.Logging;
 using System.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace AutoRest.Swagger.Tests
 {
@@ -222,7 +223,9 @@ namespace AutoRest.Swagger.Tests
             Assert.Null(x.OldJson());
 
             var output = x.GetValidationMessagesAsJson();
-            Assert.NotNull(output);
+            var raw = JToken.Parse(output);
+            Assert.Equal(JTokenType.Object, raw.Type);
+            Assert.Equal("new\\added_path.json:31:15", raw["location-new"].Value<string>());
         }
 
         /// <summary>

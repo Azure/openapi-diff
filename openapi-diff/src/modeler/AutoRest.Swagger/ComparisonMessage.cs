@@ -109,17 +109,19 @@ namespace AutoRest.Swagger
 
         public string GetValidationMessagesAsJson()
         {
-            var rawMessage = new Dictionary<string, string>();
-            rawMessage["id"] = Id.ToString();
-            rawMessage["code"] = Code.ToString();
-            rawMessage["message"] = Message;
-            rawMessage["jsonref-old"] = OldJsonRef;
-            rawMessage["location-old"] = OldLocation(); 
-            rawMessage["jsonref-new"] = NewJsonRef;
-            rawMessage["location-new"] = NewLocation();
-            rawMessage["type"] = Severity.ToString();
-            rawMessage["docurl"] = DocUrl.ToString();
-            rawMessage["mode"] = Mode.ToString();
+            var rawMessage = new Dictionary<string, string>
+            {
+                ["id"] = Id.ToString(),
+                ["code"] = Code.ToString(),
+                ["message"] = Message,
+                ["jsonref-old"] = OldJsonRef,
+                ["location-old"] = OldLocation(),
+                ["jsonref-new"] = NewJsonRef,
+                ["location-new"] = NewLocation(),
+                ["type"] = Severity.ToString(),
+                ["docurl"] = DocUrl.ToString(),
+                ["mode"] = Mode.ToString()
+            };
 
             return JsonConvert.SerializeObject(rawMessage, Formatting.Indented);
         }
