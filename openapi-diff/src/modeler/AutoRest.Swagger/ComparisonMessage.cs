@@ -100,7 +100,9 @@ namespace AutoRest.Swagger
         {
             // up cast.
             IJsonLineInfo x = jsonToken;
-            return x == null ? "" : $"{jsonDoc.FileName}:{x.LineNumber}:{x.LinePosition}";
+            return x == null ? 
+                "" : 
+                $"{ObjectPath.FileNameNorm(jsonDoc.FileName)}:{x.LineNumber}:{x.LinePosition}";
         }
 
         public string OldLocation() => Location(OldDoc, OldJson());

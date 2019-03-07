@@ -62,10 +62,13 @@ namespace OpenApiDiff.Core.Logging
         public IEnumerable<(JToken token, string name)> CompletePath(JToken t)
             => CompletePath(Path, t);
 
+        public static string FileNameNorm(string fileName) 
+            => fileName.Replace("\\", "/");
+
         // https://tools.ietf.org/html/draft-ietf-appsawg-json-pointer-04
         public string JsonPointer(IJsonDocument t) => CompletePath(t.Token)
             .Select(v => v.name?.Replace("~", "~0")?.Replace("/", "~1"))
-            .Aggregate(t.FileName.Replace("\\", "/") + "#", (a, b) => a == null || b == null ? null : a + "/" + b);
+            .Aggregate(FileNameNorm(t.FileName) + "#", (a, b) => a == null || b == null ? null : a + "/" + b);
             
 
         public ObjectPath AppendExpression(Func<JToken, string> func)
