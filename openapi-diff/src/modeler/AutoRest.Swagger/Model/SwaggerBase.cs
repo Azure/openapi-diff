@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace AutoRest.Swagger.Model
 {
-    public abstract class SwaggerBase
+    public abstract class SwaggerBase<T>
     {
         public SwaggerBase()
         {
@@ -24,7 +24,10 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public virtual IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
+        public virtual IEnumerable<ComparisonMessage> Compare(
+            ComparisonContext<ServiceDefinition> context, 
+            T previous
+        )
         {
             if (previous == null)
                 throw new ArgumentNullException("previous");

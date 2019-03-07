@@ -9,7 +9,7 @@ namespace AutoRest.Swagger.Model
     /// <summary>
     /// Describes a single API operation on a path.
     /// </summary>
-    public class Operation : SwaggerBase
+    public class Operation : SwaggerBase<Operation>
     {
         public Operation()
         {
@@ -81,12 +81,15 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public override IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
+        public override IEnumerable<ComparisonMessage> Compare(
+            ComparisonContext<ServiceDefinition> context,
+            Operation previous
+        )
         {
-            var priorOperation = previous as Operation;
+            var priorOperation = previous;
 
-            var currentRoot = (context.CurrentRoot as ServiceDefinition);
-            var previousRoot = (context.PreviousRoot as ServiceDefinition);
+            var currentRoot = context.CurrentRoot;
+            var previousRoot = context.PreviousRoot;
 
             if (priorOperation == null)
             {
@@ -104,6 +107,7 @@ namespace AutoRest.Swagger.Model
 
             if (Responses != null && priorOperation.Responses != null)
             {
+                context.PushProperty("responses");
                 foreach (var response in Responses)
                 {
                     var oldResponse = priorOperation.FindResponse(response.Key, priorOperation.Responses);
@@ -133,6 +137,7 @@ namespace AutoRest.Swagger.Model
                         context.Pop();
                     }
                 }
+                context.Pop();
             }
 
             return context.Messages;
@@ -143,21 +148,26 @@ namespace AutoRest.Swagger.Model
         /// </summary>
         /// <param name="context">Comaprision Context</param>
         /// <param name="priorOperation">Operation object of old swagger</param>
-        private void CheckParameters(ComparisonContext context, Operation priorOperation)
+        private void CheckParameters(ComparisonContext<ServiceDefinition> context, Operation priorOperation)
         {
             // Check that no parameters were removed or reordered, and compare them if it's not the case.
 
-            var currentRoot = (context.CurrentRoot as ServiceDefinition);
-            var previousRoot = (context.PreviousRoot as ServiceDefinition);
+            var currentRoot = context.CurrentRoot;
+            var previousRoot = context.PreviousRoot;
+
+            context.PushProperty("parameters");
 
             var priorOperationParameters = priorOperation.Parameters.Select(param =>
-                                             string.IsNullOrWhiteSpace(param.Reference) ?
-                                             param : FindReferencedParameter(param.Reference, previousRoot.Parameters));
+                string.IsNullOrWhiteSpace(param.Reference) ? param : 
+                FindReferencedParameter(param.Reference, previousRoot.Parameters)
+            );
             foreach (var oldParam in priorOperationParameters)
             {
                 SwaggerParameter newParam = FindParameter(oldParam.Name, Parameters, currentRoot.Parameters);
 
-                context.PushProperty(oldParam.Name);
+                // we should use PushItemByName instead of PushProperty because Swagger `parameters` is 
+                // an array of paremters.  
+                context.PushItemByName(oldParam.Name);
 
                 if (newParam != null)
                 {
@@ -185,12 +195,13 @@ namespace AutoRest.Swagger.Model
 
                 if (oldParam == null)
                 {
-                    // Did not find required parameter in the old swagger i.e required parameter is added
-                    context.PushProperty(newParam.Name);
+                    // Did not find required parameter in the old swagger i.e required parameter is added                    
+                    context.PushItemByName(newParam.Name);
                     context.LogBreakingChange(ComparisonMessages.AddingRequiredParameter, newParam.Name);
                     context.Pop();
                 }
             }
+            context.Pop();
         }
 
         /// <summary>
@@ -233,15 +244,16 @@ namespace AutoRest.Swagger.Model
         /// <param name="reference">Name of the reference to search for</param>
         /// <param name="parameters">Dictionary of parameters for the search</param>
         /// <returns>Swagger Parameter if found; otherwise null</returns>
-        private static SwaggerParameter FindReferencedParameter(string reference, IDictionary<string, SwaggerParameter> parameters)
+        private static SwaggerParameter FindReferencedParameter(
+            string reference, IDictionary<string, SwaggerParameter> parameters
+        )
         {
             if (reference != null && reference.StartsWith("#", StringComparison.Ordinal))
             {
                 var parts = reference.Split('/');
                 if (parts.Length == 3 && parts[1].Equals("parameters"))
                 {
-                    SwaggerParameter p = null;
-                    if (parameters.TryGetValue(parts[2], out p))
+                    if (parameters.TryGetValue(parts[2], out var p))
                     {
                         return p;
                     }

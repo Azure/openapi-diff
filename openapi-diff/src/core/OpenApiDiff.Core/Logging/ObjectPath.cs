@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using YamlDotNet.RepresentationModel;
 
 namespace OpenApiDiff.Core.Logging
 {
@@ -13,37 +13,65 @@ namespace OpenApiDiff.Core.Logging
     /// </summary>
     public class ObjectPath
     {
-        public static ObjectPath Empty => new ObjectPath(Enumerable.Empty<ObjectPathPart>());
+        public static ObjectPath Empty => new ObjectPath(Enumerable.Empty<Func<JToken, string>>());
 
-        private ObjectPath(IEnumerable<ObjectPathPart> path)
+        private ObjectPath(IEnumerable<Func<JToken, string>> path)
         {
             Path = path;
         }
 
-        private ObjectPath Append(ObjectPathPart part) => new ObjectPath(Path.Concat(new[] { part }));
+        private ObjectPath Append(Func<JToken, string> f) => new ObjectPath(Path.Concat(new[] { f }));
 
-        public ObjectPath AppendIndex(int index) => Append(new ObjectPathPartIndex(index));
+        public ObjectPath AppendProperty(string property) => Append((_) => property);
 
-        public ObjectPath AppendProperty(string property) => Append(new ObjectPathPartProperty(property));
+        public ObjectPath AppendItemByName(string value) => Append(t =>
+        {
+            var list = t
+                ?.Select((v, i) => (v, i))
+                ?.Where(vi => vi.v?["name"]?.Value<string>() == value)
+                ?.ToList();
+            return list == null || list.Count == 0 ? null : list[0].i.ToString();
+        });
 
-        public IEnumerable<ObjectPathPart> Path { get; }
+        public IEnumerable<Func<JToken, string>> Path { get; }
+
+        private static ObjectPath ParseRef(string s)
+            => new ObjectPath(s
+                .Split('/')
+                .Where(v => v != "#")
+                .Select<string, Func<JToken, string>>(v => _ => v.Replace("~1", "/").Replace("~0", "~"))
+            );
+
+        private static JToken FromObject(JObject o, string name)
+        {
+            var @ref = o["$ref"];
+            var unrefed = @ref != null ? ParseRef(@ref.Value<string>()).CompletePath(o.Root).Last().token : o;
+            return unrefed[name];
+        }
+
+        private static IEnumerable<(JToken token, string name)> CompletePath(IEnumerable<Func<JToken, string>> p, JToken t)
+            => p.Select(v => {
+                var name = v(t);
+                t =
+                    t is JArray a ? int.TryParse(name, out var i) ? a[i] : null :
+                    t is JObject o ? FromObject(o, name) :
+                    null;
+                return (t, name);
+            });
+
+        public IEnumerable<(JToken token, string name)> CompletePath(JToken t)
+            => CompletePath(Path, t);
+
+        public static string FileNameNorm(string fileName) 
+            => fileName.Replace("\\", "/");
 
         // https://tools.ietf.org/html/draft-ietf-appsawg-json-pointer-04
-        public string JsonPointer => string.Concat(Path.Select(p => p.JsonPointer));
+        public string JsonPointer(IJsonDocument t) => CompletePath(t.Token)
+            .Select(v => v.name?.Replace("~", "~0")?.Replace("/", "~1"))
+            .Aggregate(FileNameNorm(t.FileName) + "#", (a, b) => a == null || b == null ? null : a + "/" + b);
+            
 
-        // http://goessner.net/articles/JsonPath/, https://github.com/jayway/JsonPath
-        public string JsonPath => "$" + string.Concat(Path.Select(p => p.JsonPath));
-
-        public string ReadablePath => string.Concat(Path.Select(p => p.ReadablePath));
-
-        public YamlNode SelectNode(YamlNode node)
-        {
-            YamlNode result = node;
-            foreach (var part in Path)
-            {
-                result = part.SelectNode(ref node) ?? result;
-            }
-            return result;
-        }
+        public ObjectPath AppendExpression(Func<JToken, string> func)
+            => Append(func);
     }
 }

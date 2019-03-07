@@ -12,7 +12,7 @@ namespace AutoRest.Swagger.Model
     /// <summary>
     /// Swagger schema object.
     /// </summary>
-    public class Schema : SwaggerObject
+    public class Schema : SwaggerObject<Schema>
     {
         public string Title { get; set; }
 
@@ -73,9 +73,13 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public override IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
+        public override IEnumerable<ComparisonMessage> Compare(
+            ComparisonContext<ServiceDefinition> context,
+            Schema previous
+        )
         {
-            if (!(previous is Schema priorSchema))
+            var priorSchema = previous;
+            if (priorSchema == null)
             {
                 throw new ArgumentNullException("priorVersion");
             }
@@ -90,7 +94,7 @@ namespace AutoRest.Swagger.Model
 
             if (!string.IsNullOrWhiteSpace(thisSchema.Reference))
             {
-                thisSchema = FindReferencedSchema(thisSchema.Reference, (context.CurrentRoot as ServiceDefinition).Definitions);
+                thisSchema = FindReferencedSchema(thisSchema.Reference, context.CurrentRoot.Definitions);
                 referenced += 1;
                 if (thisSchema == null)
                 {
@@ -99,7 +103,7 @@ namespace AutoRest.Swagger.Model
             }
             if (!string.IsNullOrWhiteSpace(priorSchema.Reference))
             {
-                priorSchema = FindReferencedSchema(priorSchema.Reference, (context.PreviousRoot as ServiceDefinition).Definitions);
+                priorSchema = FindReferencedSchema(priorSchema.Reference, context.PreviousRoot.Definitions);
                 referenced += 1;
                 if (priorSchema == null)
                 {
@@ -109,7 +113,7 @@ namespace AutoRest.Swagger.Model
 
             // Avoid doing the comparison repeatedly by marking for which direction it's already been done.
 
-            if ((context.Direction != DataDirection.None && referenced == 2))
+            if (context.Direction != DataDirection.None && referenced == 2)
             {
                 // Comparing two referenced schemas in the context of a parameter or response -- did we already do this?
 
@@ -120,7 +124,7 @@ namespace AutoRest.Swagger.Model
                 _compareDirection |= context.Direction;
             }
 
-            if ((thisSchema != this || priorSchema != previous))
+            if (thisSchema != this || priorSchema != previous)
             {
                 if (_visitedSchemas.Contains(priorSchema))
                 {
@@ -175,7 +179,7 @@ namespace AutoRest.Swagger.Model
         /// </summary>
         /// <param name="context">Comaprision Context</param>
         /// <param name="priorSchema">Schema of the old model</param>
-        private void CompareRequired(ComparisonContext context, Schema priorSchema)
+        private void CompareRequired(ComparisonContext<ServiceDefinition> context, Schema priorSchema)
         {
             if (Required == null)
             {
@@ -195,7 +199,7 @@ namespace AutoRest.Swagger.Model
             }
         }
 
-        private void CompareAllOfs(ComparisonContext context, Schema priorSchema)
+        private void CompareAllOfs(ComparisonContext<ServiceDefinition> context, Schema priorSchema)
         {
             var different = 0;
             foreach (var schema in priorSchema.AllOf)
@@ -224,7 +228,7 @@ namespace AutoRest.Swagger.Model
         /// </summary>
         /// <param name="context">Comaprision Context</param>
         /// <param name="priorSchema">Schema of the old model</param>
-        private void CompareProperties(ComparisonContext context, Schema priorSchema)
+        private void CompareProperties(ComparisonContext<ServiceDefinition> context, Schema priorSchema)
         {
             // Case: Were any properties removed?
             if (priorSchema.Properties != null)
@@ -250,8 +254,7 @@ namespace AutoRest.Swagger.Model
                 foreach (KeyValuePair<string, Schema> property in Properties)
                 {
                     // Case: Were any required properties added?
-                    Schema model = null;
-                    if (priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(property.Key, out model) &&
+                    if (priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(property.Key, out var model) &&
                         (Required != null && Required.Contains(property.Key)))
                     {
                         context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, property.Key);
@@ -279,8 +282,7 @@ namespace AutoRest.Swagger.Model
                 var parts = reference.Split('/');
                 if (parts.Length == 3 && parts[1].Equals("definitions"))
                 {
-                    Schema p = null;
-                    if (definitions.TryGetValue(parts[2], out p))
+                    if (definitions.TryGetValue(parts[2], out var p))
                     {
                         return p;
                     }
