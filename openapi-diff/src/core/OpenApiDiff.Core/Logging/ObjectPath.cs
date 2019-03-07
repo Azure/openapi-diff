@@ -35,16 +35,17 @@ namespace OpenApiDiff.Core.Logging
 
         public IEnumerable<Func<JToken, string>> Path { get; }
 
-        private static IEnumerable<Func<JToken, string>> ParseRef(string s)
-            => s
+        private static ObjectPath ParseRef(string s)
+            => new ObjectPath(s
                 .Split('/')
                 .Where(v => v != "#")
-                .Select<string, Func<JToken, string>>(v => _ => v.Replace("~1", "/").Replace("~0", "~"));
+                .Select<string, Func<JToken, string>>(v => _ => v.Replace("~1", "/").Replace("~0", "~"))
+            );
 
         private static JToken FromObject(JObject o, string name)
         {
             var @ref = o["$ref"];
-            var unrefed = @ref != null ? CompletePath(ParseRef(@ref.Value<string>()), o.Root).Last().token : o;
+            var unrefed = @ref != null ? ParseRef(@ref.Value<string>()).CompletePath(o.Root).Last().token : o;
             return unrefed[name];
         }
 
