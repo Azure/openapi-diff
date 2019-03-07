@@ -227,6 +227,7 @@ namespace AutoRest.Swagger.Tests
             Assert.Equal(JTokenType.Object, raw.Type);
             Assert.Equal("new/added_path.json:31:15", raw["location-new"].Value<string>());
             Assert.Equal("paths./api/Operations.post", raw["jsonpath-new"].Value<string>());
+            Assert.Null(raw["location-old"]);
         }
 
         /// <summary>

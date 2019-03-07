@@ -101,7 +101,7 @@ namespace AutoRest.Swagger
             // up cast.
             IJsonLineInfo x = jsonToken;
             return x == null ? 
-                "" : 
+                null : 
                 $"{ObjectPath.FileNameNorm(jsonDoc.FileName)}:{x.LineNumber}:{x.LinePosition}";
         }
 
@@ -111,23 +111,25 @@ namespace AutoRest.Swagger
 
         public string GetValidationMessagesAsJson()
         {
-            var rawMessage = new Dictionary<string, string>
-            {
-                ["id"] = Id.ToString(),
-                ["code"] = Code.ToString(),
-                ["message"] = Message,
-                ["jsonref-old"] = OldJsonRef,
-                ["jsonpath-old"] = OldJson()?.Path,
-                ["location-old"] = OldLocation(),
-                ["jsonref-new"] = NewJsonRef,
-                ["jsonpath-new"] = NewJson()?.Path,
-                ["location-new"] = NewLocation(),
-                ["type"] = Severity.ToString(),
-                ["docurl"] = DocUrl.ToString(),
-                ["mode"] = Mode.ToString()
-            };
+            var rawMessage = new Dictionary<string, string>()
+                .AddIfNotNull("id", Id.ToString())
+                .AddIfNotNull("code", Code.ToString())
+                .AddIfNotNull("message", Message)
+                .AddIfNotNull("jsonref-old", OldJsonRef)
+                .AddIfNotNull("jsonpath-old", OldJson()?.Path)
+                .AddIfNotNull("location-old", OldLocation())
+                .AddIfNotNull("jsonref-new", NewJsonRef)
+                .AddIfNotNull("jsonpath-new", NewJson()?.Path)
+                .AddIfNotNull("location-new", NewLocation())
+                .AddIfNotNull("type", Severity.ToString())
+                .AddIfNotNull("docurl", DocUrl.ToString())
+                .AddIfNotNull("mode", Mode.ToString());
 
-            return JsonConvert.SerializeObject(rawMessage, Formatting.Indented);
+            return JsonConvert.SerializeObject(
+                rawMessage, 
+                Formatting.Indented,
+                new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }
+            );
         }
 
         public override string ToString()
