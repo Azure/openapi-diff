@@ -53,6 +53,7 @@
   },
   "scripts": {
     "jshint": "jshint index.js --reporter=jslint",
-    "test": "npm -s run-script jshint && mocha -t 50000"
+    "test": "npm -s run-script jshint && mocha -t 50000",
+    "gulp": "gulp"
   }
 }

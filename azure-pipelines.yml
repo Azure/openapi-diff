@@ -15,11 +15,11 @@ steps:
     sudo apt-get update
     sudo apt-get install dotnet-sdk-2.0.0 -y
   displayName: install
-- script: gulp
+- script: npm run gulp
   displayName: build
-- script: test
-  displayName: gulp test
-- script: gulp pack
+- script: npm run gulp test
+  displayName: test
+- script: npm run gulp pack
   displayName: pack
 - task: CopyFiles@2
   displayName: 'Copy Files to: drop'
