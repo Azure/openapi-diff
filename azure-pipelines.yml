@@ -15,6 +15,8 @@ steps:
     sudo apt-get update
     sudo apt-get install dotnet-sdk-2.0.0 -y
   displayName: install
+- script: npm install
+  displayName: npm install
 - script: npm run gulp
   displayName: build
 - script: npm run gulp test
