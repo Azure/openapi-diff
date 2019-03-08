@@ -1,6 +1,6 @@
 {
   "name": "oad",
-  "version": "0.1.13",
+  "version": "0.2.0",
   "author": {
     "name": "Microsoft Corporation",
     "email": "azsdkteam@microsoft.com",
@@ -53,6 +53,7 @@
   },
   "scripts": {
     "jshint": "jshint index.js --reporter=jslint",
-    "test": "npm -s run-script jshint && mocha -t 50000"
+    "test": "npm -s run-script jshint && mocha -t 50000",
+    "gulp": "gulp"
   }
 }
