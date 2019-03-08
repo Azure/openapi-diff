@@ -111,19 +111,27 @@ namespace AutoRest.Swagger
 
         public string GetValidationMessagesAsJson()
         {
-            var rawMessage = new Dictionary<string, string>()
-                .AddIfNotNull("id", Id.ToString())
-                .AddIfNotNull("code", Code.ToString())
-                .AddIfNotNull("message", Message)
-                .AddIfNotNull("jsonref-old", OldJsonRef)
-                .AddIfNotNull("jsonpath-old", OldJson()?.Path)
-                .AddIfNotNull("location-old", OldLocation())
-                .AddIfNotNull("jsonref-new", NewJsonRef)
-                .AddIfNotNull("jsonpath-new", NewJson()?.Path)
-                .AddIfNotNull("location-new", NewLocation())
-                .AddIfNotNull("type", Severity.ToString())
-                .AddIfNotNull("docurl", DocUrl.ToString())
-                .AddIfNotNull("mode", Mode.ToString());
+            var rawMessage = new JsonComparisonMessage
+            {
+                id = Id.ToString(),
+                code = Code.ToString(),
+                message = Message,
+                type = Severity.ToString(),
+                docurl = DocUrl.ToString(),
+                mode = Mode.ToString(),
+                old = new JsonLocation
+                {
+                    @ref = OldJsonRef,
+                    path = OldJson()?.Path,
+                    location = OldLocation(),
+                },
+                @new = new JsonLocation
+                {
+                    @ref = NewJsonRef,
+                    path = NewJson()?.Path,
+                    location = NewLocation(),
+                }
+            };
 
             return JsonConvert.SerializeObject(
                 rawMessage, 
