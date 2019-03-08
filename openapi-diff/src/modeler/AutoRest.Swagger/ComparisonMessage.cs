@@ -101,7 +101,7 @@ namespace AutoRest.Swagger
             // up cast.
             IJsonLineInfo x = jsonToken;
             return x == null ? 
-                "" : 
+                null : 
                 $"{ObjectPath.FileNameNorm(jsonDoc.FileName)}:{x.LineNumber}:{x.LinePosition}";
         }
 
@@ -111,23 +111,33 @@ namespace AutoRest.Swagger
 
         public string GetValidationMessagesAsJson()
         {
-            var rawMessage = new Dictionary<string, string>
+            var rawMessage = new JsonComparisonMessage
             {
-                ["id"] = Id.ToString(),
-                ["code"] = Code.ToString(),
-                ["message"] = Message,
-                ["jsonref-old"] = OldJsonRef,
-                ["jsonpath-old"] = OldJson()?.Path,
-                ["location-old"] = OldLocation(),
-                ["jsonref-new"] = NewJsonRef,
-                ["jsonpath-new"] = NewJson()?.Path,
-                ["location-new"] = NewLocation(),
-                ["type"] = Severity.ToString(),
-                ["docurl"] = DocUrl.ToString(),
-                ["mode"] = Mode.ToString()
+                id = Id.ToString(),
+                code = Code.ToString(),
+                message = Message,
+                type = Severity.ToString(),
+                docurl = DocUrl.ToString(),
+                mode = Mode.ToString(),
+                old = new JsonLocation
+                {
+                    @ref = OldJsonRef,
+                    path = OldJson()?.Path,
+                    location = OldLocation(),
+                },
+                @new = new JsonLocation
+                {
+                    @ref = NewJsonRef,
+                    path = NewJson()?.Path,
+                    location = NewLocation(),
+                }
             };
 
-            return JsonConvert.SerializeObject(rawMessage, Formatting.Indented);
+            return JsonConvert.SerializeObject(
+                rawMessage, 
+                Formatting.Indented,
+                new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }
+            );
         }
 
         public override string ToString()
