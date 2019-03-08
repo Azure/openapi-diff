@@ -14,13 +14,13 @@ steps:
     sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-trusty-prod trusty main" > /etc/apt/sources.list.d/dotnetdev.list'
     sudo apt-get update
     sudo apt-get install dotnet-sdk-2.0.0 -y
-  display: install
+  displayName: install
 - script: gulp
-  display: build
+  displayName: build
 - script: test
-  display: gulp test
+  displayName: gulp test
 - script: gulp pack
-  display: pack
+  displayName: pack
 - task: CopyFiles@2
   displayName: 'Copy Files to: drop'
   inputs:
