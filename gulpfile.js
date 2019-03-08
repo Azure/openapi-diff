@@ -15,12 +15,14 @@ gulp.task('restore', function () {
 
 gulp.task('build', ['clean', 'restore'], function () {
     console.log('Building .NET Core project...');
-    return gulp.src('./').pipe(run('dotnet build -c debug openapi-diff/OpenApiDiff.sln /nologo /clp:NoSummary'));
+    return gulp.src('./').pipe(run('dotnet build -c release openapi-diff/OpenApiDiff.sln /nologo /clp:NoSummary'));
 });
 
-gulp.task('publish', ['clean', 'restore'], function () {
+gulp.task('publish', ['build'], function () {
     console.log('Publishing .NET proejct...');
-    return gulp.src('./').pipe(run('dotnet publish -c release openapi-diff/src/core/OpenApiDiff/OpenApiDiff.csproj'));
+    return gulp
+        .src('./')
+        .pipe(run('dotnet publish -c release openapi-diff/src/core/OpenApiDiff/OpenApiDiff.csproj'));
 });
 
 gulp.task('pack', ['publish'], function () {
