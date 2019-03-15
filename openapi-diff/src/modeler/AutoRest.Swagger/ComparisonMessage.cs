@@ -59,7 +59,7 @@ namespace AutoRest.Swagger
         /// </summary>
         /// <seealso cref="IJsonLineInfo"/>
         /// <returns></returns>
-        public JToken OldJson() => Path.CompletePath(OldDoc.Token).Last().token;
+        public JToken OldJson() => Path.CompletePath(OldDoc.Token).LastOrDefault().token;
 
         public string NewJsonRef => Path.JsonPointer(NewDoc);
 
@@ -68,7 +68,7 @@ namespace AutoRest.Swagger
         /// </summary>
         /// <seealso cref="IJsonLineInfo"/>
         /// <returns></returns>
-        public JToken NewJson() => Path.CompletePath(NewDoc.Token).Last().token;
+        public JToken NewJson() => Path.CompletePath(NewDoc.Token).LastOrDefault().token;
 
         /// <summary>
         /// The id of the validation message
