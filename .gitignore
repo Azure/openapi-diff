@@ -221,5 +221,3 @@ package/nuget/tools
 package/chocolatey/*.nupkg
 lib/dlls/**/*
 *.tgz
-
-package-lock.json
