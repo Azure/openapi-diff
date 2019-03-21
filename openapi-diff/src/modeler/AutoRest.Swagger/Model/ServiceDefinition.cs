@@ -109,22 +109,27 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public override IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
+        public override IEnumerable<ComparisonMessage> Compare(
+            ComparisonContext<ServiceDefinition> context,
+            ServiceDefinition previousDefinition
+        )
         {
-            if (previous == null)
-                throw new ArgumentNullException("previous");
-
-            context.CurrentRoot = this;
-            context.PreviousRoot = previous;
-
-            base.Compare(context, previous);
-
-            var previousDefinition = previous as ServiceDefinition;
+            if (context.CurrentRoot != this)
+            {
+                throw new ArgumentException("context.CurrentRoot != this");
+            }
+            if (context.PreviousRoot != previousDefinition)
+            {
+                throw new ArgumentException("context.PreviousRoot != previousDefinition");
+            }
 
             if (previousDefinition == null)
                 throw new ArgumentException("Comparing a service definition with something else.");
 
-            if (Info != null && previousDefinition.Info != null)
+            base.Compare(context, previousDefinition);
+
+            if (Info?.Version != null && 
+                previousDefinition.Info?.Version != null)
             {
                 context.PushProperty("info");
                 context.PushProperty("version");
@@ -408,7 +413,7 @@ namespace AutoRest.Swagger.Model
         /// In semantic versioning schemes, only the major and minor version numbers are considered when comparing versions.
         /// Build numbers are ignored.
         /// </remarks>
-        private void CompareVersions(ComparisonContext context, string newVer, string oldVer)
+        private void CompareVersions(ComparisonContext<ServiceDefinition> context, string newVer, string oldVer)
         {
             var oldVersion = oldVer.Split('.');
             var newVersion = newVer.Split('.');

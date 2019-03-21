@@ -11,7 +11,7 @@ namespace AutoRest.Swagger.Model
     /// Describes a single operation parameter.
     /// https://github.com/wordnik/swagger-spec/blob/master/versions/2.0.md#parameterObject 
     /// </summary>
-    public class SwaggerParameter : SwaggerObject
+    public class SwaggerParameter : SwaggerObject<SwaggerParameter>
     {
         private bool _isRequired;
         public string Name { get; set; }
@@ -21,15 +21,13 @@ namespace AutoRest.Swagger.Model
         [JsonProperty(PropertyName = "required")]
         public override bool IsRequired
         {
-            get { return (_isRequired) || In == ParameterLocation.Path; }
+            get { return _isRequired || In == ParameterLocation.Path; }
             set { _isRequired = value; }
         }
 
         [JsonIgnore]
-        public bool IsConstant
-        {
-            get { return IsRequired && Enum != null && Enum.Count == 1; }
-        }
+        public bool IsConstant 
+            => IsRequired && Enum != null && Enum.Count == 1;
 
         /// <summary>
         /// The schema defining the type used for the body parameter.
@@ -40,11 +38,14 @@ namespace AutoRest.Swagger.Model
         /// Compare a modified document node (this) to a previous one and look for breaking as well as non-breaking changes.
         /// </summary>
         /// <param name="context">The modified document context.</param>
-        /// <param name="previous">The original document model.</param>
+        /// <param name="previous">The SwaggerParameter from the original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public override IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
+        public override IEnumerable<ComparisonMessage> Compare(
+            ComparisonContext<ServiceDefinition> context,
+            SwaggerParameter previous
+        )
         {
-            var priorParameter = previous as SwaggerParameter;
+            var priorParameter = previous;
 
             if (priorParameter == null)
             {
@@ -61,10 +62,14 @@ namespace AutoRest.Swagger.Model
             
             if (In != priorParameter.In)
             {
-                context.LogBreakingChange(ComparisonMessages.ParameterInHasChanged, priorParameter.In.ToString().ToLower(), In.ToString().ToLower());
+                context.LogBreakingChange(
+                    ComparisonMessages.ParameterInHasChanged,
+                    priorParameter.In.ToString().ToLower(),
+                    In.ToString().ToLower()
+                );
             }
 
-            if (this.IsConstant != priorParameter.IsConstant)
+            if (IsConstant != priorParameter.IsConstant)
             {
                 context.LogBreakingChange(ComparisonMessages.ConstantStatusHasChanged);
             }

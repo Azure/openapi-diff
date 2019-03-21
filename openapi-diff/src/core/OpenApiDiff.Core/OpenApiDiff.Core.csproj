@@ -7,6 +7,7 @@
   <PropertyGroup>
     <AssemblyName>OpenApiDiff.Core</AssemblyName>
     <PackageTags>Microsoft AutoRest</PackageTags>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,9 +18,9 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="YamlDotNet.Signed" Version="4.2.2" />
     <PackageReference Include="System.Net.Http" Version="4.3.0" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
+    <PackageReference Include="YamlDotNet.Signed" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

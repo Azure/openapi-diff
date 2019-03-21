@@ -13,7 +13,8 @@ namespace AutoRest.Swagger.Model
     /// Describes a single operation determining with this object is mandatory.
     /// https://github.com/wordnik/swagger-spec/blob/master/versions/2.0.md#parameterObject
     /// </summary>
-    public abstract class SwaggerObject : SwaggerBase
+    public abstract class SwaggerObject<T> : SwaggerBase<T>
+        where T: SwaggerObject<T>
     {
         public virtual bool IsRequired { get; set; }
 
@@ -82,10 +83,13 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public override IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
+        public override IEnumerable<ComparisonMessage> Compare(
+            ComparisonContext<ServiceDefinition> context,
+            T previous
+        )
         {
 
-            var prior = previous as SwaggerObject;
+            var prior = previous;
 
             if (prior == null)
             {
@@ -152,7 +156,7 @@ namespace AutoRest.Swagger.Model
             return context.Messages;
         }
 
-        private void CompareEnums(ComparisonContext context, SwaggerObject prior)
+        private void CompareEnums(ComparisonContext<ServiceDefinition> context, T prior)
         {
             if (prior.Enum == null && this.Enum == null) return;
 
@@ -201,7 +205,7 @@ namespace AutoRest.Swagger.Model
                 context.LogInfo(relaxes ? ComparisonMessages.ConstraintIsWeaker : ComparisonMessages.ConstraintIsStronger, "enum");
         }
 
-        private void CompareProperties(ComparisonContext context, SwaggerObject prior)
+        private void CompareProperties(ComparisonContext<ServiceDefinition> context, T prior)
         {
             // Additional properties
 
@@ -221,7 +225,7 @@ namespace AutoRest.Swagger.Model
             }
         }
 
-        protected void CompareFormats(ComparisonContext context, SwaggerObject prior)
+        protected void CompareFormats(ComparisonContext<ServiceDefinition> context, T prior)
         {
             if (prior == null)
             {
@@ -241,7 +245,7 @@ namespace AutoRest.Swagger.Model
         }
 
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "It may look complex, but it really isn't.")]
-        protected void CompareConstraints(ComparisonContext context, SwaggerObject prior)
+        protected void CompareConstraints(ComparisonContext<ServiceDefinition> context, T prior)
         {
             if (prior == null)
             {
@@ -378,7 +382,7 @@ namespace AutoRest.Swagger.Model
                    (isLowerBound ? (c < p) : (c > p));
         }
 
-        protected void CompareItems(ComparisonContext context, SwaggerObject prior)
+        protected void CompareItems(ComparisonContext<ServiceDefinition> context, T prior)
         {
             if (prior == null)
             {

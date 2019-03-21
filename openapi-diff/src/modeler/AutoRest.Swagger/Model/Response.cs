@@ -9,7 +9,7 @@ namespace AutoRest.Swagger.Model
     /// <summary>
     /// Describes a single response from an API Operation.
     /// </summary>
-    public class OperationResponse : SwaggerBase
+    public class OperationResponse : SwaggerBase<OperationResponse>
     {
         public string Description { get; set; }
 
@@ -25,9 +25,10 @@ namespace AutoRest.Swagger.Model
         /// <param name="context">The modified document context.</param>
         /// <param name="previous">The original document model.</param>
         /// <returns>A list of messages from the comparison.</returns>
-        public override IEnumerable<ComparisonMessage> Compare(ComparisonContext context, SwaggerBase previous)
+        public override IEnumerable<ComparisonMessage> Compare(
+            ComparisonContext<ServiceDefinition> context, OperationResponse previous)
         {
-            var priorResponse = previous as OperationResponse;
+            var priorResponse = previous;
 
             if (priorResponse == null)
             {
@@ -49,8 +50,7 @@ namespace AutoRest.Swagger.Model
             {
                 context.PushProperty(header.Key);
 
-                Header oldHeader = null;
-                if (!priorHeaders.TryGetValue(header.Key, out oldHeader))
+                if (!priorHeaders.TryGetValue(header.Key, out var oldHeader))
                 {
                     context.LogInfo(ComparisonMessages.AddingHeader, header.Key);
                 }
@@ -66,8 +66,7 @@ namespace AutoRest.Swagger.Model
             {
                 context.PushProperty(header.Key);
 
-                Header newHeader = null;
-                if (!headers.TryGetValue(header.Key, out newHeader))
+                if (!headers.TryGetValue(header.Key, out var newHeader))
                 {
                     context.LogBreakingChange(ComparisonMessages.RemovingHeader, header.Key);
                 }
@@ -75,10 +74,13 @@ namespace AutoRest.Swagger.Model
                 context.Pop();
             }
 
+            // switch context to `schema` property.
+            context.PushProperty("schema");
             if (Schema != null && priorResponse.Schema != null)
             {
                 Schema.Compare(context, priorResponse.Schema);
             }
+            context.Pop();
 
             context.Direction = DataDirection.None;
 

@@ -7,11 +7,12 @@ namespace AutoRest.Swagger
         {
         }
 
-        public MessageTemplate(int id, string code, string message)
+        public MessageTemplate(int id, string code, string message, MessageType type)
         {
             Code = code;
             Id = id;
             Message = message;
+            Type = type;
         }
 
         public int Id { get; set; }
@@ -19,5 +20,7 @@ namespace AutoRest.Swagger
         public string Code { get; set; }
 
         public string Message { get; set; }
+
+        public MessageType Type { get; set; }
     }
 }

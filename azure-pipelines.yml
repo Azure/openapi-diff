@@ -1,0 +1,23 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'vs2017-win2016'
+
+steps:
+- script: npm install
+  displayName: npm install
+- script: npm run gulp
+  displayName: build
+- script: npm run gulp test
+  displayName: test
+- script: npm run gulp pack
+  displayName: pack
+- task: CopyFiles@2
+  displayName: 'Copy Files to: drop'
+  inputs:
+    Contents: '*.tgz'
+    TargetFolder: drop
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: $(Build.SourcesDirectory)/drop

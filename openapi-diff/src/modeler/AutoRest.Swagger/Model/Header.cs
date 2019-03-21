@@ -8,7 +8,7 @@ namespace AutoRest.Swagger.Model
     /// <summary>
     /// Swagger header object.
     /// </summary>
-    public class Header : SwaggerObject
+    public class Header : SwaggerObject<Header>
     {        
     }
 }
