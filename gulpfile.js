@@ -19,7 +19,7 @@ gulp.task('build', ['clean', 'restore'], function () {
 });
 
 gulp.task('publish', ['build'], function () {
-    console.log('Publishing .NET proejct...');
+    console.log('Publishing .NET project...');
     return gulp
         .src('./')
         .pipe(run('dotnet publish -c release openapi-diff/src/core/OpenApiDiff/OpenApiDiff.csproj'));

@@ -7,11 +7,9 @@ pool:
 steps:
 - script: npm install
   displayName: npm install
-- script: npm run gulp
-  displayName: build
-- script: npm run gulp test
+- script: npm run test
   displayName: test
-- script: npm run gulp pack
+- script: npm run pack
   displayName: pack
 - task: CopyFiles@2
   displayName: 'Copy Files to: drop'
