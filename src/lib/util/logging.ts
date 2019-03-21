@@ -44,7 +44,7 @@ var customLogLevels = {
   silly: 7
 };
 
-var logger = new (winston.Logger)({
+export var logger = new (winston.Logger)({
   transports: [
     new (winston.transports.Console)({
       level: 'warn',
@@ -119,5 +119,3 @@ Object.defineProperties(logger, {
     }
   }
 });
-
-module.exports = logger;
