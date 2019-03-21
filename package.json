@@ -30,16 +30,16 @@
     "node": ">=7.10.0"
   },
   "files": [
-    "lib",
-    "index.js",
-    "cli.js",
+    "dist/lib",
+    "dist/index.js",
+    "dist/cli.js",
     "package.json",
     "README.md",
     "LICENSE"
   ],
-  "main": "./index.js",
+  "main": "./dist/index.js",
   "bin": {
-    "oad": "./cli.js"
+    "oad": "./dist/cli.js"
   },
   "scripts": {
     "test": "npm run dn.test",
