@@ -17,7 +17,9 @@
     "winston": "^2.3.0",
     "yargs": "^6.6.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "typescript": "^3.3.4000"
+  },
   "homepage": "https://github.com/Azure/openapi-diff",
   "repository": {
     "type": "git",
@@ -42,12 +44,13 @@
     "oad": "./dist/cli.js"
   },
   "scripts": {
-    "test": "npm run dn.test",
     "dn.clean": "dotnet clean openapi-diff/OpenApiDiff.sln",
     "dn.restore": "dotnet restore openapi-diff/OpenApiDiff.sln",
     "dn.build": "npm run dn.clean && npm run dn.restore && dotnet build -c release openapi-diff/OpenApiDiff.sln /nologo /clp:NoSummary",
     "dn.publish": "npm run dn.build && dotnet publish -c release openapi-diff/src/core/OpenApiDiff/OpenApiDiff.csproj",
     "dn.test": "npm run dn.build && dotnet test openapi-diff/src/modeler/AutoRest.Swagger.Tests/AutoRest.Swagger.Tests.csproj",
-    "prepack": "npm install && npm run dn.publish"
+    "tsc": "tsc",
+    "test": "npm run dn.test && tsc",
+    "prepack": "npm install && npm run dn.publish && tsc"
   }
 }

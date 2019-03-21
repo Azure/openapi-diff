@@ -221,3 +221,6 @@ package/nuget/tools
 package/chocolatey/*.nupkg
 dist/lib/dlls/**/*
 *.tgz
+
+*.d.ts.map
+*.js
