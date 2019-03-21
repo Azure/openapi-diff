@@ -1,15 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-'use strict';
+import winston = require('winston')
+import path = require('path')
+import fs = require('fs')
+import os = require('os')
+var gDir = path.resolve(os.homedir(), 'oad_output')
 
-var winston = require('winston'),
-  path = require('path'),
-  fs = require('fs'),
-  os = require('os'),
-  logDir = path.resolve(os.homedir(), 'oad_output');
-
-var currentLogFile;
+var currentLogFile: unknown
+var logDir: unknown
 
 /*
  * Provides current time in custom format that will be used in naming log files. Example:'20140820_151113'
@@ -17,7 +16,7 @@ var currentLogFile;
  */
 function getTimeStamp() {
   // We pad each value so that sorted directory listings show the files in chronological order
-  function pad(number) {
+  function pad(number: any) {
     if (number < 10) {
       return '0' + number;
     }
