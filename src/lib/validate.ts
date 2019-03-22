@@ -46,7 +46,7 @@ export function compare(oldSwagger: string, newSwagger: string, options: OpenApi
  * @param {boolean} [options.matchApiVersion] A boolean flag indicating whether to consider api-version while comparing.
  *
  */
-exports.compareTags = function (
+export function compareTags(
   oldSwagger: string, oldTag: string, newSwagger: string, newTag: string, options: OpenApiDiff.Options
 ) {
   if (!options) options = {};

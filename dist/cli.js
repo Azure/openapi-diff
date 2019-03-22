@@ -11,7 +11,7 @@ var yargs = require('yargs'),
 
 var defaultLogDir = log.directory;
 var logFilepath = log.filepath;
-var packageVersion = require('./package.json').version;
+var packageVersion = require('../package.json').version;
 
 yargs
   .version(packageVersion)
