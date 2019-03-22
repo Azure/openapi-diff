@@ -112,7 +112,7 @@ export class OpenApiDiff {
   openApiDiffDllPath() {
     log.silly(`openApiDiffDllPath is being called`);
 
-    return path.join(__dirname, "..", "dlls", "OpenApiDiff.dll");
+    return path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll");
   }
 
   /**
