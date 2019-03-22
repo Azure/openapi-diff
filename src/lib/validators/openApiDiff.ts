@@ -56,16 +56,15 @@ export class OpenApiDiff {
    * @param {string} newTag Tag name used for AutoRest with the new specification file.
    *
    */
-  compare(oldSwagger: string, newSwagger: string, oldTag?: string, newTag?: string) {
+  async compare(oldSwagger: string, newSwagger: string, oldTag?: string, newTag?: string) {
     log.silly(`compare is being called`);
 
     let self = this;
     var promise1 = self.processViaAutoRest(oldSwagger, 'old', oldTag);
     var promise2 = self.processViaAutoRest(newSwagger, 'new', newTag);
 
-    return Promise.all([promise1, promise2]).then(results => {
-      return self.processViaOpenApiDiff(results[0], results[1]);
-    });
+    const results = await Promise.all([promise1, promise2]);
+    return self.processViaOpenApiDiff(results[0], results[1]);
   }
 
   /**
@@ -73,7 +72,7 @@ export class OpenApiDiff {
    *
    * @returns {string} Path to the dotnet executable.
    */
-  dotNetPath() {
+  dotNetPath(): string {
     log.silly(`dotNetPath is being called`);
 
     // Assume that dotnet is in the PATH
@@ -85,7 +84,7 @@ export class OpenApiDiff {
    *
    * @returns {string} Path to the autorest app.js file.
    */
-  autoRestPath() {
+  autoRestPath(): string {
     log.silly(`autoRestPath is being called`);
 
     // When oad is installed globally
@@ -109,7 +108,7 @@ export class OpenApiDiff {
    *
    * @returns {string} Path to the OpenApiDiff.dll.
    */
-  openApiDiffDllPath() {
+  openApiDiffDllPath(): string {
     log.silly(`openApiDiffDllPath is being called`);
 
     return path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll");

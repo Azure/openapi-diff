@@ -39,7 +39,7 @@ export type Argv = {
   readonly j?: unknown
 }
 
-export const handler = function(argv: Argv) {
+export const handler = (argv: Argv) => {
   log.debug(argv);
   let oldSpec = argv.oldSpec;
   let oldTag = argv.o;
