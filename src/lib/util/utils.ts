@@ -1,15 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-'use strict';
-var fs = require('fs'),
-  execSync = require('child_process').execSync,
-  util = require('util'),
-  path = require('path'),
-  jsonPointer = require('json-pointer'),
-  YAML = require('js-yaml'),
-  log = require('./logging'),
-  request = require('request');
+import * as fs from 'fs'
+import { execSync } from 'child_process'
+import * as util from 'util'
+import * as path from 'path'
+import * as jsonPointer from 'json-pointer'
+import * as YAML from 'js-yaml'
+import { logger as log } from './logging'
+import request = require('request')
 
 /*
  * Caches the json docs that were successfully parsed by parseJson(). This avoids, fetching them again.
@@ -289,8 +288,8 @@ export function parseReferenceInSwagger(reference: string) {
  * provided by path.join() https://nodejs.org/dist/latest-v6.x/docs/api/path.html#path_path_join_paths
  * @return {string} resolved path
  */
-export function joinPath(args: ReadonlyArray<string>) {
-  let finalPath = path.join(args);
+export function joinPath(...args: string[]) {
+  let finalPath = path.join(...args);
   finalPath = finalPath.replace(/\\/gi, '/');
   finalPath = finalPath.replace(/^(http|https):\/(.*)/gi, '$1://$2');
   return finalPath;
@@ -305,8 +304,8 @@ export function joinPath(args: ReadonlyArray<string>) {
  *
  * @returns {object} jsonDoc - Parsed document in JSON format.
  */
-export function parseJsonWithPathFragments(args: ReadonlyArray<string>) {
-  let specPath = joinPath(args);
+export function parseJsonWithPathFragments(...args: string[]) {
+  let specPath = joinPath(...args);
   return parseJson(specPath);
 };
 

@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import winston = require('winston')
-import path = require('path')
-import fs = require('fs')
-import os = require('os')
+import * as winston from 'winston'
+import * as path from 'path'
+import * as fs from 'fs'
+import * as os from 'os'
 var gDir = path.resolve(os.homedir(), 'oad_output')
 
 var currentLogFile: unknown

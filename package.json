@@ -9,15 +9,18 @@
   "description": "OpenApi Specification Diff tool",
   "license": "MIT",
   "dependencies": {
+    "@types/request": "^2.48.1",
     "autorest": "^2.0.0",
     "glob": "^5.0.14",
-    "js-yaml": "^3.8.2",
+    "js-yaml": "^3.13.0",
     "json-pointer": "^0.6.0",
-    "request": "^2.79.0",
+    "request": "^2.88.0",
     "winston": "^2.3.0",
     "yargs": "^6.6.0"
   },
   "devDependencies": {
+    "@types/js-yaml": "^3.12.0",
+    "@types/json-pointer": "^1.0.30",
     "@types/node": "^11.11.5",
     "typescript": "^3.3.4000"
   },
