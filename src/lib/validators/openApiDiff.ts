@@ -5,7 +5,7 @@
 import * as util from 'util'
 import * as path from 'path'
 import * as os from 'os'
-import { logger as log } from '../util/logging'
+import { log as log } from '../util/logging'
 import * as fs from 'fs'
 import { exec } from 'child_process'
 

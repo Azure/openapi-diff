@@ -5,7 +5,7 @@ import * as validate from './lib/validate'
 import * as utils from './lib/util/utils'
 
 // Easy to use methods from validate.js
-export { logger as log } from './lib/util/logging'
+export { log as log } from './lib/util/logging'
 export const compare = validate.compare;
 export const compareTags = validate.compareTags;
 

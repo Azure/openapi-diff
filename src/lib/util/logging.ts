@@ -47,12 +47,13 @@ var customLogLevels = {
 export type Logger = {
   consoleLogLevel: unknown
   filepath: unknown
+  directory: unknown
   readonly silly: (v: string) => void
   readonly debug: (v: string) => void
   readonly error: (v: string) => void
 }
 
-export var logger: Logger = new (winston.Logger)({
+export var log: Logger = new (winston.Logger)({
   transports: [
     new (winston.transports.Console)({
       level: 'warn',
@@ -64,7 +65,7 @@ export var logger: Logger = new (winston.Logger)({
   levels: customLogLevels
 }) as any;
 
-Object.defineProperties(logger, {
+Object.defineProperties(log, {
   'consoleLogLevel': {
     enumerable: true,
     get: function () { return this.transports.console.level; },

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { logger as log } from './util/logging'
+import { log as log } from './util/logging'
 import * as OpenApiDiff from './validators/openApiDiff'
 
 /**

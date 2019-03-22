@@ -3,11 +3,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-'use strict';
-
-var yargs = require('yargs'),
-  os = require('os'),
-  log = require('./lib/util/logging');
+import * as yargs from 'yargs'
+import * as os from 'os'
+import { log as log } from './lib/util/logging'
 
 var defaultLogDir = log.directory;
 var logFilepath = log.filepath;

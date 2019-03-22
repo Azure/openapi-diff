@@ -7,7 +7,7 @@ import * as util from 'util'
 import * as path from 'path'
 import * as jsonPointer from 'json-pointer'
 import * as YAML from 'js-yaml'
-import { logger as log } from './logging'
+import { log as log } from './logging'
 import request = require('request')
 
 /*

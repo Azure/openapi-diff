@@ -16,12 +16,13 @@
     "json-pointer": "^0.6.0",
     "request": "^2.88.0",
     "winston": "^2.3.0",
-    "yargs": "^6.6.0"
+    "yargs": "^13.2.2"
   },
   "devDependencies": {
     "@types/js-yaml": "^3.12.0",
     "@types/json-pointer": "^1.0.30",
     "@types/node": "^11.11.5",
+    "@types/yargs": "^12.0.10",
     "typescript": "^3.3.4000"
   },
   "homepage": "https://github.com/Azure/openapi-diff",
