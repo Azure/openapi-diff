@@ -2,18 +2,17 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 
-const util = require('util'),
-  path = require('path'),
-  os = require('os'),
-  url = require('url'),
-  log = require('../util/logging'),
-  utils = require('../util/utils'),
-  fs = require('fs'),
-  execSync = require('child_process').execSync,
-  exec = require('child_process').exec;
+import * as util from 'util'
+import * as path from 'path'
+import * as os from 'os'
+import { logger as log } from '../util/logging'
+import * as fs from 'fs'
+import { exec } from 'child_process'
 
 export type Options = {
-  readonly json: unknown
+  readonly json?: unknown
+  readonly consoleLogLevel?: unknown
+  readonly logFilepath?: unknown
 }
 
 /**
@@ -57,7 +56,7 @@ export class OpenApiDiff {
    * @param {string} newTag Tag name used for AutoRest with the new specification file.
    *
    */
-  compare(oldSwagger: string, newSwagger: string, oldTag: string, newTag: string) {
+  compare(oldSwagger: string, newSwagger: string, oldTag?: string, newTag?: string) {
     log.silly(`compare is being called`);
 
     let self = this;
@@ -126,7 +125,7 @@ export class OpenApiDiff {
    * @param {string} tagName Name of the tag in the specification file.
    *
    */
-  processViaAutoRest(swaggerPath: string, outputFileName: string, tagName: string): Promise<string> {
+  processViaAutoRest(swaggerPath: string, outputFileName: string, tagName?: string): Promise<string> {
     log.silly(`processViaAutoRest is being called`);
 
     let self = this;
