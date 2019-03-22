@@ -224,3 +224,4 @@ dist/lib/dlls/**/*
 
 *.d.ts.map
 *.js
+coverage/

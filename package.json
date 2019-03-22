@@ -19,10 +19,13 @@
     "yargs": "^13.2.2"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.11",
     "@types/js-yaml": "^3.12.0",
     "@types/json-pointer": "^1.0.30",
     "@types/node": "^11.11.5",
     "@types/yargs": "^12.0.10",
+    "jest": "^24.5.0",
+    "ts-jest": "^24.0.0",
     "typescript": "^3.3.4000"
   },
   "homepage": "https://github.com/Azure/openapi-diff",
@@ -48,6 +51,24 @@
   "bin": {
     "oad": "./dist/cli.js"
   },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.ts",
+      "!**/*.d.ts"
+    ],
+    "testMatch": [
+      "**/*test.ts"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.json"
+      }
+    }
+  },
   "scripts": {
     "dn.clean": "dotnet clean openapi-diff/OpenApiDiff.sln",
     "dn.restore": "dotnet restore openapi-diff/OpenApiDiff.sln",
@@ -55,7 +76,8 @@
     "dn.publish": "npm run dn.build && dotnet publish -c release openapi-diff/src/core/OpenApiDiff/OpenApiDiff.csproj",
     "dn.test": "npm run dn.build && dotnet test openapi-diff/src/modeler/AutoRest.Swagger.Tests/AutoRest.Swagger.Tests.csproj",
     "tsc": "tsc",
-    "test": "npm run dn.test && tsc",
+    "ts.test": "tsc && jest",
+    "test": "npm run dn.test && npm run ts.test",
     "prepack": "npm install && npm run dn.publish && tsc"
   }
 }
