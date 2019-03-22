@@ -1,16 +1,15 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-"use strict";
-const log = require("../util/logging"),
-  validate = require("../validate");
+import { log } from "../util/logging"
+import * as validate from "../validate"
 
-exports.command = "compare <old-spec> <new-spec>";
+export const command = "compare <old-spec> <new-spec>";
 
-exports.describe =
+export const describe =
   "Compares old and new open api specification for breaking changes.";
 
-exports.builder = {
+export const builder = {
   j: {
     alias: "inJson",
     describe:
@@ -30,16 +29,27 @@ exports.builder = {
   }
 };
 
-exports.handler = function(argv) {
+export type Argv = {
+  readonly oldSpec: string
+  readonly o?: string
+  readonly newSpec: string
+  readonly n?: string
+  readonly logLevel?: unknown
+  readonly f?: unknown
+  readonly j?: unknown
+}
+
+export const handler = function(argv: Argv) {
   log.debug(argv);
   let oldSpec = argv.oldSpec;
   let oldTag = argv.o;
   let newSpec = argv.newSpec;
   let newTag = argv.n;
-  let vOptions = {};
-  vOptions.consoleLogLevel = argv.logLevel;
-  vOptions.logFilepath = argv.f;
-  vOptions.json = argv.j;
+  let vOptions = {
+    consoleLogLevel: argv.logLevel,
+    logFilepath: argv.f,
+    json: argv.j,
+  }
 
   let compareFunc;
   if (oldTag && newTag) {
@@ -63,5 +73,3 @@ exports.handler = function(argv) {
       process.exitCode = 1;
     });
 };
-
-exports = module.exports;

@@ -49,7 +49,7 @@ export type Logger = {
   filepath: unknown
   directory: unknown
   readonly silly: (v: string) => void
-  readonly debug: (v: string) => void
+  readonly debug: (v: unknown) => void
   readonly error: (v: string) => void
 }
 
