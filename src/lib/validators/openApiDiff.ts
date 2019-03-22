@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-'use strict';
 
 const util = require('util'),
   path = require('path'),
@@ -13,11 +12,15 @@ const util = require('util'),
   execSync = require('child_process').execSync,
   exec = require('child_process').exec;
 
+export type Options = {
+  readonly json: unknown
+}
+
 /**
  * @class
  * Open API Diff class.
  */
-class OpenApiDiff {
+export class OpenApiDiff {
   /**
    * Constructs OpenApiDiff based on provided options.
    *
@@ -27,13 +30,13 @@ class OpenApiDiff {
    *
    * @param {boolean} [options.matchApiVersion] A boolean flag indicating whether to consider api-version while comparing.
    */
-  constructor(options) {
+  constructor(private options: Options) {
     log.silly(`Initializing OpenApiDiff class`);
-    this.options = options;
 
     if (this.options === null || this.options === undefined) {
-      this.options = {};
-      this.options.json = true;
+      this.options = {
+        json: true
+      };
     }
     if (typeof this.options !== 'object') {
       throw new Error('options must be of type "object".');
@@ -54,7 +57,7 @@ class OpenApiDiff {
    * @param {string} newTag Tag name used for AutoRest with the new specification file.
    *
    */
-  compare(oldSwagger, newSwagger, oldTag, newTag) {
+  compare(oldSwagger: string, newSwagger: string, oldTag: string, newTag: string) {
     log.silly(`compare is being called`);
 
     let self = this;
@@ -123,7 +126,7 @@ class OpenApiDiff {
    * @param {string} tagName Name of the tag in the specification file.
    *
    */
-  processViaAutoRest(swaggerPath, outputFileName, tagName) {
+  processViaAutoRest(swaggerPath: string, outputFileName: string, tagName: string): Promise<string> {
     log.silly(`processViaAutoRest is being called`);
 
     let self = this;
@@ -138,7 +141,7 @@ class OpenApiDiff {
     log.debug(`swaggerPath = "${swaggerPath}"`);
     log.debug(`outputFileName = "${outputFileName}"`);
 
-    let autoRestPromise = new Promise((resolve, reject) => {
+    let autoRestPromise = new Promise<string>((resolve, reject) => {
       if (!fs.existsSync(swaggerPath)) {
         reject(`File "${swaggerPath}" not found.`);
       }
@@ -151,7 +154,7 @@ class OpenApiDiff {
 
       log.debug(`Executing: "${autoRestCmd}"`);
 
-      exec(autoRestCmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 }, (err, stdout, stderr) => {
+      exec(autoRestCmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 }, (err: unknown, stdout: unknown, stderr: unknown) => {
         if (stderr) {
           reject(stderr);
         }
@@ -172,7 +175,7 @@ class OpenApiDiff {
    * @param {string} newSwagger Path to the new specification file.
    *
    */
-  processViaOpenApiDiff(oldSwagger, newSwagger) {
+  processViaOpenApiDiff(oldSwagger: string, newSwagger: string) {
     log.silly(`processViaOpenApiDiff is being called`);
 
     let self = this;
@@ -188,7 +191,7 @@ class OpenApiDiff {
     log.debug(`oldSwagger = "${oldSwagger}"`);
     log.debug(`newSwagger = "${newSwagger}"`);
 
-    let OpenApiDiffPromise = new Promise((resolve, reject) => {
+    let OpenApiDiffPromise = new Promise<unknown>((resolve, reject) => {
       if (!fs.existsSync(oldSwagger)) {
         reject(`File "${oldSwagger}" not found.`);
       }
@@ -204,7 +207,7 @@ class OpenApiDiff {
       }
 
       log.debug(`Executing: "${cmd}"`);
-      exec(cmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 }, (err, stdout, stderr) => {
+      exec(cmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 }, (err: unknown, stdout: unknown, stderr: unknown) => {
         if (err) {
           reject(err);
         }
@@ -216,9 +219,6 @@ class OpenApiDiff {
     return OpenApiDiffPromise;
   }
 }
-
-// Export OpenApiDiff
-module.exports = OpenApiDiff;
 
 // Testing
 // let swagger = '/Users/vishrut/git-repos/azure-rest-api-specs/arm-network/2017-03-01/swagger/virtualNetworkGateway.json';
