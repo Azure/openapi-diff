@@ -124,16 +124,16 @@ export class OpenApiDiff {
    * @param {string} tagName Name of the tag in the specification file.
    *
    */
-  processViaAutoRest(swaggerPath: string, outputFileName: string, tagName?: string): Promise<string> {
+  async processViaAutoRest(swaggerPath: string, outputFileName: string, tagName?: string): Promise<string> {
     log.silly(`processViaAutoRest is being called`);
 
     let self = this;
     if (swaggerPath === null || swaggerPath === undefined || typeof swaggerPath.valueOf() !== 'string' || !swaggerPath.trim().length) {
-        return Promise.reject(new Error('swaggerPath is a required parameter of type "string" and it cannot be an empty string.'));
+        throw new Error('swaggerPath is a required parameter of type "string" and it cannot be an empty string.')
     }
 
     if (outputFileName === null || outputFileName === undefined || typeof outputFileName.valueOf() !== 'string' || !outputFileName.trim().length) {
-        return Promise.reject(new Error('outputFile is a required parameter of type "string" and it cannot be an empty string.'));
+        throw new Error('outputFile is a required parameter of type "string" and it cannot be an empty string.')
     }
 
     log.debug(`swaggerPath = "${swaggerPath}"`);

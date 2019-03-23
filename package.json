@@ -26,7 +26,6 @@
     "@types/request": "^2.48.1",
     "@types/yargs": "^12.0.10",
     "jest": "^24.5.0",
-    "ts-jest": "^24.0.0",
     "typescript": "^3.3.4000"
   },
   "homepage": "https://github.com/Azure/openapi-diff",
@@ -54,22 +53,13 @@
     "oad": "./dist/cli.js"
   },
   "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "**/*.ts",
-      "!**/*.d.ts"
+      "dist/**/*.js"
     ],
     "testMatch": [
-      "**/*test.ts"
-    ],
-    "globals": {
-      "ts-jest": {
-        "tsConfig": "tsconfig.json"
-      }
-    }
+      "**/*test.js"
+    ]
   },
   "scripts": {
     "dn.clean": "dotnet clean openapi-diff/OpenApiDiff.sln",

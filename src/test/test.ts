@@ -1,4 +1,5 @@
 import * as index from "../index"
+import * as assert from "assert"
 
 jest.setTimeout(10000);
 
