@@ -173,17 +173,17 @@ export class OpenApiDiff {
    * @param {string} newSwagger Path to the new specification file.
    *
    */
-  processViaOpenApiDiff(oldSwagger: string, newSwagger: string) {
+  async processViaOpenApiDiff(oldSwagger: string, newSwagger: string) {
     log.silly(`processViaOpenApiDiff is being called`);
 
     let self = this;
 
     if (oldSwagger === null || oldSwagger === undefined || typeof oldSwagger.valueOf() !== 'string' || !oldSwagger.trim().length) {
-        return Promise.reject(new Error('oldSwagger is a required parameter of type "string" and it cannot be an empty string.'));
+        throw new Error('oldSwagger is a required parameter of type "string" and it cannot be an empty string.')
     }
 
     if (newSwagger === null || newSwagger === undefined || typeof newSwagger.valueOf() !== 'string' || !newSwagger.trim().length) {
-        return Promise.reject(new Error('newSwagger is a required parameter of type "string" and it cannot be an empty string.'));
+        throw new Error('newSwagger is a required parameter of type "string" and it cannot be an empty string.')
     }
 
     log.debug(`oldSwagger = "${oldSwagger}"`);
