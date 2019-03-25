@@ -7,8 +7,9 @@ import * as path from 'path'
 import * as os from 'os'
 import { log as log } from '../util/logging'
 import * as fs from 'fs'
-import { exec } from 'child_process'
-import * as sourceMap from "source-map"
+import * as child_process from 'child_process'
+
+const exec = util.promisify(child_process.exec)
 
 export type Options = {
   readonly json?: unknown
@@ -140,20 +141,20 @@ export class OpenApiDiff {
     log.debug(`swaggerPath = "${swaggerPath}"`);
     log.debug(`outputFileName = "${outputFileName}"`);
 
-    let autoRestPromise = new Promise<string>((resolve, reject) => {
-      if (!fs.existsSync(swaggerPath)) {
-        reject(`File "${swaggerPath}" not found.`);
-      }
+    if (!fs.existsSync(swaggerPath)) {
+      throw new Error(`File "${swaggerPath}" not found.`)
+    }
 
-      let outputFolder = os.tmpdir();
-      let outputFilePath = path.join(outputFolder, `${outputFileName}.json`);
-      var autoRestCmd = tagName
-        ? `${self.autoRestPath()} ${swaggerPath} --tag=${tagName} --output-artifact=swagger-document.json --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
-        : `${self.autoRestPath()} --input-file=${swaggerPath} --output-artifact=swagger-document.json --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`;
+    let outputFolder = os.tmpdir();
+    let outputFilePath = path.join(outputFolder, `${outputFileName}.json`);
+    var autoRestCmd = tagName
+      ? `${self.autoRestPath()} ${swaggerPath} --tag=${tagName} --output-artifact=swagger-document.json --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
+      : `${self.autoRestPath()} --input-file=${swaggerPath} --output-artifact=swagger-document.json --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`;
 
-      log.debug(`Executing: "${autoRestCmd}"`);
+    log.debug(`Executing: "${autoRestCmd}"`);
 
-      exec(autoRestCmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 }, (err: unknown, stdout: unknown, stderr: unknown) => {
+    const autoRestPromise = new Promise<string>((resolve, reject) => {
+      child_process.exec(autoRestCmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 }, (err: unknown, stdout: unknown, stderr: unknown) => {
         if (stderr) {
           reject(stderr);
         }
@@ -206,8 +207,8 @@ export class OpenApiDiff {
 
     log.debug(`Executing: "${cmd}"`);
 
-    const OpenApiDiffPromise = await new Promise<unknown>((resolve, reject) => {
-      exec(cmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 }, (err: unknown, stdout: unknown, stderr: unknown) => {
+    const OpenApiDiffPromise = await new Promise<string>((resolve, reject) => {
+      child_process.exec(cmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 }, (err: unknown, stdout: string, stderr: unknown) => {
         if (err) {
           reject(err);
         }
