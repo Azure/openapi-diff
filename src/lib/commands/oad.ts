@@ -51,18 +51,15 @@ export const handler = (argv: Argv) => {
     json: argv.j,
   }
 
-  let compareFunc;
-  if (oldTag && newTag) {
-    compareFunc = validate.compareTags(
-      oldSpec,
-      oldTag,
-      newSpec,
-      newTag,
-      vOptions
-    );
-  } else {
-    compareFunc = validate.compare(oldSpec, newSpec, vOptions);
-  }
+  const compareFunc = oldTag && newTag ?
+      validate.compareTags(
+        oldSpec,
+        oldTag,
+        newSpec,
+        newTag,
+        vOptions
+      )
+    : validate.compare(oldSpec, newSpec, vOptions)
 
   return compareFunc
     .then(result => {
