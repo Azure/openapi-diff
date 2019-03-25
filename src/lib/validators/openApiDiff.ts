@@ -8,6 +8,7 @@ import * as os from 'os'
 import { log as log } from '../util/logging'
 import * as fs from 'fs'
 import { exec } from 'child_process'
+import * as sourceMap from "source-map"
 
 export type Options = {
   readonly json?: unknown
@@ -189,22 +190,23 @@ export class OpenApiDiff {
     log.debug(`oldSwagger = "${oldSwagger}"`);
     log.debug(`newSwagger = "${newSwagger}"`);
 
-    let OpenApiDiffPromise = new Promise<unknown>((resolve, reject) => {
-      if (!fs.existsSync(oldSwagger)) {
-        reject(`File "${oldSwagger}" not found.`);
-      }
+    if (!fs.existsSync(oldSwagger)) {
+      throw new Error(`File "${oldSwagger}" not found.`)
+    }
 
-      if (!fs.existsSync(newSwagger)) {
-        reject(`File "${newSwagger}" not found.`);
-      }
+    if (!fs.existsSync(newSwagger)) {
+      throw new Error(`File "${newSwagger}" not found.`)
+    }
 
-      let cmd = `${self.dotNetPath()} ${self.openApiDiffDllPath()} -o ${oldSwagger} -n ${newSwagger}`;
-      if (self.options.json)
-      {
-        cmd = `${cmd} -JsonValidationMessages`;
-      }
+    let cmd = `${self.dotNetPath()} ${self.openApiDiffDllPath()} -o ${oldSwagger} -n ${newSwagger}`;
+    if (self.options.json)
+    {
+      cmd = `${cmd} -JsonValidationMessages`;
+    }
 
-      log.debug(`Executing: "${cmd}"`);
+    log.debug(`Executing: "${cmd}"`);
+
+    const OpenApiDiffPromise = await new Promise<unknown>((resolve, reject) => {
       exec(cmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 }, (err: unknown, stdout: unknown, stderr: unknown) => {
         if (err) {
           reject(err);

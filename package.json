@@ -14,6 +14,7 @@
     "js-yaml": "^3.13.0",
     "json-pointer": "^0.6.0",
     "request": "^2.88.0",
+    "source-map": "^0.7.3",
     "tslib": "^1.9.3",
     "winston": "^2.3.0",
     "yargs": "^13.2.2"
