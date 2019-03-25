@@ -1,9 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-'use strict';
-
-var Constants = {
+export var Constants = {
   constraints: ['minLength', 'maxLength', 'minimum', 'maximum', 'enum', 'maxItems', 'minItems', 'uniqueItems', 'multipleOf', 'pattern'],
   xmsExamples: 'x-ms-examples',
   exampleInSpec: 'example-in-spec',
@@ -56,5 +54,3 @@ var Constants = {
     'ResourceManagementClient': 'Microsoft.Resources'
   }
 };
-
-exports = module.exports = Constants;

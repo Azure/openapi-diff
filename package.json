@@ -1,6 +1,6 @@
 {
   "name": "@azure/oad",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "author": {
     "name": "Microsoft Corporation",
     "email": "azsdkteam@microsoft.com",
@@ -10,23 +10,23 @@
   "license": "MIT",
   "dependencies": {
     "autorest": "^2.0.0",
+    "glob": "^7.1.3",
+    "js-yaml": "^3.13.0",
     "json-pointer": "^0.6.0",
-    "js-yaml": "^3.8.2",
-    "request": "^2.79.0",
+    "request": "^2.88.0",
+    "tslib": "^1.9.3",
     "winston": "^2.3.0",
-    "yargs": "^6.6.0",
-    "glob": "^5.0.14"
+    "yargs": "^13.2.2"
   },
   "devDependencies": {
-    "jshint": "^2.9.4",
-    "mocha": "^3.2.0",
-    "should": "^5.2.0",
-    "@types/mocha": "^2.2.40",
-    "@types/should": "^8.1.30",
-    "gulp": "^3.9.1",
-    "gulp-run": "^1.7.1",
-    "gulp-clean": "^0.3.2",
-    "gulp-mocha": "^4.3.1"
+    "@types/jest": "^24.0.11",
+    "@types/js-yaml": "^3.12.0",
+    "@types/json-pointer": "^1.0.30",
+    "@types/node": "^11.11.5",
+    "@types/request": "^2.48.1",
+    "@types/yargs": "^12.0.10",
+    "jest": "^24.5.0",
+    "typescript": "^3.3.4000"
   },
   "homepage": "https://github.com/Azure/openapi-diff",
   "repository": {
@@ -40,20 +40,36 @@
     "node": ">=7.10.0"
   },
   "files": [
-    "lib",
-    "index.js",
-    "cli.js",
+    "dist/lib",
+    "dist/index.js",
+    "dist/cli.js",
+    "dlls",
     "package.json",
     "README.md",
     "LICENSE"
   ],
-  "main": "./index.js",
+  "main": "./dist/index.js",
   "bin": {
-    "oad": "./cli.js"
+    "oad": "./dist/cli.js"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "dist/**/*.js"
+    ],
+    "testMatch": [
+      "**/*test.js"
+    ]
   },
   "scripts": {
-    "jshint": "jshint index.js --reporter=jslint",
-    "test": "npm -s run-script jshint && mocha -t 50000",
-    "gulp": "gulp"
+    "dn.clean": "dotnet clean openapi-diff/OpenApiDiff.sln",
+    "dn.restore": "dotnet restore openapi-diff/OpenApiDiff.sln",
+    "dn.build": "npm run dn.clean && npm run dn.restore && dotnet build -c release openapi-diff/OpenApiDiff.sln /nologo /clp:NoSummary",
+    "dn.publish": "npm run dn.build && dotnet publish -c release openapi-diff/src/core/OpenApiDiff/OpenApiDiff.csproj",
+    "dn.test": "npm run dn.build && dotnet test openapi-diff/src/modeler/AutoRest.Swagger.Tests/AutoRest.Swagger.Tests.csproj",
+    "tsc": "tsc",
+    "ts.test": "tsc && jest",
+    "test": "npm run dn.test && npm run ts.test",
+    "prepack": "npm install && npm run dn.publish && tsc"
   }
 }

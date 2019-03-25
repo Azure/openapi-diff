@@ -1,15 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-'use strict';
+import * as winston from 'winston'
+import * as path from 'path'
+import * as fs from 'fs'
+import * as os from 'os'
+var gDir = path.resolve(os.homedir(), 'oad_output')
 
-var winston = require('winston'),
-  path = require('path'),
-  fs = require('fs'),
-  os = require('os'),
-  logDir = path.resolve(os.homedir(), 'oad_output');
-
-var currentLogFile;
+var currentLogFile: unknown
+var logDir: unknown
 
 /*
  * Provides current time in custom format that will be used in naming log files. Example:'20140820_151113'
@@ -17,7 +16,7 @@ var currentLogFile;
  */
 function getTimeStamp() {
   // We pad each value so that sorted directory listings show the files in chronological order
-  function pad(number) {
+  function pad(number: any) {
     if (number < 10) {
       return '0' + number;
     }
@@ -45,7 +44,16 @@ var customLogLevels = {
   silly: 7
 };
 
-var logger = new (winston.Logger)({
+export type Logger = {
+  consoleLogLevel: unknown
+  filepath: unknown
+  directory: unknown
+  readonly silly: (v: string) => void
+  readonly debug: (v: unknown) => void
+  readonly error: (v: string) => void
+}
+
+export var log: Logger = new (winston.Logger)({
   transports: [
     new (winston.transports.Console)({
       level: 'warn',
@@ -55,9 +63,9 @@ var logger = new (winston.Logger)({
     })
   ],
   levels: customLogLevels
-});
+}) as any;
 
-Object.defineProperties(logger, {
+Object.defineProperties(log, {
   'consoleLogLevel': {
     enumerable: true,
     get: function () { return this.transports.console.level; },
@@ -120,5 +128,3 @@ Object.defineProperties(logger, {
     }
   }
 });
-
-module.exports = logger;
