@@ -2,12 +2,16 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 
-import * as util from 'util'
-import * as path from 'path'
-import * as os from 'os'
-import { log as log } from '../util/logging'
-import * as fs from 'fs'
-import * as child_process from 'child_process'
+import * as util from "util"
+import * as path from "path"
+import * as os from "os"
+import { log as log } from "../util/logging"
+import * as fs from "fs"
+import * as asyncFs from "@ts-common/fs"
+import * as child_process from "child_process"
+import * as sourceMap from "source-map"
+import * as jsonParser from "@ts-common/json-parser"
+import * as propertySet from "@ts-common/property-set"
 
 const exec = util.promisify(child_process.exec)
 
@@ -15,6 +19,43 @@ export type Options = {
   readonly json?: unknown
   readonly consoleLogLevel?: unknown
   readonly logFilepath?: unknown
+}
+
+export type ProcessedFile = {
+  readonly fileName: string
+  readonly map: sourceMap.BasicSourceMapConsumer | sourceMap.IndexedSourceMapConsumer
+}
+
+type Change = {
+  readonly location?: string
+  readonly path?: string
+  readonly ref?: string
+}
+
+type Message = {
+  readonly id: string
+  readonly code: string
+  readonly docurl: string
+  readonly message: string
+  readonly mode: string
+  readonly type: string
+  readonly new: Change
+  readonly old: Change
+}
+
+type Messages = ReadonlyArray<Message>
+
+const updateChange = (change: Change, pf: ProcessedFile) => {
+  if (change.location) {
+    const s = change.location.split(":")
+    const position = { line: parseInt(s[s.length - 2]), column: parseInt(s[s.length - 1]) - 1 }
+    const originalPosition = pf.map.originalPositionFor(position)
+    propertySet.setMutableProperty(
+      change,
+      "location",
+      `${originalPosition.source}:${position.line}:${position.column + 1}`
+    )
+  }
 }
 
 /**
@@ -37,7 +78,7 @@ export class OpenApiDiff {
     if (this.options === null || this.options === undefined) {
       this.options = {
         json: true
-      };
+      }
     }
     if (typeof this.options !== 'object') {
       throw new Error('options must be of type "object".');
@@ -62,8 +103,8 @@ export class OpenApiDiff {
     log.silly(`compare is being called`);
 
     let self = this;
-    var promise1 = self.processViaAutoRest(oldSwagger, 'old', oldTag);
-    var promise2 = self.processViaAutoRest(newSwagger, 'new', newTag);
+    var promise1 = self.processViaAutoRest(oldSwagger, 'old', oldTag)
+    var promise2 = self.processViaAutoRest(newSwagger, 'new', newTag)
 
     const results = await Promise.all([promise1, promise2]);
     return self.processViaOpenApiDiff(results[0], results[1]);
@@ -126,10 +167,9 @@ export class OpenApiDiff {
    * @param {string} tagName Name of the tag in the specification file.
    *
    */
-  async processViaAutoRest(swaggerPath: string, outputFileName: string, tagName?: string): Promise<string> {
-    log.silly(`processViaAutoRest is being called`);
+  async processViaAutoRest(swaggerPath: string, outputFileName: string, tagName?: string): Promise<ProcessedFile> {
+    log.silly(`processViaAutoRest is being called`)
 
-    let self = this;
     if (swaggerPath === null || swaggerPath === undefined || typeof swaggerPath.valueOf() !== 'string' || !swaggerPath.trim().length) {
         throw new Error('swaggerPath is a required parameter of type "string" and it cannot be an empty string.')
     }
@@ -138,27 +178,35 @@ export class OpenApiDiff {
         throw new Error('outputFile is a required parameter of type "string" and it cannot be an empty string.')
     }
 
-    log.debug(`swaggerPath = "${swaggerPath}"`);
-    log.debug(`outputFileName = "${outputFileName}"`);
+    log.debug(`swaggerPath = "${swaggerPath}"`)
+    log.debug(`outputFileName = "${outputFileName}"`)
 
     if (!fs.existsSync(swaggerPath)) {
       throw new Error(`File "${swaggerPath}" not found.`)
     }
 
-    let outputFolder = os.tmpdir();
-    let outputFilePath = path.join(outputFolder, `${outputFileName}.json`);
-    var autoRestCmd = tagName
-      ? `${self.autoRestPath()} ${swaggerPath} --tag=${tagName} --output-artifact=swagger-document.json --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
-      : `${self.autoRestPath()} --input-file=${swaggerPath} --output-artifact=swagger-document.json --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`;
+    const outputFolder = os.tmpdir()
+    const outputFilePath = path.join(outputFolder, `${outputFileName}.json`)
+    const outputMapFilePath = path.join(outputFolder, `${outputFileName}.map`)
+    const autoRestCmd = tagName
+      ? `${this.autoRestPath()} ${swaggerPath} --tag=${tagName} --output-artifact=swagger-document.json --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
+      : `${this.autoRestPath()} --input-file=${swaggerPath} --output-artifact=swagger-document.json --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
 
-    log.debug(`Executing: "${autoRestCmd}"`);
+    log.debug(`Executing: "${autoRestCmd}"`)
 
     const { stderr } = await exec(autoRestCmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 })
     if (stderr) {
-      throw new Error()
+      throw new Error(stderr)
     }
-    log.debug(`outputFilePath: "${outputFilePath}"`);
-    return outputFilePath
+
+    const buffer = await asyncFs.readFile(outputMapFilePath)
+    const map = await new sourceMap.SourceMapConsumer(buffer.toString())
+
+    log.debug(`outputFilePath: "${outputFilePath}"`)
+    return {
+      fileName: outputFilePath,
+      map
+    }
   }
 
   /**
@@ -169,11 +217,11 @@ export class OpenApiDiff {
    * @param {string} newSwagger Path to the new specification file.
    *
    */
-  async processViaOpenApiDiff(oldSwagger: string, newSwagger: string) {
-    log.silly(`processViaOpenApiDiff is being called`);
+  async processViaOpenApiDiff(oldSwaggerFile: ProcessedFile, newSwaggerFile: ProcessedFile) {
+    log.silly(`processViaOpenApiDiff is being called`)
 
-    let self = this;
-
+    const oldSwagger = oldSwaggerFile.fileName
+    const newSwagger = newSwaggerFile.fileName
     if (oldSwagger === null || oldSwagger === undefined || typeof oldSwagger.valueOf() !== 'string' || !oldSwagger.trim().length) {
         throw new Error('oldSwagger is a required parameter of type "string" and it cannot be an empty string.')
     }
@@ -182,8 +230,8 @@ export class OpenApiDiff {
         throw new Error('newSwagger is a required parameter of type "string" and it cannot be an empty string.')
     }
 
-    log.debug(`oldSwagger = "${oldSwagger}"`);
-    log.debug(`newSwagger = "${newSwagger}"`);
+    log.debug(`oldSwagger = "${oldSwagger}"`)
+    log.debug(`newSwagger = "${newSwagger}"`)
 
     if (!fs.existsSync(oldSwagger)) {
       throw new Error(`File "${oldSwagger}" not found.`)
@@ -193,15 +241,20 @@ export class OpenApiDiff {
       throw new Error(`File "${newSwagger}" not found.`)
     }
 
-    let cmd = `${self.dotNetPath()} ${self.openApiDiffDllPath()} -o ${oldSwagger} -n ${newSwagger}`;
-    if (self.options.json)
-    {
-      cmd = `${cmd} -JsonValidationMessages`;
+    let cmd = `${this.dotNetPath()} ${this.openApiDiffDllPath()} -o ${oldSwagger} -n ${newSwagger}`
+    if (this.options.json) {
+      cmd = `${cmd} -JsonValidationMessages`
     }
 
     log.debug(`Executing: "${cmd}"`);
     const { stdout } = await exec(cmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 })
-    return stdout;
+    const json = jsonParser.parse("", stdout) as Messages
+
+    for (const x of json) {
+      updateChange(x.new, newSwaggerFile)
+      updateChange(x.old, oldSwaggerFile)
+    }
+    return JSON.stringify(json)
   }
 }
 

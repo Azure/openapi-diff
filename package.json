@@ -1,6 +1,6 @@
 {
   "name": "@azure/oad",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": {
     "name": "Microsoft Corporation",
     "email": "azsdkteam@microsoft.com",
@@ -9,10 +9,13 @@
   "description": "OpenApi Specification Diff tool",
   "license": "MIT",
   "dependencies": {
+    "@ts-common/fs": "^0.1.1",
+    "@ts-common/json-parser": "^0.6.0",
     "autorest": "^2.0.0",
     "glob": "^7.1.3",
     "js-yaml": "^3.13.0",
     "json-pointer": "^0.6.0",
+    "property-set": "^1.0.1",
     "request": "^2.88.0",
     "source-map": "^0.7.3",
     "tslib": "^1.9.3",
