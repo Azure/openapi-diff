@@ -153,18 +153,12 @@ export class OpenApiDiff {
 
     log.debug(`Executing: "${autoRestCmd}"`);
 
-    const autoRestPromise = new Promise<string>((resolve, reject) => {
-      child_process.exec(autoRestCmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 }, (err: unknown, stdout: unknown, stderr: unknown) => {
-        if (stderr) {
-          reject(stderr);
-        }
-
-        log.debug(`outputFilePath: "${outputFilePath}"`);
-        resolve(outputFilePath);
-      });
-    });
-
-    return autoRestPromise;
+    const { stderr } = await exec(autoRestCmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 })
+    if (stderr) {
+      throw new Error()
+    }
+    log.debug(`outputFilePath: "${outputFilePath}"`);
+    return outputFilePath
   }
 
   /**
@@ -206,18 +200,8 @@ export class OpenApiDiff {
     }
 
     log.debug(`Executing: "${cmd}"`);
-
-    const OpenApiDiffPromise = await new Promise<string>((resolve, reject) => {
-      child_process.exec(cmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 }, (err: unknown, stdout: string, stderr: unknown) => {
-        if (err) {
-          reject(err);
-        }
-
-        resolve(stdout);
-      });
-    });
-
-    return OpenApiDiffPromise;
+    const { stdout } = await exec(cmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 })
+    return stdout;
   }
 }
 
