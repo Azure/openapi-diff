@@ -11,7 +11,6 @@ import * as asyncFs from "@ts-common/fs"
 import * as child_process from "child_process"
 import * as sourceMap from "source-map"
 import * as jsonParser from "@ts-common/json-parser"
-import * as propertySet from "@ts-common/property-set"
 import * as jsonRefs from "json-refs"
 
 const exec = util.promisify(child_process.exec)
@@ -46,7 +45,7 @@ type Message = {
 
 type Messages = ReadonlyArray<Message>
 
-const updateChange = (change: Change, pf: ProcessedFile) => {
+const updateChange = (change: Change, pf: ProcessedFile): Change => {
   if (change.location) {
     const s = change.location.split(":")
     const position = { line: parseInt(s[s.length - 2]), column: parseInt(s[s.length - 1]) - 1 }
@@ -55,16 +54,10 @@ const updateChange = (change: Change, pf: ProcessedFile) => {
     const namePath = name.split("\n")[0]
     const parsedPath = JSON.parse(namePath) as string[]
     const ref = `${originalPosition.source}${jsonRefs.pathToPtr(parsedPath, true)}`
-    propertySet.setMutableProperty(
-      change,
-      "ref",
-      ref
-    )
-    propertySet.setMutableProperty(
-      change,
-      "location",
-      `${originalPosition.source}:${originalPosition.line}:${(originalPosition.column as number) + 1}`
-    )
+    const location = `${originalPosition.source}:${originalPosition.line}:${(originalPosition.column as number) + 1}`
+    return { ...change, ref, location }
+  } else {
+    return change
   }
 }
 
@@ -112,12 +105,11 @@ export class OpenApiDiff {
   async compare(oldSwagger: string, newSwagger: string, oldTag?: string, newTag?: string) {
     log.silly(`compare is being called`);
 
-    let self = this;
-    var promise1 = self.processViaAutoRest(oldSwagger, 'old', oldTag)
-    var promise2 = self.processViaAutoRest(newSwagger, 'new', newTag)
+    var promise1 = this.processViaAutoRest(oldSwagger, 'old', oldTag)
+    var promise2 = this.processViaAutoRest(newSwagger, 'new', newTag)
 
     const results = await Promise.all([promise1, promise2]);
-    return self.processViaOpenApiDiff(results[0], results[1]);
+    return this.processViaOpenApiDiff(results[0], results[1]);
   }
 
   /**
@@ -260,11 +252,12 @@ export class OpenApiDiff {
     const { stdout } = await exec(cmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 })
     const json = jsonParser.parse("", stdout) as Messages
 
-    for (const x of json) {
-      updateChange(x.new, newSwaggerFile)
-      updateChange(x.old, oldSwaggerFile)
-    }
-    return JSON.stringify(json)
+    const newJson = json.map(v => ({
+      ...v,
+      new: updateChange(v.new, newSwaggerFile),
+      old: updateChange(v.old, oldSwaggerFile)
+    }))
+    return JSON.stringify(newJson)
   }
 }
 
