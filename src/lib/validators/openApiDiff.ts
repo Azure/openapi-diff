@@ -12,6 +12,7 @@ import * as child_process from "child_process"
 import * as sourceMap from "source-map"
 import * as jsonParser from "@ts-common/json-parser"
 import * as propertySet from "@ts-common/property-set"
+import * as jsonRefs from "json-refs"
 
 const exec = util.promisify(child_process.exec)
 
@@ -50,10 +51,19 @@ const updateChange = (change: Change, pf: ProcessedFile) => {
     const s = change.location.split(":")
     const position = { line: parseInt(s[s.length - 2]), column: parseInt(s[s.length - 1]) - 1 }
     const originalPosition = pf.map.originalPositionFor(position)
+    const name = originalPosition.name as string
+    const namePath = name.split("\n")[0]
+    const parsedPath = JSON.parse(namePath) as string[]
+    const ref = `${originalPosition.source}${jsonRefs.pathToPtr(parsedPath, true)}`
+    propertySet.setMutableProperty(
+      change,
+      "ref",
+      ref
+    )
     propertySet.setMutableProperty(
       change,
       "location",
-      `${originalPosition.source}:${position.line}:${position.column + 1}`
+      `${originalPosition.source}:${originalPosition.line}:${(originalPosition.column as number) + 1}`
     )
   }
 }

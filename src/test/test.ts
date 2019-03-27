@@ -55,9 +55,9 @@ describe("index", () => {
         message: "The new version is adding a path that was not found in the old version.",
         mode: "Addition",
         new: {
-          location: `file:///${newFilePath}:8:11`,
+          location: `file:///${newFilePath}:8:5`,
           path: "paths./x",
-          ref: "C:/Users/sergey/AppData/Local/Temp/new.json#/paths/~1x"
+          ref: `file:///${newFilePath}#/paths/~1x`
         },
         old:
         {
