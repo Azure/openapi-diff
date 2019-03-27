@@ -18,20 +18,20 @@ function getTimeStamp() {
   // We pad each value so that sorted directory listings show the files in chronological order
   function pad(number: any) {
     if (number < 10) {
-      return '0' + number;
+      return '0' + number
     }
 
-    return number;
+    return number
   }
 
-  var now = new Date();
+  var now = new Date()
   return pad(now.getFullYear())
     + pad(now.getMonth() + 1)
     + pad(now.getDate())
     + "_"
     + pad(now.getHours())
     + pad(now.getMinutes())
-    + pad(now.getSeconds());
+    + pad(now.getSeconds())
 }
 var customLogLevels = {
   off: 0,
@@ -42,7 +42,7 @@ var customLogLevels = {
   verbose: 5,
   debug: 6,
   silly: 7
-};
+}
 
 export type Logger = {
   consoleLogLevel: unknown
@@ -63,57 +63,57 @@ export var log: Logger = new (winston.Logger)({
     })
   ],
   levels: customLogLevels
-}) as any;
+}) as any
 
 Object.defineProperties(log, {
   'consoleLogLevel': {
     enumerable: true,
-    get: function () { return this.transports.console.level; },
+    get: function () { return this.transports.console.level },
     set: function (level) {
       if (!level) {
-        level = 'warn';
+        level = 'warn'
       }
-      let validLevels = Object.keys(customLogLevels);
-      if (!validLevels.some(function (item) { return item === level; })) {
-        throw new Error(`The logging level provided is "${level}". Valid values are: "${validLevels}".`);
+      let validLevels = Object.keys(customLogLevels)
+      if (!validLevels.some(function (item) { return item === level })) {
+        throw new Error(`The logging level provided is "${level}". Valid values are: "${validLevels}".`)
       }
-      this.transports.console.level = level;
-      return;
+      this.transports.console.level = level
+      return
     }
   },
   'directory': {
     enumerable: true,
     get: function () {
-      return logDir;
+      return logDir
     },
     set: function (logDirectory) {
       if (!logDirectory || logDirectory && typeof logDirectory.valueOf() !== 'string') {
-        throw new Error('logDirectory cannot be null or undefined and must be of type "string".');
+        throw new Error('logDirectory cannot be null or undefined and must be of type "string".')
       }
 
       if (!fs.existsSync(logDirectory)) {
-        fs.mkdirSync(logDirectory);
+        fs.mkdirSync(logDirectory)
       }
-      logDir = logDirectory;
-      return;
+      logDir = logDirectory
+      return
     }
   },
   'filepath': {
     enumerable: true,
     get: function () {
       if (!currentLogFile) {
-        let filename = `validate_log_${getTimeStamp()}.log`;
-        currentLogFile = path.join(this.directory, filename);
+        let filename = `validate_log_${getTimeStamp()}.log`
+        currentLogFile = path.join(this.directory, filename)
       }
 
-      return currentLogFile;
+      return currentLogFile
     },
     set: function (logFilePath) {
       if (!logFilePath || logFilePath && typeof logFilePath.valueOf() !== 'string') {
         throw new Error('filepath cannot be null or undefined and must be of type string. It must be an absolute file path.')
       }
-      currentLogFile = logFilePath;
-      this.directory = path.dirname(logFilePath);
+      currentLogFile = logFilePath
+      this.directory = path.dirname(logFilePath)
       if (!this.transports.file) {
         this.add(winston.transports.File, {
           level: 'silly',
@@ -122,9 +122,9 @@ Object.defineProperties(log, {
           prettyPrint: true,
           json: false,
           filename: logFilePath
-        });
+        })
       }
-      return;
+      return
     }
   }
-});
+})

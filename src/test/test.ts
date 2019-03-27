@@ -2,7 +2,7 @@ import * as index from "../index"
 import * as assert from "assert"
 import * as path from "path"
 
-jest.setTimeout(10000);
+jest.setTimeout(10000)
 
 describe("index", () => {
   it("simple", async () => {

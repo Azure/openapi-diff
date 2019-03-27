@@ -76,7 +76,7 @@ export class OpenApiDiff {
    * @param {boolean} [options.matchApiVersion] A boolean flag indicating whether to consider api-version while comparing.
    */
   constructor(private options: Options) {
-    log.silly(`Initializing OpenApiDiff class`);
+    log.silly(`Initializing OpenApiDiff class`)
 
     if (this.options === null || this.options === undefined) {
       this.options = {
@@ -84,10 +84,10 @@ export class OpenApiDiff {
       }
     }
     if (typeof this.options !== 'object') {
-      throw new Error('options must be of type "object".');
+      throw new Error('options must be of type "object".')
     }
 
-    log.debug(`Initialized OpenApiDiff class with options = ${util.inspect(this.options, { depth: null })}`);
+    log.debug(`Initialized OpenApiDiff class with options = ${util.inspect(this.options, { depth: null })}`)
   }
 
   /**
@@ -103,13 +103,13 @@ export class OpenApiDiff {
    *
    */
   async compare(oldSwagger: string, newSwagger: string, oldTag?: string, newTag?: string) {
-    log.silly(`compare is being called`);
+    log.silly(`compare is being called`)
 
     var promise1 = this.processViaAutoRest(oldSwagger, 'old', oldTag)
     var promise2 = this.processViaAutoRest(newSwagger, 'new', newTag)
 
-    const results = await Promise.all([promise1, promise2]);
-    return this.processViaOpenApiDiff(results[0], results[1]);
+    const results = await Promise.all([promise1, promise2])
+    return this.processViaOpenApiDiff(results[0], results[1])
   }
 
   /**
@@ -118,10 +118,10 @@ export class OpenApiDiff {
    * @returns {string} Path to the dotnet executable.
    */
   dotNetPath(): string {
-    log.silly(`dotNetPath is being called`);
+    log.silly(`dotNetPath is being called`)
 
     // Assume that dotnet is in the PATH
-    return "dotnet";
+    return "dotnet"
   }
 
   /**
@@ -130,22 +130,22 @@ export class OpenApiDiff {
    * @returns {string} Path to the autorest app.js file.
    */
   autoRestPath(): string {
-    log.silly(`autoRestPath is being called`);
+    log.silly(`autoRestPath is being called`)
 
     // When oad is installed globally
-    let result = path.join(__dirname, "..", "..", "node_modules", "autorest", "app.js");
+    let result = path.join(__dirname, "..", "..", "node_modules", "autorest", "app.js")
     if (fs.existsSync(result)) {
-      return `node ${result}`;
+      return `node ${result}`
     }
 
     // When oad is installed locally
-    result = path.join(__dirname, "..", "..", "..", "autorest", "app.js");
+    result = path.join(__dirname, "..", "..", "..", "autorest", "app.js")
     if (fs.existsSync(result)) {
-      return `node ${result}`;
+      return `node ${result}`
     }
 
     // Assume that autorest is in the path
-    return 'autorest';
+    return 'autorest'
   }
 
   /**
@@ -154,9 +154,9 @@ export class OpenApiDiff {
    * @returns {string} Path to the OpenApiDiff.dll.
    */
   openApiDiffDllPath(): string {
-    log.silly(`openApiDiffDllPath is being called`);
+    log.silly(`openApiDiffDllPath is being called`)
 
-    return path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll");
+    return path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll")
   }
 
   /**
@@ -207,7 +207,7 @@ export class OpenApiDiff {
     log.debug(`outputFilePath: "${outputFilePath}"`)
     return {
       fileName: outputFilePath,
-      map
+      map,
     }
   }
 
@@ -248,33 +248,33 @@ export class OpenApiDiff {
       cmd = `${cmd} -JsonValidationMessages`
     }
 
-    log.debug(`Executing: "${cmd}"`);
+    log.debug(`Executing: "${cmd}"`)
     const { stdout } = await exec(cmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 })
     const json = jsonParser.parse("", stdout) as Messages
 
     const newJson = json.map(v => ({
       ...v,
       new: updateChange(v.new, newSwaggerFile),
-      old: updateChange(v.old, oldSwaggerFile)
+      old: updateChange(v.old, oldSwaggerFile),
     }))
     return JSON.stringify(newJson)
   }
 }
 
 // Testing
-// let swagger = '/Users/vishrut/git-repos/azure-rest-api-specs/arm-network/2017-03-01/swagger/virtualNetworkGateway.json';
-// let obj = new OpenApiDiff();
+// let swagger = '/Users/vishrut/git-repos/azure-rest-api-specs/arm-network/2017-03-01/swagger/virtualNetworkGateway.json'
+// let obj = new OpenApiDiff()
 // // obj.processViaAutoRest(swagger, 'new').then((success, error) => {
-// //   console.log(success);
-// //   console.log(error);
-// // });
-// console.log(obj.dotNetPath());
+// //   console.log(success)
+// //   console.log(error)
+// // })
+// console.log(obj.dotNetPath())
 
-// let newSwagger = '/Users/vishrut/git-repos/autorest/generated/NewVirtualNetworkGateway.json';
-// let oldSwagger = '/Users/vishrut/git-repos/autorest/generated/VirtualNetworkGateway.json';
+// let newSwagger = '/Users/vishrut/git-repos/autorest/generated/NewVirtualNetworkGateway.json'
+// let oldSwagger = '/Users/vishrut/git-repos/autorest/generated/VirtualNetworkGateway.json'
 // // obj.processViaOpenApiDiff(oldSwagger, newSwagger).then((success, error) => {
-// //   console.log(success);
-// //   console.log(error);
-// // });
+// //   console.log(success)
+// //   console.log(error)
+// // })
 
-// obj.detectChanges(oldSwagger, newSwagger, {});
+// obj.detectChanges(oldSwagger, newSwagger, {})
