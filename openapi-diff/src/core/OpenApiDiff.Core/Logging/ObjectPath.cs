@@ -50,14 +50,15 @@ namespace OpenApiDiff.Core.Logging
         }
 
         private static IEnumerable<(JToken token, string name)> CompletePath(IEnumerable<Func<JToken, string>> p, JToken t)
-            => p.Select(v => {
-                var name = v(t);
-                t =
-                    t is JArray a ? int.TryParse(name, out var i) ? a[i] : null :
-                    t is JObject o ? FromObject(o, name) :
-                    null;
-                return (t, name);
-            });
+            => new[] { (t, "#") }
+                .Concat(p.Select(v => {
+                    var name = v(t);
+                    t =
+                        t is JArray a ? int.TryParse(name, out var i) ? a[i] : null :
+                        t is JObject o ? FromObject(o, name) :
+                        null;
+                    return (t, name);
+                }));
 
         public IEnumerable<(JToken token, string name)> CompletePath(JToken t)
             => CompletePath(Path, t);
@@ -66,10 +67,13 @@ namespace OpenApiDiff.Core.Logging
             => fileName.Replace("\\", "/");
 
         // https://tools.ietf.org/html/draft-ietf-appsawg-json-pointer-04
-        public string JsonPointer(IJsonDocument t) => CompletePath(t.Token)
-            .Select(v => v.name?.Replace("~", "~0")?.Replace("/", "~1"))
-            .Aggregate(FileNameNorm(t.FileName) + "#", (a, b) => a == null || b == null ? null : a + "/" + b);
-            
+        public string JsonPointer(IJsonDocument t)
+        {
+            var result = CompletePath(t.Token)
+                .Select(v => v.name?.Replace("~", "~0")?.Replace("/", "~1"))
+                .Aggregate((a, b) => a == null || b == null ? null : a + "/" + b);
+            return result == null ? null : FileNameNorm(t.FileName) + result;
+        }
 
         public ObjectPath AppendExpression(Func<JToken, string> func)
             => Append(func);

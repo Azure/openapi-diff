@@ -7,8 +7,10 @@ jest.setTimeout(10000)
 describe("index", () => {
   it("simple", async () => {
     const diff = new index.OpenApiDiff({ json: true })
-    const resultStr = await diff.compare("src/test/simple/same.json", "src/test/simple/same.json")
+    const file = "src/test/simple/same.json"
+    const resultStr = await diff.compare(file, file)
     const result = JSON.parse(resultStr)
+    const filePath = path.resolve(file).split("\\").join("/")
     const expected = [
       {
         code: "NoVersionChange",
@@ -17,10 +19,14 @@ describe("index", () => {
         message: "The versions have not changed.",
         mode: "Update",
         new: {
-          ref: "C:/Users/sergey/AppData/Local/Temp/new.json#"
+          ref: `file:///${filePath}#`,
+          path: "",
+          location: `file:///${filePath}:1:1`
         },
         old: {
-          ref: "C:/Users/sergey/AppData/Local/Temp/old.json#"
+          ref: `file:///${filePath}#`,
+          path: "",
+          location: `file:///${filePath}:1:1`
         },
         type: "Info"
       }
@@ -29,10 +35,12 @@ describe("index", () => {
   })
   it("some-changes", async () => {
     const diff = new index.OpenApiDiff({ json: true })
+    const oldFile = "src/test/some-changes/old.json"
     const newFile = "src/test/some-changes/new.json"
-    const resultStr = await diff.compare("src/test/some-changes/old.json", newFile)
+    const resultStr = await diff.compare(oldFile, newFile)
     const result = JSON.parse(resultStr)
-    const newFilePath = path.resolve(newFile).split("\\").join("/")
+    const newFilePath = "file:///" + path.resolve(newFile).split("\\").join("/")
+    const oldFilePath = "file:///" + path.resolve(oldFile).split("\\").join("/")
     const expected = [
       {
         code: "NoVersionChange",
@@ -41,10 +49,14 @@ describe("index", () => {
         message: "The versions have not changed.",
         mode: "Update",
         new: {
-          ref: "C:/Users/sergey/AppData/Local/Temp/new.json#"
+          ref: `${newFilePath}#`,
+          location: `${newFilePath}:1:1`,
+          path: ""
         },
         old: {
-          ref: "C:/Users/sergey/AppData/Local/Temp/old.json#"
+          ref: `${oldFilePath}#`,
+          location: `${oldFilePath}:1:1`,
+          path: ""
         },
         type: "Info"
       },
@@ -55,9 +67,9 @@ describe("index", () => {
         message: "The new version is adding a path that was not found in the old version.",
         mode: "Addition",
         new: {
-          location: `file:///${newFilePath}:8:5`,
+          location: `${newFilePath}:8:5`,
           path: "paths./x",
-          ref: `file:///${newFilePath}#/paths/~1x`
+          ref: `${newFilePath}#/paths/~1x`
         },
         old:
         {

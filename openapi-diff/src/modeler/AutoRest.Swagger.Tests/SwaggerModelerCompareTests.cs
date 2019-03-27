@@ -7,7 +7,6 @@ using Xunit;
 using System.Collections.Generic;
 using OpenApiDiff.Core.Logging;
 using System.Reflection;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace AutoRest.Swagger.Tests
@@ -32,18 +31,43 @@ namespace AutoRest.Swagger.Tests
         /// </summary>
         /// <param name="input">The name of the swagger document file. The file name must be the same in both the 'modified' and 'original' folder.</param>
         /// <returns>A list of messages from the comparison logic.</returns>
-        private IEnumerable<ComparisonMessage> CompareSwagger(string input)
+        private static IEnumerable<ComparisonMessage> CompareSwagger(string input)
         {
             var modeler = new SwaggerModeler();
             var baseDir = Directory.GetParent(typeof(SwaggerModelerCompareTests).GetTypeInfo().Assembly.Location.ToString()).ToString();
             var oldFileName = Path.Combine(baseDir, "Resource", "Swagger", "old", input);
             var newFileName = Path.Combine(baseDir, "Resource", "Swagger", "new", input);
-            return modeler.Compare(
+            var result = modeler.Compare(
                 Path.Combine("old", input),
                 File.ReadAllText(oldFileName),
                 Path.Combine("new", input),
                 File.ReadAllText(newFileName)
             );
+            ValidateMessages(result);
+            return result;
+        }
+
+        private static void ValidateMessage(ComparisonMessage message)
+        {
+            var newLocation = message.NewLocation();
+            var oldLocation = message.OldLocation();
+            switch (message.Mode)
+            {
+                case MessageType.Update:
+                    break;
+                case MessageType.Addition:
+                    break;
+                case MessageType.Removal:
+                    break;
+            }
+        }
+
+        private static void ValidateMessages(IEnumerable<ComparisonMessage> messages)
+        {
+            foreach (var message in messages)
+            {
+                ValidateMessage(message);
+            }
         }
 
         /// <summary>
@@ -102,7 +126,10 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("removed_definition.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedDefinition.Id);
             Assert.NotEmpty(missing);
-            Assert.Equal(Category.Error, missing.First().Severity);
+            var missing0 = missing.First();
+            Assert.Equal(Category.Error, missing0.Severity);
+            Assert.NotNull(missing0.NewJson());
+            Assert.NotNull(missing0.OldJson());
         }
 
         /// <summary>
@@ -317,7 +344,7 @@ namespace AutoRest.Swagger.Tests
                     "#/paths/~1subscriptions~1{subscriptionId}~1providers~1Microsoft.Storage~1checkNameAvailability/post/responses/200/schema/properties"
                 )
             );
-            // Assert.NotNull(x.NewJson());
+            Assert.NotNull(x.NewJson());
             // Assert.Null(x.OldJson());
         }
 
