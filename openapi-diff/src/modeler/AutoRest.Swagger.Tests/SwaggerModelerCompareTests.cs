@@ -54,8 +54,7 @@ namespace AutoRest.Swagger.Tests
                 case MessageType.Update:
                     var newLocation = message.NewLocation();
                     var oldLocation = message.OldLocation();
-                    // sAssert.NotNull(oldLocation);
-                    // Assert.NotNull(newLocation);
+                    Assert.True(oldLocation != null || newLocation != null);
                     break;
                 case MessageType.Addition:
                     break;
@@ -533,7 +532,7 @@ namespace AutoRest.Swagger.Tests
             var added = messages.Where(m => m.Id == ComparisonMessages.AddingHeader.Id).ToArray();
             Assert.Single(added);
             Assert.Equal(Category.Info, added[0].Severity);
-            Assert.Equal("new/operation_check_03.json#/paths/~1api~1Responses/get/responses/200/x-c", added[0].NewJsonRef);
+            Assert.Equal("new/operation_check_03.json#/paths/~1api~1Responses/get/responses/200/headers/x-c", added[0].NewJsonRef);
         }
 
         /// <summary>
@@ -546,7 +545,7 @@ namespace AutoRest.Swagger.Tests
             var removed = messages.Where(m => m.Id == ComparisonMessages.RemovingHeader.Id).ToArray();
             Assert.Single(removed);
             Assert.Equal(Category.Error, removed[0].Severity);
-            Assert.Equal("new/operation_check_03.json#/paths/~1api~1Responses/get/responses/200/x-a", removed[0].NewJsonRef);
+            Assert.Equal("new/operation_check_03.json#/paths/~1api~1Responses/get/responses/200/headers/x-a", removed[0].NewJsonRef);
         }
 
         /// <summary>
@@ -559,7 +558,7 @@ namespace AutoRest.Swagger.Tests
             var changed = messages.Where(m => m.Id == ComparisonMessages.TypeChanged.Id && m.NewJsonRef.Contains("Responses")).ToArray();
             Assert.Single(changed);
             Assert.Equal(Category.Error, changed[0].Severity);
-            Assert.Equal("new/operation_check_03.json#/paths/~1api~1Responses/get/responses/200/x-b", changed[0].NewJsonRef);
+            Assert.Equal("new/operation_check_03.json#/paths/~1api~1Responses/get/responses/200/headers/x-b", changed[0].NewJsonRef);
         }
 
         /// <summary>
