@@ -81,7 +81,9 @@ namespace AutoRest.Swagger.Model
 
             if (Schema != null && priorParameter.Schema != null)
             {
+                context.PushProperty("schema");
                 Schema.Compare(context, priorParameter.Schema);
+                context.Pop();
             }
 
             context.Direction = DataDirection.None;
