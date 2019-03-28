@@ -193,8 +193,7 @@ namespace AutoRest.Swagger.Model
 
                 context.PushProperty(path);
 
-                Dictionary<string, Operation> operations = null;
-                if (!newPaths.TryGetValue(p, out operations))
+                if (!newPaths.TryGetValue(p, out var operations))
                 {
                     // Entrie path was removeed
                     context.LogBreakingChange(ComparisonMessages.RemovedPath, path);
@@ -203,14 +202,13 @@ namespace AutoRest.Swagger.Model
                 {
                     // 1. Remove this path from the current list to find the added paths
                     newPaths.Remove(p);
-                    Dictionary<string, Operation> copyOfOperations = operations.ToDictionary(e => e.Key, e => e.Value);
+                    var copyOfOperations = operations.ToDictionary(e => e.Key, e => e.Value);
 
                     // 2. look for operation match inside this path
-                    Dictionary<string, Operation> previousOperations = previousDefinition.Paths[path];
+                    var previousOperations = previousDefinition.Paths[path];
                     foreach (var previousOperation in previousOperations)
                     {
-                        Operation newOperation = null;
-                        if (!operations.TryGetValue(previousOperation.Key, out newOperation))
+                        if (!operations.TryGetValue(previousOperation.Key, out var newOperation))
                         {
                             // Operation was removed from the path
                             context.LogBreakingChange(ComparisonMessages.RemovedOperation, previousOperation.Value.OperationId);
@@ -232,8 +230,7 @@ namespace AutoRest.Swagger.Model
                     // Compare operations
                     foreach (var operation in operations)
                     {
-                        Operation previousOperation = null;
-                        if (previousDefinition.Paths[path].TryGetValue(operation.Key, out previousOperation))
+                        if (previousDefinition.Paths[path].TryGetValue(operation.Key, out var previousOperation))
                         {
                             context.PushProperty(operation.Key);
                             operation.Value.Compare(context, previousOperation);
