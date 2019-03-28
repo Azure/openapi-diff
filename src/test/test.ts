@@ -71,10 +71,7 @@ describe("index", () => {
           path: "paths./x",
           ref: `${newFilePath}#/paths/~1x`
         },
-        old:
-        {
-          ref: "C:/Users/sergey/AppData/Local/Temp/old.json#/paths/~1x"
-        },
+        old: {},
         type: "Info"
       }
     ]

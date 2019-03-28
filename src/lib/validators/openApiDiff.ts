@@ -57,7 +57,7 @@ const updateChange = (change: Change, pf: ProcessedFile): Change => {
     const location = `${originalPosition.source}:${originalPosition.line}:${(originalPosition.column as number) + 1}`
     return { ...change, ref, location }
   } else {
-    return change
+    return {}
   }
 }
 
