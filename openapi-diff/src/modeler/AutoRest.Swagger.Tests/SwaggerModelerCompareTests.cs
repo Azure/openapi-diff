@@ -49,12 +49,12 @@ namespace AutoRest.Swagger.Tests
 
         private static void ValidateMessage(ComparisonMessage message)
         {
+            var newLocation = message.NewLocation();
+            var oldLocation = message.OldLocation();
+            // Assert.True(oldLocation != null || newLocation != null);
             switch (message.Mode)
             {
                 case MessageType.Update:
-                    var newLocation = message.NewLocation();
-                    var oldLocation = message.OldLocation();
-                    Assert.True(oldLocation != null || newLocation != null);
                     break;
                 case MessageType.Addition:
                     break;
