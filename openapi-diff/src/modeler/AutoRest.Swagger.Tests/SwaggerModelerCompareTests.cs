@@ -51,14 +51,16 @@ namespace AutoRest.Swagger.Tests
         {
             var newLocation = message.NewLocation();
             var oldLocation = message.OldLocation();
-            // Assert.True(oldLocation != null || newLocation != null);
+            Assert.True(oldLocation != null || newLocation != null);
             switch (message.Mode)
             {
-                case MessageType.Update:
+                case MessageType.Update:                    
                     break;
                 case MessageType.Addition:
+                    Assert.NotNull(newLocation);
                     break;
                 case MessageType.Removal:
+                    Assert.NotNull(oldLocation);
                     break;
             }
         }
@@ -194,8 +196,8 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("removed_path.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedPath.Id);
             Assert.Equal(2, missing.Count());
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.NewJsonRef == "new/removed_path.json#/paths/~1api~1Parameters~1{a}"));
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.NewJsonRef == "new/removed_path.json#/paths/~1api~1Responses"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.OldJsonRef == "old/removed_path.json#/paths/~1api~1Parameters~1{a}"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.OldJsonRef == "old/removed_path.json#/paths/~1api~1Responses"));
         }
 
         /// <summary>
@@ -388,7 +390,7 @@ namespace AutoRest.Swagger.Tests
             Assert.NotEmpty(missing);
             var error = missing.First();
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Null(error.NewJsonRef);
+            Assert.NotNull(error.NewJsonRef);
             Assert.Equal("old/operation_check_01.json#/paths/~1api~1Parameters~1{a}/get/parameters/1", error.OldJsonRef);
         }
 
@@ -416,7 +418,7 @@ namespace AutoRest.Swagger.Tests
             Assert.NotEmpty(missing);
             var error = missing.Skip(1).First();
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Null(error.NewJsonRef);
+            Assert.NotNull(error.NewJsonRef);
             Assert.Equal("old/operation_check_01.json#/paths/~1api~1Parameters~1{a}/get/parameters/3", error.OldJsonRef);
         }
 
@@ -432,7 +434,7 @@ namespace AutoRest.Swagger.Tests
             Assert.NotEmpty(missing);
             var error = missing.First();
             Assert.Equal(Category.Error, error.Severity);
-            Assert.Null(error.NewJsonRef);
+            Assert.NotNull(error.NewJsonRef);
             Assert.Equal("old/operation_check_01.json#/paths/~1api~1Parameters~1{a}/get/parameters/4", error.OldJsonRef);
         }
 

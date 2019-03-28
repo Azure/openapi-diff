@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using OpenApiDiff.Core.Logging;
 
 namespace AutoRest.Swagger.Model
 {
@@ -189,9 +190,9 @@ namespace AutoRest.Swagger.Model
             context.PushProperty("paths");
             foreach (var path in previousDefinition.Paths.Keys)
             {
-                var p = Regex.Replace(path, @"\{\w*\}", @"{}");
+                var p = ObjectPath.PathName(path);
 
-                context.PushProperty(path);
+                context.PushPathProperty(path);
 
                 if (!newPaths.TryGetValue(p, out var operations))
                 {
@@ -258,9 +259,9 @@ namespace AutoRest.Swagger.Model
             context.PushProperty("x-ms-paths");
             foreach (var path in previousDefinition.CustomPaths.Keys)
             {
-                var p = Regex.Replace(path, @"\{\w*\}", @"{}");
+                var p = ObjectPath.PathName(path);
 
-                context.PushProperty(path);
+                context.PushPathProperty(path);
 
                 Dictionary<string, Operation> operations = null;
                 if (!newCustomPaths.TryGetValue(p, out operations))
@@ -387,18 +388,9 @@ namespace AutoRest.Swagger.Model
         /// </summary>
         /// <param name="paths">A dictionary of paths, potentially with embedded parameter names.</param>
         /// <returns>A transformed dictionary, where paths do not embed parameter names.</returns>
-        private Dictionary<string, Dictionary<string, Operation>> RemovePathVariables(Dictionary<string, Dictionary<string, Operation>> paths)
-        {
-            var result = new Dictionary<string, Dictionary<string, Operation>>();
-
-            foreach (var kv in paths)
-            {
-                var p = Regex.Replace(kv.Key, @"\{\w*\}", @"{}");
-                result[p] = kv.Value;
-            }
-
-            return result;
-        }
+        private Dictionary<string, Dictionary<string, Operation>> RemovePathVariables(
+            Dictionary<string, Dictionary<string, Operation>> paths
+        ) => paths.ToDictionary(kv => ObjectPath.PathName(kv.Key), kv => kv.Value);
 
         /// <summary>
         /// Since some services may rely on semantic versioning, comparing versions is fairly complex.

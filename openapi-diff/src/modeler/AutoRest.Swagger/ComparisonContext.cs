@@ -51,7 +51,11 @@ namespace AutoRest.Swagger
 
         // public void PushIndex(int index) => _path.Push(Path.AppendIndex(index));
         public void PushProperty(string property) => _path.Push(Path.AppendProperty(property));
+
         public void PushItemByName(string name) => _path.Push(Path.AppendItemByName(name));
+
+        public void PushPathProperty(string name) => _path.Push(Path.AppendPathProperty(name));
+
         public void Pop() => _path.Pop();
 
         private Stack<ObjectPath> _path = new Stack<ObjectPath>(new[] { ObjectPath.Empty });

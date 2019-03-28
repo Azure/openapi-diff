@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace OpenApiDiff.Core.Logging
 {
@@ -33,6 +34,19 @@ namespace OpenApiDiff.Core.Logging
             return list == null || list.Count == 0 ? null : list[0].i.ToString();
         });
 
+        public static string PathName(string path)
+            => Regex.Replace(path, @"\{\w*\}", @"{}");
+
+        public ObjectPath AppendPathProperty(string path) {
+            var noParameters = PathName(path);
+            return Append(t =>
+                (t as JObject)
+                    ?.Properties()
+                    ?.FirstOrDefault(p => PathName(p.Name) == noParameters)
+                    ?.Name
+            );
+        }
+
         public IEnumerable<Func<JToken, string>> Path { get; }
 
         private static ObjectPath ParseRef(string s)
@@ -44,6 +58,10 @@ namespace OpenApiDiff.Core.Logging
 
         private static JToken FromObject(JObject o, string name)
         {
+            if (name == null)
+            {
+                return null;
+            }
             var @ref = o["$ref"];
             var unrefed = @ref != null ? ParseRef(@ref.Value<string>()).CompletePath(o.Root).Last().token : o;
             return unrefed[name];
