@@ -16,7 +16,6 @@ import * as jsonRefs from "json-refs"
 const exec = util.promisify(child_process.exec)
 
 export type Options = {
-  readonly json?: unknown
   readonly consoleLogLevel?: unknown
   readonly logFilepath?: unknown
 }
@@ -79,9 +78,7 @@ export class OpenApiDiff {
     log.silly(`Initializing OpenApiDiff class`)
 
     if (this.options === null || this.options === undefined) {
-      this.options = {
-        json: true
-      }
+      this.options = {}
     }
     if (typeof this.options !== 'object') {
       throw new Error('options must be of type "object".')
@@ -243,10 +240,8 @@ export class OpenApiDiff {
       throw new Error(`File "${newSwagger}" not found.`)
     }
 
-    let cmd = `${this.dotNetPath()} ${this.openApiDiffDllPath()} -o ${oldSwagger} -n ${newSwagger}`
-    if (this.options.json) {
-      cmd = `${cmd} -JsonValidationMessages`
-    }
+    const cmd =
+      `${this.dotNetPath()} ${this.openApiDiffDllPath()} -o ${oldSwagger} -n ${newSwagger} -JsonValidationMessages`
 
     log.debug(`Executing: "${cmd}"`)
     const { stdout } = await exec(cmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 })

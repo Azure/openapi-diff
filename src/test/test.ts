@@ -6,7 +6,7 @@ jest.setTimeout(10000)
 
 describe("index", () => {
   it("simple", async () => {
-    const diff = new index.OpenApiDiff({ json: true })
+    const diff = new index.OpenApiDiff({})
     const file = "src/test/simple/same.json"
     const resultStr = await diff.compare(file, file)
     const result = JSON.parse(resultStr)
@@ -34,7 +34,7 @@ describe("index", () => {
     assert.deepStrictEqual(result, expected)
   })
   it("some-changes", async () => {
-    const diff = new index.OpenApiDiff({ json: true })
+    const diff = new index.OpenApiDiff({})
     const oldFile = "src/test/some-changes/old.json"
     const newFile = "src/test/some-changes/new.json"
     const resultStr = await diff.compare(oldFile, newFile)
