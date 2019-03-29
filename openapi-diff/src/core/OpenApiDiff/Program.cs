@@ -45,19 +45,9 @@ namespace OpenApiDiff
                 settings
             );
 
-            if (settings.JsonValidationMessages)
-            {
-                Console.WriteLine("[");
-                Console.WriteLine(string.Join(",\n", messages.Select(v => v.GetValidationMessagesAsJson())));
-                Console.WriteLine("]");
-            }
-            else
-            {
-                foreach (var msg in messages)
-                {
-                    Console.WriteLine(msg.ToString());
-                }
-            }
+            Console.WriteLine("[");
+            Console.WriteLine(string.Join(",\n", messages.Select(v => v.GetValidationMessagesAsJson())));
+            Console.WriteLine("]");
 
             return 0;
         }
