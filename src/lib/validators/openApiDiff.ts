@@ -25,7 +25,7 @@ export type ProcessedFile = {
   readonly map: sourceMap.BasicSourceMapConsumer | sourceMap.IndexedSourceMapConsumer
 }
 
-type Change = {
+type ChangeProperties = {
   readonly location?: string
   readonly path?: string
   readonly ref?: string
@@ -34,17 +34,17 @@ type Change = {
 type Message = {
   readonly id: string
   readonly code: string
-  readonly docurl: string
+  readonly docUrl: string
   readonly message: string
   readonly mode: string
   readonly type: string
-  readonly new: Change
-  readonly old: Change
+  readonly new: ChangeProperties
+  readonly old: ChangeProperties
 }
 
 type Messages = ReadonlyArray<Message>
 
-const updateChange = (change: Change, pf: ProcessedFile): Change => {
+const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): ChangeProperties => {
   if (change.location) {
     const s = change.location.split(":")
     const position = { line: parseInt(s[s.length - 2]), column: parseInt(s[s.length - 1]) - 1 }
@@ -248,31 +248,13 @@ export class OpenApiDiff {
 
     log.debug(`Executing: "${cmd}"`)
     const { stdout } = await exec(cmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 })
-    const json = jsonParser.parse("", stdout) as Messages
+    const resultJson = jsonParser.parse("", stdout) as Messages
 
-    const newJson = json.map(v => ({
-      ...v,
-      new: updateChange(v.new, newSwaggerFile),
-      old: updateChange(v.old, oldSwaggerFile),
+    const updatedJson = resultJson.map(message => ({
+      ...message,
+      new: updateChangeProperties(message.new, newSwaggerFile),
+      old: updateChangeProperties(message.old, oldSwaggerFile),
     }))
-    return JSON.stringify(newJson)
+    return JSON.stringify(updatedJson)
   }
 }
-
-// Testing
-// let swagger = '/Users/vishrut/git-repos/azure-rest-api-specs/arm-network/2017-03-01/swagger/virtualNetworkGateway.json'
-// let obj = new OpenApiDiff()
-// // obj.processViaAutoRest(swagger, 'new').then((success, error) => {
-// //   console.log(success)
-// //   console.log(error)
-// // })
-// console.log(obj.dotNetPath())
-
-// let newSwagger = '/Users/vishrut/git-repos/autorest/generated/NewVirtualNetworkGateway.json'
-// let oldSwagger = '/Users/vishrut/git-repos/autorest/generated/VirtualNetworkGateway.json'
-// // obj.processViaOpenApiDiff(oldSwagger, newSwagger).then((success, error) => {
-// //   console.log(success)
-// //   console.log(error)
-// // })
-
-// obj.detectChanges(oldSwagger, newSwagger, {})

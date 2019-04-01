@@ -14,7 +14,7 @@ describe("index", () => {
     const expected = [
       {
         code: "NoVersionChange",
-        docurl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
         id: "1001",
         message: "The versions have not changed.",
         mode: "Update",
@@ -44,7 +44,7 @@ describe("index", () => {
     const expected = [
       {
         code: "NoVersionChange",
-        docurl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
         id: "1001",
         message: "The versions have not changed.",
         mode: "Update",
@@ -62,7 +62,7 @@ describe("index", () => {
       },
       {
         code: "AddedPath",
-        docurl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1038.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1038.md",
         id: "1038",
         message: "The new version is adding a path that was not found in the old version.",
         mode: "Addition",
@@ -89,7 +89,7 @@ describe("index", () => {
     const expected = [
       {
         code: "NoVersionChange",
-        docurl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
         id: "1001",
         message: "The versions have not changed.",
         mode: "Update",
@@ -107,7 +107,7 @@ describe("index", () => {
       },
       {
         code: "AddedPath",
-        docurl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1038.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1038.md",
         id: "1038",
         message: "The new version is adding a path that was not found in the old version.",
         mode: "Addition",
@@ -118,6 +118,52 @@ describe("index", () => {
         },
         old: {},
         type: "Info"
+      }
+    ]
+    assert.deepStrictEqual(result, expected)
+  })
+
+  it("full reveresed", async () => {
+    const oldFile = "src/test/full/new/readme.md"
+    const newFile = "src/test/full/old/readme.md"
+    const diff = new index.OpenApiDiff({})
+    const resultStr = await diff.compare(oldFile, newFile, "2019", "2019")
+    const result = JSON.parse(resultStr)
+    const oldFilePath = "file:///" + path.resolve("src/test/full/new/openapi.json").split("\\").join("/")
+    const oldFilePath2 = "file:///" + path.resolve("src/test/full/new/openapi2.json").split("\\").join("/")
+    const newFilePath = "file:///" + path.resolve("src/test/full/old/openapi.json").split("\\").join("/")
+    const expected = [
+      {
+        code: "NoVersionChange",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        id: "1001",
+        message: "The versions have not changed.",
+        mode: "Update",
+        new: {
+          ref: `${newFilePath}#`,
+          location: `${newFilePath}:1:1`,
+          path: ""
+        },
+        old: {
+          ref: `${oldFilePath}#`,
+          location: `${oldFilePath}:1:1`,
+          path: ""
+        },
+        type: "Info"
+      },
+      {
+        code: "RemovedPath",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1005.md",
+        id: "1005",
+        message: "The new version is missing a path that was found in the old version. Was path '/x' removed or restructured?",
+        mode: "Removal",
+        old: {
+          location: `${oldFilePath2}:8:5`,
+          path: "paths./x",
+          ref: `${oldFilePath2}#/paths/~1x`
+        },
+        new: {},
+        type: "Error"
       }
     ]
     assert.deepStrictEqual(result, expected)

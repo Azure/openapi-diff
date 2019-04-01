@@ -117,7 +117,7 @@ namespace AutoRest.Swagger
                 code = Code.ToString(),
                 message = Message,
                 type = Severity.ToString(),
-                docurl = DocUrl.ToString(),
+                docUrl = DocUrl.ToString(),
                 mode = Mode.ToString(),
                 old = new JsonLocation
                 {
