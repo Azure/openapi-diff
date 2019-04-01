@@ -78,6 +78,11 @@ namespace OpenApiDiff.Core.Logging
                     return (t, name);
                 }));
 
+        /// <summary>
+        /// Returns a sequence of property names, including the "#" string.
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public IEnumerable<(JToken token, string name)> CompletePath(JToken t)
             => CompletePath(Path, t);
 
