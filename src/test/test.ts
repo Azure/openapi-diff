@@ -1,7 +1,6 @@
 import * as index from "../index"
 import * as assert from "assert"
 import * as path from "path"
-import { compareTags } from '../lib/validate';
 
 jest.setTimeout(10000)
 
