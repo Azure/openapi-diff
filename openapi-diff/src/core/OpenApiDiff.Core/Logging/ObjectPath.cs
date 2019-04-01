@@ -39,15 +39,15 @@ namespace OpenApiDiff.Core.Logging
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static string PathName(string path)
+        public static string OpenApiPathName(string path)
             => Regex.Replace(path, @"\{\w*\}", @"{}");
 
         public ObjectPath AppendPathProperty(string path) {
-            var noParameters = PathName(path);
+            var noParameters = OpenApiPathName(path);
             return Append(t =>
                 (t as JObject)
                     ?.Properties()
-                    ?.FirstOrDefault(p => PathName(p.Name) == noParameters)
+                    ?.FirstOrDefault(p => OpenApiPathName(p.Name) == noParameters)
                     ?.Name
             );
         }

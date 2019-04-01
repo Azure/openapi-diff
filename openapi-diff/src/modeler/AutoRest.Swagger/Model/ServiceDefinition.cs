@@ -190,7 +190,7 @@ namespace AutoRest.Swagger.Model
             context.PushProperty("paths");
             foreach (var path in previousDefinition.Paths.Keys)
             {
-                var p = ObjectPath.PathName(path);
+                var p = ObjectPath.OpenApiPathName(path);
 
                 context.PushPathProperty(path);
 
@@ -259,7 +259,7 @@ namespace AutoRest.Swagger.Model
             context.PushProperty("x-ms-paths");
             foreach (var path in previousDefinition.CustomPaths.Keys)
             {
-                var p = ObjectPath.PathName(path);
+                var p = ObjectPath.OpenApiPathName(path);
 
                 context.PushPathProperty(path);
 
@@ -390,7 +390,7 @@ namespace AutoRest.Swagger.Model
         /// <returns>A transformed dictionary, where paths do not embed parameter names.</returns>
         private Dictionary<string, Dictionary<string, Operation>> RemovePathVariables(
             Dictionary<string, Dictionary<string, Operation>> paths
-        ) => paths.ToDictionary(kv => ObjectPath.PathName(kv.Key), kv => kv.Value);
+        ) => paths.ToDictionary(kv => ObjectPath.OpenApiPathName(kv.Key), kv => kv.Value);
 
         /// <summary>
         /// Since some services may rely on semantic versioning, comparing versions is fairly complex.
