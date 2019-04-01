@@ -34,6 +34,11 @@ namespace OpenApiDiff.Core.Logging
             return list == null || list.Count == 0 ? null : list[0].i.ToString();
         });
 
+        /// <summary>
+        /// This's the OpenAPI path name. To use it as an id we need to remove all parameter names.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static string PathName(string path)
             => Regex.Replace(path, @"\{\w*\}", @"{}");
 
