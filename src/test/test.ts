@@ -85,6 +85,7 @@ describe("index", () => {
     const resultStr = await diff.compare(oldFile, newFile, "2019", "2019")
     const result = JSON.parse(resultStr)
     const newFilePath = "file:///" + path.resolve("src/test/full/new/openapi.json").split("\\").join("/")
+    const newFilePath2 = "file:///" + path.resolve("src/test/full/new/openapi2.json").split("\\").join("/")
     const oldFilePath = "file:///" + path.resolve("src/test/full/old/openapi.json").split("\\").join("/")
     const expected = [
       {
@@ -112,9 +113,9 @@ describe("index", () => {
         message: "The new version is adding a path that was not found in the old version.",
         mode: "Addition",
         new: {
-          location: `${newFilePath}:8:5`,
+          location: `${newFilePath2}:8:5`,
           path: "paths./x",
-          ref: `${newFilePath}#/paths/~1x`
+          ref: `${newFilePath2}#/paths/~1x`
         },
         old: {},
         type: "Info"
