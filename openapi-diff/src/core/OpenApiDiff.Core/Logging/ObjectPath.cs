@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace OpenApiDiff.Core.Logging
 {
@@ -33,6 +34,33 @@ namespace OpenApiDiff.Core.Logging
             return list == null || list.Count == 0 ? null : list[0].i.ToString();
         });
 
+        /// <summary>
+        /// This's the OpenAPI path name. To use it as an id we need to remove all parameter names.
+        /// For example, "/a/{a}/" and "/a/{b}" are the same paths.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string OpenApiPathName(string path)
+            => Regex.Replace(path, @"\{\w*\}", @"{}");
+
+        /// <summary>
+        /// Adding an Open API path.
+        /// 
+        /// For example, if the `opepApiPath` is "/subscription/{a}/{b}" then "a" and "b" parameters 
+        /// will be removed from a search.
+        /// </summary>
+        /// <param name="openApiPath"></param>
+        /// <returns></returns>
+        public ObjectPath AppendPathProperty(string openApiPath) {
+            var noParameters = OpenApiPathName(openApiPath);
+            return Append(t =>
+                (t as JObject)
+                    ?.Properties()
+                    ?.FirstOrDefault(p => OpenApiPathName(p.Name) == noParameters)
+                    ?.Name
+            );
+        }
+
         public IEnumerable<Func<JToken, string>> Path { get; }
 
         private static ObjectPath ParseRef(string s)
@@ -44,21 +72,31 @@ namespace OpenApiDiff.Core.Logging
 
         private static JToken FromObject(JObject o, string name)
         {
+            if (name == null)
+            {
+                return null;
+            }
             var @ref = o["$ref"];
             var unrefed = @ref != null ? ParseRef(@ref.Value<string>()).CompletePath(o.Root).Last().token : o;
             return unrefed[name];
         }
 
-        private static IEnumerable<(JToken token, string name)> CompletePath(IEnumerable<Func<JToken, string>> p, JToken t)
-            => p.Select(v => {
-                var name = v(t);
-                t =
-                    t is JArray a ? int.TryParse(name, out var i) ? a[i] : null :
-                    t is JObject o ? FromObject(o, name) :
-                    null;
-                return (t, name);
-            });
+        private static IEnumerable<(JToken token, string name)> CompletePath(IEnumerable<Func<JToken, string>> path, JToken token)
+            => new[] { (token, "#") }
+                .Concat(path.Select(v => {
+                    var name = v(token);
+                    token =
+                        token is JArray a ? int.TryParse(name, out var i) ? a[i] : null :
+                        token is JObject o ? FromObject(o, name) :
+                        null;
+                    return (token, name);
+                }));
 
+        /// <summary>
+        /// Returns a sequence of property names, including the "#" string.
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public IEnumerable<(JToken token, string name)> CompletePath(JToken t)
             => CompletePath(Path, t);
 
@@ -66,10 +104,13 @@ namespace OpenApiDiff.Core.Logging
             => fileName.Replace("\\", "/");
 
         // https://tools.ietf.org/html/draft-ietf-appsawg-json-pointer-04
-        public string JsonPointer(IJsonDocument t) => CompletePath(t.Token)
-            .Select(v => v.name?.Replace("~", "~0")?.Replace("/", "~1"))
-            .Aggregate(FileNameNorm(t.FileName) + "#", (a, b) => a == null || b == null ? null : a + "/" + b);
-            
+        public string JsonPointer(IJsonDocument t)
+        {
+            var result = CompletePath(t.Token)
+                .Select(v => v.name?.Replace("~", "~0")?.Replace("/", "~1"))
+                .Aggregate((a, b) => a == null || b == null ? null : a + "/" + b);
+            return result == null ? null : FileNameNorm(t.FileName) + result;
+        }
 
         public ObjectPath AppendExpression(Func<JToken, string> func)
             => Append(func);

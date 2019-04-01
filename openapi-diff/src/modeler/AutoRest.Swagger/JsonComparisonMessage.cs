@@ -14,7 +14,7 @@
 
         public string type;
 
-        public string docurl;
+        public string docUrl;
 
         public string mode;
     }

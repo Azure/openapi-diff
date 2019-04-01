@@ -54,13 +54,6 @@ namespace OpenApiDiff.Core
         public bool Verbose { get; set; }
 
         /// <summary>
-        /// If set to true, collect and print out validation messages as single JSON blob.
-        /// </summary>
-        [SettingsInfo("Collect and print out validation messages as single JSON.", false)]
-        [SettingsAlias("JsonValidationMessages")]
-        public bool JsonValidationMessages { get; set; }
-
-        /// <summary>
         /// If true, then checking should be strict, in other words, breaking changes are errors intead of warnings.
         /// </summary>
         [SettingsInfo("If true, then checking should be strict, in other words, breaking changes are errors intead of warnings.", false)]

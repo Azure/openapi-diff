@@ -4,12 +4,11 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 import * as yargs from 'yargs'
-import * as os from 'os'
 import { log as log } from './lib/util/logging'
 
-var defaultLogDir = log.directory;
-var logFilepath = log.filepath;
-var packageVersion = require('../package.json').version;
+var defaultLogDir = log.directory
+var logFilepath = log.filepath
+var packageVersion = require('../package.json').version
 
 yargs
   .version(packageVersion)
@@ -31,5 +30,5 @@ yargs
   .argv;
 
 if (yargs.argv._.length === 0 && yargs.argv.h === false) {
-  yargs.coerce('help', function (arg) { return true; }).argv;
+  yargs.coerce('help', function (arg) { return true }).argv
 }

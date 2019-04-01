@@ -53,4 +53,4 @@ export var Constants = {
   knownTitleToResourceProviders: {
     'ResourceManagementClient': 'Microsoft.Resources'
   }
-};
+}

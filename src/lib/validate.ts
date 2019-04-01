@@ -19,14 +19,14 @@ import * as OpenApiDiff from './validators/openApiDiff'
  *
  */
 export function compare(oldSwagger: string, newSwagger: string, options: OpenApiDiff.Options) {
-  if (!options) options = {};
+  if (!options) options = {}
 
-  log.consoleLogLevel = options.consoleLogLevel || log.consoleLogLevel;
-  log.filepath = options.logFilepath || log.filepath;
-  let openApiDiff = new OpenApiDiff.OpenApiDiff(options);
+  log.consoleLogLevel = options.consoleLogLevel || log.consoleLogLevel
+  log.filepath = options.logFilepath || log.filepath
+  const openApiDiff = new OpenApiDiff.OpenApiDiff(options)
 
-  return openApiDiff.compare(oldSwagger, newSwagger);
-};
+  return openApiDiff.compare(oldSwagger, newSwagger)
+}
 
 /**
  * Wrapper method to compares old and new specifications.
@@ -49,11 +49,11 @@ export function compare(oldSwagger: string, newSwagger: string, options: OpenApi
 export function compareTags(
   oldSwagger: string, oldTag: string, newSwagger: string, newTag: string, options: OpenApiDiff.Options
 ) {
-  if (!options) options = {};
+  if (!options) options = {}
 
-  log.consoleLogLevel = options.consoleLogLevel || log.consoleLogLevel;
-  log.filepath = options.logFilepath || log.filepath;
-  let openApiDiff = new OpenApiDiff.OpenApiDiff(options);
+  log.consoleLogLevel = options.consoleLogLevel || log.consoleLogLevel
+  log.filepath = options.logFilepath || log.filepath
+  const openApiDiff = new OpenApiDiff.OpenApiDiff(options)
 
-  return openApiDiff.compare(oldSwagger, newSwagger, oldTag, newTag);
-};
+  return openApiDiff.compare(oldSwagger, newSwagger, oldTag, newTag)
+}

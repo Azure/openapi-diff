@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using OpenApiDiff.Core.Logging;
 
 namespace AutoRest.Swagger.Model
 {
@@ -189,12 +190,11 @@ namespace AutoRest.Swagger.Model
             context.PushProperty("paths");
             foreach (var path in previousDefinition.Paths.Keys)
             {
-                var p = Regex.Replace(path, @"\{\w*\}", @"{}");
+                var p = ObjectPath.OpenApiPathName(path);
 
-                context.PushProperty(path);
+                context.PushPathProperty(path);
 
-                Dictionary<string, Operation> operations = null;
-                if (!newPaths.TryGetValue(p, out operations))
+                if (!newPaths.TryGetValue(p, out var operations))
                 {
                     // Entrie path was removeed
                     context.LogBreakingChange(ComparisonMessages.RemovedPath, path);
@@ -203,14 +203,13 @@ namespace AutoRest.Swagger.Model
                 {
                     // 1. Remove this path from the current list to find the added paths
                     newPaths.Remove(p);
-                    Dictionary<string, Operation> copyOfOperations = operations.ToDictionary(e => e.Key, e => e.Value);
+                    var copyOfOperations = operations.ToDictionary(e => e.Key, e => e.Value);
 
                     // 2. look for operation match inside this path
-                    Dictionary<string, Operation> previousOperations = previousDefinition.Paths[path];
+                    var previousOperations = previousDefinition.Paths[path];
                     foreach (var previousOperation in previousOperations)
                     {
-                        Operation newOperation = null;
-                        if (!operations.TryGetValue(previousOperation.Key, out newOperation))
+                        if (!operations.TryGetValue(previousOperation.Key, out var newOperation))
                         {
                             // Operation was removed from the path
                             context.LogBreakingChange(ComparisonMessages.RemovedOperation, previousOperation.Value.OperationId);
@@ -232,8 +231,7 @@ namespace AutoRest.Swagger.Model
                     // Compare operations
                     foreach (var operation in operations)
                     {
-                        Operation previousOperation = null;
-                        if (previousDefinition.Paths[path].TryGetValue(operation.Key, out previousOperation))
+                        if (previousDefinition.Paths[path].TryGetValue(operation.Key, out var previousOperation))
                         {
                             context.PushProperty(operation.Key);
                             operation.Value.Compare(context, previousOperation);
@@ -261,9 +259,9 @@ namespace AutoRest.Swagger.Model
             context.PushProperty("x-ms-paths");
             foreach (var path in previousDefinition.CustomPaths.Keys)
             {
-                var p = Regex.Replace(path, @"\{\w*\}", @"{}");
+                var p = ObjectPath.OpenApiPathName(path);
 
-                context.PushProperty(path);
+                context.PushPathProperty(path);
 
                 Dictionary<string, Operation> operations = null;
                 if (!newCustomPaths.TryGetValue(p, out operations))
@@ -390,18 +388,9 @@ namespace AutoRest.Swagger.Model
         /// </summary>
         /// <param name="paths">A dictionary of paths, potentially with embedded parameter names.</param>
         /// <returns>A transformed dictionary, where paths do not embed parameter names.</returns>
-        private Dictionary<string, Dictionary<string, Operation>> RemovePathVariables(Dictionary<string, Dictionary<string, Operation>> paths)
-        {
-            var result = new Dictionary<string, Dictionary<string, Operation>>();
-
-            foreach (var kv in paths)
-            {
-                var p = Regex.Replace(kv.Key, @"\{\w*\}", @"{}");
-                result[p] = kv.Value;
-            }
-
-            return result;
-        }
+        private Dictionary<string, Dictionary<string, Operation>> RemovePathVariables(
+            Dictionary<string, Dictionary<string, Operation>> paths
+        ) => paths.ToDictionary(kv => ObjectPath.OpenApiPathName(kv.Key), kv => kv.Value);
 
         /// <summary>
         /// Since some services may rely on semantic versioning, comparing versions is fairly complex.

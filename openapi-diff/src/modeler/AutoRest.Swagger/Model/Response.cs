@@ -46,6 +46,7 @@ namespace AutoRest.Swagger.Model
             var headers = Headers != null ? Headers : new Dictionary<string, Header>();
             var priorHeaders = priorResponse.Headers != null ? priorResponse.Headers : new Dictionary<string, Header>();
 
+            context.PushProperty("headers");
             foreach (var header in headers)
             {
                 context.PushProperty(header.Key);
@@ -73,6 +74,7 @@ namespace AutoRest.Swagger.Model
 
                 context.Pop();
             }
+            context.Pop();
 
             // switch context to `schema` property.
             context.PushProperty("schema");

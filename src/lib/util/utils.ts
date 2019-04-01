@@ -15,12 +15,10 @@ import request = require('request')
  * key: docPath
  * value: parsed doc in JSON format
  */
-export let docCache: { [key: string]: unknown } = {};
-
+export let docCache: { [key: string]: unknown } = {}
 
 export function clearCache() {
-  docCache = {};
-  return;
+  docCache = {}
 }
 /*
  * Removes byte order marker. This catches EF BB BF (the UTF-8 BOM)
@@ -29,13 +27,13 @@ export function clearCache() {
  */
 export function stripBOM(content: string) {
   if (Buffer.isBuffer(content)) {
-    content = content.toString();
+    content = content.toString()
   }
   if (content.charCodeAt(0) === 0xFEFF || content.charCodeAt(0) === 0xFFFE) {
-    content = content.slice(1);
+    content = content.slice(1)
   }
-  return content;
-};
+  return content
+}
 
 /*
  * Provides a parsed JSON from the given file path or a url.
@@ -45,37 +43,35 @@ export function stripBOM(content: string) {
  *
  * @returns {object} jsonDoc - Parsed document in JSON format.
  */
-export function parseJson(specPath: string) {
-  let result = null;
+export async function parseJson(specPath: string) {
   if (!specPath || (specPath && typeof specPath.valueOf() !== 'string')) {
-    let err = new Error('A (github) url or a local file path to the swagger spec is required and must be of type string.');
-    return Promise.reject(err);
+    throw new Error('A (github) url or a local file path to the swagger spec is required and must be of type string.')
   }
   if (docCache[specPath]) {
-    return Promise.resolve(docCache[specPath]);
+    return docCache[specPath]
   }
   //url
   if (specPath.match(/^http.*/ig) !== null) {
     //If the spec path is a url starting with https://github then let us auto convert it to an https://raw.githubusercontent url.
     if (specPath.startsWith('https://github')) {
-      specPath = specPath.replace(/^https:\/\/(github.com)(.*)blob\/(.*)/ig, 'https://raw.githubusercontent.com$2$3');
+      specPath = specPath.replace(/^https:\/\/(github.com)(.*)blob\/(.*)/ig, 'https://raw.githubusercontent.com$2$3')
     }
-    let res = makeRequest({ url: specPath, errorOnNon200Response: true });
-    docCache[specPath] = res;
-    return res;
+    const res = makeRequest({ url: specPath, errorOnNon200Response: true })
+    docCache[specPath] = res
+    return res
   } else {
     //local filepath
     try {
-      let fileContent = stripBOM(fs.readFileSync(specPath, 'utf8'));
-      let result = parseContent(specPath, fileContent);
-      docCache[specPath] = result;
-      return Promise.resolve(result);
+      const fileContent = stripBOM(fs.readFileSync(specPath, 'utf8'))
+      const result = parseContent(specPath, fileContent)
+      docCache[specPath] = result
+      return result
     } catch (err) {
-      log.error(err);
-      return Promise.reject(err);
+      log.error(err)
+      return err
     }
   }
-};
+}
 
 /*
  * Provides a parsed JSON from the given content.
@@ -87,18 +83,18 @@ export function parseJson(specPath: string) {
  * @returns {object} jsonDoc - Parsed document in JSON format.
  */
 export function parseContent(filePath: string, fileContent: string) {
-  let result = null;
+  let result = null
   if (/.*\.json$/ig.test(filePath)) {
-    result = JSON.parse(fileContent);
+    result = JSON.parse(fileContent)
   } else if (/.*\.ya?ml$/ig.test(filePath)) {
-    result = YAML.safeLoad(fileContent);
+    result = YAML.safeLoad(fileContent)
   } else {
-    let msg = `We currently support "*.json" and "*.yaml | *.yml" file formats for validating swaggers.\n` +
-      `The current file extension in "${filePath}" is not supported.`;
-    throw new Error(msg);
+    const msg = `We currently support "*.json" and "*.yaml | *.yml" file formats for validating swaggers.\n` +
+      `The current file extension in "${filePath}" is not supported.`
+    throw new Error(msg)
   }
-  return result;
-};
+  return result
+}
 
 /*
  * A utility function to help us acheive stuff in the same way as async/await but with yield statement and generator functions.
@@ -107,16 +103,16 @@ export function parseContent(filePath: string, fileContent: string) {
  */
 export function run(genfun: () => any) {
   // instantiate the generator object
-  var gen = genfun();
+  var gen = genfun()
   // This is the async loop pattern
   function next(err?: unknown, answer?: unknown) {
-    var res;
+    var res
     if (err) {
       // if err, throw it into the wormhole
-      return gen.throw(err);
+      return gen.throw(err)
     } else {
       // if good value, send it
-      res = gen.next(answer);
+      res = gen.next(answer)
     }
     if (!res.done) {
       // if we are not at the end
@@ -126,12 +122,12 @@ export function run(genfun: () => any) {
       // and passing it a callback
       // that receives err, answer
       // for which we'll just use `next()`
-      res.value(next);
+      res.value(next)
     }
   }
   // Kick off the async loop
-  next();
-};
+  next()
+}
 
 export type Options = {
   readonly errorOnNon200Response?: unknown
@@ -155,28 +151,28 @@ export function makeRequest(options: Options) {
   var promise = new Promise(function (resolve, reject) {
     request(options, function (err: unknown, response: Response, responseBody: string) {
       if (err) {
-        reject(err);
+        reject(err)
       }
       if (options.errorOnNon200Response && response.statusCode !== 200) {
-        var msg = `StatusCode: "${response.statusCode}", ResponseBody: "${responseBody}."`;
-        reject(new Error(msg));
+        var msg = `StatusCode: "${response.statusCode}", ResponseBody: "${responseBody}."`
+        reject(new Error(msg))
       }
-      let res = responseBody;
+      let res = responseBody
       try {
         if (typeof responseBody.valueOf() === 'string') {
-          res = parseContent(options.url, responseBody);
+          res = parseContent(options.url, responseBody)
         }
       } catch (error) {
-        let msg = `An error occurred while parsing the file ${options.url}. The error is:\n ${util.inspect(error, { depth: null })}.`
-        let e = new Error(msg);
-        reject(e);
+        const msg = `An error occurred while parsing the file ${options.url}. The error is:\n ${util.inspect(error, { depth: null })}.`
+        const e = new Error(msg)
+        reject(e)
       }
 
-      resolve(res);
-    });
-  });
-  return promise;
-};
+      resolve(res)
+    })
+  })
+  return promise
+}
 
 /*
  * Executes an array of promises sequentially. Inspiration of this method is here:
@@ -187,12 +183,12 @@ export function makeRequest(options: Options) {
  * @return A chain of resolved or rejected promises
  */
 export function executePromisesSequentially(promiseFactories: ReadonlyArray<any>) {
-  let result = Promise.resolve();
+  let result = Promise.resolve()
   promiseFactories.forEach(function (promiseFactory) {
-    result = result.then(promiseFactory);
-  });
-  return result;
-};
+    result = result.then(promiseFactory)
+  })
+  return result
+}
 
 /*
  * Generates a randomId
@@ -205,18 +201,18 @@ export function executePromisesSequentially(promiseFactories: ReadonlyArray<any>
  * @return {string} result A random string
  */
 export function generateRandomId(prefix: string, existingIds: object) {
-  let randomStr;
+  let randomStr
   while (true) {
-    randomStr = Math.random().toString(36).substr(2, 12);
+    randomStr = Math.random().toString(36).substr(2, 12)
     if (prefix && typeof prefix.valueOf() === 'string') {
-      randomStr = prefix + randomStr;
+      randomStr = prefix + randomStr
     }
     if (!existingIds || !(randomStr in existingIds)) {
-      break;
+      break
     }
   }
-  return randomStr;
-};
+  return randomStr
+}
 
 export type References = {
   localReference?: {
@@ -247,10 +243,10 @@ export type References = {
  */
 export function parseReferenceInSwagger(reference: string) {
   if (!reference || (reference && reference.trim().length === 0)) {
-    throw new Error('reference cannot be null or undefined and it must be a non-empty string.');
+    throw new Error('reference cannot be null or undefined and it must be a non-empty string.')
   }
 
-  let result: References = {};
+  let result: References = {}
   if (reference.includes('#')) {
     //local reference in the doc
     if (reference.startsWith('#/')) {
@@ -260,8 +256,8 @@ export function parseReferenceInSwagger(reference: string) {
       }
     } else {
       //filePath+localReference
-      let segments = reference.split('#');
-      result.filePath = segments[0];
+      const segments = reference.split('#')
+      result.filePath = segments[0]
       result.localReference = {
         value: '#' + segments[1],
         accessorProperty: segments[1].slice(1).replace('/', '.')
@@ -269,11 +265,11 @@ export function parseReferenceInSwagger(reference: string) {
     }
   } else {
     //we are assuming that the string is a relative filePath
-    result.filePath = reference;
+    result.filePath = reference
   }
 
-  return result;
-};
+  return result
+}
 
 /*
  * Same as path.join(), however, it converts backward slashes to forward slashes.
@@ -289,11 +285,11 @@ export function parseReferenceInSwagger(reference: string) {
  * @return {string} resolved path
  */
 export function joinPath(...args: string[]) {
-  let finalPath = path.join(...args);
-  finalPath = finalPath.replace(/\\/gi, '/');
-  finalPath = finalPath.replace(/^(http|https):\/(.*)/gi, '$1://$2');
-  return finalPath;
-};
+  let finalPath = path.join(...args)
+  finalPath = finalPath.replace(/\\/gi, '/')
+  finalPath = finalPath.replace(/^(http|https):\/(.*)/gi, '$1://$2')
+  return finalPath
+}
 
 /*
  * Provides a parsed JSON from the given file path or a url. Same as parseJson(). However,
@@ -305,9 +301,9 @@ export function joinPath(...args: string[]) {
  * @returns {object} jsonDoc - Parsed document in JSON format.
  */
 export function parseJsonWithPathFragments(...args: string[]) {
-  let specPath = joinPath(...args);
-  return parseJson(specPath);
-};
+  const specPath = joinPath(...args)
+  return parseJson(specPath)
+}
 
 /*
  * Merges source object into the target object
@@ -319,9 +315,9 @@ export function parseJsonWithPathFragments(...args: string[]) {
  */
 export function mergeObjects(source: { readonly [key: string]: unknown }, target: { [key: string]: unknown }) {
   Object.keys(source).forEach(function (key) {
-    target[key] = source[key];
-  });
-  return target;
+    target[key] = source[key]
+  })
+  return target
 }
 
 /*
@@ -334,15 +330,15 @@ export function mergeObjects(source: { readonly [key: string]: unknown }, target
  * @returns {any} result - Returns the value that the ptr points to, in the doc.
  */
 export function getObject(doc: object, ptr: string) {
-  let result;
+  let result
   try {
-    result = jsonPointer.get(doc, ptr);
+    result = jsonPointer.get(doc, ptr)
   } catch (err) {
-    log.error(err);
-    throw err;
+    log.error(err)
+    throw err
   }
-  return result;
-};
+  return result
+}
 
 /*
  * Sets the given value at the location provided by the ptr in the given doc.
@@ -354,14 +350,14 @@ export function getObject(doc: object, ptr: string) {
  * location provided by the ptr in the doc.
  */
 export function setObject(doc: object, ptr: string, value: unknown) {
-  let result;
+  let result
   try {
-    result = jsonPointer.set(doc, ptr, value);
+    result = jsonPointer.set(doc, ptr, value)
   } catch (err) {
-    log.error(err);
+    log.error(err)
   }
-  return result;
-};
+  return result
+}
 
 /*
  * Removes the location pointed by the json pointer in the given doc.
@@ -370,14 +366,14 @@ export function setObject(doc: object, ptr: string, value: unknown) {
  * @param {string} ptr The json reference pointer.
  */
 export function removeObject(doc: object, ptr: string) {
-  let result;
+  let result
   try {
-    result = jsonPointer.remove(doc, ptr);
+    result = jsonPointer.remove(doc, ptr)
   } catch (err) {
-    log.error(err);
+    log.error(err)
   }
-  return result;
-};
+  return result
+}
 
 /**
 /*
@@ -391,20 +387,20 @@ export function removeObject(doc: object, ptr: string) {
  */
 export function getProvider(path: string) {
   if (path === null || path === undefined || typeof path.valueOf() !== 'string' || !path.trim().length) {
-    throw new Error('path is a required parameter of type string and it cannot be an empty string.');
+    throw new Error('path is a required parameter of type string and it cannot be an empty string.')
   }
 
-  let providerRegEx = new RegExp('/providers/(\:?[^{/]+)', 'gi');
-  let result;
-  let pathMatch;
+  const providerRegEx = new RegExp('/providers/(\:?[^{/]+)', 'gi')
+  let result
+  let pathMatch
 
   // Loop over the paths to find the last matched provider namespace
   while ((pathMatch = providerRegEx.exec(path)) != null) {
-    result = pathMatch[1];
+    result = pathMatch[1]
   }
 
-  return result;
-};
+  return result
+}
 
 /*
  * Clones a github repository in the given directory.
@@ -416,30 +412,30 @@ export function getProvider(path: string) {
  */
 export function gitClone(url: string, directory: string) {
   if (url === null || url === undefined || typeof url.valueOf() !== 'string' || !url.trim().length) {
-    throw new Error('url is a required parameter of type string and it cannot be an empty string.');
+    throw new Error('url is a required parameter of type string and it cannot be an empty string.')
   }
 
   if (directory === null || directory === undefined || typeof directory.valueOf() !== 'string' || !directory.trim().length) {
-    throw new Error('directory is a required parameter of type string and it cannot be an empty string.');
+    throw new Error('directory is a required parameter of type string and it cannot be an empty string.')
   }
 
   // If the directory exists then we assume that the repo to be cloned is already present.
   if (fs.existsSync(directory)) {
     if (!fs.lstatSync(directory).isDirectory()) {
-      throw new Error(`"${directory}" must be a directory.`);
+      throw new Error(`"${directory}" must be a directory.`)
     }
-    return;
+    return
   } else {
-    fs.mkdirSync(directory);
+    fs.mkdirSync(directory)
   }
 
   try {
-    let cmd = `git clone ${url} ${directory}`;
-    let result = execSync(cmd, { encoding: 'utf8' });
+    const cmd = `git clone ${url} ${directory}`
+    execSync(cmd, { encoding: 'utf8' })
   } catch (err) {
-    throw new Error(`An error occurred while cloning git repository: ${util.inspect(err, { depth: null })}.`);
+    throw new Error(`An error occurred while cloning git repository: ${util.inspect(err, { depth: null })}.`)
   }
-};
+}
 
 /*
  * Finds the first content-type that contains "/json". Only supported Content-Types are
@@ -449,14 +445,14 @@ export function gitClone(url: string, directory: string) {
  * @returns {string} firstMatchedJson content-type that contains "/json".
  */
 export function getJsonContentType(consumesOrProduces: ReadonlyArray<string>) {
-  let firstMatchedJson = null;
+  let firstMatchedJson = null
   if (consumesOrProduces) {
     firstMatchedJson = consumesOrProduces.find((contentType) => {
-      return (contentType.match(/.*\/json.*/ig) !== null);
-    });
+      return (contentType.match(/.*\/json.*/ig) !== null)
+    })
   }
-  return firstMatchedJson;
-};
+  return firstMatchedJson
+}
 
 /**
  * Determines whether the given string is url encoded
@@ -464,9 +460,9 @@ export function getJsonContentType(consumesOrProduces: ReadonlyArray<string>) {
  * @returns {boolean} result - true if str is url encoded; false otherwise.
  */
 export function isUrlEncoded(str: string) {
-  str = str || '';
-  return str !== decodeURIComponent(str);
-};
+  str = str || ''
+  return str !== decodeURIComponent(str)
+}
 
 export type Model = {
   type?: string|ReadonlyArray<string>
@@ -486,16 +482,16 @@ export type Model = {
  */
 export function isPureObject(model: Model) {
   if (!model) {
-    throw new Error(`model cannot be null or undefined and must be of type "object"`);
+    throw new Error(`model cannot be null or undefined and must be of type "object"`)
   }
   if (model.type && typeof model.type.valueOf() === 'string' && model.type === 'object' && model.properties && Object.keys(model.properties).length === 0) {
-    return true;
+    return true
   } else if (!model.type && model.properties && Object.keys(model.properties).length === 0) {
-    return true;
+    return true
   } else if (model.type && typeof model.type.valueOf() === 'string' && model.type === 'object' && !model.properties) {
-    return true;
+    return true
   } else {
-    return false;
+    return false
   }
 }
 
@@ -510,38 +506,38 @@ export function isPureObject(model: Model) {
  */
 export function relaxEntityType(entity: Model, isRequired?: boolean) {
   if (isPureObject(entity)) {
-    entity.type = ['array', 'boolean', 'number', 'object', 'string'];
+    entity.type = ['array', 'boolean', 'number', 'object', 'string']
     // if (!isRequired) {
-    //   entity.type.push('null');
+    //   entity.type.push('null')
     // }
   }
   if (entity.additionalProperties && isPureObject(entity.additionalProperties)) {
-    entity.additionalProperties.type = ['array', 'boolean', 'number', 'object', 'string'];
+    entity.additionalProperties.type = ['array', 'boolean', 'number', 'object', 'string']
     // if (!isRequired) {
-    //   entity.additionalProperties.type.push('null');
+    //   entity.additionalProperties.type.push('null')
     // }
   }
-  return entity;
-};
+  return entity
+}
 
 /**
  * Relaxes/Transforms model definition like entities recursively
  */
 export function relaxModelLikeEntities(model: Model) {
-  model = relaxEntityType(model);
+  model = relaxEntityType(model)
   if (model.properties) {
-    let modelProperties = model.properties;
-    for (let propName in modelProperties) {
-      let isPropRequired = model.required ? model.required.some((p) => { return p == propName; }) : false
+    const modelProperties = model.properties
+    for (const propName in modelProperties) {
+      const isPropRequired = model.required ? model.required.some((p) => { return p == propName }) : false
       const mp = modelProperties[propName]
       if (mp) {
         if (mp.properties) {
-          modelProperties[propName] = relaxModelLikeEntities(mp);
+          modelProperties[propName] = relaxModelLikeEntities(mp)
         } else {
-          modelProperties[propName] = relaxEntityType(mp, isPropRequired);
+          modelProperties[propName] = relaxEntityType(mp, isPropRequired)
         }
       }
     }
   }
-  return model;
+  return model
 }

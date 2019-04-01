@@ -6,6 +6,7 @@ using System;
 using OpenApiDiff.Core;
 using OpenApiDiff.Properties;
 using System.IO;
+using System.Linq;
 
 namespace OpenApiDiff
 {
@@ -13,7 +14,7 @@ namespace OpenApiDiff
     {
         private static int Main(string[] args)
         {
-            Settings settings = Settings.GetInstance(args);
+            var settings = Settings.GetInstance(args);
 
             if (settings.ShowHelp)
             {
@@ -24,16 +25,17 @@ namespace OpenApiDiff
             try
             {
                 settings.Validate();
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return 1;
             }
 
-            SwaggerModeler modeler = new SwaggerModeler();
+            var modeler = new SwaggerModeler();
 
-            string swaggerPrev = File.ReadAllText(settings.OldSpec);
-            string swaggerNew = File.ReadAllText(settings.NewSpec);
+            var swaggerPrev = File.ReadAllText(settings.OldSpec);
+            var swaggerNew = File.ReadAllText(settings.NewSpec);
 
             var messages = modeler.Compare(
                 settings.OldSpec,
@@ -42,10 +44,10 @@ namespace OpenApiDiff
                 swaggerNew,
                 settings
             );
-            foreach (var msg in messages)
-            {
-                Console.WriteLine(settings.JsonValidationMessages ? msg.GetValidationMessagesAsJson() : msg.ToString());
-            }
+
+            Console.WriteLine("[");
+            Console.WriteLine(string.Join(",\n", messages.Select(v => v.GetValidationMessagesAsJson())));
+            Console.WriteLine("]");
 
             return 0;
         }

@@ -4,10 +4,10 @@
 import { log } from "../util/logging"
 import * as validate from "../validate"
 
-export const command = "compare <old-spec> <new-spec>";
+export const command = "compare <old-spec> <new-spec>"
 
 export const describe =
-  "Compares old and new open api specification for breaking changes.";
+  "Compares old and new open api specification for breaking changes."
 
 export const builder = {
   j: {
@@ -27,7 +27,7 @@ export const builder = {
     describe:
       "The tag name for the new specification file.  If included it indicates that the new spec file is a readme file"
   }
-};
+}
 
 export type Argv = {
   readonly oldSpec: string
@@ -40,12 +40,12 @@ export type Argv = {
 }
 
 export const handler = (argv: Argv) => {
-  log.debug(argv);
-  let oldSpec = argv.oldSpec;
-  let oldTag = argv.o;
-  let newSpec = argv.newSpec;
-  let newTag = argv.n;
-  let vOptions = {
+  log.debug(argv)
+  const oldSpec = argv.oldSpec
+  const oldTag = argv.o
+  const newSpec = argv.newSpec
+  const newTag = argv.n
+  const vOptions = {
     consoleLogLevel: argv.logLevel,
     logFilepath: argv.f,
     json: argv.j,
@@ -63,10 +63,10 @@ export const handler = (argv: Argv) => {
 
   return compareFunc
     .then(result => {
-      console.log(result);
+      console.log(result)
     })
     .catch(err => {
-      console.log(err);
-      process.exitCode = 1;
-    });
-};
+      console.log(err)
+      process.exitCode = 1
+    })
+}
