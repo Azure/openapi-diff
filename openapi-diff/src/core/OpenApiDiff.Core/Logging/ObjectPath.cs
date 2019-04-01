@@ -36,14 +36,23 @@ namespace OpenApiDiff.Core.Logging
 
         /// <summary>
         /// This's the OpenAPI path name. To use it as an id we need to remove all parameter names.
+        /// For example, "/a/{a}/" and "/a/{b}" are the same paths.
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
         public static string OpenApiPathName(string path)
             => Regex.Replace(path, @"\{\w*\}", @"{}");
 
-        public ObjectPath AppendPathProperty(string path) {
-            var noParameters = OpenApiPathName(path);
+        /// <summary>
+        /// Adding an Open API path.
+        /// 
+        /// For example, if the `opepApiPath` is "/subscription/{a}/{b}" then "a" and "b" parameters 
+        /// will be removed from a search.
+        /// </summary>
+        /// <param name="openApiPath"></param>
+        /// <returns></returns>
+        public ObjectPath AppendPathProperty(string openApiPath) {
+            var noParameters = OpenApiPathName(openApiPath);
             return Append(t =>
                 (t as JObject)
                     ?.Properties()
@@ -72,15 +81,15 @@ namespace OpenApiDiff.Core.Logging
             return unrefed[name];
         }
 
-        private static IEnumerable<(JToken token, string name)> CompletePath(IEnumerable<Func<JToken, string>> p, JToken t)
-            => new[] { (t, "#") }
-                .Concat(p.Select(v => {
-                    var name = v(t);
-                    t =
-                        t is JArray a ? int.TryParse(name, out var i) ? a[i] : null :
-                        t is JObject o ? FromObject(o, name) :
+        private static IEnumerable<(JToken token, string name)> CompletePath(IEnumerable<Func<JToken, string>> path, JToken token)
+            => new[] { (token, "#") }
+                .Concat(path.Select(v => {
+                    var name = v(token);
+                    token =
+                        token is JArray a ? int.TryParse(name, out var i) ? a[i] : null :
+                        token is JObject o ? FromObject(o, name) :
                         null;
-                    return (t, name);
+                    return (token, name);
                 }));
 
         /// <summary>
