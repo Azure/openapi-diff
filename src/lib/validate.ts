@@ -23,7 +23,7 @@ export function compare(oldSwagger: string, newSwagger: string, options: OpenApi
 
   log.consoleLogLevel = options.consoleLogLevel || log.consoleLogLevel
   log.filepath = options.logFilepath || log.filepath
-  let openApiDiff = new OpenApiDiff.OpenApiDiff(options)
+  const openApiDiff = new OpenApiDiff.OpenApiDiff(options)
 
   return openApiDiff.compare(oldSwagger, newSwagger)
 }
@@ -53,7 +53,7 @@ export function compareTags(
 
   log.consoleLogLevel = options.consoleLogLevel || log.consoleLogLevel
   log.filepath = options.logFilepath || log.filepath
-  let openApiDiff = new OpenApiDiff.OpenApiDiff(options)
+  const openApiDiff = new OpenApiDiff.OpenApiDiff(options)
 
   return openApiDiff.compare(oldSwagger, newSwagger, oldTag, newTag)
 }

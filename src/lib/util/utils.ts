@@ -163,8 +163,8 @@ export function makeRequest(options: Options) {
           res = parseContent(options.url, responseBody)
         }
       } catch (error) {
-        let msg = `An error occurred while parsing the file ${options.url}. The error is:\n ${util.inspect(error, { depth: null })}.`
-        let e = new Error(msg)
+        const msg = `An error occurred while parsing the file ${options.url}. The error is:\n ${util.inspect(error, { depth: null })}.`
+        const e = new Error(msg)
         reject(e)
       }
 
@@ -256,7 +256,7 @@ export function parseReferenceInSwagger(reference: string) {
       }
     } else {
       //filePath+localReference
-      let segments = reference.split('#')
+      const segments = reference.split('#')
       result.filePath = segments[0]
       result.localReference = {
         value: '#' + segments[1],
@@ -301,7 +301,7 @@ export function joinPath(...args: string[]) {
  * @returns {object} jsonDoc - Parsed document in JSON format.
  */
 export function parseJsonWithPathFragments(...args: string[]) {
-  let specPath = joinPath(...args)
+  const specPath = joinPath(...args)
   return parseJson(specPath)
 }
 
@@ -390,7 +390,7 @@ export function getProvider(path: string) {
     throw new Error('path is a required parameter of type string and it cannot be an empty string.')
   }
 
-  let providerRegEx = new RegExp('/providers/(\:?[^{/]+)', 'gi')
+  const providerRegEx = new RegExp('/providers/(\:?[^{/]+)', 'gi')
   let result
   let pathMatch
 
@@ -430,8 +430,8 @@ export function gitClone(url: string, directory: string) {
   }
 
   try {
-    let cmd = `git clone ${url} ${directory}`
-    let result = execSync(cmd, { encoding: 'utf8' })
+    const cmd = `git clone ${url} ${directory}`
+    execSync(cmd, { encoding: 'utf8' })
   } catch (err) {
     throw new Error(`An error occurred while cloning git repository: ${util.inspect(err, { depth: null })}.`)
   }
@@ -526,9 +526,9 @@ export function relaxEntityType(entity: Model, isRequired?: boolean) {
 export function relaxModelLikeEntities(model: Model) {
   model = relaxEntityType(model)
   if (model.properties) {
-    let modelProperties = model.properties
-    for (let propName in modelProperties) {
-      let isPropRequired = model.required ? model.required.some((p) => { return p == propName }) : false
+    const modelProperties = model.properties
+    for (const propName in modelProperties) {
+      const isPropRequired = model.required ? model.required.some((p) => { return p == propName }) : false
       const mp = modelProperties[propName]
       if (mp) {
         if (mp.properties) {

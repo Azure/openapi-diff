@@ -130,15 +130,19 @@ export class OpenApiDiff {
     log.silly(`autoRestPath is being called`)
 
     // When oad is installed globally
-    let result = path.join(__dirname, "..", "..", "node_modules", "autorest", "app.js")
-    if (fs.existsSync(result)) {
-      return `node ${result}`
+    {
+      const result = path.join(__dirname, "..", "..", "node_modules", "autorest", "app.js")
+      if (fs.existsSync(result)) {
+        return `node ${result}`
+      }
     }
 
     // When oad is installed locally
-    result = path.join(__dirname, "..", "..", "..", "autorest", "app.js")
-    if (fs.existsSync(result)) {
-      return `node ${result}`
+    {
+      const result = path.join(__dirname, "..", "..", "..", "autorest", "app.js")
+      if (fs.existsSync(result)) {
+        return `node ${result}`
+      }
     }
 
     // Assume that autorest is in the path

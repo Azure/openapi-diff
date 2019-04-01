@@ -73,7 +73,7 @@ Object.defineProperties(log, {
       if (!level) {
         level = 'warn'
       }
-      let validLevels = Object.keys(customLogLevels)
+      const validLevels = Object.keys(customLogLevels)
       if (!validLevels.some(function (item) { return item === level })) {
         throw new Error(`The logging level provided is "${level}". Valid values are: "${validLevels}".`)
       }
@@ -102,7 +102,7 @@ Object.defineProperties(log, {
     enumerable: true,
     get: function () {
       if (!currentLogFile) {
-        let filename = `validate_log_${getTimeStamp()}.log`
+        const filename = `validate_log_${getTimeStamp()}.log`
         currentLogFile = path.join(this.directory, filename)
       }
 

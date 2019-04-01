@@ -41,11 +41,11 @@ export type Argv = {
 
 export const handler = (argv: Argv) => {
   log.debug(argv)
-  let oldSpec = argv.oldSpec
-  let oldTag = argv.o
-  let newSpec = argv.newSpec
-  let newTag = argv.n
-  let vOptions = {
+  const oldSpec = argv.oldSpec
+  const oldTag = argv.o
+  const newSpec = argv.newSpec
+  const newTag = argv.n
+  const vOptions = {
     consoleLogLevel: argv.logLevel,
     logFilepath: argv.f,
     json: argv.j,
