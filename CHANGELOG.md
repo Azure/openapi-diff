@@ -1,5 +1,9 @@
 # Changelog
- 
+
+## 0.4.2 Release on 2019-04-03.
+
+* Fixed issue with logging.
+
 ## 0.4.1 Release on 2019-04-03.
 
 * Fixed issue with models that are not reference. [#136](https://github.com/Azure/openapi-diff/pull/136)
