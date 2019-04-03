@@ -362,7 +362,7 @@ namespace AutoRest.Swagger.Tests
             Assert.Equal(2, missing.Count());
 
             missing = messages.Where(m => m.Id == ComparisonMessages.ReadonlyPropertyChanged.Id);
-            Assert.Equal(2, missing.Count());
+            Assert.Equal(3, missing.Count());
         }
 
         /// <summary>
@@ -724,6 +724,20 @@ namespace AutoRest.Swagger.Tests
         {
             var messages = CompareSwagger("removed_property.json").ToArray();
             Assert.True(messages.Where(m => m.Id == ComparisonMessages.RemovedProperty.Id).Any());
+        }
+
+        [Fact]
+        public void FormatChanged()
+        {
+            var messages = CompareSwagger("format_check_01.json").ToArray();
+            Assert.True(messages.Where(m => m.Id == ComparisonMessages.TypeFormatChanged.Id).Any());
+        }
+
+        [Fact]
+        public void FormatRemoved()
+        {
+            var messages = CompareSwagger("format_check_02.json").ToArray();
+            Assert.True(messages.Where(m => m.Id == ComparisonMessages.TypeFormatChanged.Id).Any());
         }
     }
 }
