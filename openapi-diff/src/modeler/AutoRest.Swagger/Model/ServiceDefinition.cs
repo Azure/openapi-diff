@@ -367,7 +367,7 @@ namespace AutoRest.Swagger.Model
                         // It's only an error if the definition is referenced in the old service.
                         context.LogBreakingChange(ComparisonMessages.RemovedDefinition, def);
                 }
-                else if (schema.IsReferenced && oldSchema.IsReferenced)
+                else
                 {
                     context.PushProperty(def);
                     schema.Compare(context, previousDefinition.Definitions[def]);
