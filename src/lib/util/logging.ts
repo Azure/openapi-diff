@@ -103,7 +103,7 @@ Object.defineProperties(log, {
     get: function () {
       if (!currentLogFile) {
         const filename = `validate_log_${getTimeStamp()}.log`
-        currentLogFile = path.join(this.directory, filename)
+        currentLogFile = this.directory? path.join(this.directory, filename): filename
       }
 
       return currentLogFile
