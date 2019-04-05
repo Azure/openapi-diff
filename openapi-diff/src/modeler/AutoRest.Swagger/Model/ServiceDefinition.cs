@@ -245,7 +245,7 @@ namespace AutoRest.Swagger.Model
             // Check wether any new paths are being added
             foreach (var path in newPaths.Keys)
             {
-                context.PushProperty(path);
+                context.PushPathProperty(path);
                 context.LogInfo(ComparisonMessages.AddedPath);
                 context.Pop();
             }
@@ -311,7 +311,7 @@ namespace AutoRest.Swagger.Model
             // Check wether any new paths are being added into x-ms-paths
             foreach (var path in newCustomPaths.Keys)
             {
-                context.PushProperty(path);
+                context.PushPathProperty(path);
                 context.LogInfo(ComparisonMessages.AddedPath);
                 context.Pop();
             }

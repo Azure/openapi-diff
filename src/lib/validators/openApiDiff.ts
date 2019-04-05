@@ -42,7 +42,7 @@ type Message = {
   readonly old: ChangeProperties
 }
 
-type Messages = ReadonlyArray<Message>
+export type Messages = ReadonlyArray<Message>
 
 const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): ChangeProperties => {
   if (change.location) {

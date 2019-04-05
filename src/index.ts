@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 import * as validate from './lib/validate'
-import * as utils from './lib/util/utils'
 
 // Easy to use methods from validate.js
 export { log as log } from './lib/util/logging'
@@ -10,7 +9,7 @@ export const compare = validate.compare
 export const compareTags = validate.compareTags
 
 // Classes
-export { OpenApiDiff } from './lib/validators/openApiDiff'
+export { OpenApiDiff, Messages } from './lib/validators/openApiDiff'
 
 // Constants
 export const Constants = require('./lib/util/constants')
