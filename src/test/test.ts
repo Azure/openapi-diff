@@ -1,9 +1,8 @@
 import * as index from "../index"
 import * as assert from "assert"
 import * as path from "path"
-import * as fs from "@ts-common/fs"
 
-jest.setTimeout(10000)
+jest.setTimeout(20000)
 
 describe("index", () => {
   it("simple", async () => {
