@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/azure-sdk/public/_apis/build/status/public.openapi-diff?branchName=master)](https://dev.azure.com/azure-sdk/public/_build/latest?definitionId=135&branchName=master)
+
 # How to install
 
 ```javascript
