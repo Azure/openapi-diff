@@ -138,7 +138,6 @@ local.properties
 # Other Tooling #
 .classpath
 .project
-target
 build
 reports
 .gradle

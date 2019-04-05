@@ -1,6 +1,7 @@
 import * as index from "../index"
 import * as assert from "assert"
 import * as path from "path"
+import * as fs from "@ts-common/fs"
 
 jest.setTimeout(10000)
 
@@ -123,7 +124,7 @@ describe("index", () => {
     assert.deepStrictEqual(result, expected)
   })
 
-  it("full reveresed", async () => {
+  it("full reversed", async () => {
     const oldFile = "src/test/full/new/readme.md"
     const newFile = "src/test/full/old/readme.md"
     const diff = new index.OpenApiDiff({})
@@ -167,5 +168,45 @@ describe("index", () => {
       }
     ]
     assert.deepStrictEqual(result, expected)
+  })
+
+  it("full2", async () => {
+
+    const source = {
+      url: "src/test/full2/source/readme.md",
+      tag: "package-compute-only-2017-12"
+    }
+
+    const target = {
+      url: "src/test/full2/target/readme.md",
+      tag: "package-compute-2018-04"
+    }
+
+    const diff = new index.OpenApiDiff({})
+    const resultStr = await diff.compare(source.url, target.url, source.tag, target.tag)
+    const result: index.Messages = JSON.parse(resultStr)
+    for (const v of result) {
+      assert.deepStrictEqual(v.old.location !== undefined || v.new.location !== undefined, true)
+    }
+  })
+
+  it("full2 reversed", async () => {
+
+    const source = {
+      url: "src/test/full2/target/readme.md",
+      tag: "package-compute-2018-04"
+    }
+
+    const target = {
+      url: "src/test/full2/source/readme.md",
+      tag: "package-compute-only-2017-12"
+    }
+
+    const diff = new index.OpenApiDiff({})
+    const resultStr = await diff.compare(source.url, target.url, source.tag, target.tag)
+    const result: index.Messages = JSON.parse(resultStr)
+    for (const v of result) {
+      assert.deepStrictEqual(v.old.location !== undefined || v.new.location !== undefined, true)
+    }
   })
 })

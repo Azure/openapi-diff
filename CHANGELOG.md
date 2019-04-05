@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.3 Release on 2019-04-04.
+
+* Fixed issue with `AddedPath`.
+
 ## 0.4.2 Release on 2019-04-03.
 
 * Fixed issue with logging.
