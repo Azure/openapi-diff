@@ -1,6 +1,6 @@
 {
   "name": "@azure/oad",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "author": {
     "name": "Microsoft Corporation",
     "email": "azsdkteam@microsoft.com",
@@ -45,15 +45,18 @@
   },
   "files": [
     "dist/lib",
-    "dist/index.js",
-    "dist/cli.js",
+    "dist/index.*",
+    "dist/cli.*",
     "dlls",
+    "src/index.ts",
+    "src/cli.ts",
+    "src/lib",
     "package.json",
     "README.md",
     "LICENSE"
   ],
   "main": "./dist/index.js",
-  "types": "./dist/index.ts",
+  "types": "./dist/index.d.ts",
   "bin": {
     "oad": "./dist/cli.js"
   },
