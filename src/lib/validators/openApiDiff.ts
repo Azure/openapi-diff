@@ -25,13 +25,13 @@ export type ProcessedFile = {
   readonly map: sourceMap.BasicSourceMapConsumer | sourceMap.IndexedSourceMapConsumer
 }
 
-type ChangeProperties = {
+export type ChangeProperties = {
   readonly location?: string
   readonly path?: string
   readonly ref?: string
 }
 
-type Message = {
+export type Message = {
   readonly id: string
   readonly code: string
   readonly docUrl: string

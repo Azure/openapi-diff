@@ -9,7 +9,7 @@ export const compare = validate.compare
 export const compareTags = validate.compareTags
 
 // Classes
-export { OpenApiDiff, Messages } from './lib/validators/openApiDiff'
+export { OpenApiDiff, Messages, Message, ChangeProperties } from './lib/validators/openApiDiff'
 
 // Constants
 export const Constants = require('./lib/util/constants')
