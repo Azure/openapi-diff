@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.2 Release on 2019-04-19.
+
+* Fixed issue with null Enums.
+
+## 0.5.0 Release on 2019-04-12.
+
+* Update to TS 3.4 and 'types'.
+
 ## 0.4.3 Release on 2019-04-04.
 
 * Fixed issue with `AddedPath`.
