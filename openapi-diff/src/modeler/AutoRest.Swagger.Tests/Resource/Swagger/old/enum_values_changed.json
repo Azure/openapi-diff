@@ -41,6 +41,10 @@
           "type": "string",
           "description": "Enum.",
           "enum": [ "b1" ]
+        },
+        "c": {
+          "type": "string",
+          "description": "Enum."
         }
       }
     }

@@ -172,30 +172,31 @@ namespace AutoRest.Swagger.Model
 
                 // 2. Look for added elements (relaxing).
                 relaxes = this.Enum.Any(str => !prior.Enum.Contains(str));
-            }
 
-            if (context.Direction == DataDirection.Request)
-            {
-                if (constrains)
+
+                if (context.Direction == DataDirection.Request)
                 {
-                    IEnumerable<string> removedEnums = prior.Enum.Except(this.Enum);
-                    if (removedEnums.Any())
+                    if (constrains)
                     {
-                        context.LogBreakingChange(ComparisonMessages.RemovedEnumValue, String.Join(", ", removedEnums.ToList()));
+                        IEnumerable<string> removedEnums = prior.Enum.Except(this.Enum);
+                        if (removedEnums.Any())
+                        {
+                            context.LogBreakingChange(ComparisonMessages.RemovedEnumValue, String.Join(", ", removedEnums.ToList()));
+                        }
+                        return;
                     }
-                    return;
                 }
-            }
-            else if (context.Direction == DataDirection.Response)
-            {
-                if (relaxes)
+                else if (context.Direction == DataDirection.Response)
                 {
-                    IEnumerable<string> addedEnums = this.Enum.Except(prior.Enum);
-                    if (addedEnums.Any())
+                    if (relaxes)
                     {
-                        context.LogBreakingChange(ComparisonMessages.AddedEnumValue, String.Join(", ", addedEnums.ToList()));
+                        IEnumerable<string> addedEnums = this.Enum.Except(prior.Enum);
+                        if (addedEnums.Any())
+                        {
+                            context.LogBreakingChange(ComparisonMessages.AddedEnumValue, String.Join(", ", addedEnums.ToList()));
+                        }
+                        return;
                     }
-                    return;
                 }
             }
 

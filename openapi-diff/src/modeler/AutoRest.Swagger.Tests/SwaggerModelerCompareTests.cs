@@ -602,6 +602,22 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
+        /// Verifies that making constraints stricter in requests are flagged, weaker are flagged and adding enum to parameters are flagged
+        /// </summary>
+        [Fact]
+        public void RequestTypeContraintsWithNewEnum()
+        {
+            var messages = CompareSwagger("enum_values_changed.json").Where(m => m.NewJsonRef.Contains("Parameters")).ToArray();
+            var stricter = messages.Where(m => m.Id == ComparisonMessages.ConstraintIsStronger.Id).ToArray();
+            var weaker = messages.Where(m => m.Id == ComparisonMessages.ConstraintIsWeaker.Id).ToArray();
+            var removedValue = messages.Where(m => m.Id == ComparisonMessages.RemovedEnumValue.Id).ToArray();
+
+            Assert.Single(stricter);
+            Assert.Single(weaker);
+            Assert.Single(removedValue);
+        }
+
+        /// <summary>
         /// Verifies that changing the collection format for an array parameter is flagged.
         /// Direction: responses
         /// </summary>
