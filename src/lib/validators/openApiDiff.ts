@@ -141,7 +141,6 @@ export class OpenApiDiff {
     {
 
       const result = path.join(__dirname, "..", "..", "..", "..", "..", "autorest", "app.js")
-      console.log(result)
       if (fs.existsSync(result)) {
         return `node ${result}`
       }
@@ -150,7 +149,6 @@ export class OpenApiDiff {
     // Try to find autorest in `node-modules`
     {
       const result = path.resolve("node_modules/.bin/autorest")
-      console.log(result)
       if (fs.existsSync(result)) {
         return result
       }

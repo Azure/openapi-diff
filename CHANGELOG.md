@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6.2 Released on 2019-04-22
+## 0.6.3 Released on 2019-04-22
 
 * Fixed autorest path.
 
