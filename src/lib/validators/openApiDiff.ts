@@ -139,7 +139,7 @@ export class OpenApiDiff {
 
     // When oad is installed locally
     {
-      const result = path.join(__dirname, "..", "..", "..", "..", "autorest", "app.js")
+      const result = path.join(__dirname, "..", "..", "..", "..", "..", "autorest", "app.js")
       if (fs.existsSync(result)) {
         return `node ${result}`
       }
