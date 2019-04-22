@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.0 Released on 2019-04-22
+
+* Fixed autorest path.
+
 ## 0.5.2 Release on 2019-04-19.
 
 * Fixed issue with null Enums.
