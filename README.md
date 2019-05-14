@@ -33,7 +33,7 @@ Options:
 
 ## Build dependencies
 
-* [Node](https://nodejs.org) (7.10.0 or higher)
+* [Node](https://nodejs.org) (10 or higher)
 * [Node Package Manager](https://www.npmjs.com/package/npm)
 * [.NET CLI tools](https://github.com/dotnet/cli/releases) version 2.0.0 or higher
   > You want the **.NET Core SDK Binaries** for your platform <br>
