@@ -50,6 +50,14 @@
             Type = MessageType.Removal
         };
 
+        public static MessageTemplate RemovedDeprecatedpath = new MessageTemplate
+        {
+            Id = 1042,
+            Code = nameof(ComparisonMessages.RemovedDeprecatedpath),
+            Message = "The new version is missing a path that was deprecated in the old version. Can upstream services function without path '{0}'?",
+            Type = MessageType.Removal
+        };
+
         public static MessageTemplate AddedPath = new MessageTemplate
         {
             Id = 1038,
@@ -63,6 +71,14 @@
             Id = 1035,
             Code = nameof(ComparisonMessages.RemovedOperation),
             Message = "The new version is missing an operation that was found in the old version. Was operationId '{0}' removed or restructured?",
+            Type = MessageType.Removal
+        };
+
+        public static MessageTemplate RemovedDeprecatedOperation = new MessageTemplate
+        {
+            Id = 1041,
+            Code = nameof(ComparisonMessages.RemovedDeprecatedOperation),
+            Message = "The new version is missing an operation that was deprecated in the old version. Can upstream services function without operationId '{0}'?",
             Type = MessageType.Removal
         };
 
