@@ -233,10 +233,10 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void DeprecatedOperationRemoved()
         {
-            var messages = CompareSwagger("remove_deprecated_operation.json").ToArray();
+            var messages = CompareSwagger("removed_deprecated_operation.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedDeprecatedOperation.Id);
             Assert.Single(missing);
-            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.NewJsonRef == "new/remove_deprecated_operation.json#/paths/~1api~1Operations"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.NewJsonRef == "new/removed_deprecated_operation.json#/paths/~1api~1Operations"));
         }
 
         /// <summary>
