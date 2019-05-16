@@ -197,7 +197,7 @@ namespace AutoRest.Swagger.Model
 
                 if (!newPaths.TryGetValue(p, out var operations))
                 {
-                    if(previousDefinition.Paths[path].All(operation => operation.Value.Deprecated))
+                    if(previousDefinition.Paths[path].Count != 0 && previousDefinition.Paths[path].All(operation => operation.Value.Deprecated))
                     {
                         // Entry path removed contained only deprecated operations, implies path was deprecated
                         context.LogInfo(ComparisonMessages.RemovedDeprecatedpath, path);
