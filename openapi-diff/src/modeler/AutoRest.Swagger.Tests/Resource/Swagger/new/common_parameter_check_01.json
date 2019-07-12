@@ -1,0 +1,33 @@
+{
+  "swagger": 2.0,
+  "info": {
+    "title": "common_parameter_check_01",
+    "version": "1.0"
+  },
+  "host": "localhost:8000",
+  "schemes": [ "http", "https" ],
+  "paths": {
+    "/api/Operations": {
+      "parameters": [
+        {
+          "name": "database",
+          "in": "body",
+          "type": "string"
+        },
+        {
+          "name": "database2",
+          "in": "body",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tag": [ "Operations" ],
+        "operationId": "Operations_Get",
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {}
+      }
+    }
+  }
+}

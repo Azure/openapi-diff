@@ -255,7 +255,7 @@ namespace AutoRest.Swagger.Tests
             var output = x.GetValidationMessagesAsJson();
             var raw = JToken.Parse(output);
             Assert.Equal(JTokenType.Object, raw.Type);
-            Assert.Equal("new/added_path.json:31:15", raw["new"]["location"].Value<string>());
+            Assert.Equal("new/added_path.json:38:15", raw["new"]["location"].Value<string>());
             Assert.Equal("paths./api/Operations.post", raw["new"]["path"].Value<string>());
             Assert.Null(raw["old"]["location"]);
         }
@@ -754,6 +754,31 @@ namespace AutoRest.Swagger.Tests
         {
             var messages = CompareSwagger("format_check_02.json").ToArray();
             Assert.True(messages.Where(m => m.Id == ComparisonMessages.TypeFormatChanged.Id).Any());
+        }
+
+        [Fact]
+        public void CommonParameterAdded()
+        {
+            var messages = CompareSwagger("common_parameter_check_01.json").ToArray();
+            Assert.Empty(messages.Where(m => m.Severity == Category.Error));
+        }
+
+        [Fact]
+        public void CommonParameterChanged()
+        {
+            var messages = CompareSwagger("common_parameter_check_02.json").ToArray();
+            Assert.Single(messages.Where(m => m.Id == ComparisonMessages.RemovedRequiredParameter.Id));
+            Assert.Single(messages.Where(m => m.Id == ComparisonMessages.ParameterInHasChanged.Id));
+            Assert.Equal(2, messages.Where(m => m.Id == ComparisonMessages.RequiredStatusChange.Id).Count());
+            Assert.Single(messages.Where(m => m.Id == ComparisonMessages.RemovedRequiredParameter.Id && m.Severity == Category.Error));
+        }
+
+        [Fact]
+        public void CommonParameterOverride()
+        {
+            // For the parameters both defined in path/operation, the operation parameters should override path parameters. 
+            var messages = CompareSwagger("common_parameter_check_03.json").ToArray();
+            Assert.Empty(messages.Where(m => m.Severity == Category.Error));
         }
     }
 }
