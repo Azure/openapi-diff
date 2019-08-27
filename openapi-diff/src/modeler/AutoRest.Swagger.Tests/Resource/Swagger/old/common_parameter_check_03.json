@@ -1,0 +1,56 @@
+{
+  "swagger": 2.0,
+  "info": {
+    "title": "common_parameter_check_03",
+    "version": "1.0"
+  },
+  "host": "localhost:8000",
+  "schemes": [ "http", "https" ],
+  "paths": {
+    "/api/Operations": {
+      "parameters": [
+        {
+          "name": "p1",
+          "in": "body",
+          "type": "object"
+        },
+        {
+          "name": "p2",
+          "in": "body",
+          "type": "string"
+        },
+        {
+          "name": "p3",
+          "in": "body",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tag": [ "Operations" ],
+        "operationId": "Operations_Get",
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {},
+        "parameters": [
+          {
+            "name": "p1",
+            "in": "body",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "p2",
+            "in": "body",
+            "type": "string"
+          },
+          {
+            "name": "p3",
+            "in": "body",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  }
+}
