@@ -201,6 +201,20 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
+        /// Verifies that if you remove (or rename) a path, it's caught.
+        /// But not the same warning as removing a non deprecated path
+        /// </summary>
+        [Fact]
+        public void DeprecatedPathRemoved()
+        {
+            var messages = CompareSwagger("removed_deprecated_path.json").ToArray();
+            var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedDeprecatedpath.Id);
+            Assert.Equal(2, missing.Count());
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.OldJsonRef == "old/removed_deprecated_path.json#/paths/~1api~1Parameters~1{a}"));
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.OldJsonRef == "old/removed_deprecated_path.json#/paths/~1api~1Responses"));
+        }
+
+        /// <summary>
         /// Verifies that if you remove an operation, it's caught.
         /// </summary>
         [Fact]
@@ -210,6 +224,19 @@ namespace AutoRest.Swagger.Tests
             var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedOperation.Id);
             Assert.Single(missing);
             Assert.NotEmpty(missing.Where(m => m.Severity == Category.Error && m.NewJsonRef == "new/removed_operation.json#/paths/~1api~1Operations"));
+        }
+
+        /// <summary>
+        /// Verifies that if you remove a deprecated operation, it's caught.
+        /// But not with the same warning as removing an non-deprecated operation
+        /// </summary>
+        [Fact]
+        public void DeprecatedOperationRemoved()
+        {
+            var messages = CompareSwagger("removed_deprecated_operation.json").ToArray();
+            var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedDeprecatedOperation.Id);
+            Assert.Single(missing);
+            Assert.NotEmpty(missing.Where(m => m.Severity == Category.Info && m.NewJsonRef == "new/removed_deprecated_operation.json#/paths/~1api~1Operations"));
         }
 
         /// <summary>

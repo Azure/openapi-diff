@@ -24,6 +24,8 @@
     <Content Include="Resource\Swagger\new\operation_check_05.json" />
     <Content Include="Resource\Swagger\new\param_check_01.json" />
     <Content Include="Resource\Swagger\new\removed_definition.json" />
+    <Content Include="Resource\Swagger\new\removed_deprecated_operation.json" />
+    <Content Include="Resource\Swagger\old\removed_deprecated_path.json" />
     <Content Include="Resource\Swagger\new\removed_operation.json" />
     <Content Include="Resource\Swagger\new\removed_path.json" />
     <Content Include="Resource\Swagger\new\required_parameter.json" />
@@ -52,6 +54,8 @@
     <Content Include="Resource\Swagger\old\recursive_model.json" />
     <Content Include="Resource\Swagger\old\changed_operation_id.json" />
     <Content Include="Resource\Swagger\old\added_path.json" />
+    <Content Include="Resource\Swagger\old\removed_deprecated_operation.json" />
+    <Content Include="Resource\Swagger\old\removed_deprecated_path.json" />
     <Content Include="Resource\Swagger\old\required_parameter.json" />
     <Content Include="Resource\Swagger\old\removed_operation.json" />
     <Content Include="Resource\Swagger\old\removed_path.json" />

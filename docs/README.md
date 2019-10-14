@@ -73,3 +73,7 @@
 [1039 - AddedOperation](rules/1039.md)
 
 [1040 - AddedReadOnlyPropertyInResponse](rules/1040.md)
+
+[1041 - RemovedDeprecatedOperation](rules/1041.md)
+
+[1042 - RemovedDeprecatedPath](rules/1042.md)

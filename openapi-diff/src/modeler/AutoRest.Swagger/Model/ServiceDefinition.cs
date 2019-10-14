@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System;
@@ -196,8 +197,16 @@ namespace AutoRest.Swagger.Model
 
                 if (!newPaths.TryGetValue(p, out var operations))
                 {
-                    // Entrie path was removeed
-                    context.LogBreakingChange(ComparisonMessages.RemovedPath, path);
+                    if(previousDefinition.Paths[path].Count != 0 && previousDefinition.Paths[path].All(operation => operation.Value.Deprecated))
+                    {
+                        // Entry path removed contained only deprecated operations, implies path was deprecated
+                        context.LogInfo(ComparisonMessages.RemovedDeprecatedpath, path);
+                    }
+                    else
+                    {
+                        // Entry path was removeed
+                        context.LogBreakingChange(ComparisonMessages.RemovedPath, path);
+                    } 
                 }
                 else
                 {
@@ -211,6 +220,12 @@ namespace AutoRest.Swagger.Model
                     {
                         if (!operations.TryGetValue(previousOperation.Key, out var newOperation))
                         {
+                            if (previousOperation.Value.Deprecated)
+                            {
+                                // Deprecated operation was removed from the path
+                                context.LogInfo(ComparisonMessages.RemovedDeprecatedOperation, previousOperation.Value.OperationId);
+                            }
+
                             // Operation was removed from the path
                             context.LogBreakingChange(ComparisonMessages.RemovedOperation, previousOperation.Value.OperationId);
                         }
