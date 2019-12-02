@@ -19,7 +19,8 @@ steps:
 - task: PublishBuildArtifacts@1
   inputs:
     pathtoPublish: $(Build.SourcesDirectory)/drop
-
+    
+jobs:
 - job: Windows
   pool:
     vmImage: "windows-2019"
