@@ -49,10 +49,13 @@ const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): Ch
     const s = change.location.split(":")
     const position = { line: parseInt(s[s.length - 2]), column: parseInt(s[s.length - 1]) - 1 }
     const originalPosition = pf.map.originalPositionFor(position)
+    if (!originalPosition) {
+      return {...change}
+    }
     const name = originalPosition.name as string
-    const namePath = name.split("\n")[0]
-    const parsedPath = JSON.parse(namePath) as string[]
-    const ref = `${originalPosition.source}${jsonRefs.pathToPtr(parsedPath, true)}`
+    const namePath = name ? name.split("\n")[0] : ""
+    const parsedPath = namePath ? JSON.parse(namePath) as string[] : ""
+    const ref = parsedPath ? `${originalPosition.source}${jsonRefs.pathToPtr(parsedPath, true)}` : ""
     const location = `${originalPosition.source}:${originalPosition.line}:${(originalPosition.column as number) + 1}`
     return { ...change, ref, location }
   } else {
