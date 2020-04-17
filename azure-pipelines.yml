@@ -20,11 +20,11 @@ steps:
   inputs:
     pathtoPublish: $(Build.SourcesDirectory)/drop
 
-- task: CredScan@2
+- task: securedevelopmentteam.vss-secure-development-tools.build-task-credscan.CredScan@2
   inputs:
     toolMajorVersion: 'V2'
 
-- task: PostAnalysis@1
+- task: securedevelopmentteam.vss-secure-development-tools.build-task-postanalysis.PostAnalysis@1 # PostAnalysis@1
   inputs:
     AllTools: false
     APIScan: false
