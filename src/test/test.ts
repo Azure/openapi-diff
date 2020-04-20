@@ -208,4 +208,53 @@ describe("index", () => {
       assert.deepStrictEqual(v.old.location !== undefined || v.new.location !== undefined, true)
     }
   })
+
+  it("common-parameters", async () => {
+    const diff = new index.OpenApiDiff({})
+    const oldFile = "src/test/common-parameters/old.json"
+    const newFile = "src/test/common-parameters/new.json"
+    const resultStr = await diff.compare(oldFile, newFile)
+    const result = JSON.parse(resultStr)
+    const newFilePath = "file:///" + path.resolve(newFile).split("\\").join("/")
+    const oldFilePath = "file:///" + path.resolve(oldFile).split("\\").join("/")
+    const expected = [
+      {
+        code: "NoVersionChange",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        id: "1001",
+        message: "The versions have not changed.",
+        mode: "Update",
+        new: {
+          ref: `${newFilePath}#`,
+          location: `${newFilePath}:1:1`,
+          path: ""
+        },
+        old: {
+          ref: `${oldFilePath}#`,
+          location: `${oldFilePath}:1:1`,
+          path: ""
+        },
+        type: "Info"
+      },
+      {
+        code: "RemovedClientParameter",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1007.md",
+        id: "1007",
+        message: "The new version is missing a client parameter that was found in the old version. Was 'P1' removed or renamed?",
+        mode: "Removal",
+        new: {
+          location: `file:///C:/code/openapi-diff/${newFile}:7:3`,
+          path: "parameters",
+          ref: `file:///C:/code/openapi-diff/${newFile}#/parameters`
+        },
+        old: {
+          location: `file:///C:/code/openapi-diff/${oldFile}:7:3`,
+          path: "parameters",
+          ref: `file:///C:/code/openapi-diff/${oldFile}#/parameters`
+        },
+        type: "Error"
+      }
+    ]
+    assert.deepStrictEqual(result, expected)
+  })
 })
