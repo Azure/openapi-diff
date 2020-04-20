@@ -73,3 +73,5 @@
 [1039 - AddedOperation](rules/1039.md)
 
 [1040 - AddedReadOnlyPropertyInResponse](rules/1040.md)
+
+[1041 - AddedPropertyInResponse](rules/1041.md)
