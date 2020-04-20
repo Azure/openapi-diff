@@ -243,14 +243,14 @@ describe("index", () => {
         message: "The new version is missing a client parameter that was found in the old version. Was 'P1' removed or renamed?",
         mode: "Removal",
         new: {
-          location: `file:///C:/code/openapi-diff/${newFile}:7:3`,
+          location: `${newFilePath}:7:3`,
           path: "parameters",
-          ref: `file:///C:/code/openapi-diff/${newFile}#/parameters`
+          ref: `${newFilePath}#/parameters`
         },
         old: {
-          location: `file:///C:/code/openapi-diff/${oldFile}:7:3`,
+          location: `${oldFilePath}:7:3`,
           path: "parameters",
-          ref: `file:///C:/code/openapi-diff/${oldFile}#/parameters`
+          ref: `${oldFilePath}#/parameters`
         },
         type: "Error"
       }
