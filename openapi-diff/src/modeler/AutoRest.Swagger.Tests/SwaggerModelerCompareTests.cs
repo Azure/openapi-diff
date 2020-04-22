@@ -780,5 +780,14 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("common_parameter_check_03.json").ToArray();
             Assert.Empty(messages.Where(m => m.Severity == Category.Error));
         }
+
+        [Fact]
+        public void CommonParameterWithRef()
+        {
+            var messages = CompareSwagger("common_parameter_check_04.json").ToArray();
+            Assert.Equal(2, messages.Where(m => m.Id == ComparisonMessages.RequiredStatusChange.Id).Count());
+            var changes = messages.Where(m => m.Id == ComparisonMessages.RequiredStatusChange.Id && m.Severity == Category.Error).ToList();
+            Assert.Equal(2, changes.Count());
+        }
     }
 }

@@ -55,10 +55,13 @@ namespace AutoRest.Swagger
 
         /// <summary>
         /// A JToken from the old document that contains such information as location.
+        /// if there are null nodes in the path, and the it's not an change of addtion, the null nodes  should be removed,  thus can return its parent token 
         /// </summary>
         /// <seealso cref="IJsonLineInfo"/>
         /// <returns></returns>
-        public JToken OldJson() => Path.CompletePath(OldDoc.Token).LastOrDefault().token;
+        public JToken OldJson() => Mode != MessageType.Addition ?
+             Path.CompletePath(OldDoc.Token).Where(t => t.token != null).LastOrDefault().token 
+            : Path.CompletePath(OldDoc.Token).LastOrDefault().token;
 
         public string NewJsonRef => Path.JsonPointer(NewDoc);
 
@@ -67,7 +70,10 @@ namespace AutoRest.Swagger
         /// </summary>
         /// <seealso cref="IJsonLineInfo"/>
         /// <returns></returns>
-        public JToken NewJson() => Path.CompletePath(NewDoc.Token).LastOrDefault().token;
+        public JToken NewJson() => Mode != MessageType.Removal ? 
+            Path.CompletePath(NewDoc.Token).Where(t => t.token != null).LastOrDefault().token 
+            : Path.CompletePath(NewDoc.Token).LastOrDefault().token;
+
 
         /// <summary>
         /// The id of the validation message
