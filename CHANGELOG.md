@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1 Released on 2020-04-21
+
+* Fixed issue with common parameters.[#160](https://github.com/Azure/openapi-diff/pull/160)
+
 ## 0.6.3 Released on 2019-04-22
 
 * Fixed autorest path.
