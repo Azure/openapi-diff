@@ -12,6 +12,11 @@ import * as child_process from "child_process"
 import * as sourceMap from "source-map"
 import * as jsonParser from "@ts-common/json-parser"
 import * as jsonRefs from "json-refs"
+import { ResolveSwagger } from '../util/resolveSwagger'
+import {getFilePosition} from '@ts-common/source-map'
+import JSON_Pointer from 'json-pointer'
+import { pathToJsonPointer } from '../util/utils'
+const jp = require('jsonpath');
 
 const exec = util.promisify(child_process.exec)
 
@@ -23,6 +28,8 @@ export type Options = {
 export type ProcessedFile = {
   readonly fileName: string
   readonly map: sourceMap.BasicSourceMapConsumer | sourceMap.IndexedSourceMapConsumer
+  readonly resolvedFileName:string
+  readonly resolvedJson:any
 }
 
 export type ChangeProperties = {
@@ -46,8 +53,22 @@ export type Messages = ReadonlyArray<Message>
 
 const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): ChangeProperties => {
   if (change.location) {
-    const s = change.location.split(":")
-    const position = { line: parseInt(s[s.length - 2]), column: parseInt(s[s.length - 1]) - 1 }
+    let position = undefined
+    let jsonPointer = undefined
+    if (change.path != undefined) {
+      try {
+        jsonPointer = pathToJsonPointer(change.path)
+        const jsonValue = JSON_Pointer.get(pf.resolvedJson,jsonPointer)
+        position = getFilePosition(jsonValue)
+      }
+      catch(e) {
+        console.log(e.message);
+      }
+    }
+
+    if (!position || !Object.keys(position).length) {
+      return {...change}
+    }
     const originalPosition = pf.map.originalPositionFor(position)
     if (!originalPosition) {
       return {...change}
@@ -213,6 +234,12 @@ export class OpenApiDiff {
     if (stderr) {
       throw new Error(stderr)
     }
+    const resolveSwagger = new ResolveSwagger(outputFilePath)
+    let resolvedJson = resolveSwagger.resolve()
+    let resolvedPath:string = resolveSwagger.getResolvedPath()
+    if (!resolvedJson) {
+      throw new Error("resolve failed!")
+    }
 
     const buffer = await asyncFs.readFile(outputMapFilePath)
     const map = await new sourceMap.SourceMapConsumer(buffer.toString())
@@ -221,6 +248,9 @@ export class OpenApiDiff {
     return {
       fileName: outputFilePath,
       map,
+      resolvedFileName:resolvedPath,
+      resolvedJson:resolvedJson
+      
     }
   }
 
@@ -235,8 +265,8 @@ export class OpenApiDiff {
   async processViaOpenApiDiff(oldSwaggerFile: ProcessedFile, newSwaggerFile: ProcessedFile) {
     log.silly(`processViaOpenApiDiff is being called`)
 
-    const oldSwagger = oldSwaggerFile.fileName
-    const newSwagger = newSwaggerFile.fileName
+    const oldSwagger = oldSwaggerFile.resolvedFileName
+    const newSwagger = newSwaggerFile.resolvedFileName
     if (oldSwagger === null || oldSwagger === undefined || typeof oldSwagger.valueOf() !== 'string' || !oldSwagger.trim().length) {
         throw new Error('oldSwagger is a required parameter of type "string" and it cannot be an empty string.')
     }

@@ -541,3 +541,43 @@ export function relaxModelLikeEntities(model: Model) {
   }
   return model
 }
+
+/**
+ * 
+ * @param jsonPath e.g paths['test!'].get.response
+ * @returns jonsPointer  /paths/test!/get/response
+ */
+
+export function pathToJsonPointer(jsonPath:string):string {
+  const replaceAllReg = (src:string):RegExp =>{
+    let regex = new RegExp(src,'g')
+    return regex
+  }
+  let result:string = jsonPath.
+  replace(replaceAllReg('~'),'~0').
+  replace(replaceAllReg('/'),'~1').
+  replace(replaceAllReg('\\.'),'/')
+
+  let regex = /(\[\'.+\'\])/g
+  let matchs = result.match(regex)
+  if (matchs) {
+     matchs.forEach(
+       m => {
+        result = result.replace(m,
+          m.replace(replaceAllReg('/'),'.'). // the `.` in [] was replaced by / first , here replace it back
+          replace(/^\[\'/ig,'/').
+          replace(/\'\]$/ig,''))
+       }
+     )
+  }
+
+  regex = /(\[\d+\])/g
+  matchs = result.match(regex)
+  if (matchs) {
+    matchs.forEach((m: string) =>{
+      result = result.replace(m,m.replace(/(\[)/ig,'/').replace(/\]$/ig,''))
+    })
+  }
+
+  return !result ? "" : '/' + result
+}
