@@ -67,11 +67,11 @@ const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): Ch
     }
 
     if (!position || !Object.keys(position).length) {
-      return {...change}
+      return {...change,ref:"",location:""}
     }
     const originalPosition = pf.map.originalPositionFor(position)
-    if (!originalPosition) {
-      return {...change}
+    if (!originalPosition || !Object.keys(originalPosition).length) {
+      return {...change,ref:"",location:""}
     }
     const name = originalPosition.name as string
     const namePath = name ? name.split("\n")[0] : ""
@@ -230,7 +230,7 @@ export class OpenApiDiff {
 
     log.debug(`Executing: "${autoRestCmd}"`)
 
-    const { stderr } = await exec(autoRestCmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 })
+    const { stderr } = await exec(autoRestCmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 ,env:{NODE_OPTIONS:"--max-old-space-size=8192"}})
     if (stderr) {
       throw new Error(stderr)
     }
