@@ -16,7 +16,6 @@ import { ResolveSwagger } from '../util/resolveSwagger'
 import {getFilePosition} from '@ts-common/source-map'
 import JSON_Pointer from 'json-pointer'
 import { pathToJsonPointer } from '../util/utils'
-const jp = require('jsonpath');
 
 const exec = util.promisify(child_process.exec)
 
