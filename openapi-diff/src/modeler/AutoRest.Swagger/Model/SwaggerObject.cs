@@ -122,9 +122,9 @@ namespace AutoRest.Swagger.Model
                 }
             }
 
-            // Are the types the same?
+            // If the type field was removed or the types don't match
 
-            if (prior.Type.HasValue != Type.HasValue || (Type.HasValue && prior.Type.Value != Type.Value))
+            if ((prior.Type.HasValue && !Type.HasValue) || (Type.HasValue && prior.Type.HasValue && prior.Type.Value != Type.Value))
             {
                 context.LogBreakingChange(ComparisonMessages.TypeChanged, 
                     Type.HasValue ? Type.Value.ToString().ToLower() : "",

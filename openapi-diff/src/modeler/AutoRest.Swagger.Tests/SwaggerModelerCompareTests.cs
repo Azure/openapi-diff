@@ -151,6 +151,17 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
+        /// Verifies that if you add the type to a schema property, it's allowed through.
+        /// </summary>
+        [Fact]
+        public void PropertyTypeAdded()
+        {
+            var messages = CompareSwagger("type_added.json").ToArray();
+            var missing = messages.Where(m => m.Id == ComparisonMessages.TypeChanged.Id);
+            Assert.Empty(missing);
+        }
+
+        /// <summary>
         /// Verifies that if you change the type format of a schema property, it's caught.
         /// </summary>
         [Fact]
