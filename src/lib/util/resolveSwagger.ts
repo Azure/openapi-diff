@@ -1,13 +1,13 @@
+import * as json from "@ts-common/json"
 import * as jsonParser from "@ts-common/json-parser"
 import * as jsonPointer from "json-pointer"
-import * as json from "@ts-common/json"
 
-import { readFileSync, writeFileSync } from 'fs'
+import { toArray } from "@ts-common/iterator"
 import { cloneDeep, Data, FilePosition, getFilePosition } from "@ts-common/source-map"
 import * as sm from "@ts-common/string-map"
-import { toArray } from "@ts-common/iterator"
-import { pathToJsonPointer } from './utils'
-import * as path from 'path'
+import { readFileSync, writeFileSync } from "fs"
+import * as path from "path"
+import { pathToJsonPointer } from "./utils"
 
 /*
  * Merges source object into the target object
@@ -27,7 +27,7 @@ export function mergeObjects<T extends sm.MutableStringMap<Data>>(source: T, tar
       } else if (!Array.isArray(targetProperty)) {
         throw new Error(
           `Cannot merge ${key} from source object into target object because the same property ` +
-          `in target object is not (of the same type) an Array.`
+            `in target object is not (of the same type) an Array.`
         )
       } else {
         result[key] = mergeArrays(sourceProperty, targetProperty)
@@ -58,30 +58,30 @@ export function mergeArrays<T extends Data>(source: ReadonlyArray<T>, target: T[
 }
 
 /**
- * This class aimed at process some swagger extensions like x-ms-path and 
+ * This class aimed at process some swagger extensions like x-ms-path and
  * you can also resolve some swagger keyword e.g allOf here, then return a
  * new json with source location info
  */
 export class ResolveSwagger {
-  innerSwagger: json.Json | undefined
-  file: string
+  public innerSwagger: json.Json | undefined
+  public file: string
 
   constructor(file: string) {
     this.file = path.resolve(file)
   }
-  resolve(): json.Json | undefined {
-    let content: string = readFileSync(this.file, { encoding: "utf8" });
+  public resolve(): json.Json | undefined {
+    const content: string = readFileSync(this.file, { encoding: "utf8" })
     this.parse(this.file, content)
     this.unifyXMsPaths()
     this.generateNew()
     return this.innerSwagger
   }
 
-  unifyXMsPaths() {
+  private unifyXMsPaths() {
     if (!this.innerSwagger) {
       throw new Error("non swagger object")
     }
-    let swagger = this.innerSwagger as any
+    const swagger = this.innerSwagger as any
     const xmsPaths = swagger["x-ms-paths"]
     const paths = swagger.paths
     if (xmsPaths && xmsPaths instanceof Object && toArray(sm.keys(xmsPaths)).length > 0) {
@@ -93,41 +93,40 @@ export class ResolveSwagger {
     }
   }
 
-  stringify(): string {
+  private stringify(): string {
     return json.stringify(this.innerSwagger as json.JsonObject)
   }
 
-  generateNew() {
+  private generateNew() {
     writeFileSync(this.getResolvedPath(), this.stringify())
   }
 
-  parse(url: string, data: string) {
+  private parse(url: string, data: string) {
     try {
-      let json = jsonParser.parse(url, data)
-      this.innerSwagger = json
-    }
-    catch (e) {
+      this.innerSwagger = jsonParser.parse(url, data)
+    } catch (e) {
       console.log(JSON.stringify(e))
     }
-
   }
 
-  getSwaggerFolder(): string {
-    return this.file.split('/').slice(0, -1).join('/')
+  public getSwaggerFolder(): string {
+    return this.file
+      .split("/")
+      .slice(0, -1)
+      .join("/")
   }
 
-  getResolvedPath(): string {
-    return this.file.replace('.json', '-resolved.json')
+  public getResolvedPath(): string {
+    return this.file.replace(".json", "-resolved.json")
   }
 
-  getLocation(jsonPath: string): FilePosition | undefined {
+  public getLocation(jsonPath: string): FilePosition | undefined {
     if (this.innerSwagger) {
       try {
         const pointer = pathToJsonPointer(jsonPath)
-        let value = jsonPointer.get(this.innerSwagger as Object, pointer)
+        const value = jsonPointer.get(this.innerSwagger as object, pointer)
         return getFilePosition(value)
-      }
-      catch (e) {
+      } catch (e) {
         console.log(JSON.stringify(e))
       }
     }

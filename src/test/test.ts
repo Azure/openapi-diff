@@ -1,6 +1,6 @@
-import * as index from "../index"
 import * as assert from "assert"
 import * as path from "path"
+import * as index from "../index"
 
 jest.setTimeout(100000)
 
@@ -10,7 +10,10 @@ describe("index", () => {
     const file = "src/test/simple/same.json"
     const resultStr = await diff.compare(file, file)
     const result = JSON.parse(resultStr)
-    const filePath = path.resolve(file).split("\\").join("/")
+    const filePath = path
+      .resolve(file)
+      .split("\\")
+      .join("/")
     const expected = [
       {
         code: "NoVersionChange",
@@ -39,8 +42,18 @@ describe("index", () => {
     const newFile = "src/test/some-changes/new.json"
     const resultStr = await diff.compare(oldFile, newFile)
     const result = JSON.parse(resultStr)
-    const newFilePath = "file:///" + path.resolve(newFile).split("\\").join("/")
-    const oldFilePath = "file:///" + path.resolve(oldFile).split("\\").join("/")
+    const newFilePath =
+      "file:///" +
+      path
+        .resolve(newFile)
+        .split("\\")
+        .join("/")
+    const oldFilePath =
+      "file:///" +
+      path
+        .resolve(oldFile)
+        .split("\\")
+        .join("/")
     const expected = [
       {
         code: "NoVersionChange",
@@ -83,9 +96,24 @@ describe("index", () => {
     const diff = new index.OpenApiDiff({})
     const resultStr = await diff.compare(oldFile, newFile, "2019", "2019")
     const result = JSON.parse(resultStr)
-    const newFilePath = "file:///" + path.resolve("src/test/full/new/openapi.json").split("\\").join("/")
-    const newFilePath2 = "file:///" + path.resolve("src/test/full/new/openapi2.json").split("\\").join("/")
-    const oldFilePath = "file:///" + path.resolve("src/test/full/old/openapi.json").split("\\").join("/")
+    const newFilePath =
+      "file:///" +
+      path
+        .resolve("src/test/full/new/openapi.json")
+        .split("\\")
+        .join("/")
+    const newFilePath2 =
+      "file:///" +
+      path
+        .resolve("src/test/full/new/openapi2.json")
+        .split("\\")
+        .join("/")
+    const oldFilePath =
+      "file:///" +
+      path
+        .resolve("src/test/full/old/openapi.json")
+        .split("\\")
+        .join("/")
     const expected = [
       {
         code: "NoVersionChange",
@@ -129,9 +157,24 @@ describe("index", () => {
     const diff = new index.OpenApiDiff({})
     const resultStr = await diff.compare(oldFile, newFile, "2019", "2019")
     const result = JSON.parse(resultStr)
-    const oldFilePath = "file:///" + path.resolve("src/test/full/new/openapi.json").split("\\").join("/")
-    const oldFilePath2 = "file:///" + path.resolve("src/test/full/new/openapi2.json").split("\\").join("/")
-    const newFilePath = "file:///" + path.resolve("src/test/full/old/openapi.json").split("\\").join("/")
+    const oldFilePath =
+      "file:///" +
+      path
+        .resolve("src/test/full/new/openapi.json")
+        .split("\\")
+        .join("/")
+    const oldFilePath2 =
+      "file:///" +
+      path
+        .resolve("src/test/full/new/openapi2.json")
+        .split("\\")
+        .join("/")
+    const newFilePath =
+      "file:///" +
+      path
+        .resolve("src/test/full/old/openapi.json")
+        .split("\\")
+        .join("/")
     const expected = [
       {
         code: "NoVersionChange",
@@ -170,7 +213,6 @@ describe("index", () => {
   })
 
   it("full2", async () => {
-
     const source = {
       url: "src/test/full2/source/readme.md",
       tag: "package-compute-only-2017-12"
@@ -190,7 +232,6 @@ describe("index", () => {
   })
 
   it("full2 reversed", async () => {
-
     const source = {
       url: "src/test/full2/target/readme.md",
       tag: "package-compute-2018-04"
@@ -215,8 +256,18 @@ describe("index", () => {
     const newFile = "src/test/common-parameters/new.json"
     const resultStr = await diff.compare(oldFile, newFile)
     const result = JSON.parse(resultStr)
-    const newFilePath = "file:///" + path.resolve(newFile).split("\\").join("/")
-    const oldFilePath = "file:///" + path.resolve(oldFile).split("\\").join("/")
+    const newFilePath =
+      "file:///" +
+      path
+        .resolve(newFile)
+        .split("\\")
+        .join("/")
+    const oldFilePath =
+      "file:///" +
+      path
+        .resolve(oldFile)
+        .split("\\")
+        .join("/")
     const expected = [
       {
         code: "NoVersionChange",
@@ -264,8 +315,18 @@ describe("index", () => {
     const newFile = "src/test/xmspath/new.json"
     const resultStr = await diff.compare(oldFile, newFile)
     const result = JSON.parse(resultStr)
-    const newFilePath = "file:///" + path.resolve(newFile).split("\\").join("/")
-    const oldFilePath = "file:///" + path.resolve(oldFile).split("\\").join("/")
+    const newFilePath =
+      "file:///" +
+      path
+        .resolve(newFile)
+        .split("\\")
+        .join("/")
+    const oldFilePath =
+      "file:///" +
+      path
+        .resolve(oldFile)
+        .split("\\")
+        .join("/")
     const expected = [
       {
         code: "NoVersionChange",

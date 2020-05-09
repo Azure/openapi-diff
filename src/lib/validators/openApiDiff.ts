@@ -1,21 +1,20 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-
-import * as util from "util"
-import * as path from "path"
-import * as os from "os"
-import { log as log } from "../util/logging"
-import * as fs from "fs"
 import * as asyncFs from "@ts-common/fs"
-import * as child_process from "child_process"
-import * as sourceMap from "source-map"
 import * as jsonParser from "@ts-common/json-parser"
+import { getFilePosition } from "@ts-common/source-map"
+import * as child_process from "child_process"
+import * as fs from "fs"
+import JSON_Pointer from "json-pointer"
 import * as jsonRefs from "json-refs"
-import { ResolveSwagger } from '../util/resolveSwagger'
-import { getFilePosition } from '@ts-common/source-map'
-import JSON_Pointer from 'json-pointer'
-import { pathToJsonPointer } from '../util/utils'
+import * as os from "os"
+import * as path from "path"
+import * as sourceMap from "source-map"
+import * as util from "util"
+import { log } from "../util/logging"
+import { ResolveSwagger } from "../util/resolveSwagger"
+import { pathToJsonPointer } from "../util/utils"
 
 const exec = util.promisify(child_process.exec)
 
@@ -52,16 +51,15 @@ export type Messages = ReadonlyArray<Message>
 
 const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): ChangeProperties => {
   if (change.location) {
-    let position = undefined
-    let jsonPointer = undefined
+    let position
+    let jsonPointer
     if (change.path != undefined) {
       try {
         jsonPointer = pathToJsonPointer(change.path)
         const jsonValue = JSON_Pointer.get(pf.resolvedJson, jsonPointer)
         position = getFilePosition(jsonValue)
-      }
-      catch (e) {
-        console.log(e.message);
+      } catch (e) {
+        console.log(e.message)
       }
     }
 
@@ -74,7 +72,7 @@ const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): Ch
     }
     const name = originalPosition.name as string
     const namePath = name ? name.split("\n")[0] : ""
-    const parsedPath = namePath ? JSON.parse(namePath) as string[] : ""
+    const parsedPath = namePath ? (JSON.parse(namePath) as string[]) : ""
     const ref = parsedPath ? `${originalPosition.source}${jsonRefs.pathToPtr(parsedPath, true)}` : ""
     const location = `${originalPosition.source}:${originalPosition.line}:${(originalPosition.column as number) + 1}`
     return { ...change, ref, location }
@@ -103,7 +101,7 @@ export class OpenApiDiff {
     if (this.options === null || this.options === undefined) {
       this.options = {}
     }
-    if (typeof this.options !== 'object') {
+    if (typeof this.options !== "object") {
       throw new Error('options must be of type "object".')
     }
 
@@ -122,11 +120,11 @@ export class OpenApiDiff {
    * @param {string} newTag Tag name used for AutoRest with the new specification file.
    *
    */
-  async compare(oldSwagger: string, newSwagger: string, oldTag?: string, newTag?: string) {
+  public async compare(oldSwagger: string, newSwagger: string, oldTag?: string, newTag?: string) {
     log.silly(`compare is being called`)
 
-    var promise1 = this.processViaAutoRest(oldSwagger, 'old', oldTag)
-    var promise2 = this.processViaAutoRest(newSwagger, 'new', newTag)
+    const promise1 = this.processViaAutoRest(oldSwagger, "old", oldTag)
+    const promise2 = this.processViaAutoRest(newSwagger, "new", newTag)
 
     const results = await Promise.all([promise1, promise2])
     return this.processViaOpenApiDiff(results[0], results[1])
@@ -137,7 +135,7 @@ export class OpenApiDiff {
    *
    * @returns {string} Path to the dotnet executable.
    */
-  dotNetPath(): string {
+  public dotNetPath(): string {
     log.silly(`dotNetPath is being called`)
 
     // Assume that dotnet is in the PATH
@@ -149,7 +147,7 @@ export class OpenApiDiff {
    *
    * @returns {string} Path to the autorest app.js file.
    */
-  autoRestPath(): string {
+  public autoRestPath(): string {
     log.silly(`autoRestPath is being called`)
 
     // When oad is installed globally
@@ -162,7 +160,6 @@ export class OpenApiDiff {
 
     // When oad is installed locally
     {
-
       const result = path.join(__dirname, "..", "..", "..", "..", "..", "autorest", "app.js")
       if (fs.existsSync(result)) {
         return `node ${result}`
@@ -178,7 +175,7 @@ export class OpenApiDiff {
     }
 
     // Assume that autorest is in the path
-    return 'autorest'
+    return "autorest"
   }
 
   /**
@@ -186,7 +183,7 @@ export class OpenApiDiff {
    *
    * @returns {string} Path to the OpenApiDiff.dll.
    */
-  openApiDiffDllPath(): string {
+  public openApiDiffDllPath(): string {
     log.silly(`openApiDiffDllPath is being called`)
 
     return path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll")
@@ -202,14 +199,19 @@ export class OpenApiDiff {
    * @param {string} tagName Name of the tag in the specification file.
    *
    */
-  async processViaAutoRest(swaggerPath: string, outputFileName: string, tagName?: string): Promise<ProcessedFile> {
+  public async processViaAutoRest(swaggerPath: string, outputFileName: string, tagName?: string): Promise<ProcessedFile> {
     log.silly(`processViaAutoRest is being called`)
 
-    if (swaggerPath === null || swaggerPath === undefined || typeof swaggerPath.valueOf() !== 'string' || !swaggerPath.trim().length) {
+    if (swaggerPath === null || swaggerPath === undefined || typeof swaggerPath.valueOf() !== "string" || !swaggerPath.trim().length) {
       throw new Error('swaggerPath is a required parameter of type "string" and it cannot be an empty string.')
     }
 
-    if (outputFileName === null || outputFileName === undefined || typeof outputFileName.valueOf() !== 'string' || !outputFileName.trim().length) {
+    if (
+      outputFileName === null ||
+      outputFileName === undefined ||
+      typeof outputFileName.valueOf() !== "string" ||
+      !outputFileName.trim().length
+    ) {
       throw new Error('outputFile is a required parameter of type "string" and it cannot be an empty string.')
     }
 
@@ -224,18 +226,24 @@ export class OpenApiDiff {
     const outputFilePath = path.join(outputFolder, `${outputFileName}.json`)
     const outputMapFilePath = path.join(outputFolder, `${outputFileName}.map`)
     const autoRestCmd = tagName
-      ? `${this.autoRestPath()} ${swaggerPath} --tag=${tagName} --output-artifact=swagger-document.json --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
-      : `${this.autoRestPath()} --input-file=${swaggerPath} --output-artifact=swagger-document.json --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
+      ? `${this.autoRestPath()} ${swaggerPath} --tag=${tagName} --output-artifact=swagger-document.json` +
+        ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
+      : `${this.autoRestPath()} --input-file=${swaggerPath} --output-artifact=swagger-document.json` +
+        ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
 
     log.debug(`Executing: "${autoRestCmd}"`)
 
-    const { stderr } = await exec(autoRestCmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64, env: { NODE_OPTIONS: "--max-old-space-size=8192" } })
+    const { stderr } = await exec(autoRestCmd, {
+      encoding: "utf8",
+      maxBuffer: 1024 * 1024 * 64,
+      env: { NODE_OPTIONS: "--max-old-space-size=8192" }
+    })
     if (stderr) {
       throw new Error(stderr)
     }
     const resolveSwagger = new ResolveSwagger(outputFilePath)
-    let resolvedJson = resolveSwagger.resolve()
-    let resolvedPath: string = resolveSwagger.getResolvedPath()
+    const resolvedJson = resolveSwagger.resolve()
+    const resolvedPath: string = resolveSwagger.getResolvedPath()
     if (!resolvedJson) {
       throw new Error("resolve failed!")
     }
@@ -248,8 +256,7 @@ export class OpenApiDiff {
       fileName: outputFilePath,
       map,
       resolvedFileName: resolvedPath,
-      resolvedJson: resolvedJson
-
+      resolvedJson
     }
   }
 
@@ -261,16 +268,16 @@ export class OpenApiDiff {
    * @param {string} newSwagger Path to the new specification file.
    *
    */
-  async processViaOpenApiDiff(oldSwaggerFile: ProcessedFile, newSwaggerFile: ProcessedFile) {
+  public async processViaOpenApiDiff(oldSwaggerFile: ProcessedFile, newSwaggerFile: ProcessedFile) {
     log.silly(`processViaOpenApiDiff is being called`)
 
     const oldSwagger = oldSwaggerFile.resolvedFileName
     const newSwagger = newSwaggerFile.resolvedFileName
-    if (oldSwagger === null || oldSwagger === undefined || typeof oldSwagger.valueOf() !== 'string' || !oldSwagger.trim().length) {
+    if (oldSwagger === null || oldSwagger === undefined || typeof oldSwagger.valueOf() !== "string" || !oldSwagger.trim().length) {
       throw new Error('oldSwagger is a required parameter of type "string" and it cannot be an empty string.')
     }
 
-    if (newSwagger === null || newSwagger === undefined || typeof newSwagger.valueOf() !== 'string' || !newSwagger.trim().length) {
+    if (newSwagger === null || newSwagger === undefined || typeof newSwagger.valueOf() !== "string" || !newSwagger.trim().length) {
       throw new Error('newSwagger is a required parameter of type "string" and it cannot be an empty string.')
     }
 
@@ -288,13 +295,13 @@ export class OpenApiDiff {
     const cmd = `${this.dotNetPath()} ${this.openApiDiffDllPath()} -o ${oldSwagger} -n ${newSwagger}`
 
     log.debug(`Executing: "${cmd}"`)
-    const { stdout } = await exec(cmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 })
+    const { stdout } = await exec(cmd, { encoding: "utf8", maxBuffer: 1024 * 1024 * 64 })
     const resultJson = jsonParser.parse("", stdout) as Messages
 
     const updatedJson = resultJson.map(message => ({
       ...message,
       new: updateChangeProperties(message.new, newSwaggerFile),
-      old: updateChangeProperties(message.old, oldSwaggerFile),
+      old: updateChangeProperties(message.old, oldSwaggerFile)
     }))
     return JSON.stringify(updatedJson)
   }
