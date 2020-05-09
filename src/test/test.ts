@@ -2,7 +2,7 @@ import * as index from "../index"
 import * as assert from "assert"
 import * as path from "path"
 
-jest.setTimeout(20000)
+jest.setTimeout(100000)
 
 describe("index", () => {
   it("simple", async () => {
@@ -253,6 +253,37 @@ describe("index", () => {
           ref: `${oldFilePath}#/parameters`
         },
         type: "Error"
+      }
+    ]
+    assert.deepStrictEqual(result, expected)
+  })
+
+  it("xms-path", async () => {
+    const diff = new index.OpenApiDiff({})
+    const oldFile = "src/test/xmspath/old.json"
+    const newFile = "src/test/xmspath/new.json"
+    const resultStr = await diff.compare(oldFile, newFile)
+    const result = JSON.parse(resultStr)
+    const newFilePath = "file:///" + path.resolve(newFile).split("\\").join("/")
+    const oldFilePath = "file:///" + path.resolve(oldFile).split("\\").join("/")
+    const expected = [
+      {
+        code: "NoVersionChange",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        id: "1001",
+        message: "The versions have not changed.",
+        mode: "Update",
+        new: {
+          ref: `${newFilePath}#`,
+          location: `${newFilePath}:1:1`,
+          path: ""
+        },
+        old: {
+          ref: `${oldFilePath}#`,
+          location: `${oldFilePath}:1:1`,
+          path: ""
+        },
+        type: "Info"
       }
     ]
     assert.deepStrictEqual(result, expected)
