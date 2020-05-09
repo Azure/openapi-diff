@@ -465,9 +465,9 @@ export function isUrlEncoded(str: string) {
 }
 
 export type Model = {
-  type?: string|ReadonlyArray<string>
+  type?: string | ReadonlyArray<string>
   readonly properties?: {
-    [key: string]: Model|undefined
+    [key: string]: Model | undefined
   }
   readonly required?: ReadonlyArray<unknown>
   additionalProperties?: {
@@ -548,34 +548,36 @@ export function relaxModelLikeEntities(model: Model) {
  * @returns jonsPointer  /paths/test!/get/response
  */
 
-export function pathToJsonPointer(jsonPath:string):string {
-  const replaceAllReg = (src:string):RegExp =>{
-    let regex = new RegExp(src,'g')
+export function pathToJsonPointer(jsonPath: string): string {
+  const replaceAllReg = (src: string): RegExp => {
+    let regex = new RegExp(src, 'g')
     return regex
   }
-  let result:string = jsonPath.
-  replace(replaceAllReg('~'),'~0').
-  replace(replaceAllReg('/'),'~1').
-  replace(replaceAllReg('\\.'),'/')
+  let result: string = jsonPath.
+    replace(replaceAllReg('~'), '~0').
+    replace(replaceAllReg('/'), '~1').
+    replace(replaceAllReg('\\.'), '/')
 
+  // match subpath with special character which be surround by ' e.g. paths['~0test~1'] , and replace it to path/~0test~1
   let regex = /(\[\'.+\'\])/g
   let matchs = result.match(regex)
   if (matchs) {
-     matchs.forEach(
-       m => {
+    matchs.forEach(
+      m => {
         result = result.replace(m,
-          m.replace(replaceAllReg('/'),'.'). // the `.` in [] was replaced by / first , here replace it back
-          replace(/^\[\'/ig,'/').
-          replace(/\'\]$/ig,''))
-       }
-     )
+          m.replace(replaceAllReg('/'), '.'). // the `.` in [] was replaced by / first , here replace it back
+            replace(/^\[\'/ig, '/').
+            replace(/\'\]$/ig, ''))
+      }
+    )
   }
 
+  // match the array index e.g. path[0] and replace it to path/0
   regex = /(\[\d+\])/g
   matchs = result.match(regex)
   if (matchs) {
-    matchs.forEach((m: string) =>{
-      result = result.replace(m,m.replace(/(\[)/ig,'/').replace(/\]$/ig,''))
+    matchs.forEach((m: string) => {
+      result = result.replace(m, m.replace(/(\[)/ig, '/').replace(/\]$/ig, ''))
     })
   }
 

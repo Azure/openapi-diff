@@ -13,7 +13,7 @@ import * as sourceMap from "source-map"
 import * as jsonParser from "@ts-common/json-parser"
 import * as jsonRefs from "json-refs"
 import { ResolveSwagger } from '../util/resolveSwagger'
-import {getFilePosition} from '@ts-common/source-map'
+import { getFilePosition } from '@ts-common/source-map'
 import JSON_Pointer from 'json-pointer'
 import { pathToJsonPointer } from '../util/utils'
 
@@ -27,8 +27,8 @@ export type Options = {
 export type ProcessedFile = {
   readonly fileName: string
   readonly map: sourceMap.BasicSourceMapConsumer | sourceMap.IndexedSourceMapConsumer
-  readonly resolvedFileName:string
-  readonly resolvedJson:any
+  readonly resolvedFileName: string
+  readonly resolvedJson: any
 }
 
 export type ChangeProperties = {
@@ -57,20 +57,20 @@ const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): Ch
     if (change.path != undefined) {
       try {
         jsonPointer = pathToJsonPointer(change.path)
-        const jsonValue = JSON_Pointer.get(pf.resolvedJson,jsonPointer)
+        const jsonValue = JSON_Pointer.get(pf.resolvedJson, jsonPointer)
         position = getFilePosition(jsonValue)
       }
-      catch(e) {
+      catch (e) {
         console.log(e.message);
       }
     }
 
     if (!position || !Object.keys(position).length) {
-      return {...change,ref:"",location:""}
+      return { ...change, ref: "", location: "" }
     }
     const originalPosition = pf.map.originalPositionFor(position)
     if (!originalPosition || !Object.keys(originalPosition).length) {
-      return {...change,ref:"",location:""}
+      return { ...change, ref: "", location: "" }
     }
     const name = originalPosition.name as string
     const namePath = name ? name.split("\n")[0] : ""
@@ -206,11 +206,11 @@ export class OpenApiDiff {
     log.silly(`processViaAutoRest is being called`)
 
     if (swaggerPath === null || swaggerPath === undefined || typeof swaggerPath.valueOf() !== 'string' || !swaggerPath.trim().length) {
-        throw new Error('swaggerPath is a required parameter of type "string" and it cannot be an empty string.')
+      throw new Error('swaggerPath is a required parameter of type "string" and it cannot be an empty string.')
     }
 
     if (outputFileName === null || outputFileName === undefined || typeof outputFileName.valueOf() !== 'string' || !outputFileName.trim().length) {
-        throw new Error('outputFile is a required parameter of type "string" and it cannot be an empty string.')
+      throw new Error('outputFile is a required parameter of type "string" and it cannot be an empty string.')
     }
 
     log.debug(`swaggerPath = "${swaggerPath}"`)
@@ -229,13 +229,13 @@ export class OpenApiDiff {
 
     log.debug(`Executing: "${autoRestCmd}"`)
 
-    const { stderr } = await exec(autoRestCmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 ,env:{NODE_OPTIONS:"--max-old-space-size=8192"}})
+    const { stderr } = await exec(autoRestCmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64, env: { NODE_OPTIONS: "--max-old-space-size=8192" } })
     if (stderr) {
       throw new Error(stderr)
     }
     const resolveSwagger = new ResolveSwagger(outputFilePath)
     let resolvedJson = resolveSwagger.resolve()
-    let resolvedPath:string = resolveSwagger.getResolvedPath()
+    let resolvedPath: string = resolveSwagger.getResolvedPath()
     if (!resolvedJson) {
       throw new Error("resolve failed!")
     }
@@ -247,9 +247,9 @@ export class OpenApiDiff {
     return {
       fileName: outputFilePath,
       map,
-      resolvedFileName:resolvedPath,
-      resolvedJson:resolvedJson
-      
+      resolvedFileName: resolvedPath,
+      resolvedJson: resolvedJson
+
     }
   }
 
@@ -267,11 +267,11 @@ export class OpenApiDiff {
     const oldSwagger = oldSwaggerFile.resolvedFileName
     const newSwagger = newSwaggerFile.resolvedFileName
     if (oldSwagger === null || oldSwagger === undefined || typeof oldSwagger.valueOf() !== 'string' || !oldSwagger.trim().length) {
-        throw new Error('oldSwagger is a required parameter of type "string" and it cannot be an empty string.')
+      throw new Error('oldSwagger is a required parameter of type "string" and it cannot be an empty string.')
     }
 
     if (newSwagger === null || newSwagger === undefined || typeof newSwagger.valueOf() !== 'string' || !newSwagger.trim().length) {
-        throw new Error('newSwagger is a required parameter of type "string" and it cannot be an empty string.')
+      throw new Error('newSwagger is a required parameter of type "string" and it cannot be an empty string.')
     }
 
     log.debug(`oldSwagger = "${oldSwagger}"`)
