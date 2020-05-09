@@ -543,33 +543,33 @@ export function relaxModelLikeEntities(model: Model) {
 }
 
 /**
- * 
  * @param jsonPath e.g paths['test!'].get.response
- * @returns jonsPointer  /paths/test!/get/response
+ * @returns jsonPointer  /paths/test!/get/response
+ * for more details about jsonPointer,see https://tools.ietf.org/html/rfc6901
  */
 
 export function pathToJsonPointer(jsonPath: string): string {
   const replaceAllReg = (src: string): RegExp => {
-    let regex = new RegExp(src, 'g')
-    return regex
+    return new RegExp(src, 'g')
   }
-  let result: string = jsonPath.
-    replace(replaceAllReg('~'), '~0').
-    replace(replaceAllReg('/'), '~1').
-    replace(replaceAllReg('\\.'), '/')
+  let result: string = jsonPath
+    .replace(replaceAllReg('~'), '~0')
+    .replace(replaceAllReg('/'), '~1')
+    .replace(replaceAllReg('\\.'), '/')
 
   // match subpath with special character which be surround by ' e.g. paths['~0test~1'] , and replace it to path/~0test~1
   let regex = /(\[\'.+\'\])/g
   let matchs = result.match(regex)
   if (matchs) {
-    matchs.forEach(
-      m => {
-        result = result.replace(m,
-          m.replace(replaceAllReg('/'), '.'). // the `.` in [] was replaced by / first , here replace it back
-            replace(/^\[\'/ig, '/').
-            replace(/\'\]$/ig, ''))
-      }
-    )
+    matchs.forEach(m => {
+      result = result.replace(
+        m,
+        m
+          .replace(replaceAllReg('/'), '.') // the `.` in [] was replaced by / first , here replace it back
+          .replace(/^\[\'/gi, '/')
+          .replace(/\'\]$/gi, '')
+      )
+    })
   }
 
   // match the array index e.g. path[0] and replace it to path/0
@@ -577,9 +577,9 @@ export function pathToJsonPointer(jsonPath: string): string {
   matchs = result.match(regex)
   if (matchs) {
     matchs.forEach((m: string) => {
-      result = result.replace(m, m.replace(/(\[)/ig, '/').replace(/\]$/ig, ''))
+      result = result.replace(m, m.replace(/(\[)/gi, '/').replace(/\]$/gi, ''))
     })
   }
 
-  return !result ? "" : '/' + result
+  return !result ? '' : '/' + result
 }
