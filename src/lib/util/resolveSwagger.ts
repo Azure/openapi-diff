@@ -7,7 +7,7 @@ import { cloneDeep, Data, FilePosition, getFilePosition } from "@ts-common/sourc
 import * as sm from "@ts-common/string-map"
 import { toArray } from "@ts-common/iterator"
 import { pathToJsonPointer } from './utils'
-
+import * as path from 'path'
 
 /*
  * Merges source object into the target object
@@ -67,7 +67,7 @@ export class ResolveSwagger {
   file: string
 
   constructor(file: string) {
-    this.file = file.replace('\\', '/')
+    this.file = path.resolve(file)
   }
   resolve(): json.Json | undefined {
     let content: string = readFileSync(this.file, { encoding: "utf8" });
