@@ -1,14 +1,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import * as winston from 'winston'
-import * as path from 'path'
-import * as fs from 'fs'
-import * as os from 'os'
-var gDir = path.resolve(os.homedir(), 'oad_output')
+import * as fs from "fs"
+import * as path from "path"
+import * as winston from "winston"
 
-var currentLogFile: unknown
-var logDir: unknown
+let currentLogFile: unknown
+let logDir: unknown
 
 /*
  * Provides current time in custom format that will be used in naming log files. Example:'20140820_151113'
@@ -18,22 +16,24 @@ function getTimeStamp() {
   // We pad each value so that sorted directory listings show the files in chronological order
   function pad(number: any) {
     if (number < 10) {
-      return '0' + number
+      return "0" + number
     }
 
     return number
   }
 
-  var now = new Date()
-  return pad(now.getFullYear())
-    + pad(now.getMonth() + 1)
-    + pad(now.getDate())
-    + "_"
-    + pad(now.getHours())
-    + pad(now.getMinutes())
-    + pad(now.getSeconds())
+  const now = new Date()
+  return (
+    pad(now.getFullYear()) +
+    pad(now.getMonth() + 1) +
+    pad(now.getDate()) +
+    "_" +
+    pad(now.getHours()) +
+    pad(now.getMinutes()) +
+    pad(now.getSeconds())
+  )
 }
-var customLogLevels = {
+const customLogLevels = {
   off: 0,
   json: 1,
   error: 2,
@@ -53,10 +53,10 @@ export type Logger = {
   readonly error: (v: string) => void
 }
 
-export var log: Logger = new (winston.Logger)({
+export let log: Logger = new winston.Logger({
   transports: [
-    new (winston.transports.Console)({
-      level: 'warn',
+    new winston.transports.Console({
+      level: "warn",
       colorize: true,
       prettyPrint: true,
       humanReadableUnhandledException: true
@@ -66,28 +66,34 @@ export var log: Logger = new (winston.Logger)({
 }) as any
 
 Object.defineProperties(log, {
-  'consoleLogLevel': {
+  consoleLogLevel: {
     enumerable: true,
-    get: function () { return this.transports.console.level },
-    set: function (level) {
+    get() {
+      return this.transports.console.level
+    },
+    set(level) {
       if (!level) {
-        level = 'warn'
+        level = "warn"
       }
       const validLevels = Object.keys(customLogLevels)
-      if (!validLevels.some(function (item) { return item === level })) {
+      if (
+        !validLevels.some(function(item) {
+          return item === level
+        })
+      ) {
         throw new Error(`The logging level provided is "${level}". Valid values are: "${validLevels}".`)
       }
       this.transports.console.level = level
       return
     }
   },
-  'directory': {
+  directory: {
     enumerable: true,
-    get: function () {
+    get() {
       return logDir
     },
-    set: function (logDirectory) {
-      if (!logDirectory || logDirectory && typeof logDirectory.valueOf() !== 'string') {
+    set(logDirectory) {
+      if (!logDirectory || (logDirectory && typeof logDirectory.valueOf() !== "string")) {
         throw new Error('logDirectory cannot be null or undefined and must be of type "string".')
       }
 
@@ -98,25 +104,25 @@ Object.defineProperties(log, {
       return
     }
   },
-  'filepath': {
+  filepath: {
     enumerable: true,
-    get: function () {
+    get() {
       if (!currentLogFile) {
         const filename = `validate_log_${getTimeStamp()}.log`
-        currentLogFile = this.directory? path.join(this.directory, filename): filename
+        currentLogFile = this.directory ? path.join(this.directory, filename) : filename
       }
 
       return currentLogFile
     },
-    set: function (logFilePath) {
-      if (!logFilePath || logFilePath && typeof logFilePath.valueOf() !== 'string') {
-        throw new Error('filepath cannot be null or undefined and must be of type string. It must be an absolute file path.')
+    set(logFilePath) {
+      if (!logFilePath || (logFilePath && typeof logFilePath.valueOf() !== "string")) {
+        throw new Error("filepath cannot be null or undefined and must be of type string. It must be an absolute file path.")
       }
       currentLogFile = logFilePath
       this.directory = path.dirname(logFilePath)
       if (!this.transports.file) {
         this.add(winston.transports.File, {
-          level: 'silly',
+          level: "silly",
           colorize: false,
           silent: false,
           prettyPrint: true,

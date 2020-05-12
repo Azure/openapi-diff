@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.0 Released on 2020-05-11
+
+* Unify paths and x-ms-paths in the swagger then compare the unified swagger so that it consider not a breaking when you move a path from `paths` to `x-ms-path` without any other changes.
+
 ## 0.7.1 Released on 2020-04-21
 
 * Fixed issue with common parameters.[#160](https://github.com/Azure/openapi-diff/pull/160)

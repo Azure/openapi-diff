@@ -6,26 +6,22 @@ import * as validate from "../validate"
 
 export const command = "compare <old-spec> <new-spec>"
 
-export const describe =
-  "Compares old and new open api specification for breaking changes."
+export const describe = "Compares old and new open api specification for breaking changes."
 
 export const builder = {
   j: {
     alias: "inJson",
-    describe:
-      "A boolean flag indicating whether output format of the messages is json.",
+    describe: "A boolean flag indicating whether output format of the messages is json.",
     boolean: true,
     default: true
   },
   o: {
     alias: "oldTagName",
-    describe:
-      "The tag name for the old specification file.  If included it indicates that the old spec file is a readme file"
+    describe: "The tag name for the old specification file.  If included it indicates that the old spec file is a readme file"
   },
   n: {
     alias: "newTagName",
-    describe:
-      "The tag name for the new specification file.  If included it indicates that the new spec file is a readme file"
+    describe: "The tag name for the new specification file.  If included it indicates that the new spec file is a readme file"
   }
 }
 
@@ -48,18 +44,11 @@ export const handler = (argv: Argv) => {
   const vOptions = {
     consoleLogLevel: argv.logLevel,
     logFilepath: argv.f,
-    json: argv.j,
+    json: argv.j
   }
 
-  const compareFunc = oldTag && newTag ?
-      validate.compareTags(
-        oldSpec,
-        oldTag,
-        newSpec,
-        newTag,
-        vOptions
-      )
-    : validate.compare(oldSpec, newSpec, vOptions)
+  const compareFunc =
+    oldTag && newTag ? validate.compareTags(oldSpec, oldTag, newSpec, newTag, vOptions) : validate.compare(oldSpec, newSpec, vOptions)
 
   return compareFunc
     .then(result => {

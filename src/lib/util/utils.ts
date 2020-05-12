@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import * as fs from 'fs'
-import { execSync } from 'child_process'
-import * as util from 'util'
-import * as path from 'path'
-import * as jsonPointer from 'json-pointer'
-import * as YAML from 'js-yaml'
-import { log as log } from './logging'
-import request = require('request')
+import { execSync } from "child_process"
+import * as fs from "fs"
+import * as YAML from "js-yaml"
+import * as jsonPointer from "json-pointer"
+import * as path from "path"
+import request = require("request")
+import * as util from "util"
+import { log } from "./logging"
 
 /*
  * Caches the json docs that were successfully parsed by parseJson(). This avoids, fetching them again.
@@ -29,7 +29,7 @@ export function stripBOM(content: string) {
   if (Buffer.isBuffer(content)) {
     content = content.toString()
   }
-  if (content.charCodeAt(0) === 0xFEFF || content.charCodeAt(0) === 0xFFFE) {
+  if (content.charCodeAt(0) === 0xfeff || content.charCodeAt(0) === 0xfffe) {
     content = content.slice(1)
   }
   return content
@@ -44,25 +44,25 @@ export function stripBOM(content: string) {
  * @returns {object} jsonDoc - Parsed document in JSON format.
  */
 export async function parseJson(specPath: string) {
-  if (!specPath || (specPath && typeof specPath.valueOf() !== 'string')) {
-    throw new Error('A (github) url or a local file path to the swagger spec is required and must be of type string.')
+  if (!specPath || (specPath && typeof specPath.valueOf() !== "string")) {
+    throw new Error("A (github) url or a local file path to the swagger spec is required and must be of type string.")
   }
   if (docCache[specPath]) {
     return docCache[specPath]
   }
-  //url
-  if (specPath.match(/^http.*/ig) !== null) {
-    //If the spec path is a url starting with https://github then let us auto convert it to an https://raw.githubusercontent url.
-    if (specPath.startsWith('https://github')) {
-      specPath = specPath.replace(/^https:\/\/(github.com)(.*)blob\/(.*)/ig, 'https://raw.githubusercontent.com$2$3')
+  // url
+  if (specPath.match(/^http.*/gi) !== null) {
+    // If the spec path is a url starting with https://github then let us auto convert it to an https://raw.githubusercontent url.
+    if (specPath.startsWith("https://github")) {
+      specPath = specPath.replace(/^https:\/\/(github.com)(.*)blob\/(.*)/gi, "https://raw.githubusercontent.com$2$3")
     }
     const res = makeRequest({ url: specPath, errorOnNon200Response: true })
     docCache[specPath] = res
     return res
   } else {
-    //local filepath
+    // local filepath
     try {
-      const fileContent = stripBOM(fs.readFileSync(specPath, 'utf8'))
+      const fileContent = stripBOM(fs.readFileSync(specPath, "utf8"))
       const result = parseContent(specPath, fileContent)
       docCache[specPath] = result
       return result
@@ -84,12 +84,13 @@ export async function parseJson(specPath: string) {
  */
 export function parseContent(filePath: string, fileContent: string) {
   let result = null
-  if (/.*\.json$/ig.test(filePath)) {
+  if (/.*\.json$/gi.test(filePath)) {
     result = JSON.parse(fileContent)
-  } else if (/.*\.ya?ml$/ig.test(filePath)) {
+  } else if (/.*\.ya?ml$/gi.test(filePath)) {
     result = YAML.safeLoad(fileContent)
   } else {
-    const msg = `We currently support "*.json" and "*.yaml | *.yml" file formats for validating swaggers.\n` +
+    const msg =
+      `We currently support "*.json" and "*.yaml | *.yml" file formats for validating swaggers.\n` +
       `The current file extension in "${filePath}" is not supported.`
     throw new Error(msg)
   }
@@ -103,10 +104,10 @@ export function parseContent(filePath: string, fileContent: string) {
  */
 export function run(genfun: () => any) {
   // instantiate the generator object
-  var gen = genfun()
+  const gen = genfun()
   // This is the async loop pattern
   function next(err?: unknown, answer?: unknown) {
-    var res
+    let res
     if (err) {
       // if err, throw it into the wormhole
       return gen.throw(err)
@@ -148,18 +149,18 @@ export type Response = {
  * @return {Promise} promise - A promise that resolves to the responseBody or rejects to an error.
  */
 export function makeRequest(options: Options) {
-  var promise = new Promise(function (resolve, reject) {
-    request(options, function (err: unknown, response: Response, responseBody: string) {
+  const promise = new Promise(function(resolve, reject) {
+    request(options, function(err: unknown, response: Response, responseBody: string) {
       if (err) {
         reject(err)
       }
       if (options.errorOnNon200Response && response.statusCode !== 200) {
-        var msg = `StatusCode: "${response.statusCode}", ResponseBody: "${responseBody}."`
+        const msg = `StatusCode: "${response.statusCode}", ResponseBody: "${responseBody}."`
         reject(new Error(msg))
       }
       let res = responseBody
       try {
-        if (typeof responseBody.valueOf() === 'string') {
+        if (typeof responseBody.valueOf() === "string") {
           res = parseContent(options.url, responseBody)
         }
       } catch (error) {
@@ -184,7 +185,7 @@ export function makeRequest(options: Options) {
  */
 export function executePromisesSequentially(promiseFactories: ReadonlyArray<any>) {
   let result = Promise.resolve()
-  promiseFactories.forEach(function (promiseFactory) {
+  promiseFactories.forEach(function(promiseFactory) {
     result = result.then(promiseFactory)
   })
   return result
@@ -203,8 +204,10 @@ export function executePromisesSequentially(promiseFactories: ReadonlyArray<any>
 export function generateRandomId(prefix: string, existingIds: object) {
   let randomStr
   while (true) {
-    randomStr = Math.random().toString(36).substr(2, 12)
-    if (prefix && typeof prefix.valueOf() === 'string') {
+    randomStr = Math.random()
+      .toString(36)
+      .substr(2, 12)
+    if (prefix && typeof prefix.valueOf() === "string") {
       randomStr = prefix + randomStr
     }
     if (!existingIds || !(randomStr in existingIds)) {
@@ -243,28 +246,28 @@ export type References = {
  */
 export function parseReferenceInSwagger(reference: string) {
   if (!reference || (reference && reference.trim().length === 0)) {
-    throw new Error('reference cannot be null or undefined and it must be a non-empty string.')
+    throw new Error("reference cannot be null or undefined and it must be a non-empty string.")
   }
 
-  let result: References = {}
-  if (reference.includes('#')) {
-    //local reference in the doc
-    if (reference.startsWith('#/')) {
+  const result: References = {}
+  if (reference.includes("#")) {
+    // local reference in the doc
+    if (reference.startsWith("#/")) {
       result.localReference = {
         value: reference,
-        accessorProperty: reference.slice(2).replace('/', '.'),
+        accessorProperty: reference.slice(2).replace("/", ".")
       }
     } else {
-      //filePath+localReference
-      const segments = reference.split('#')
+      // filePath+localReference
+      const segments = reference.split("#")
       result.filePath = segments[0]
       result.localReference = {
-        value: '#' + segments[1],
-        accessorProperty: segments[1].slice(1).replace('/', '.')
+        value: "#" + segments[1],
+        accessorProperty: segments[1].slice(1).replace("/", ".")
       }
     }
   } else {
-    //we are assuming that the string is a relative filePath
+    // we are assuming that the string is a relative filePath
     result.filePath = reference
   }
 
@@ -286,8 +289,8 @@ export function parseReferenceInSwagger(reference: string) {
  */
 export function joinPath(...args: string[]) {
   let finalPath = path.join(...args)
-  finalPath = finalPath.replace(/\\/gi, '/')
-  finalPath = finalPath.replace(/^(http|https):\/(.*)/gi, '$1://$2')
+  finalPath = finalPath.replace(/\\/gi, "/")
+  finalPath = finalPath.replace(/^(http|https):\/(.*)/gi, "$1://$2")
   return finalPath
 }
 
@@ -314,7 +317,7 @@ export function parseJsonWithPathFragments(...args: string[]) {
  * @returns {object} target - Returns the merged target object.
  */
 export function mergeObjects(source: { readonly [key: string]: unknown }, target: { [key: string]: unknown }) {
-  Object.keys(source).forEach(function (key) {
+  Object.keys(source).forEach(function(key) {
     target[key] = source[key]
   })
   return target
@@ -386,11 +389,11 @@ export function removeObject(doc: object, ptr: string) {
  * @returns {string} result - provider namespace from the given path.
  */
 export function getProvider(path: string) {
-  if (path === null || path === undefined || typeof path.valueOf() !== 'string' || !path.trim().length) {
-    throw new Error('path is a required parameter of type string and it cannot be an empty string.')
+  if (path === null || path === undefined || typeof path.valueOf() !== "string" || !path.trim().length) {
+    throw new Error("path is a required parameter of type string and it cannot be an empty string.")
   }
 
-  const providerRegEx = new RegExp('/providers/(\:?[^{/]+)', 'gi')
+  const providerRegEx = new RegExp("/providers/(:?[^{/]+)", "gi")
   let result
   let pathMatch
 
@@ -411,12 +414,12 @@ export function getProvider(path: string) {
  * @param {string} path where to clone the repository.
  */
 export function gitClone(url: string, directory: string) {
-  if (url === null || url === undefined || typeof url.valueOf() !== 'string' || !url.trim().length) {
-    throw new Error('url is a required parameter of type string and it cannot be an empty string.')
+  if (url === null || url === undefined || typeof url.valueOf() !== "string" || !url.trim().length) {
+    throw new Error("url is a required parameter of type string and it cannot be an empty string.")
   }
 
-  if (directory === null || directory === undefined || typeof directory.valueOf() !== 'string' || !directory.trim().length) {
-    throw new Error('directory is a required parameter of type string and it cannot be an empty string.')
+  if (directory === null || directory === undefined || typeof directory.valueOf() !== "string" || !directory.trim().length) {
+    throw new Error("directory is a required parameter of type string and it cannot be an empty string.")
   }
 
   // If the directory exists then we assume that the repo to be cloned is already present.
@@ -431,7 +434,7 @@ export function gitClone(url: string, directory: string) {
 
   try {
     const cmd = `git clone ${url} ${directory}`
-    execSync(cmd, { encoding: 'utf8' })
+    execSync(cmd, { encoding: "utf8" })
   } catch (err) {
     throw new Error(`An error occurred while cloning git repository: ${util.inspect(err, { depth: null })}.`)
   }
@@ -447,8 +450,8 @@ export function gitClone(url: string, directory: string) {
 export function getJsonContentType(consumesOrProduces: ReadonlyArray<string>) {
   let firstMatchedJson = null
   if (consumesOrProduces) {
-    firstMatchedJson = consumesOrProduces.find((contentType) => {
-      return (contentType.match(/.*\/json.*/ig) !== null)
+    firstMatchedJson = consumesOrProduces.find(contentType => {
+      return contentType.match(/.*\/json.*/gi) !== null
     })
   }
   return firstMatchedJson
@@ -460,7 +463,7 @@ export function getJsonContentType(consumesOrProduces: ReadonlyArray<string>) {
  * @returns {boolean} result - true if str is url encoded; false otherwise.
  */
 export function isUrlEncoded(str: string) {
-  str = str || ''
+  str = str || ""
   return str !== decodeURIComponent(str)
 }
 
@@ -484,11 +487,17 @@ export function isPureObject(model: Model) {
   if (!model) {
     throw new Error(`model cannot be null or undefined and must be of type "object"`)
   }
-  if (model.type && typeof model.type.valueOf() === 'string' && model.type === 'object' && model.properties && Object.keys(model.properties).length === 0) {
+  if (
+    model.type &&
+    typeof model.type.valueOf() === "string" &&
+    model.type === "object" &&
+    model.properties &&
+    Object.keys(model.properties).length === 0
+  ) {
     return true
   } else if (!model.type && model.properties && Object.keys(model.properties).length === 0) {
     return true
-  } else if (model.type && typeof model.type.valueOf() === 'string' && model.type === 'object' && !model.properties) {
+  } else if (model.type && typeof model.type.valueOf() === "string" && model.type === "object" && !model.properties) {
     return true
   } else {
     return false
@@ -506,13 +515,13 @@ export function isPureObject(model: Model) {
  */
 export function relaxEntityType(entity: Model, isRequired?: boolean) {
   if (isPureObject(entity)) {
-    entity.type = ['array', 'boolean', 'number', 'object', 'string']
+    entity.type = ["array", "boolean", "number", "object", "string"]
     // if (!isRequired) {
     //   entity.type.push('null')
     // }
   }
   if (entity.additionalProperties && isPureObject(entity.additionalProperties)) {
-    entity.additionalProperties.type = ['array', 'boolean', 'number', 'object', 'string']
+    entity.additionalProperties.type = ["array", "boolean", "number", "object", "string"]
     // if (!isRequired) {
     //   entity.additionalProperties.type.push('null')
     // }
@@ -528,7 +537,7 @@ export function relaxModelLikeEntities(model: Model) {
   if (model.properties) {
     const modelProperties = model.properties
     for (const propName in modelProperties) {
-      const isPropRequired = model.required ? model.required.some((p) => { return p == propName }) : false
+      const isPropRequired = model.required ? model.required.some(p => p == propName) : false
       const mp = modelProperties[propName]
       if (mp) {
         if (mp.properties) {
@@ -550,12 +559,12 @@ export function relaxModelLikeEntities(model: Model) {
 
 export function pathToJsonPointer(jsonPath: string): string {
   const replaceAllReg = (src: string): RegExp => {
-    return new RegExp(src, 'g')
+    return new RegExp(src, "g")
   }
   let result: string = jsonPath
-    .replace(replaceAllReg('~'), '~0')
-    .replace(replaceAllReg('/'), '~1')
-    .replace(replaceAllReg('\\.'), '/')
+    .replace(replaceAllReg("~"), "~0")
+    .replace(replaceAllReg("/"), "~1")
+    .replace(replaceAllReg("\\."), "/")
 
   // match subpath with special character which be surround by ' e.g. paths['~0test~1'] , and replace it to path/~0test~1
   let regex = /(\[\'.+\'\])/g
@@ -565,9 +574,9 @@ export function pathToJsonPointer(jsonPath: string): string {
       result = result.replace(
         m,
         m
-          .replace(replaceAllReg('/'), '.') // the `.` in [] was replaced by / first , here replace it back
-          .replace(/^\[\'/gi, '/')
-          .replace(/\'\]$/gi, '')
+          .replace(replaceAllReg("/"), ".") // the `.` in [] was replaced by / first , here replace it back
+          .replace(/^\[\'/gi, "/")
+          .replace(/\'\]$/gi, "")
       )
     })
   }
@@ -577,9 +586,9 @@ export function pathToJsonPointer(jsonPath: string): string {
   matchs = result.match(regex)
   if (matchs) {
     matchs.forEach((m: string) => {
-      result = result.replace(m, m.replace(/(\[)/gi, '/').replace(/\]$/gi, ''))
+      result = result.replace(m, m.replace(/(\[)/gi, "/").replace(/\]$/gi, ""))
     })
   }
 
-  return !result ? '' : '/' + result
+  return !result ? "" : "/" + result
 }
