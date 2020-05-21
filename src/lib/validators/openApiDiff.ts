@@ -152,16 +152,18 @@ export class OpenApiDiff {
 
     // When oad is installed globally
     {
-      const result = path.join(__dirname, "..", "..", "..", "node_modules", "autorest", "app.js")
+      const result = path.join(__dirname, "..", "..", "..", "node_modules", "autorest", "dist", "app.js")
       if (fs.existsSync(result)) {
+        log.silly(`Found autoRest:${result} `)
         return `node ${result}`
       }
     }
 
     // When oad is installed locally
     {
-      const result = path.join(__dirname, "..", "..", "..", "..", "..", "autorest", "app.js")
+      const result = path.join(__dirname, "..", "..", "..", "..", "..", "autorest", "dist", "app.js")
       if (fs.existsSync(result)) {
+        log.silly(`Found autoRest:${result} `)
         return `node ${result}`
       }
     }
@@ -170,6 +172,7 @@ export class OpenApiDiff {
     {
       const result = path.resolve("node_modules/.bin/autorest")
       if (fs.existsSync(result)) {
+        log.silly(`Found autoRest:${result} `)
         return result
       }
     }
@@ -236,7 +239,7 @@ export class OpenApiDiff {
     const { stderr } = await exec(autoRestCmd, {
       encoding: "utf8",
       maxBuffer: 1024 * 1024 * 64,
-      env: { NODE_OPTIONS: "--max-old-space-size=8192" }
+      env: { ...process.env, NODE_OPTIONS: "--max-old-space-size=8192" }
     })
     if (stderr) {
       throw new Error(stderr)
