@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.8.1 
+
+* Fixed issue : can not find `node` path when running in pipeline.
+* Fixed issue : can not find correct `autorest` path when When oad is installed globally.
+
+## 0.8.0 Released on 2020-05-11
+
+* Unify paths and x-ms-paths in the swagger then compare the unified swagger so that it consider not a breaking when you move a path from `paths` to `x-ms-path` without any other changes.
+
+## 0.7.1 Released on 2020-04-21
+
+* Fixed issue with common parameters.[#160](https://github.com/Azure/openapi-diff/pull/160)
+
 ## 0.6.3 Released on 2019-04-22
 
 * Fixed autorest path.

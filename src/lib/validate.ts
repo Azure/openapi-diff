@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { log as log } from './util/logging'
-import * as OpenApiDiff from './validators/openApiDiff'
+import { log } from "./util/logging"
+import * as OpenApiDiff from "./validators/openApiDiff"
 
 /**
  * Wrapper method to compares old and new specifications.
@@ -19,7 +19,9 @@ import * as OpenApiDiff from './validators/openApiDiff'
  *
  */
 export function compare(oldSwagger: string, newSwagger: string, options: OpenApiDiff.Options) {
-  if (!options) options = {}
+  if (!options) {
+    options = {}
+  }
 
   log.consoleLogLevel = options.consoleLogLevel || log.consoleLogLevel
   log.filepath = options.logFilepath || log.filepath
@@ -46,10 +48,10 @@ export function compare(oldSwagger: string, newSwagger: string, options: OpenApi
  * @param {boolean} [options.matchApiVersion] A boolean flag indicating whether to consider api-version while comparing.
  *
  */
-export function compareTags(
-  oldSwagger: string, oldTag: string, newSwagger: string, newTag: string, options: OpenApiDiff.Options
-) {
-  if (!options) options = {}
+export function compareTags(oldSwagger: string, oldTag: string, newSwagger: string, newTag: string, options: OpenApiDiff.Options) {
+  if (!options) {
+    options = {}
+  }
 
   log.consoleLogLevel = options.consoleLogLevel || log.consoleLogLevel
   log.filepath = options.logFilepath || log.filepath

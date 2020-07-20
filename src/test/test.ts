@@ -1,8 +1,8 @@
-import * as index from "../index"
 import * as assert from "assert"
 import * as path from "path"
+import * as index from "../index"
 
-jest.setTimeout(20000)
+jest.setTimeout(100000)
 
 describe("index", () => {
   it("simple", async () => {
@@ -10,7 +10,10 @@ describe("index", () => {
     const file = "src/test/simple/same.json"
     const resultStr = await diff.compare(file, file)
     const result = JSON.parse(resultStr)
-    const filePath = path.resolve(file).split("\\").join("/")
+    const filePath = path
+      .resolve(file)
+      .split("\\")
+      .join("/")
     const expected = [
       {
         code: "NoVersionChange",
@@ -39,8 +42,18 @@ describe("index", () => {
     const newFile = "src/test/some-changes/new.json"
     const resultStr = await diff.compare(oldFile, newFile)
     const result = JSON.parse(resultStr)
-    const newFilePath = "file:///" + path.resolve(newFile).split("\\").join("/")
-    const oldFilePath = "file:///" + path.resolve(oldFile).split("\\").join("/")
+    const newFilePath =
+      "file:///" +
+      path
+        .resolve(newFile)
+        .split("\\")
+        .join("/")
+    const oldFilePath =
+      "file:///" +
+      path
+        .resolve(oldFile)
+        .split("\\")
+        .join("/")
     const expected = [
       {
         code: "NoVersionChange",
@@ -83,9 +96,24 @@ describe("index", () => {
     const diff = new index.OpenApiDiff({})
     const resultStr = await diff.compare(oldFile, newFile, "2019", "2019")
     const result = JSON.parse(resultStr)
-    const newFilePath = "file:///" + path.resolve("src/test/full/new/openapi.json").split("\\").join("/")
-    const newFilePath2 = "file:///" + path.resolve("src/test/full/new/openapi2.json").split("\\").join("/")
-    const oldFilePath = "file:///" + path.resolve("src/test/full/old/openapi.json").split("\\").join("/")
+    const newFilePath =
+      "file:///" +
+      path
+        .resolve("src/test/full/new/openapi.json")
+        .split("\\")
+        .join("/")
+    const newFilePath2 =
+      "file:///" +
+      path
+        .resolve("src/test/full/new/openapi2.json")
+        .split("\\")
+        .join("/")
+    const oldFilePath =
+      "file:///" +
+      path
+        .resolve("src/test/full/old/openapi.json")
+        .split("\\")
+        .join("/")
     const expected = [
       {
         code: "NoVersionChange",
@@ -129,9 +157,24 @@ describe("index", () => {
     const diff = new index.OpenApiDiff({})
     const resultStr = await diff.compare(oldFile, newFile, "2019", "2019")
     const result = JSON.parse(resultStr)
-    const oldFilePath = "file:///" + path.resolve("src/test/full/new/openapi.json").split("\\").join("/")
-    const oldFilePath2 = "file:///" + path.resolve("src/test/full/new/openapi2.json").split("\\").join("/")
-    const newFilePath = "file:///" + path.resolve("src/test/full/old/openapi.json").split("\\").join("/")
+    const oldFilePath =
+      "file:///" +
+      path
+        .resolve("src/test/full/new/openapi.json")
+        .split("\\")
+        .join("/")
+    const oldFilePath2 =
+      "file:///" +
+      path
+        .resolve("src/test/full/new/openapi2.json")
+        .split("\\")
+        .join("/")
+    const newFilePath =
+      "file:///" +
+      path
+        .resolve("src/test/full/old/openapi.json")
+        .split("\\")
+        .join("/")
     const expected = [
       {
         code: "NoVersionChange",
@@ -170,7 +213,6 @@ describe("index", () => {
   })
 
   it("full2", async () => {
-
     const source = {
       url: "src/test/full2/source/readme.md",
       tag: "package-compute-only-2017-12"
@@ -190,7 +232,6 @@ describe("index", () => {
   })
 
   it("full2 reversed", async () => {
-
     const source = {
       url: "src/test/full2/target/readme.md",
       tag: "package-compute-2018-04"
@@ -207,5 +248,105 @@ describe("index", () => {
     for (const v of result) {
       assert.deepStrictEqual(v.old.location !== undefined || v.new.location !== undefined, true)
     }
+  })
+
+  it("common-parameters", async () => {
+    const diff = new index.OpenApiDiff({})
+    const oldFile = "src/test/common-parameters/old.json"
+    const newFile = "src/test/common-parameters/new.json"
+    const resultStr = await diff.compare(oldFile, newFile)
+    const result = JSON.parse(resultStr)
+    const newFilePath =
+      "file:///" +
+      path
+        .resolve(newFile)
+        .split("\\")
+        .join("/")
+    const oldFilePath =
+      "file:///" +
+      path
+        .resolve(oldFile)
+        .split("\\")
+        .join("/")
+    const expected = [
+      {
+        code: "NoVersionChange",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        id: "1001",
+        message: "The versions have not changed.",
+        mode: "Update",
+        new: {
+          ref: `${newFilePath}#`,
+          location: `${newFilePath}:1:1`,
+          path: ""
+        },
+        old: {
+          ref: `${oldFilePath}#`,
+          location: `${oldFilePath}:1:1`,
+          path: ""
+        },
+        type: "Info"
+      },
+      {
+        code: "RemovedClientParameter",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1007.md",
+        id: "1007",
+        message: "The new version is missing a client parameter that was found in the old version. Was 'P1' removed or renamed?",
+        mode: "Removal",
+        new: {
+          location: `${newFilePath}:7:3`,
+          path: "parameters",
+          ref: `${newFilePath}#/parameters`
+        },
+        old: {
+          location: `${oldFilePath}:7:3`,
+          path: "parameters",
+          ref: `${oldFilePath}#/parameters`
+        },
+        type: "Error"
+      }
+    ]
+    assert.deepStrictEqual(result, expected)
+  })
+
+  it("xms-path", async () => {
+    const diff = new index.OpenApiDiff({})
+    const oldFile = "src/test/xmspath/old.json"
+    const newFile = "src/test/xmspath/new.json"
+    const resultStr = await diff.compare(oldFile, newFile)
+    const result = JSON.parse(resultStr)
+    const newFilePath =
+      "file:///" +
+      path
+        .resolve(newFile)
+        .split("\\")
+        .join("/")
+    const oldFilePath =
+      "file:///" +
+      path
+        .resolve(oldFile)
+        .split("\\")
+        .join("/")
+    const expected = [
+      {
+        code: "NoVersionChange",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        id: "1001",
+        message: "The versions have not changed.",
+        mode: "Update",
+        new: {
+          ref: `${newFilePath}#`,
+          location: `${newFilePath}:1:1`,
+          path: ""
+        },
+        old: {
+          ref: `${oldFilePath}#`,
+          location: `${oldFilePath}:1:1`,
+          path: ""
+        },
+        type: "Info"
+      }
+    ]
+    assert.deepStrictEqual(result, expected)
   })
 })

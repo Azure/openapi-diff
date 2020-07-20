@@ -1,17 +1,20 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-
-import * as util from "util"
-import * as path from "path"
-import * as os from "os"
-import { log as log } from "../util/logging"
-import * as fs from "fs"
 import * as asyncFs from "@ts-common/fs"
-import * as child_process from "child_process"
-import * as sourceMap from "source-map"
 import * as jsonParser from "@ts-common/json-parser"
+import { getFilePosition } from "@ts-common/source-map"
+import * as child_process from "child_process"
+import * as fs from "fs"
+import JSON_Pointer from "json-pointer"
 import * as jsonRefs from "json-refs"
+import * as os from "os"
+import * as path from "path"
+import * as sourceMap from "source-map"
+import * as util from "util"
+import { log } from "../util/logging"
+import { ResolveSwagger } from "../util/resolveSwagger"
+import { pathToJsonPointer } from "../util/utils"
 
 const exec = util.promisify(child_process.exec)
 
@@ -23,6 +26,8 @@ export type Options = {
 export type ProcessedFile = {
   readonly fileName: string
   readonly map: sourceMap.BasicSourceMapConsumer | sourceMap.IndexedSourceMapConsumer
+  readonly resolvedFileName: string
+  readonly resolvedJson: any
 }
 
 export type ChangeProperties = {
@@ -46,13 +51,29 @@ export type Messages = ReadonlyArray<Message>
 
 const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): ChangeProperties => {
   if (change.location) {
-    const s = change.location.split(":")
-    const position = { line: parseInt(s[s.length - 2]), column: parseInt(s[s.length - 1]) - 1 }
+    let position
+    let jsonPointer
+    if (change.path != undefined) {
+      try {
+        jsonPointer = pathToJsonPointer(change.path)
+        const jsonValue = JSON_Pointer.get(pf.resolvedJson, jsonPointer)
+        position = getFilePosition(jsonValue)
+      } catch (e) {
+        console.log(e.message)
+      }
+    }
+
+    if (!position || !Object.keys(position).length) {
+      return { ...change, ref: "", location: "" }
+    }
     const originalPosition = pf.map.originalPositionFor(position)
+    if (!originalPosition || !Object.keys(originalPosition).length) {
+      return { ...change, ref: "", location: "" }
+    }
     const name = originalPosition.name as string
-    const namePath = name.split("\n")[0]
-    const parsedPath = JSON.parse(namePath) as string[]
-    const ref = `${originalPosition.source}${jsonRefs.pathToPtr(parsedPath, true)}`
+    const namePath = name ? name.split("\n")[0] : ""
+    const parsedPath = namePath ? (JSON.parse(namePath) as string[]) : ""
+    const ref = parsedPath ? `${originalPosition.source}${jsonRefs.pathToPtr(parsedPath, true)}` : ""
     const location = `${originalPosition.source}:${originalPosition.line}:${(originalPosition.column as number) + 1}`
     return { ...change, ref, location }
   } else {
@@ -80,7 +101,7 @@ export class OpenApiDiff {
     if (this.options === null || this.options === undefined) {
       this.options = {}
     }
-    if (typeof this.options !== 'object') {
+    if (typeof this.options !== "object") {
       throw new Error('options must be of type "object".')
     }
 
@@ -99,11 +120,11 @@ export class OpenApiDiff {
    * @param {string} newTag Tag name used for AutoRest with the new specification file.
    *
    */
-  async compare(oldSwagger: string, newSwagger: string, oldTag?: string, newTag?: string) {
+  public async compare(oldSwagger: string, newSwagger: string, oldTag?: string, newTag?: string) {
     log.silly(`compare is being called`)
 
-    var promise1 = this.processViaAutoRest(oldSwagger, 'old', oldTag)
-    var promise2 = this.processViaAutoRest(newSwagger, 'new', newTag)
+    const promise1 = this.processViaAutoRest(oldSwagger, "old", oldTag)
+    const promise2 = this.processViaAutoRest(newSwagger, "new", newTag)
 
     const results = await Promise.all([promise1, promise2])
     return this.processViaOpenApiDiff(results[0], results[1])
@@ -114,7 +135,7 @@ export class OpenApiDiff {
    *
    * @returns {string} Path to the dotnet executable.
    */
-  dotNetPath(): string {
+  public dotNetPath(): string {
     log.silly(`dotNetPath is being called`)
 
     // Assume that dotnet is in the PATH
@@ -126,22 +147,23 @@ export class OpenApiDiff {
    *
    * @returns {string} Path to the autorest app.js file.
    */
-  autoRestPath(): string {
+  public autoRestPath(): string {
     log.silly(`autoRestPath is being called`)
 
     // When oad is installed globally
     {
-      const result = path.join(__dirname, "..", "..", "..", "node_modules", "autorest", "app.js")
+      const result = path.join(__dirname, "..", "..", "..", "node_modules", "autorest", "dist", "app.js")
       if (fs.existsSync(result)) {
+        log.silly(`Found autoRest:${result} `)
         return `node ${result}`
       }
     }
 
     // When oad is installed locally
     {
-
-      const result = path.join(__dirname, "..", "..", "..", "..", "..", "autorest", "app.js")
+      const result = path.join(__dirname, "..", "..", "..", "..", "..", "autorest", "dist", "app.js")
       if (fs.existsSync(result)) {
+        log.silly(`Found autoRest:${result} `)
         return `node ${result}`
       }
     }
@@ -150,12 +172,13 @@ export class OpenApiDiff {
     {
       const result = path.resolve("node_modules/.bin/autorest")
       if (fs.existsSync(result)) {
+        log.silly(`Found autoRest:${result} `)
         return result
       }
     }
 
     // Assume that autorest is in the path
-    return 'autorest'
+    return "autorest"
   }
 
   /**
@@ -163,7 +186,7 @@ export class OpenApiDiff {
    *
    * @returns {string} Path to the OpenApiDiff.dll.
    */
-  openApiDiffDllPath(): string {
+  public openApiDiffDllPath(): string {
     log.silly(`openApiDiffDllPath is being called`)
 
     return path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll")
@@ -179,15 +202,20 @@ export class OpenApiDiff {
    * @param {string} tagName Name of the tag in the specification file.
    *
    */
-  async processViaAutoRest(swaggerPath: string, outputFileName: string, tagName?: string): Promise<ProcessedFile> {
+  public async processViaAutoRest(swaggerPath: string, outputFileName: string, tagName?: string): Promise<ProcessedFile> {
     log.silly(`processViaAutoRest is being called`)
 
-    if (swaggerPath === null || swaggerPath === undefined || typeof swaggerPath.valueOf() !== 'string' || !swaggerPath.trim().length) {
-        throw new Error('swaggerPath is a required parameter of type "string" and it cannot be an empty string.')
+    if (swaggerPath === null || swaggerPath === undefined || typeof swaggerPath.valueOf() !== "string" || !swaggerPath.trim().length) {
+      throw new Error('swaggerPath is a required parameter of type "string" and it cannot be an empty string.')
     }
 
-    if (outputFileName === null || outputFileName === undefined || typeof outputFileName.valueOf() !== 'string' || !outputFileName.trim().length) {
-        throw new Error('outputFile is a required parameter of type "string" and it cannot be an empty string.')
+    if (
+      outputFileName === null ||
+      outputFileName === undefined ||
+      typeof outputFileName.valueOf() !== "string" ||
+      !outputFileName.trim().length
+    ) {
+      throw new Error('outputFile is a required parameter of type "string" and it cannot be an empty string.')
     }
 
     log.debug(`swaggerPath = "${swaggerPath}"`)
@@ -201,14 +229,26 @@ export class OpenApiDiff {
     const outputFilePath = path.join(outputFolder, `${outputFileName}.json`)
     const outputMapFilePath = path.join(outputFolder, `${outputFileName}.map`)
     const autoRestCmd = tagName
-      ? `${this.autoRestPath()} ${swaggerPath} --tag=${tagName} --output-artifact=swagger-document.json --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
-      : `${this.autoRestPath()} --input-file=${swaggerPath} --output-artifact=swagger-document.json --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
+      ? `${this.autoRestPath()} ${swaggerPath} --tag=${tagName} --output-artifact=swagger-document.json` +
+        ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
+      : `${this.autoRestPath()} --input-file=${swaggerPath} --output-artifact=swagger-document.json` +
+        ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
 
     log.debug(`Executing: "${autoRestCmd}"`)
 
-    const { stderr } = await exec(autoRestCmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 })
+    const { stderr } = await exec(autoRestCmd, {
+      encoding: "utf8",
+      maxBuffer: 1024 * 1024 * 64,
+      env: { ...process.env, NODE_OPTIONS: "--max-old-space-size=8192" }
+    })
     if (stderr) {
       throw new Error(stderr)
+    }
+    const resolveSwagger = new ResolveSwagger(outputFilePath)
+    const resolvedJson = resolveSwagger.resolve()
+    const resolvedPath: string = resolveSwagger.getResolvedPath()
+    if (!resolvedJson) {
+      throw new Error("resolve failed!")
     }
 
     const buffer = await asyncFs.readFile(outputMapFilePath)
@@ -218,6 +258,8 @@ export class OpenApiDiff {
     return {
       fileName: outputFilePath,
       map,
+      resolvedFileName: resolvedPath,
+      resolvedJson
     }
   }
 
@@ -229,17 +271,17 @@ export class OpenApiDiff {
    * @param {string} newSwagger Path to the new specification file.
    *
    */
-  async processViaOpenApiDiff(oldSwaggerFile: ProcessedFile, newSwaggerFile: ProcessedFile) {
+  public async processViaOpenApiDiff(oldSwaggerFile: ProcessedFile, newSwaggerFile: ProcessedFile) {
     log.silly(`processViaOpenApiDiff is being called`)
 
-    const oldSwagger = oldSwaggerFile.fileName
-    const newSwagger = newSwaggerFile.fileName
-    if (oldSwagger === null || oldSwagger === undefined || typeof oldSwagger.valueOf() !== 'string' || !oldSwagger.trim().length) {
-        throw new Error('oldSwagger is a required parameter of type "string" and it cannot be an empty string.')
+    const oldSwagger = oldSwaggerFile.resolvedFileName
+    const newSwagger = newSwaggerFile.resolvedFileName
+    if (oldSwagger === null || oldSwagger === undefined || typeof oldSwagger.valueOf() !== "string" || !oldSwagger.trim().length) {
+      throw new Error('oldSwagger is a required parameter of type "string" and it cannot be an empty string.')
     }
 
-    if (newSwagger === null || newSwagger === undefined || typeof newSwagger.valueOf() !== 'string' || !newSwagger.trim().length) {
-        throw new Error('newSwagger is a required parameter of type "string" and it cannot be an empty string.')
+    if (newSwagger === null || newSwagger === undefined || typeof newSwagger.valueOf() !== "string" || !newSwagger.trim().length) {
+      throw new Error('newSwagger is a required parameter of type "string" and it cannot be an empty string.')
     }
 
     log.debug(`oldSwagger = "${oldSwagger}"`)
@@ -256,13 +298,13 @@ export class OpenApiDiff {
     const cmd = `${this.dotNetPath()} ${this.openApiDiffDllPath()} -o ${oldSwagger} -n ${newSwagger}`
 
     log.debug(`Executing: "${cmd}"`)
-    const { stdout } = await exec(cmd, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 })
+    const { stdout } = await exec(cmd, { encoding: "utf8", maxBuffer: 1024 * 1024 * 64 })
     const resultJson = jsonParser.parse("", stdout) as Messages
 
     const updatedJson = resultJson.map(message => ({
       ...message,
       new: updateChangeProperties(message.new, newSwaggerFile),
-      old: updateChangeProperties(message.old, oldSwaggerFile),
+      old: updateChangeProperties(message.old, oldSwaggerFile)
     }))
     return JSON.stringify(updatedJson)
   }

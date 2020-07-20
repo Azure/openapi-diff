@@ -42,9 +42,11 @@
 
 [1021 - AddedAdditionalProperties](rules/1021.md)
 
-[1022 - RemovedAdditionalProperties](rules/1021.md)
+[1022 - RemovedAdditionalProperties](rules/1022.md)
 
-[1023 - TypeFormatChanged](rules/1021.md)
+[1023 - TypeFormatChanged](rules/1023.md)
+
+[1023 - ConstraintIsStronger](rules/1024.md)
 
 [1025 - RequiredStatusChange](rules/1025.md)
 
@@ -53,6 +55,8 @@
 [1027 - DefaultValueChanged](rules/1027.md)
 
 [1028 - ArrayCollectionFormatChanged](rules/1028.md)
+
+[1029 - ReadonlyPropertyChanged](rules/1029.md)
 
 [1030 - DifferentDiscriminator](rules/1030.md)
 
@@ -68,8 +72,12 @@
 
 [1036 - ConstraintChanged](rules/1036.md)
 
+[1037 - ConstraintIsWeaker](rules/1037.md)
+
 [1038 - AddedPath](rules/1038.md)
 
 [1039 - AddedOperation](rules/1039.md)
 
 [1040 - AddedReadOnlyPropertyInResponse](rules/1040.md)
+
+[1041 - AddedPropertyInResponse](rules/1041.md)
