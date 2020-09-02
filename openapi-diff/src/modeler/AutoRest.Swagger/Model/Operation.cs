@@ -98,7 +98,7 @@ namespace AutoRest.Swagger.Model
 
             base.Compare(context, previous);
 
-            if (!OperationId.Equals(priorOperation.OperationId))
+            if (OperationId != priorOperation.OperationId)
             {
                 context.LogBreakingChange(ComparisonMessages.ModifiedOperationId, priorOperation.OperationId, OperationId);
             }
@@ -158,15 +158,15 @@ namespace AutoRest.Swagger.Model
             context.PushProperty("parameters");
 
             var priorOperationParameters = priorOperation.Parameters.Select(param =>
-                string.IsNullOrWhiteSpace(param.Reference) ? param : 
+                string.IsNullOrWhiteSpace(param.Reference) ? param :
                 FindReferencedParameter(param.Reference, previousRoot.Parameters)
             );
             foreach (var oldParam in priorOperationParameters)
             {
                 SwaggerParameter newParam = FindParameter(oldParam.Name, Parameters, currentRoot.Parameters);
 
-                // we should use PushItemByName instead of PushProperty because Swagger `parameters` is 
-                // an array of paremters.  
+                // we should use PushItemByName instead of PushProperty because Swagger `parameters` is
+                // an array of paremters.
                 context.PushItemByName(oldParam.Name);
 
                 if (newParam != null)
@@ -195,7 +195,7 @@ namespace AutoRest.Swagger.Model
 
                 if (oldParam == null)
                 {
-                    // Did not find required parameter in the old swagger i.e required parameter is added                    
+                    // Did not find required parameter in the old swagger i.e required parameter is added
                     context.PushItemByName(newParam.Name);
                     context.LogBreakingChange(ComparisonMessages.AddingRequiredParameter, newParam.Name);
                     context.Pop();
