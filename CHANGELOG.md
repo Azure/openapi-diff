@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.2 
+
+* Fixed issue : Adding optional property to a model and the properties of the model is null, tool reports AddRequiredProperty.
+
 ## 0.8.1 
 
 * Fixed issue : can not find `node` path when running in pipeline.
