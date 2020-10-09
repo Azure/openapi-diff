@@ -1,5 +1,11 @@
+# Summary
+The openapi-diff tool compares two swagger files based on the certain rules and output the result. The rule have three severities: error,warning,info. Currently ,a rule violation whose severity is 'error' in the result indicates a breaking change.
+
 ## Existing Rules
-| Id Rule Name | IsSameVersionBreakingChange | IsCrossVersionBreakingChange | comments |
+The table shows the details of the rule . The value of field : 'IsAllowed' (which means the error can be allowed in the same version or in new version) needs to be re-confirmed as the breaking change policy has
+changed. A  consensus is that if the violation is allowed in the same version , it's also allowed in the new version.
+
+| Id Rule Name | IsError | IsAllowed(same version | only new version) | comments |
 | --- | --- | --- | --- |
 | [1002 - ProtocolNoLongerSupported](rules/1002.md) |  Y |  ? |  |
 | [1003 - RequestBodyFormatNoLongerSupported](rules/1003.md) | Y | ? | |
@@ -39,4 +45,6 @@
 | [1038 - AddedPath](rules/1038.md)   | N | N | needs to meet the new policy |
 | [1039 - AddedOperation](rules/1039.md)  | N | N |  needs to meet the new policy |
 | [1040 - AddedReadOnlyPropertyInResponse](rules/1040.md)  | N | ? | *the readonly property is optional property but can not be used by the request |
-| [1041 - AddedPropertyInResponse](rules/1041.md)  | Y | N | allowed in cross api versions |
+| [1041 - AddedPropertyInResponse](rules/1041.md)  | Y | CrossVersion | allowed in cross api versions |
+
+## New Rules
