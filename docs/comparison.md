@@ -3,9 +3,9 @@ The openapi-diff tool compares two swagger files based on the certain rules and 
 
 ## Existing Rules
 The table shows the details of the rule . The value of field : 'IsAllowed' (which means the error can be allowed in the same version or in new version) needs to be re-confirmed as the breaking change policy has
-changed. A  consensus is that if the violation is allowed in the same version , it's also allowed in the new version.
+changed. A consensus is that if the violation is allowed in the same version , it's also allowed in the new version.
 
-| Id Rule Name | IsError | IsAllowed(same version | only new version) | comments |
+| Id Rule Name | IsError | IsAllowed(same version or only new version) | comments |
 | --- | --- | --- | --- |
 | [1002 - ProtocolNoLongerSupported](rules/1002.md) |  Y |  ? |  |
 | [1003 - RequestBodyFormatNoLongerSupported](rules/1003.md) | Y | ? | |
