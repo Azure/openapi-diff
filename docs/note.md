@@ -1,8 +1,8 @@
-# Summary
-The openapi-diff tool compares two swagger files based on the certain rules and output the result. The rule have three severity levels: error,warning,info. Currently ,a rule violation whose severity level is 'error' in the result indicates a breaking change.
+## Overview
+The openapi-diff tool compares two swagger files based on the certain rules and output the result. The rule have three severity levels: error,warning,info. During swagger reviewing, the breaking change checker treat the rule violation whose severity level is 'error' in the result as a breaking change.
 
 ## Existing Rules
-The table shows the details of the rule . The value of field : 'Allowable level' (which means the error can be allowed in the same version or in new version) needs to be confirmed as the breaking change policy has
+The table shows the details of all the rules . The field : 'Allowable level' (which means the error can be allowed in the same version or in new version) needs to be confirmed as the breaking change policy has
 changed. A consensus is that if the violation is allowed in the same version , it's also allowed in the new version.
 
 | Id Rule Name | Severity | Allowable level(same version or only new version) | comments |
@@ -48,3 +48,4 @@ changed. A consensus is that if the violation is allowed in the same version , i
 | [1041 - AddedPropertyInResponse](rules/1041.md)  | Error | New version | allowed in cross api versions |
 
 ## New Rules
+- AddedXmsExtension, like: x-ms-client-name, x-ms-client-flatten
