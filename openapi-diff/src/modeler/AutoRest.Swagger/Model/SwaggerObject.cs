@@ -231,7 +231,7 @@ namespace AutoRest.Swagger.Model
             }
         }
 
-        private Boolean isFormatChangedAllowed(ComparisonContext<ServiceDefinition> context, T prior) {
+        private Boolean isFormatChangeAllowed(ComparisonContext<ServiceDefinition> context, T prior) {
             if (this.Type.Equals(DataType.Integer) && !context.Strict && prior.Format != null && this.Format != null) {
                 if (context.Direction == DataDirection.Request && prior.Format.Equals("int32") && this.Format.Equals("int64")) {
                     return true;
@@ -257,7 +257,7 @@ namespace AutoRest.Swagger.Model
 
             if (prior.Format == null && Format != null || 
                 prior.Format != null && Format == null ||
-                prior.Format != null && Format != null && !prior.Format.Equals(Format) && !isFormatChangedAllowed(context,prior))
+                prior.Format != null && Format != null && !prior.Format.Equals(Format) && !isFormatChangeAllowed(context,prior))
             {   
                 context.LogBreakingChange(ComparisonMessages.TypeFormatChanged);
             }
