@@ -789,5 +789,13 @@ namespace AutoRest.Swagger.Tests
             var changes = messages.Where(m => m.Id == ComparisonMessages.RequiredStatusChange.Id && m.Severity == Category.Error).ToList();
             Assert.Equal(2, changes.Count());
         }
+
+        [Fact]
+        public void XmsEnumModelAsString()
+        {
+            var messages = CompareSwagger("enum_as_string.json").ToArray();
+            Assert.Empty(messages.Where(m => m.Id == ComparisonMessages.AddedEnumValue.Id));
+           
+        }
     }
 }
