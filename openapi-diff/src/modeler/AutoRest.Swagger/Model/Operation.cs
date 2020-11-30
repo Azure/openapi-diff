@@ -158,9 +158,34 @@ namespace AutoRest.Swagger.Model
             context.PushProperty("parameters");
 
             var priorOperationParameters = priorOperation.Parameters.Select(param =>
-                string.IsNullOrWhiteSpace(param.Reference) ? param : 
+                string.IsNullOrWhiteSpace(param.Reference) ? param :
                 FindReferencedParameter(param.Reference, previousRoot.Parameters)
             );
+
+            foreach (var it in priorOperation.Parameters)
+            {
+                System.Console.WriteLine(String.Format("Key: {0}", it.Name));
+            }
+            foreach (var it in Parameters)
+            {
+                System.Console.WriteLine(String.Format("Cur: {0}", it.Name));
+            }
+
+            // Check whether operation parameter order change
+            for (int i = 0; i < Parameters.Count; i++)
+            {
+                for (int j = i + 1; j < Parameters.Count; j++)
+                {
+                    var priorI = FindParameterIndex(Parameters.ElementAt(i).Name, priorOperation.Parameters);
+                    var priorJ = FindParameterIndex(Parameters.ElementAt(j).Name, priorOperation.Parameters);
+                    if (priorI != -1 && priorJ != -1 && priorI > priorJ)
+                    {
+                        context.LogBreakingChange(ComparisonMessages.ChangedParameterOrder, Parameters.ElementAt(i).Name, Parameters.ElementAt(j).Name);
+                        System.Console.WriteLine(String.Format("Breaking change Order change {0}, {1}", Parameters.ElementAt(i).Name, Parameters.ElementAt(j).Name));
+                    }
+                }
+            }
+
             foreach (var oldParam in priorOperationParameters)
             {
                 SwaggerParameter newParam = FindParameter(oldParam.Name, Parameters, currentRoot.Parameters);
@@ -229,6 +254,18 @@ namespace AutoRest.Swagger.Model
                 }
             }
             return null;
+        }
+
+        private int FindParameterIndex(string name, IList<SwaggerParameter> operationParameters)
+        {
+            for (int i = 0; i < operationParameters.Count; i++)
+            {
+                if (operationParameters.ElementAt(i).Name == name)
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         private OperationResponse FindResponse(string name, IDictionary<string, OperationResponse> responses)
