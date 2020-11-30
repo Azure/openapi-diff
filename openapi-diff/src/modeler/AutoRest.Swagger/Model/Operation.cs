@@ -162,15 +162,6 @@ namespace AutoRest.Swagger.Model
                 FindReferencedParameter(param.Reference, previousRoot.Parameters)
             );
 
-            foreach (var it in priorOperation.Parameters)
-            {
-                System.Console.WriteLine(String.Format("Key: {0}", it.Name));
-            }
-            foreach (var it in Parameters)
-            {
-                System.Console.WriteLine(String.Format("Cur: {0}", it.Name));
-            }
-
             // Check whether operation parameter order change
             for (int i = 0; i < Parameters.Count; i++)
             {
@@ -181,7 +172,6 @@ namespace AutoRest.Swagger.Model
                     if (priorI != -1 && priorJ != -1 && priorI > priorJ)
                     {
                         context.LogBreakingChange(ComparisonMessages.ChangedParameterOrder, Parameters.ElementAt(i).Name, Parameters.ElementAt(j).Name);
-                        System.Console.WriteLine(String.Format("Breaking change Order change {0}, {1}", Parameters.ElementAt(i).Name, Parameters.ElementAt(j).Name));
                     }
                 }
             }
