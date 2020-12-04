@@ -801,7 +801,7 @@ namespace AutoRest.Swagger.Tests
         public void ChangedParameterOrder()
         {
             var messages = CompareSwagger("parameter_order_change.json").ToArray();
-            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id).Count());
+            Assert.Equal(2, messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id).Count());
         }
     }
 }
