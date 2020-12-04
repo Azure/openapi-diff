@@ -162,13 +162,17 @@ namespace AutoRest.Swagger.Model
                 FindReferencedParameter(param.Reference, previousRoot.Parameters)
             );
 
+            var currentOperationParameters = Parameters.Select(param =>
+                string.IsNullOrWhiteSpace(param.Reference) ? param :
+                FindReferencedParameter(param.Reference, currentRoot.Parameters));
+
             // Check whether operation parameter order change
             for (int i = 0; i < Parameters.Count; i++)
             {
                 for (int j = i + 1; j < Parameters.Count; j++)
                 {
-                    var priorI = FindParameterIndex(Parameters.ElementAt(i).Name, priorOperation.Parameters);
-                    var priorJ = FindParameterIndex(Parameters.ElementAt(j).Name, priorOperation.Parameters);
+                    var priorI = FindParameterIndex(Parameters.ElementAt(i), priorOperation.Parameters);
+                    var priorJ = FindParameterIndex(Parameters.ElementAt(j), priorOperation.Parameters);
                     if (priorI != -1 && priorJ != -1 && priorI > priorJ)
                     {
                         context.LogBreakingChange(ComparisonMessages.ChangedParameterOrder, Parameters.ElementAt(i).Name, Parameters.ElementAt(j).Name);
@@ -246,11 +250,11 @@ namespace AutoRest.Swagger.Model
             return null;
         }
 
-        private int FindParameterIndex(string name, IList<SwaggerParameter> operationParameters)
+        private int FindParameterIndex(SwaggerParameter parameter, IList<SwaggerParameter> operationParameters)
         {
             for (int i = 0; i < operationParameters.Count; i++)
             {
-                if (operationParameters.ElementAt(i).Name == name)
+                if (operationParameters.ElementAt(i).Name == parameter.Name && operationParameters.ElementAt(i).In == parameter.In)
                 {
                     return i;
                 }
