@@ -166,17 +166,17 @@ namespace AutoRest.Swagger.Model
                 string.IsNullOrWhiteSpace(param.Reference) ? param :
                 FindReferencedParameter(param.Reference, currentRoot.Parameters));
 
-            // Check whether operation parameter order change
             for (int i = 0; i < Parameters.Count; i++)
             {
-                for (int j = i + 1; j < Parameters.Count; j++)
+                var curParameter = Parameters.ElementAt(i);
+                if (curParameter.In == ParameterLocation.Path)
                 {
-                    var priorI = FindParameterIndex(Parameters.ElementAt(i), priorOperation.Parameters);
-                    var priorJ = FindParameterIndex(Parameters.ElementAt(j), priorOperation.Parameters);
-                    if (priorI != -1 && priorJ != -1 && priorI > priorJ)
-                    {
-                        context.LogBreakingChange(ComparisonMessages.ChangedParameterOrder, Parameters.ElementAt(i).Name, Parameters.ElementAt(j).Name);
-                    }
+                    continue;
+                }
+                var priorIndex = FindParameterIndex(curParameter, priorOperation.Parameters);
+                if (priorIndex != -1 && priorIndex != i)
+                {
+                    context.LogBreakingChange(ComparisonMessages.ChangedParameterOrder, curParameter.Name);
                 }
             }
 
