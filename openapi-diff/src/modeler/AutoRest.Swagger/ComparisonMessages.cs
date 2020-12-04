@@ -94,7 +94,7 @@
         {
             Id = 1042,
             Code = nameof(ComparisonMessages.ChangedParameterOrder),
-            Message = "The parameter order '{0}' was changed. ",
+            Message = "The order of parameter '{0}' was changed. ",
             Type = MessageType.Update
         };
 
