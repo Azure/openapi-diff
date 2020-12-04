@@ -166,14 +166,14 @@ namespace AutoRest.Swagger.Model
                 string.IsNullOrWhiteSpace(param.Reference) ? param :
                 FindReferencedParameter(param.Reference, currentRoot.Parameters));
 
-            for (int i = 0; i < Parameters.Count; i++)
+            for (int i = 0; i < currentOperationParameters.Count(); i++)
             {
                 var curParameter = Parameters.ElementAt(i);
                 if (curParameter.In == ParameterLocation.Path)
                 {
                     continue;
                 }
-                var priorIndex = FindParameterIndex(curParameter, priorOperation.Parameters);
+                var priorIndex = FindParameterIndex(curParameter, priorOperationParameters);
                 if (priorIndex != -1 && priorIndex != i)
                 {
                     context.LogBreakingChange(ComparisonMessages.ChangedParameterOrder, curParameter.Name);
@@ -250,9 +250,9 @@ namespace AutoRest.Swagger.Model
             return null;
         }
 
-        private int FindParameterIndex(SwaggerParameter parameter, IList<SwaggerParameter> operationParameters)
+        private int FindParameterIndex(SwaggerParameter parameter, IEnumerable<SwaggerParameter> operationParameters)
         {
-            for (int i = 0; i < operationParameters.Count; i++)
+            for (int i = 0; i < operationParameters.Count(); i++)
             {
                 if (operationParameters.ElementAt(i).Name == parameter.Name && operationParameters.ElementAt(i).In == parameter.In)
                 {
