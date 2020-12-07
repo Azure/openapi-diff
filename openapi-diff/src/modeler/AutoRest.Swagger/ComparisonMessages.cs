@@ -90,6 +90,14 @@
             Type = MessageType.Removal
         };
 
+        public static MessageTemplate ChangedParameterOrder = new MessageTemplate
+        {
+            Id = 1042,
+            Code = nameof(ComparisonMessages.ChangedParameterOrder),
+            Message = "The order of parameter '{0}' was changed. ",
+            Type = MessageType.Update
+        };
+
         public static MessageTemplate AddingRequiredParameter = new MessageTemplate
         {
             Id = 1010,

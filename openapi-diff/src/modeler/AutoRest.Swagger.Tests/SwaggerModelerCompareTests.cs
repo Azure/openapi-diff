@@ -54,7 +54,7 @@ namespace AutoRest.Swagger.Tests
             Assert.True(oldLocation != null || newLocation != null);
             switch (message.Mode)
             {
-                case MessageType.Update:                    
+                case MessageType.Update:
                     break;
                 case MessageType.Addition:
                     Assert.NotNull(newLocation);
@@ -136,8 +136,8 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
-         /// Verifies that if you change the type of a schema property, it's caught.
-         /// </summary>
+        /// Verifies that if you change the type of a schema property, it's caught.
+        /// </summary>
         [Fact]
         public void PropertyTypeChanged()
         {
@@ -328,7 +328,7 @@ namespace AutoRest.Swagger.Tests
             var missing = messages.Where(m => m.Id == ComparisonMessages.AddedReadOnlyPropertyInResponse.Id);
             Assert.Single(missing);
             Assert.NotEmpty(missing.Where(
-                m => m.Severity == Category.Info && 
+                m => m.Severity == Category.Info &&
                 m.NewJsonRef == "new/readonly_changes.json#/paths/~1subscriptions~1{subscriptionId}~1providers~1Microsoft.Storage~1checkNameAvailability/post/responses/200/schema/properties"));
         }
 
@@ -342,7 +342,7 @@ namespace AutoRest.Swagger.Tests
             var missing = messages.Where(m => m.Id == ComparisonMessages.AddedPropertyInResponse.Id);
             Assert.Single(missing);
             var x = missing.First(
-                m => m.Severity == Category.Error && 
+                m => m.Severity == Category.Error &&
                 m.NewJsonRef.Contains(
                     "#/paths/~1subscriptions~1{subscriptionId}~1providers~1Microsoft.Storage~1checkNameAvailability/post/responses/200/schema/properties"
                 )
@@ -795,7 +795,13 @@ namespace AutoRest.Swagger.Tests
         {
             var messages = CompareSwagger("enum_as_string.json").ToArray();
             Assert.Empty(messages.Where(m => m.Id == ComparisonMessages.AddedEnumValue.Id));
-           
+        }
+
+        [Fact]
+        public void ChangedParameterOrder()
+        {
+            var messages = CompareSwagger("parameter_order_change.json").ToArray();
+            Assert.Equal(2, messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id).Count());
         }
     }
 }

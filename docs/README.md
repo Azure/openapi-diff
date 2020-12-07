@@ -81,3 +81,5 @@
 [1040 - AddedReadOnlyPropertyInResponse](rules/1040.md)
 
 [1041 - AddedPropertyInResponse](rules/1041.md)
+
+[1042 - ChangedParameterOrder](rules/1042.md)

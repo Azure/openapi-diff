@@ -158,9 +158,28 @@ namespace AutoRest.Swagger.Model
             context.PushProperty("parameters");
 
             var priorOperationParameters = priorOperation.Parameters.Select(param =>
-                string.IsNullOrWhiteSpace(param.Reference) ? param : 
+                string.IsNullOrWhiteSpace(param.Reference) ? param :
                 FindReferencedParameter(param.Reference, previousRoot.Parameters)
             );
+
+            var currentOperationParameters = Parameters.Select(param =>
+                string.IsNullOrWhiteSpace(param.Reference) ? param :
+                FindReferencedParameter(param.Reference, currentRoot.Parameters));
+
+            for (int i = 0; i < currentOperationParameters.Count(); i++)
+            {
+                var curParameter = Parameters.ElementAt(i);
+                if (curParameter.In == ParameterLocation.Path)
+                {
+                    continue;
+                }
+                var priorIndex = FindParameterIndex(curParameter, priorOperationParameters);
+                if (priorIndex != -1 && priorIndex != i)
+                {
+                    context.LogBreakingChange(ComparisonMessages.ChangedParameterOrder, curParameter.Name);
+                }
+            }
+
             foreach (var oldParam in priorOperationParameters)
             {
                 SwaggerParameter newParam = FindParameter(oldParam.Name, Parameters, currentRoot.Parameters);
@@ -229,6 +248,18 @@ namespace AutoRest.Swagger.Model
                 }
             }
             return null;
+        }
+
+        private int FindParameterIndex(SwaggerParameter parameter, IEnumerable<SwaggerParameter> operationParameters)
+        {
+            for (int i = 0; i < operationParameters.Count(); i++)
+            {
+                if (operationParameters.ElementAt(i).Name == parameter.Name && operationParameters.ElementAt(i).In == parameter.In)
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         private OperationResponse FindResponse(string name, IDictionary<string, OperationResponse> responses)
