@@ -57,6 +57,25 @@ export function mergeArrays<T extends Data>(source: ReadonlyArray<T>, target: T[
   return target
 }
 
+function getParamKey(source: any) {
+  return source.$ref ? source.$ref : source.in + source.name
+}
+
+function getNextKey(source: sm.MutableStringMap<Data>) {
+  const result = sm.keys(source).reduce((a, b) => (a > b ? a : b))
+  return (+(result as string) + 1).toString()
+}
+
+function mergeParameters<T extends sm.MutableStringMap<Data>>(source: T, target: T): T {
+  const result: sm.MutableStringMap<Data> = target
+  for (const sourceProperty of sm.values(source)) {
+    if (!sm.values(target).some(v => getParamKey(v) === getParamKey(sourceProperty))) {
+      result[getNextKey(result)] = sourceProperty
+    }
+  }
+  return result as T
+}
+
 /**
  * This class aimed at process some swagger extensions like x-ms-path and
  * you can also resolve some swagger keyword e.g allOf here, then return a
@@ -73,6 +92,7 @@ export class ResolveSwagger {
     const content: string = readFileSync(this.file, { encoding: "utf8" })
     this.parse(this.file, content)
     this.unifyXMsPaths()
+    this.ConvertPathLevelParameter()
     this.generateNew()
     return this.innerSwagger
   }
@@ -90,6 +110,29 @@ export class ResolveSwagger {
       }
       swagger.paths = mergeObjects(xmsPaths, paths)
       delete swagger["x-ms-paths"]
+    }
+  }
+
+  private ConvertPathLevelParameter() {
+    if (!this.innerSwagger) {
+      throw new Error("Null swagger object")
+    }
+    const swagger = this.innerSwagger as any
+    const paths = swagger.paths
+    if (paths && paths instanceof Object && toArray(sm.keys(paths)).length > 0) {
+      for (const [property, v] of sm.entries(paths)) {
+        const pathsLevelParameters = (v as any).parameters
+        if (!pathsLevelParameters) {
+          continue
+        }
+        for (const [httpMethod, o] of sm.entries(v as any)) {
+          if (httpMethod.toLowerCase() !== "parameters") {
+            const operationParam = (o as any).parameters ? (o as any).parameters : []
+            paths[property][httpMethod].parameters = mergeParameters(pathsLevelParameters, operationParam)
+          }
+        }
+        delete (v as any).parameters
+      }
     }
   }
 

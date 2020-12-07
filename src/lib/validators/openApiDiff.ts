@@ -306,6 +306,6 @@ export class OpenApiDiff {
       new: updateChangeProperties(message.new, newSwaggerFile),
       old: updateChangeProperties(message.old, oldSwaggerFile)
     }))
-    return JSON.stringify(updatedJson)
+    return JSON.stringify(updatedJson, undefined, 2)
   }
 }

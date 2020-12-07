@@ -38,9 +38,9 @@
         }
       },
       "allOf":[
-        { "$ref":"#/definition/DataBaseProperties"}
+        { "$ref":"#/definitions/DataBaseProperties"}
       ],
-      "required": [ "b" ]
+      "required": [ "a" ]
     },
     "DataBaseProperties" :{
       "properties" : {

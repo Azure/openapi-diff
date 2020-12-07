@@ -3,6 +3,7 @@ using OpenApiDiff.Core;
 using OpenApiDiff.Core.Logging;
 using System;
 using System.Collections.Generic;
+using AutoRest.Swagger.Model;
 
 namespace AutoRest.Swagger
 {
@@ -13,7 +14,9 @@ namespace AutoRest.Swagger
     public class ComparisonContext<T>
     {
         private readonly JsonDocument<T> _CurrentRootDoc;
-        private readonly JsonDocument<T> _PreviousRootDoc; 
+        private readonly JsonDocument<T> _PreviousRootDoc;
+        public readonly SchemaResolver CurrentResolver;
+        public readonly SchemaResolver PreviousResolver;
 
         /// <summary>
         /// Initializes a top level context for comparisons
@@ -29,6 +32,8 @@ namespace AutoRest.Swagger
             {
                 Strict = settings.Strict;
             }
+            CurrentResolver = new SchemaResolver(CurrentRoot as ServiceDefinition);
+            PreviousResolver = new SchemaResolver(PreviousRoot as ServiceDefinition);
         }
 
         /// <summary>
