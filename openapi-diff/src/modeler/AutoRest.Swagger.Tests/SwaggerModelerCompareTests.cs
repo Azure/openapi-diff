@@ -808,14 +808,14 @@ namespace AutoRest.Swagger.Tests
         public void MovePropertiesIntoAllOfModel()
         {
             var messages = CompareSwagger("move_properties_into_allof_model.json").ToArray();
-            Assert.Empty(messages.Where(m => m.Id == ComparisonMessages.RemovedProperty.Id));
+            Assert.Equal(2, messages.Where(m => m.Id == ComparisonMessages.RemovedProperty.Id).Count());
         }
 
         [Fact]
         public void ExpandsAllOfModel()
         {
             var messages = CompareSwagger("expand_allOf_model.json").ToArray();
-            Assert.Empty(messages.Where(m => m.Id == ComparisonMessages.AddedRequiredProperty.Id));
+            Assert.Equal(4, messages.Where(m => m.Id == ComparisonMessages.AddedRequiredProperty.Id).Count());
 
         }
     }

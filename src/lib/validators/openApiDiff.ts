@@ -15,6 +15,7 @@ import * as util from "util"
 import { log } from "../util/logging"
 import { ResolveSwagger } from "../util/resolveSwagger"
 import { pathToJsonPointer } from "../util/utils"
+const _ = require("lodash")
 
 const exec = util.promisify(child_process.exec)
 
@@ -299,13 +300,14 @@ export class OpenApiDiff {
 
     log.debug(`Executing: "${cmd}"`)
     const { stdout } = await exec(cmd, { encoding: "utf8", maxBuffer: 1024 * 1024 * 64 })
-    const resultJson = jsonParser.parse("", stdout) as Messages
+    const resultJson = JSON.parse(stdout) as Messages
 
     const updatedJson = resultJson.map(message => ({
       ...message,
       new: updateChangeProperties(message.new, newSwaggerFile),
       old: updateChangeProperties(message.old, oldSwaggerFile)
     }))
-    return JSON.stringify(updatedJson, undefined, 2)
+    const uniqueJson = _.uniqWith(updatedJson, _.isEqual)
+    return JSON.stringify(uniqueJson)
   }
 }

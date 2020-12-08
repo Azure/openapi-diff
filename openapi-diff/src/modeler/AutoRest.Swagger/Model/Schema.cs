@@ -231,10 +231,6 @@ namespace AutoRest.Swagger.Model
         private void CompareProperties(ComparisonContext<ServiceDefinition> context, Schema priorSchema)
         {
             // Case: Were any properties removed?
-
-            context.CurrentResolver.ExpandAllOf(this);
-            context.PreviousResolver.ExpandAllOf(priorSchema);
-
             if (priorSchema.Properties != null)
             {
                 foreach (var def in priorSchema.Properties)
@@ -277,54 +273,6 @@ namespace AutoRest.Swagger.Model
                     }
                 }
             }
-        }
-
-        
-        /*
-         * get property from properties and allOf models 
-        */
-        public Schema GetPropertyDeeply(ComparisonContext<ServiceDefinition> context, Schema priorSchema, string propertyName, out List<string> paths) {
-            paths = new List<string>();
-            if (priorSchema != null) {
-                if (priorSchema.Properties != null && priorSchema.Properties.TryGetValue(propertyName,out var model)) {
-                    paths.Add("properties");
-                    return model;
-                }
-                if (priorSchema.Reference != null) {
-                    var refModel = FindReferencedSchema(priorSchema.Reference, context.CurrentRoot.Definitions);
-                    if (refModel != null)
-                    {
-                        var property = GetPropertyDeeply(context, refModel,propertyName,out var outPaths);
-                        if (null != property)
-                        {
-                            return property;        
-                        }
-                    }
- 
-                } 
-            }
-            if (priorSchema.AllOf != null) {
-                paths.Add("allOf");
-                foreach (var schema in priorSchema.AllOf)
-                {
-                    var refModel = schema;
-                    if (schema.IsReferenced)
-                    {
-                        refModel = FindReferencedSchema(schema.Reference, context.CurrentRoot.Definitions);
-                        if (refModel == null)
-                        {
-                            continue;
-                        }
-                    }
-                   
-                    var model = GetPropertyDeeply(context,refModel,propertyName, out var outPaths);
-                    if (null != model) {
-                        return model;
-                    }
-                }
-            }
-
-            return null;
         }
 
         public static Schema FindReferencedSchema(string reference, IDictionary<string, Schema> definitions)

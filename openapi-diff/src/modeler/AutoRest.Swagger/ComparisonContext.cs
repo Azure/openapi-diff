@@ -15,8 +15,6 @@ namespace AutoRest.Swagger
     {
         private readonly JsonDocument<T> _CurrentRootDoc;
         private readonly JsonDocument<T> _PreviousRootDoc;
-        public readonly SchemaResolver CurrentResolver;
-        public readonly SchemaResolver PreviousResolver;
 
         /// <summary>
         /// Initializes a top level context for comparisons
@@ -32,8 +30,6 @@ namespace AutoRest.Swagger
             {
                 Strict = settings.Strict;
             }
-            CurrentResolver = new SchemaResolver(CurrentRoot as ServiceDefinition);
-            PreviousResolver = new SchemaResolver(PreviousRoot as ServiceDefinition);
         }
 
         /// <summary>

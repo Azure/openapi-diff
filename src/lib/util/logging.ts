@@ -19,7 +19,7 @@ function getTimeStamp() {
       return "0" + number
     }
 
-    return number
+    return number + ""
   }
 
   const now = new Date()
