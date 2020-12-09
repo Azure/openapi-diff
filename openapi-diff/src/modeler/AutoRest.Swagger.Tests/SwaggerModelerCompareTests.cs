@@ -803,20 +803,5 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("parameter_order_change.json").ToArray();
             Assert.Equal(2, messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id).Count());
         }
-
-        [Fact]
-        public void MovePropertiesIntoAllOfModel()
-        {
-            var messages = CompareSwagger("move_properties_into_allof_model.json").ToArray();
-            Assert.Equal(2, messages.Where(m => m.Id == ComparisonMessages.RemovedProperty.Id).Count());
-        }
-
-        [Fact]
-        public void ExpandsAllOfModel()
-        {
-            var messages = CompareSwagger("expand_allOf_model.json").ToArray();
-            Assert.Equal(4, messages.Where(m => m.Id == ComparisonMessages.AddedRequiredProperty.Id).Count());
-
-        }
     }
 }
