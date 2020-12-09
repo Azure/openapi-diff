@@ -307,10 +307,7 @@ export class ResolveSwagger {
   }
 
   public getSwaggerFolder(): string {
-    return this.file
-      .split("/")
-      .slice(0, -1)
-      .join("/")
+    return this.file.split("/").slice(0, -1).join("/")
   }
 
   public getResolvedPath(): string {

@@ -77,7 +77,7 @@ Object.defineProperties(log, {
       }
       const validLevels = Object.keys(customLogLevels)
       if (
-        !validLevels.some(function(item) {
+        !validLevels.some(function (item) {
           return item === level
         })
       ) {
