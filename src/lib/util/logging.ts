@@ -14,12 +14,12 @@ let logDir: unknown
  */
 function getTimeStamp() {
   // We pad each value so that sorted directory listings show the files in chronological order
-  function pad(number: any) {
+  function pad(number: number) {
     if (number < 10) {
       return "0" + number
     }
 
-    return number + ""
+    return number.toString()
   }
 
   const now = new Date()

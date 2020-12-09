@@ -61,6 +61,11 @@ function getParamKey(source: any) {
   return source.$ref ? source.$ref : source.in + source.name
 }
 
+/**
+ * Get next array index for source object,
+ * the source object is actually an array but treats as an object, so the its key must be number
+ * @param source
+ */
 function getNextKey(source: sm.MutableStringMap<Data>) {
   const result = sm.keys(source).reduce((a, b) => (a > b ? a : b))
   return (+(result as string) + 1).toString()
@@ -126,10 +131,11 @@ export class ResolveSwagger {
         if (!pathsLevelParameters) {
           continue
         }
-        for (const [httpMethod, o] of sm.entries(v as any)) {
-          if (httpMethod.toLowerCase() !== "parameters") {
+        for (const [key, o] of sm.entries(v as any)) {
+          // key != parameters indicates an http method
+          if (key.toLowerCase() !== "parameters") {
             const operationParam = (o as any).parameters ? (o as any).parameters : []
-            paths[property][httpMethod].parameters = mergeParameters(pathsLevelParameters, operationParam)
+            paths[property][key].parameters = mergeParameters(pathsLevelParameters, operationParam)
           }
         }
         delete (v as any).parameters
@@ -175,7 +181,7 @@ export class ResolveSwagger {
       if (allOfSchema.properties) {
         sm.keys(allOfSchema.properties).forEach(key => {
           if (sm.keys(schemaList).some(k => k === key)) {
-            if (!this.isEqual(schemaList[key], allOfSchema.properties[key])) {
+            if (!this.isEqual(allOfSchema.properties[key], schemaList[key])) {
               throw new Error(`incompatible properties : ${key} `)
             }
           } else {
@@ -196,9 +202,9 @@ export class ResolveSwagger {
     schema.properties = schemaList
   }
   /**
-   * @description Compare two property to see if they have same definitions.
-   * @param parentProperty
-   * @param unwrappedProperty
+   * @description Compare two properties to check if they are equivalent.
+   * @param parentProperty the property in allOf model.
+   * @param unwrappedProperty the property in current model.
    */
   private isEqual(parentProperty: any, unwrappedProperty: any): boolean {
     if (!parentProperty) {
@@ -250,6 +256,10 @@ export class ResolveSwagger {
     }
   }
 
+  /**
+   * Get the definition name from the reference string.
+   * @param ref a json reference
+   */
   private getModelName(ref: string) {
     const parts = ref.split("/")
     if (parts.length === 3 && parts[1] === "definitions") {
@@ -265,7 +275,7 @@ export class ResolveSwagger {
         throw new Error("Circular reference")
       }
       if (visitedRefs.size > 40) {
-        throw new Error("Exceeded max reference count")
+        throw new Error("Exceeded max(40) reference count.")
       }
       visitedRefs.add(ref)
       const definitions = (this.innerSwagger as any).definitions
