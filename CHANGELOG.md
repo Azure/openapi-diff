@@ -2,7 +2,8 @@
 
 ## 0.8.4
 
-- Add new rule ChangedParameter order
+- Add new rule ChangedParameter order.
+- Expands "allOf" to compare.
 
 ## 0.8.2
 
