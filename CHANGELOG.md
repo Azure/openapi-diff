@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.5
+
+- Fixed bug: multiple level 'allOf' comparing fails. 
+
 ## 0.8.4
 
 - Add new rule ChangedParameter order.

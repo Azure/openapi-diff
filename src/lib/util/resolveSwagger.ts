@@ -178,6 +178,9 @@ export class ResolveSwagger {
           throw new Error("Invalid reference:" + allOfSchema.$ref)
         }
       }
+      if (allOfSchema.allOf) {
+        this.ExpandAllOf(allOfSchema)
+      }
       if (allOfSchema.properties) {
         sm.keys(allOfSchema.properties).forEach(key => {
           if (sm.keys(schemaList).some(k => k === key)) {

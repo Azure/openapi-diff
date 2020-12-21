@@ -1,6 +1,6 @@
 {
   "name": "@azure/oad",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "author": {
     "name": "Microsoft Corporation",
     "email": "azsdkteam@microsoft.com",
@@ -67,6 +67,7 @@
     "src/index.ts",
     "src/cli.ts",
     "src/lib",
+    "template/*",
     "package.json",
     "README.md",
     "LICENSE"
