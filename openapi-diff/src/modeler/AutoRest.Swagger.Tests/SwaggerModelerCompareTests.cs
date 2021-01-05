@@ -318,6 +318,16 @@ namespace AutoRest.Swagger.Tests
             Assert.Null(x.OldJson());
         }
 
+        public void OptionalParameterAdded()
+        {
+            var messages = CompareSwagger("optional_parameter.json").ToArray();
+            var missing = messages.Where(m => m.Id == ComparisonMessages.AddingOptionalParameter.Id);
+            Assert.Single(missing);
+            var x = missing.First(m => m.Severity == Category.Error && m.NewJsonRef == "new/optional_parameter.json#/paths/~1api~1Parameters~1{a}/get/parameters/4");
+            Assert.NotNull(x.NewJson());
+            Assert.Null(x.OldJson());
+        }
+
         /// <summary>
         /// Verifies that if you add a new readOnly property in the response model, it is flagged as info
         /// </summary>
@@ -760,7 +770,7 @@ namespace AutoRest.Swagger.Tests
         public void CommonParameterAdded()
         {
             var messages = CompareSwagger("common_parameter_check_01.json").ToArray();
-            Assert.Empty(messages.Where(m => m.Severity == Category.Error));
+            Assert.Single(messages.Where(m => m.Severity == Category.Error));
         }
 
         [Fact]

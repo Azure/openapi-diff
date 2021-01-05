@@ -205,7 +205,7 @@ namespace AutoRest.Swagger.Model
             var requiredParamters = Parameters.Select(param =>
                                         string.IsNullOrWhiteSpace(param.Reference) ?
                                         param : FindReferencedParameter(param.Reference, currentRoot.Parameters))
-                                        .Where(p => p != null && p.IsRequired);
+                                        .Where(p => p != null);
             foreach (var newParam in requiredParamters)
             {
                 if (newParam == null) continue;
@@ -216,7 +216,12 @@ namespace AutoRest.Swagger.Model
                 {
                     // Did not find required parameter in the old swagger i.e required parameter is added                    
                     context.PushItemByName(newParam.Name);
-                    context.LogBreakingChange(ComparisonMessages.AddingRequiredParameter, newParam.Name);
+                    if (newParam.IsRequired) {
+                        context.LogBreakingChange(ComparisonMessages.AddingRequiredParameter, newParam.Name);
+                    }
+                    else {
+                        context.LogBreakingChange(ComparisonMessages.AddingOptionalParameter, newParam.Name);
+                    }
                     context.Pop();
                 }
             }
