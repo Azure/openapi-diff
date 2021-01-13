@@ -201,12 +201,12 @@ namespace AutoRest.Swagger.Model
                 context.Pop();
             }
 
-            // Check that no required parameters were added.
-            var requiredParamters = Parameters.Select(param =>
+            // Check that no required or optional parameters were added.
+            var allParamters = Parameters.Select(param =>
                                         string.IsNullOrWhiteSpace(param.Reference) ?
                                         param : FindReferencedParameter(param.Reference, currentRoot.Parameters))
                                         .Where(p => p != null);
-            foreach (var newParam in requiredParamters)
+            foreach (var newParam in allParamters)
             {
                 if (newParam == null) continue;
 
