@@ -106,6 +106,14 @@
             Type = MessageType.Addition
         };
 
+        public static MessageTemplate AddingOptionalParameter = new MessageTemplate
+        {
+            Id = 1043,
+            Code = nameof(ComparisonMessages.AddingOptionalParameter),
+            Message = "The optional parameter '{0}' was added in the new version.",
+            Type = MessageType.Addition
+        };
+
         public static MessageTemplate RequiredStatusChange = new MessageTemplate
         {
             Id = 1025,

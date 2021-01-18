@@ -83,3 +83,5 @@
 [1041 - AddedPropertyInResponse](rules/1041.md)
 
 [1042 - ChangedParameterOrder](rules/1042.md)
+
+[1043 - AddingOptionalParameter](rules/1043.md)

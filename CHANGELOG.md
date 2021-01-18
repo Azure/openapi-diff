@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.6 Released on 2021-01-18
+
+- Add new rule - AddingOptionalParameter.
+
 ## 0.8.5
 
 - Fixed bug: multiple level 'allOf' comparing fails. 
