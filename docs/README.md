@@ -85,3 +85,5 @@
 [1042 - ChangedParameterOrder](rules/1042.md)
 
 [1043 - AddingOptionalParameter](rules/1043.md)
+
+[1044 - XmsLongRunningOperationChanged](rules/1044.md)

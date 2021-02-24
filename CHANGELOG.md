@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.7 Released on 2021-02-24
+
+- Add new rule - XmsLongRunningOperationChanged.
+
 ## 0.8.6 Released on 2021-01-18
 
 - Add new rule - AddingOptionalParameter.
