@@ -345,5 +345,13 @@
             Message = "The new version has a different '{0}' value than the previous one.",
             Type = MessageType.Update
         };
+
+        public static MessageTemplate LongRunningOperationExtensionChanged = new MessageTemplate
+        {
+            Id = 1036,
+            Code = nameof(ComparisonMessages.LongRunningOperationExtensionChanged),
+            Message = "The new version has a different 'x-ms-longrunning-operation' value than the previous one.",
+            Type = MessageType.Update
+        };
     }
 }

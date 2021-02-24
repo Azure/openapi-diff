@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace AutoRest.Swagger.Model
@@ -16,6 +17,7 @@ namespace AutoRest.Swagger.Model
         /// <summary>
         /// Vendor extensions.
         /// </summary>
+        [JsonExtensionData]
         public Dictionary<string, object> Extensions { get; set; }
 
         /// <summary>

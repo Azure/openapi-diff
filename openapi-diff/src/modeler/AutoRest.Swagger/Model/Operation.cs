@@ -102,6 +102,15 @@ namespace AutoRest.Swagger.Model
             {
                 context.LogBreakingChange(ComparisonMessages.ModifiedOperationId, priorOperation.OperationId, OperationId);
             }
+            Extensions.TryGetValue("x-ms-long-running-operation", out var currentLongrunningOperationValue);
+            priorOperation.Extensions.TryGetValue("x-ms-long-running-operation", out var priorLongrunningOperationValue);
+
+            currentLongrunningOperationValue = currentLongrunningOperationValue == null ? false : currentLongrunningOperationValue;
+            priorLongrunningOperationValue = priorLongrunningOperationValue == null ? false : priorLongrunningOperationValue;
+            if (!currentLongrunningOperationValue.Equals(priorLongrunningOperationValue))
+            {
+                context.LogBreakingChange(ComparisonMessages.LongRunningOperationExtensionChanged);
+            }
 
             CheckParameters(context, priorOperation);
 
