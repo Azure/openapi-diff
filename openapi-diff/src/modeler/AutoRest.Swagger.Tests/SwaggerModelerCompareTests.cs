@@ -820,5 +820,12 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("long_running_operation.json").ToArray();
             Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.LongRunningOperationExtensionChanged.Id).Count());
         }
+
+        [Fact]
+        public void AddedOptionalProperty()
+        {
+            var messages = CompareSwagger("added_optional_property.json").ToArray();
+            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.AddedOptionalProperty.Id).Count());
+        }
     }
 }
