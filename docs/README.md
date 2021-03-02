@@ -87,3 +87,5 @@
 [1043 - AddingOptionalParameter](rules/1043.md)
 
 [1044 - XmsLongRunningOperationChanged](rules/1044.md)
+
+[1045 - AddedOptionalProperty](rules/1045.md)

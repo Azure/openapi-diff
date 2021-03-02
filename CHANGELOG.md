@@ -3,6 +3,7 @@
 ## 0.8.7 Released on 2021-02-24
 
 - Add new rule - XmsLongRunningOperationChanged.
+- Add new rule - AddedOptionalProperty.
 
 ## 0.8.6 Released on 2021-01-18
 

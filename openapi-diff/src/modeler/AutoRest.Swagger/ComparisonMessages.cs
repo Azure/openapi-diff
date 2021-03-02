@@ -34,6 +34,14 @@
             Type = MessageType.Addition
         };
 
+        public static MessageTemplate AddedOptionalProperty = new MessageTemplate
+        {
+            Id = 1045,
+            Code = nameof(ComparisonMessages.AddedOptionalProperty),
+            Message = "The new version has a new optional property '{0}' that was not found in the old version.",
+            Type = MessageType.Addition
+        };
+
         public static MessageTemplate RemovedDefinition = new MessageTemplate
         {
             Id = 1006,
