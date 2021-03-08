@@ -269,6 +269,10 @@ namespace AutoRest.Swagger.Model
                                 context.LogInfo(ComparisonMessages.AddedReadOnlyPropertyInResponse, property.Key);
                             else
                                 context.LogBreakingChange(ComparisonMessages.AddedPropertyInResponse, property.Key);
+                        } 
+                        else if (priorSchema.IsReferenced && property.Value != null)
+                        {
+                            context.LogBreakingChange(ComparisonMessages.AddedOptionalProperty, property.Key);
                         }
                     }
                 }

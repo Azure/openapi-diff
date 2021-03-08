@@ -34,6 +34,14 @@
             Type = MessageType.Addition
         };
 
+        public static MessageTemplate AddedOptionalProperty = new MessageTemplate
+        {
+            Id = 1045,
+            Code = nameof(ComparisonMessages.AddedOptionalProperty),
+            Message = "The new version has a new optional property '{0}' that was not found in the old version.",
+            Type = MessageType.Addition
+        };
+
         public static MessageTemplate RemovedDefinition = new MessageTemplate
         {
             Id = 1006,
@@ -343,6 +351,14 @@
             Id = 1036,
             Code = nameof(ComparisonMessages.ConstraintChanged),
             Message = "The new version has a different '{0}' value than the previous one.",
+            Type = MessageType.Update
+        };
+
+        public static MessageTemplate LongRunningOperationExtensionChanged = new MessageTemplate
+        {
+            Id = 1036,
+            Code = nameof(ComparisonMessages.LongRunningOperationExtensionChanged),
+            Message = "The new version has a different 'x-ms-longrunning-operation' value than the previous one.",
             Type = MessageType.Update
         };
     }
