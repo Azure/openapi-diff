@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.8 Released on 2021-03-19
+
+- Fixed issue of rule 'AddedOptionalProperty'.
+
 ## 0.8.7 Released on 2021-02-24
 
 - Add new rule - XmsLongRunningOperationChanged.
