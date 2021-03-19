@@ -601,15 +601,15 @@ namespace AutoRest.Swagger.Model
         private static bool FindDiscriminator(string reference, IDictionary<string, Schema> definitions)
         {
             var schema = FindReferencedSchema(reference, definitions);
-            if (schema.Discriminator != null)
+            if (schema != null && schema.Discriminator != null)
             {
                 return true;
             }
-            if (schema.AllOf != null)
+            if (schema != null && schema.AllOf != null)
             {
                 foreach (var subSchema in schema.AllOf)
                 {
-                    if (FindDiscriminator(subSchema.Reference,definitions))
+                    if (subSchema.Reference != null && FindDiscriminator(subSchema.Reference,definitions))
                     {
                         return true;
                     }
