@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.9 Released on 2021-03-29
+
+- Fixed incorrect rule Id for 'XmsLongRunningOperationChanged'.
+
 ## 0.8.8 Released on 2021-03-19
 
 - Fixed issue of rule 'AddedOptionalProperty'.
