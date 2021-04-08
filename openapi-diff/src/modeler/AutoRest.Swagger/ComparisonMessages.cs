@@ -354,10 +354,10 @@
             Type = MessageType.Update
         };
 
-        public static MessageTemplate LongRunningOperationExtensionChanged = new MessageTemplate
+        public static MessageTemplate XmsLongRunningOperationChanged = new MessageTemplate
         {
-            Id = 1036,
-            Code = nameof(ComparisonMessages.LongRunningOperationExtensionChanged),
+            Id = 1044,
+            Code = nameof(ComparisonMessages.XmsLongRunningOperationChanged),
             Message = "The new version has a different 'x-ms-longrunning-operation' value than the previous one.",
             Type = MessageType.Update
         };

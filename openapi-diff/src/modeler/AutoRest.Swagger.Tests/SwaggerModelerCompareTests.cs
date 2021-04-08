@@ -818,7 +818,7 @@ namespace AutoRest.Swagger.Tests
         public void ChangedXmsLongRunningOperation()
         {
             var messages = CompareSwagger("long_running_operation.json").ToArray();
-            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.LongRunningOperationExtensionChanged.Id).Count());
+            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.XmsLongRunningOperationChanged.Id).Count());
         }
 
         [Fact]

@@ -109,7 +109,7 @@ namespace AutoRest.Swagger.Model
             priorLongrunningOperationValue = priorLongrunningOperationValue == null ? false : priorLongrunningOperationValue;
             if (!currentLongrunningOperationValue.Equals(priorLongrunningOperationValue))
             {
-                context.LogBreakingChange(ComparisonMessages.LongRunningOperationExtensionChanged);
+                context.LogBreakingChange(ComparisonMessages.XmsLongRunningOperationChanged);
             }
 
             CheckParameters(context, priorOperation);
