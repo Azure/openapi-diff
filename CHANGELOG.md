@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.8.9 Released on 2021-03-29
+## 0.8.9 Released on 2021-04-08
 
-- Fixed incorrect rule Id for 'XmsLongRunningOperationChanged'.
+- Fixed incompatible implementation with doc for 'XmsLongRunningOperationChanged'.
 
 ## 0.8.8 Released on 2021-03-19
 
