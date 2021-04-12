@@ -123,11 +123,9 @@ export class OpenApiDiff {
    */
   public async compare(oldSwagger: string, newSwagger: string, oldTag?: string, newTag?: string) {
     log.silly(`compare is being called`)
-
-    const promise1 = this.processViaAutoRest(oldSwagger, "old", oldTag)
-    const promise2 = this.processViaAutoRest(newSwagger, "new", newTag)
-
-    const results = await Promise.all([promise1, promise2])
+    const results = []
+    results[0] = await this.processViaAutoRest(oldSwagger, "old", oldTag)
+    results[1] = await this.processViaAutoRest(newSwagger, "new", newTag)
     return this.processViaOpenApiDiff(results[0], results[1])
   }
 
