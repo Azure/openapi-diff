@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.10 Released on 2021-04-12
+
+- Fixed bug: 'autorest' fails to acquire lock possibly due to running concurrently.
+
 ## 0.8.9 Released on 2021-04-08
 
 - Fixed incompatible implementation with doc for 'XmsLongRunningOperationChanged'.
