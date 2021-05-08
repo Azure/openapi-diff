@@ -1,6 +1,6 @@
 {
   "name": "@azure/oad",
-  "version": "0.8.10",
+  "version": "0.8.11",
   "author": {
     "name": "Microsoft Corporation",
     "email": "azsdkteam@microsoft.com",
@@ -18,7 +18,7 @@
     "acorn": "^5.7.4",
     "autorest": "^2.0.4407",
     "glob": "^7.1.3",
-    "handlebars": "^4.5.3",
+    "handlebars": "^4.7.7",
     "js-yaml": "^3.13.1",
     "json-pointer": "^0.6.0",
     "json-refs": "^3.0.13",
