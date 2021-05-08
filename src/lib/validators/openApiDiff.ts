@@ -217,6 +217,8 @@ export class OpenApiDiff {
       throw new Error('outputFile is a required parameter of type "string" and it cannot be an empty string.')
     }
 
+    outputFileName = `${outputFileName}-${process.pid}`
+
     log.debug(`swaggerPath = "${swaggerPath}"`)
     log.debug(`outputFileName = "${outputFileName}"`)
 
