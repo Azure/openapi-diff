@@ -184,7 +184,6 @@ namespace AutoRest.Swagger.Model
                     {
                         context.LogBreakingChange(ComparisonMessages.RemovedEnumValue, String.Join(", ", removedEnums.ToList()));
                     }
-                    return;
                 }
             
                 if (relaxes)
@@ -196,7 +195,6 @@ namespace AutoRest.Swagger.Model
                             context.LogBreakingChange(ComparisonMessages.AddedEnumValue, String.Join(", ", addedEnums.ToList()));
                         }
                     }
-                    return;
                 }
             }
         }
