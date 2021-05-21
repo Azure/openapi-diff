@@ -102,6 +102,15 @@ namespace AutoRest.Swagger.Model
             {
                 context.LogBreakingChange(ComparisonMessages.ModifiedOperationId, priorOperation.OperationId, OperationId);
             }
+            Extensions.TryGetValue("x-ms-long-running-operation", out var currentLongrunningOperationValue);
+            priorOperation.Extensions.TryGetValue("x-ms-long-running-operation", out var priorLongrunningOperationValue);
+
+            currentLongrunningOperationValue = currentLongrunningOperationValue == null ? false : currentLongrunningOperationValue;
+            priorLongrunningOperationValue = priorLongrunningOperationValue == null ? false : priorLongrunningOperationValue;
+            if (!currentLongrunningOperationValue.Equals(priorLongrunningOperationValue))
+            {
+                context.LogBreakingChange(ComparisonMessages.XmsLongRunningOperationChanged);
+            }
 
             CheckParameters(context, priorOperation);
 
@@ -161,6 +170,25 @@ namespace AutoRest.Swagger.Model
                 string.IsNullOrWhiteSpace(param.Reference) ? param :
                 FindReferencedParameter(param.Reference, previousRoot.Parameters)
             );
+
+            var currentOperationParameters = Parameters.Select(param =>
+                string.IsNullOrWhiteSpace(param.Reference) ? param :
+                FindReferencedParameter(param.Reference, currentRoot.Parameters));
+
+            for (int i = 0; i < currentOperationParameters.Count(); i++)
+            {
+                var curParameter = Parameters.ElementAt(i);
+                if (curParameter.In == ParameterLocation.Path)
+                {
+                    continue;
+                }
+                var priorIndex = FindParameterIndex(curParameter, priorOperationParameters);
+                if (priorIndex != -1 && priorIndex != i)
+                {
+                    context.LogBreakingChange(ComparisonMessages.ChangedParameterOrder, curParameter.Name);
+                }
+            }
+
             foreach (var oldParam in priorOperationParameters)
             {
                 SwaggerParameter newParam = FindParameter(oldParam.Name, Parameters, currentRoot.Parameters);
@@ -182,12 +210,12 @@ namespace AutoRest.Swagger.Model
                 context.Pop();
             }
 
-            // Check that no required parameters were added.
-            var requiredParamters = Parameters.Select(param =>
+            // Check that no required or optional parameters were added.
+            var allParamters = Parameters.Select(param =>
                                         string.IsNullOrWhiteSpace(param.Reference) ?
                                         param : FindReferencedParameter(param.Reference, currentRoot.Parameters))
-                                        .Where(p => p != null && p.IsRequired);
-            foreach (var newParam in requiredParamters)
+                                        .Where(p => p != null);
+            foreach (var newParam in allParamters)
             {
                 if (newParam == null) continue;
 
@@ -197,7 +225,12 @@ namespace AutoRest.Swagger.Model
                 {
                     // Did not find required parameter in the old swagger i.e required parameter is added
                     context.PushItemByName(newParam.Name);
-                    context.LogBreakingChange(ComparisonMessages.AddingRequiredParameter, newParam.Name);
+                    if (newParam.IsRequired) {
+                        context.LogBreakingChange(ComparisonMessages.AddingRequiredParameter, newParam.Name);
+                    }
+                    else {
+                        context.LogBreakingChange(ComparisonMessages.AddingOptionalParameter, newParam.Name);
+                    }
                     context.Pop();
                 }
             }
@@ -229,6 +262,18 @@ namespace AutoRest.Swagger.Model
                 }
             }
             return null;
+        }
+
+        private int FindParameterIndex(SwaggerParameter parameter, IEnumerable<SwaggerParameter> operationParameters)
+        {
+            for (int i = 0; i < operationParameters.Count(); i++)
+            {
+                if (operationParameters.ElementAt(i).Name == parameter.Name && operationParameters.ElementAt(i).In == parameter.In)
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         private OperationResponse FindResponse(string name, IDictionary<string, OperationResponse> responses)

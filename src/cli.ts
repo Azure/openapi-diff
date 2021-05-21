@@ -29,7 +29,7 @@ yargs
   .help().argv
 
 if (yargs.argv._.length === 0 && yargs.argv.h === false) {
-  yargs.coerce("help", function(arg) {
+  yargs.coerce("help", function (arg) {
     return true
   }).argv
 }

@@ -1,6 +1,6 @@
 {
   "name": "@azure/oad",
-  "version": "0.8.1",
+  "version": "0.8.10",
   "author": {
     "name": "Microsoft Corporation",
     "email": "azsdkteam@microsoft.com",
@@ -15,16 +15,23 @@
     "@ts-common/json-parser": "^0.9.0",
     "@ts-common/source-map": "^0.5.0",
     "@ts-common/string-map": "^0.3.0",
+    "acorn": "^5.7.4",
     "autorest": "^2.0.4407",
     "glob": "^7.1.3",
+    "handlebars": "^4.5.3",
     "js-yaml": "^3.13.1",
     "json-pointer": "^0.6.0",
     "json-refs": "^3.0.13",
+    "kind-of": "^6.0.3",
+    "lodash": "^4.17.20",
+    "minimist": "^1.2.3",
     "request": "^2.88.0",
+    "set-value": "^2.0.1",
     "source-map": "^0.7.3",
     "tslib": "^1.9.3",
     "winston": "^2.3.0",
-    "yargs": "^13.2.2"
+    "yargs": "^13.2.2",
+    "yargs-parser": "^13.1.2"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
@@ -36,7 +43,7 @@
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",
     "typescript": "^3.4.3",
-    "prettier": "^1.18.2",
+    "prettier": "^2.2.1",
     "tslint": "~5.17.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.0.1"
@@ -60,6 +67,7 @@
     "src/index.ts",
     "src/cli.ts",
     "src/lib",
+    "template/*",
     "package.json",
     "README.md",
     "LICENSE"

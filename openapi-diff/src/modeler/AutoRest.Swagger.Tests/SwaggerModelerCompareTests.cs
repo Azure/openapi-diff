@@ -136,8 +136,8 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
-         /// Verifies that if you change the type of a schema property, it's caught.
-         /// </summary>
+        /// Verifies that if you change the type of a schema property, it's caught.
+        /// </summary>
         [Fact]
         public void PropertyTypeChanged()
         {
@@ -340,6 +340,16 @@ namespace AutoRest.Swagger.Tests
             var missing = messages.Where(m => m.Id == ComparisonMessages.AddingRequiredParameter.Id);
             Assert.Single(missing);
             var x = missing.First(m => m.Severity == Category.Error && m.NewJsonRef == "new/required_parameter.json#/paths/~1api~1Parameters~1{a}/get/parameters/4");
+            Assert.NotNull(x.NewJson());
+            Assert.Null(x.OldJson());
+        }
+
+        public void OptionalParameterAdded()
+        {
+            var messages = CompareSwagger("optional_parameter.json").ToArray();
+            var missing = messages.Where(m => m.Id == ComparisonMessages.AddingOptionalParameter.Id);
+            Assert.Single(missing);
+            var x = missing.First(m => m.Severity == Category.Error && m.NewJsonRef == "new/optional_parameter.json#/paths/~1api~1Parameters~1{a}/get/parameters/4");
             Assert.NotNull(x.NewJson());
             Assert.Null(x.OldJson());
         }
@@ -786,7 +796,7 @@ namespace AutoRest.Swagger.Tests
         public void CommonParameterAdded()
         {
             var messages = CompareSwagger("common_parameter_check_01.json").ToArray();
-            Assert.Empty(messages.Where(m => m.Severity == Category.Error));
+            Assert.Single(messages.Where(m => m.Severity == Category.Error));
         }
 
         [Fact]
@@ -814,6 +824,34 @@ namespace AutoRest.Swagger.Tests
             Assert.Equal(2, messages.Where(m => m.Id == ComparisonMessages.RequiredStatusChange.Id).Count());
             var changes = messages.Where(m => m.Id == ComparisonMessages.RequiredStatusChange.Id && m.Severity == Category.Error).ToList();
             Assert.Equal(2, changes.Count());
+        }
+
+        [Fact]
+        public void XmsEnumModelAsString()
+        {
+            var messages = CompareSwagger("enum_as_string.json").ToArray();
+            Assert.Empty(messages.Where(m => m.Id == ComparisonMessages.AddedEnumValue.Id));
+        }
+
+        [Fact]
+        public void ChangedParameterOrder()
+        {
+            var messages = CompareSwagger("parameter_order_change.json").ToArray();
+            Assert.Equal(2, messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id).Count());
+        }
+
+        [Fact]
+        public void ChangedXmsLongRunningOperation()
+        {
+            var messages = CompareSwagger("long_running_operation.json").ToArray();
+            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.XmsLongRunningOperationChanged.Id).Count());
+        }
+
+        [Fact]
+        public void AddedOptionalProperty()
+        {
+            var messages = CompareSwagger("added_optional_property.json").ToArray();
+            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.AddedOptionalProperty.Id).Count());
         }
     }
 }

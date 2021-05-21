@@ -1,0 +1,52 @@
+﻿{
+  "swagger": 2.0,
+  "info": {
+    "title": "required_parameter",
+    "version": "1.0"
+  },
+  "host": "localhost:8000",
+  "schemes": [ "http", "https" ],
+  "paths": {
+    "/api/Parameters/{a}": {
+      "get": {
+        "tag": [ "Parameters" ],
+        "operationId": "Parameters_Get",
+        "produces": [
+          "text/plain"
+        ],
+        "parameters": [
+          {
+            "name": "a",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "b",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "d",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "e",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "f",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "enum": [ "theonlyvalue" ]
+          }
+        ]
+      }
+    }
+  }
+}

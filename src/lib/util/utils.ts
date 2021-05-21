@@ -149,8 +149,8 @@ export type Response = {
  * @return {Promise} promise - A promise that resolves to the responseBody or rejects to an error.
  */
 export function makeRequest(options: Options) {
-  const promise = new Promise(function(resolve, reject) {
-    request(options, function(err: unknown, response: Response, responseBody: string) {
+  const promise = new Promise(function (resolve, reject) {
+    request(options, function (err: unknown, response: Response, responseBody: string) {
       if (err) {
         reject(err)
       }
@@ -185,7 +185,7 @@ export function makeRequest(options: Options) {
  */
 export function executePromisesSequentially(promiseFactories: ReadonlyArray<any>) {
   let result = Promise.resolve()
-  promiseFactories.forEach(function(promiseFactory) {
+  promiseFactories.forEach(function (promiseFactory) {
     result = result.then(promiseFactory)
   })
   return result
@@ -204,9 +204,7 @@ export function executePromisesSequentially(promiseFactories: ReadonlyArray<any>
 export function generateRandomId(prefix: string, existingIds: object) {
   let randomStr
   while (true) {
-    randomStr = Math.random()
-      .toString(36)
-      .substr(2, 12)
+    randomStr = Math.random().toString(36).substr(2, 12)
     if (prefix && typeof prefix.valueOf() === "string") {
       randomStr = prefix + randomStr
     }
@@ -317,7 +315,7 @@ export function parseJsonWithPathFragments(...args: string[]) {
  * @returns {object} target - Returns the merged target object.
  */
 export function mergeObjects(source: { readonly [key: string]: unknown }, target: { [key: string]: unknown }) {
-  Object.keys(source).forEach(function(key) {
+  Object.keys(source).forEach(function (key) {
     target[key] = source[key]
   })
   return target
@@ -561,10 +559,7 @@ export function pathToJsonPointer(jsonPath: string): string {
   const replaceAllReg = (src: string): RegExp => {
     return new RegExp(src, "g")
   }
-  let result: string = jsonPath
-    .replace(replaceAllReg("~"), "~0")
-    .replace(replaceAllReg("/"), "~1")
-    .replace(replaceAllReg("\\."), "/")
+  let result: string = jsonPath.replace(replaceAllReg("~"), "~0").replace(replaceAllReg("/"), "~1").replace(replaceAllReg("\\."), "/")
 
   // match subpath with special character which be surround by ' e.g. paths['~0test~1'] , and replace it to path/~0test~1
   let regex = /(\[\'.+\'\])/g

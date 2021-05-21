@@ -34,6 +34,14 @@
             Type = MessageType.Addition
         };
 
+        public static MessageTemplate AddedOptionalProperty = new MessageTemplate
+        {
+            Id = 1045,
+            Code = nameof(ComparisonMessages.AddedOptionalProperty),
+            Message = "The new version has a new optional property '{0}' that was not found in the old version.",
+            Type = MessageType.Addition
+        };
+
         public static MessageTemplate RemovedDefinition = new MessageTemplate
         {
             Id = 1006,
@@ -90,11 +98,27 @@
             Type = MessageType.Removal
         };
 
+        public static MessageTemplate ChangedParameterOrder = new MessageTemplate
+        {
+            Id = 1042,
+            Code = nameof(ComparisonMessages.ChangedParameterOrder),
+            Message = "The order of parameter '{0}' was changed. ",
+            Type = MessageType.Update
+        };
+
         public static MessageTemplate AddingRequiredParameter = new MessageTemplate
         {
             Id = 1010,
             Code = nameof(ComparisonMessages.AddingRequiredParameter),
             Message = "The required parameter '{0}' was added in the new version.",
+            Type = MessageType.Addition
+        };
+
+        public static MessageTemplate AddingOptionalParameter = new MessageTemplate
+        {
+            Id = 1043,
+            Code = nameof(ComparisonMessages.AddingOptionalParameter),
+            Message = "The optional parameter '{0}' was added in the new version.",
             Type = MessageType.Addition
         };
 
@@ -327,6 +351,14 @@
             Id = 1036,
             Code = nameof(ComparisonMessages.ConstraintChanged),
             Message = "The new version has a different '{0}' value than the previous one.",
+            Type = MessageType.Update
+        };
+
+        public static MessageTemplate XmsLongRunningOperationChanged = new MessageTemplate
+        {
+            Id = 1044,
+            Code = nameof(ComparisonMessages.XmsLongRunningOperationChanged),
+            Message = "The new version has a different 'x-ms-longrunning-operation' value than the previous one.",
             Type = MessageType.Update
         };
     }

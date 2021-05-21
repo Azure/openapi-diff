@@ -77,6 +77,9 @@ namespace AutoRest.Swagger.Model
 
         public virtual IList<string> Enum { get; set; }
 
+        [JsonProperty(PropertyName = "x-ms-enum")]
+        public virtual XmsEnumExtension XmsEnum {get;set;}
+
         /// <summary>
         /// Compare a modified document node (this) to a previous one and look for breaking as well as non-breaking changes.
         /// </summary>
@@ -162,7 +165,7 @@ namespace AutoRest.Swagger.Model
 
             bool relaxes = (prior.Enum != null && this.Enum == null);
             bool constrains = (prior.Enum == null && this.Enum != null);
-
+            bool isEnumModelAsString = (this.XmsEnum != null && this.XmsEnum.ModelAsString == true);
             if (!relaxes && !constrains)
             {
                 // It was enum and it is still enum i.e check for addition/removal
@@ -193,7 +196,9 @@ namespace AutoRest.Swagger.Model
                         IEnumerable<string> addedEnums = this.Enum.Except(prior.Enum);
                         if (addedEnums.Any())
                         {
-                            context.LogBreakingChange(ComparisonMessages.AddedEnumValue, String.Join(", ", addedEnums.ToList()));
+                            if (!isEnumModelAsString) {
+                               context.LogBreakingChange(ComparisonMessages.AddedEnumValue, String.Join(", ", addedEnums.ToList()));
+                            }
                         }
                         return;
                     }
@@ -226,6 +231,19 @@ namespace AutoRest.Swagger.Model
             }
         }
 
+        private Boolean isFormatChangeAllowed(ComparisonContext<ServiceDefinition> context, T prior) {
+            if (this.Type.Equals(DataType.Integer) && !context.Strict && prior.Format != null && this.Format != null) {
+                if (context.Direction == DataDirection.Request && prior.Format.Equals("int32") && this.Format.Equals("int64")) {
+                    return true;
+                }
+                if (context.Direction == DataDirection.Response && prior.Format.Equals("int64") && this.Format.Equals("int32"))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         protected void CompareFormats(ComparisonContext<ServiceDefinition> context, T prior)
         {
             if (prior == null)
@@ -239,8 +257,8 @@ namespace AutoRest.Swagger.Model
 
             if (prior.Format == null && Format != null || 
                 prior.Format != null && Format == null ||
-                prior.Format != null && Format != null && !prior.Format.Equals(Format))
-            {
+                prior.Format != null && Format != null && !prior.Format.Equals(Format) && !isFormatChangeAllowed(context,prior))
+            {   
                 context.LogBreakingChange(ComparisonMessages.TypeFormatChanged);
             }
         }

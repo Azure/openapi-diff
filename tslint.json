@@ -20,7 +20,8 @@
       "no-unused-expression":false,
       "variable-name":false,
       "no-shadowed-variable":false,
-      "interface-over-type-literal":false
+      "interface-over-type-literal":false,
+      "newline-per-chained-call":false
     },
     "rulesDirectory": ["tslint-plugin-prettier"]
   }

@@ -1,0 +1,74 @@
+﻿{
+  "swagger": "2.0",
+  "info": {
+    "title": "added_required_property",
+    "version": "1.0"
+  },
+  "host": "localhost:8000",
+  "schemes": [ "http", "https" ],
+  "consumes": [ "text/plain", "text/json" ],
+  "produces": [ "text/plain" ],
+  "paths": {
+    "/api/Parameters": {
+      "put": {
+        "tags": [ "Parameters" ],
+        "operationId": "Parameters_Put",
+        "produces": [
+          "text/plain"
+        ],
+        "parameters": [
+          {
+            "name": "database",
+            "in": "body",
+            "required": true,
+            "description": "Database",
+            "schema": { "$ref": "#/definitions/Database" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Database",
+            "schema": {
+              "$ref": "#/definitions/Database"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Database": {
+      "discriminator": "a",
+      "properties": {
+        "a": {
+          "type": "string",
+          "description": "Enum.",
+          "enum": [ "a1", "a2", "a3" ]
+
+        },
+        "b": {
+          "type": "string",
+          "description": "Enum.",
+          "enum": [ "b1" ]
+        }
+      },
+      "required": [ "a" ]
+    },
+    "SqlDatabase": {
+      "allOf": [
+        {
+          "$ref":"#/definitions/Database"
+        }
+      ],
+      "properties": {
+        "c": {
+          "type": "string",
+          "description": "Enum.",
+          "enum": [
+            "c1"
+          ]
+        }
+      }
+    }
+  }
+}

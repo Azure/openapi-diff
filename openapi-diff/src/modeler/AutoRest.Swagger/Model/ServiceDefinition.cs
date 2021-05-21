@@ -539,6 +539,34 @@ namespace AutoRest.Swagger.Model
                     }
                 }
             }
+
+            // detect the polymorphic concrecate model.
+            foreach (var schema in service.Definitions.Values.Where(d => !d.IsReferenced))
+            {
+                if (schema.Extensions != null && schema.Extensions.ContainsKey("x-ms-discriminator-value"))
+                {
+                    schema.IsReferenced = true;
+                    continue;
+                }
+                
+                if (schema.AllOf == null)
+                {
+                    continue;
+                }
+
+                foreach (var property in schema.AllOf)
+                {
+                    if (!string.IsNullOrWhiteSpace(property.Reference))
+                    {
+                       
+                        if (FindDiscriminator(property.Reference,service.Definitions))
+                        {
+                            schema.IsReferenced = true;
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -561,8 +589,33 @@ namespace AutoRest.Swagger.Model
                     }
                 }
             }
-
             return null;
+        }
+
+        /// <summary>
+        /// Detect if a schema's hierarchy contains a discriminator .
+        /// </summary>
+        /// <param name="reference">A document-relative reference path -- #/definitions/XXX</param>
+        /// <param name="definitions">The definitions dictionary to use</param>
+        /// <returns></returns>
+        private static bool FindDiscriminator(string reference, IDictionary<string, Schema> definitions)
+        {
+            var schema = FindReferencedSchema(reference, definitions);
+            if (schema != null && schema.Discriminator != null)
+            {
+                return true;
+            }
+            if (schema != null && schema.AllOf != null)
+            {
+                foreach (var subSchema in schema.AllOf)
+                {
+                    if (subSchema.Reference != null && FindDiscriminator(subSchema.Reference,definitions))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }

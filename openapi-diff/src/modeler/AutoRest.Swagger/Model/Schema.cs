@@ -254,7 +254,7 @@ namespace AutoRest.Swagger.Model
                 foreach (KeyValuePair<string, Schema> property in Properties)
                 {
                     // Case: Were any required properties added?
-                    if (priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(property.Key, out var model) &&
+                    if ((priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(property.Key, out var model)) &&
                         (Required != null && Required.Contains(property.Key)))
                     {
                         context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, property.Key);
@@ -269,6 +269,10 @@ namespace AutoRest.Swagger.Model
                                 context.LogInfo(ComparisonMessages.AddedReadOnlyPropertyInResponse, property.Key);
                             else
                                 context.LogBreakingChange(ComparisonMessages.AddedPropertyInResponse, property.Key);
+                        } 
+                        else if (priorSchema.IsReferenced && property.Value != null && (Required == null || !Required.Contains(property.Key)))
+                        {
+                            context.LogBreakingChange(ComparisonMessages.AddedOptionalProperty, property.Key);
                         }
                     }
                 }
