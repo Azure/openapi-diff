@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.8.11 Released on 2021-05-24
+## 0.8.11 Released on 2021-05-31
 
 - ConstraintIsWeaker & ConstraintIsStronger do not check adding/removing enum values.
 - Always report AddedEnumValue/RemovedEnumValue no matter it's the context is in request or response.
