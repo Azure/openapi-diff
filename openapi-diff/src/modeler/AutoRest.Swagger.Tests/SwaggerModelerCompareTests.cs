@@ -230,6 +230,32 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
+        /// Verifies that if the operations id is missing for a path in both old and new contracts,
+        /// the execution doesn't fail and no version change is required.
+        /// </summary>
+        [Fact]
+        public void OperationIdIsNull()
+        {
+            var messages = CompareSwagger("missing_operation_id.json").ToArray();
+            Assert.Single(messages);
+            Assert.Equal(ComparisonMessages.NoVersionChange.Id, messages[0].Id);
+        }
+
+        /// <summary>
+        /// Verifies that if you remove an operationId from an operation in a path, it's caught.
+        /// </summary>
+        [Fact]
+        public void OperationIdRemoved()
+        {
+            var messages = CompareSwagger("removed_operation_id.json").ToArray();
+            var missing = messages.Where(m => m.Id == ComparisonMessages.ModifiedOperationId.Id);
+            Assert.Equal(1, missing.Count());
+            var x = missing.First(m => m.Severity == Category.Error && m.NewJsonRef == "new/removed_operation_id.json#/paths/~1api~1Operations/get");
+            Assert.NotNull(x.NewJson());
+            Assert.NotNull(x.OldJson());
+        }
+
+        /// <summary>
         /// Verifies that if you added new paths / operations, it's caught.
         /// </summary>
         [Fact]
@@ -782,7 +808,7 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void CommonParameterOverride()
         {
-            // For the parameters both defined in path/operation, the operation parameters should override path parameters. 
+            // For the parameters both defined in path/operation, the operation parameters should override path parameters.
             var messages = CompareSwagger("common_parameter_check_03.json").ToArray();
             Assert.Empty(messages.Where(m => m.Severity == Category.Error));
         }
