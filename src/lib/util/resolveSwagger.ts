@@ -236,17 +236,17 @@ export class ResolveSwagger {
     return parentProperty.type === unwrappedProperty.type && parentProperty.format === unwrappedProperty.format
   }
 
-  private checkCircularAllOf(schema: any, visited: Set<any> | undefined, referenceChain: string[]) {
-    visited = visited ? visited : new Set<any>()
+  private checkCircularAllOf(schema: any, visited: any[] | undefined, referenceChain: string[]) {
+    visited = visited ? visited : []
     referenceChain = referenceChain ? referenceChain : []
     if (schema) {
-      if (visited.has(schema)) {
+      if (visited?.includes(schema)) {
         throw new Error("Found circular allOf reference: " + referenceChain.join("-> "))
       }
       if (!schema.allOf) {
         return
       }
-      visited.add(schema)
+      visited.push(schema)
       sm.values(schema.allOf)
         .filter(s => (s as any).$ref)
         .forEach(s => {
@@ -256,6 +256,7 @@ export class ResolveSwagger {
           this.checkCircularAllOf(referredSchema, visited, referenceChain)
           referenceChain.pop()
         })
+      visited.pop()
     }
   }
 
