@@ -240,7 +240,7 @@ export class ResolveSwagger {
     visited = visited ? visited : []
     referenceChain = referenceChain ? referenceChain : []
     if (schema) {
-      if (visited?.includes(schema)) {
+      if (visited.includes(schema)) {
         throw new Error("Found circular allOf reference: " + referenceChain.join("-> "))
       }
       if (!schema.allOf) {
