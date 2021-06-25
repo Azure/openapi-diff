@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.8.12 Released on 2021-06-25
+
+- bug fix for checking circular allOf.
 ## 0.8.11 Released on 2021-05-31
 
 - ConstraintIsWeaker & ConstraintIsStronger do not check adding/removing enum values.
