@@ -4,13 +4,17 @@ import * as index from "../index"
 
 jest.setTimeout(100000)
 
+const fileUrl = (absPath: string) => {
+  return "file:///" + absPath.replace(/^\//, "").split("\\").join("/")
+}
+
 describe("index", () => {
   it("simple", async () => {
     const diff = new index.OpenApiDiff({})
     const file = "src/test/simple/same.json"
     const resultStr = await diff.compare(file, file)
     const result = JSON.parse(resultStr)
-    const filePath = path.resolve(file).split("\\").join("/")
+    const filePath = fileUrl(path.resolve(file))
     const expected = [
       {
         code: "NoVersionChange",
@@ -19,14 +23,14 @@ describe("index", () => {
         message: "The versions have not changed.",
         mode: "Update",
         new: {
-          ref: `file:///${filePath}#`,
+          ref: `${filePath}#`,
           path: "",
-          location: `file:///${filePath}:1:1`
+          location: `${filePath}:1:1`
         },
         old: {
-          ref: `file:///${filePath}#`,
+          ref: `${filePath}#`,
           path: "",
-          location: `file:///${filePath}:1:1`
+          location: `${filePath}:1:1`
         },
         type: "Info"
       }
@@ -39,8 +43,8 @@ describe("index", () => {
     const newFile = "src/test/some-changes/new.json"
     const resultStr = await diff.compare(oldFile, newFile)
     const result = JSON.parse(resultStr)
-    const newFilePath = "file:///" + path.resolve(newFile).split("\\").join("/")
-    const oldFilePath = "file:///" + path.resolve(oldFile).split("\\").join("/")
+    const newFilePath = fileUrl(path.resolve(newFile))
+    const oldFilePath = fileUrl(path.resolve(oldFile))
     const expected = [
       {
         code: "NoVersionChange",
@@ -83,9 +87,9 @@ describe("index", () => {
     const diff = new index.OpenApiDiff({})
     const resultStr = await diff.compare(oldFile, newFile, "2019", "2019")
     const result = JSON.parse(resultStr)
-    const newFilePath = "file:///" + path.resolve("src/test/full/new/openapi.json").split("\\").join("/")
-    const newFilePath2 = "file:///" + path.resolve("src/test/full/new/openapi2.json").split("\\").join("/")
-    const oldFilePath = "file:///" + path.resolve("src/test/full/old/openapi.json").split("\\").join("/")
+    const newFilePath = fileUrl(path.resolve("src/test/full/new/openapi.json").replace(/^\//, ""))
+    const newFilePath2 = fileUrl(path.resolve("src/test/full/new/openapi2.json"))
+    const oldFilePath = fileUrl(path.resolve("src/test/full/old/openapi.json"))
     const expected = [
       {
         code: "NoVersionChange",
@@ -129,9 +133,9 @@ describe("index", () => {
     const diff = new index.OpenApiDiff({})
     const resultStr = await diff.compare(oldFile, newFile, "2019", "2019")
     const result = JSON.parse(resultStr)
-    const oldFilePath = "file:///" + path.resolve("src/test/full/new/openapi.json").split("\\").join("/")
-    const oldFilePath2 = "file:///" + path.resolve("src/test/full/new/openapi2.json").split("\\").join("/")
-    const newFilePath = "file:///" + path.resolve("src/test/full/old/openapi.json").split("\\").join("/")
+    const oldFilePath = fileUrl(path.resolve("src/test/full/new/openapi.json"))
+    const oldFilePath2 = fileUrl(path.resolve("src/test/full/new/openapi2.json"))
+    const newFilePath = fileUrl(path.resolve("src/test/full/old/openapi.json"))
     const expected = [
       {
         code: "NoVersionChange",
@@ -213,8 +217,8 @@ describe("index", () => {
     const newFile = "src/test/common-parameters/new.json"
     const resultStr = await diff.compare(oldFile, newFile)
     const result = JSON.parse(resultStr)
-    const newFilePath = "file:///" + path.resolve(newFile).split("\\").join("/")
-    const oldFilePath = "file:///" + path.resolve(oldFile).split("\\").join("/")
+    const newFilePath = fileUrl(path.resolve(newFile))
+    const oldFilePath = fileUrl(path.resolve(oldFile))
     const expected = [
       {
         code: "NoVersionChange",
@@ -262,8 +266,8 @@ describe("index", () => {
     const newFile = "src/test/xmspath/new.json"
     const resultStr = await diff.compare(oldFile, newFile)
     const result = JSON.parse(resultStr)
-    const newFilePath = "file:///" + path.resolve(newFile).split("\\").join("/")
-    const oldFilePath = "file:///" + path.resolve(oldFile).split("\\").join("/")
+    const newFilePath = fileUrl(path.resolve(newFile))
+    const oldFilePath = fileUrl(path.resolve(oldFile))
     const expected = [
       {
         code: "NoVersionChange",
@@ -292,8 +296,8 @@ describe("index", () => {
     const newFile = "src/test/expandsAllOf/new/property_format_change.json"
     const resultStr = await diff.compare(oldFile, newFile)
     const result = JSON.parse(resultStr)
-    const newFilePath = "file:///" + path.resolve(newFile).split("\\").join("/")
-    const oldFilePath = "file:///" + path.resolve(oldFile).split("\\").join("/")
+    const newFilePath = fileUrl(path.resolve(newFile))
+    const oldFilePath = fileUrl(path.resolve(oldFile))
     const expected = [
       {
         id: "1001",
@@ -422,7 +426,7 @@ describe("index", () => {
         mode: "Addition"
       }
     ]
-    assert.deepEqual(result, expected)
+    assert.deepStrictEqual(result, expected)
   })
   it("expands allOf Models", async () => {
     const diff = new index.OpenApiDiff({})
@@ -430,8 +434,8 @@ describe("index", () => {
     const newFile = "src/test/expandsAllOf/new/expand_allOf_model.json"
     const resultStr = await diff.compare(oldFile, newFile)
     const result = JSON.parse(resultStr)
-    const newFilePath = "file:///" + path.resolve(newFile).split("\\").join("/")
-    const oldFilePath = "file:///" + path.resolve(oldFile).split("\\").join("/")
+    const newFilePath = fileUrl(path.resolve(newFile))
+    const oldFilePath = fileUrl(path.resolve(oldFile))
     const expected = [
       {
         id: "1001",
@@ -488,7 +492,7 @@ describe("index", () => {
         type: "Error"
       }
     ]
-    assert.deepEqual(result, expected)
+    assert.deepStrictEqual(result, expected)
   })
   it("Move into allOf Models", async () => {
     const diff = new index.OpenApiDiff({})
@@ -496,8 +500,8 @@ describe("index", () => {
     const newFile = "src/test/expandsAllOf/new/move_properties_into_allof_model.json"
     const resultStr = await diff.compare(oldFile, newFile)
     const result = JSON.parse(resultStr)
-    const newFilePath = "file:///" + path.resolve(newFile).split("\\").join("/")
-    const oldFilePath = "file:///" + path.resolve(oldFile).split("\\").join("/")
+    const newFilePath = fileUrl(path.resolve(newFile))
+    const oldFilePath = fileUrl(path.resolve(oldFile))
     const expected = [
       {
         id: "1001",
@@ -554,7 +558,7 @@ describe("index", () => {
         type: "Error"
       }
     ]
-    assert.deepEqual(result, expected)
+    assert.deepStrictEqual(result, expected)
   })
   it("Multiple Level AllOf", async () => {
     const diff = new index.OpenApiDiff({})
@@ -562,8 +566,8 @@ describe("index", () => {
     const newFile = "src/test/expandsAllOf/new/multi_level_allOf.json"
     const resultStr = await diff.compare(oldFile, newFile)
     const result = JSON.parse(resultStr)
-    const newFilePath = "file:///" + path.resolve(newFile).split("\\").join("/")
-    const oldFilePath = "file:///" + path.resolve(oldFile).split("\\").join("/")
+    const newFilePath = fileUrl(path.resolve(newFile))
+    const oldFilePath = fileUrl(path.resolve(oldFile))
     const expected = [
       {
         id: "1001",
@@ -620,6 +624,6 @@ describe("index", () => {
         type: "Error"
       }
     ]
-    assert.deepEqual(result, expected)
+    assert.deepStrictEqual(result, expected)
   })
 })
