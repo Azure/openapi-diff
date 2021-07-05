@@ -126,6 +126,18 @@ namespace AutoRest.Swagger.Model
             }
             context.Pop();
 
+            // Check that all the response body formats were also supported by the old version.
+
+            context.PushProperty("produces");
+            foreach (var format in Produces)
+            {
+                if (!priorOperation.Produces.Contains(format))
+                {
+                    context.LogBreakingChange(ComparisonMessages.ResponseBodyFormatNowSupported, format);
+                }
+            }
+            context.Pop();
+
             if (Responses != null && priorOperation.Responses != null)
             {
                 context.PushProperty("responses");
