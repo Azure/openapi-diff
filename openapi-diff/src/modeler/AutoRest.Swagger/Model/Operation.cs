@@ -114,6 +114,18 @@ namespace AutoRest.Swagger.Model
 
             CheckParameters(context, priorOperation);
 
+            // Check that all the request body formats that were accepted still are.
+
+            context.PushProperty("consumes");
+            foreach (var format in priorOperation.Consumes)
+            {
+                if (!Consumes.Contains(format))
+                {
+                    context.LogBreakingChange(ComparisonMessages.RequestBodyFormatNoLongerSupported, format);
+                }
+            }
+            context.Pop();
+
             if (Responses != null && priorOperation.Responses != null)
             {
                 context.PushProperty("responses");
