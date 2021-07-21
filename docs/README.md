@@ -46,7 +46,7 @@
 
 [1023 - TypeFormatChanged](rules/1023.md)
 
-[1023 - ConstraintIsStronger](rules/1024.md)
+[1024 - ConstraintIsStronger](rules/1024.md)
 
 [1025 - RequiredStatusChange](rules/1025.md)
 
@@ -89,3 +89,5 @@
 [1044 - XmsLongRunningOperationChanged](rules/1044.md)
 
 [1045 - AddedOptionalProperty](rules/1045.md)
+
+[1046 - RemovedOptionalParameter](rules/1046.md)
