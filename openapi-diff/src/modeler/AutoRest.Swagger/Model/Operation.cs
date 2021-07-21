@@ -98,7 +98,7 @@ namespace AutoRest.Swagger.Model
 
             base.Compare(context, previous);
 
-            if (!OperationId.Equals(priorOperation.OperationId))
+            if (OperationId != priorOperation.OperationId)
             {
                 context.LogBreakingChange(ComparisonMessages.ModifiedOperationId, priorOperation.OperationId, OperationId);
             }
@@ -113,6 +113,30 @@ namespace AutoRest.Swagger.Model
             }
 
             CheckParameters(context, priorOperation);
+
+            // Check that all the request body formats that were accepted still are.
+
+            context.PushProperty("consumes");
+            foreach (var format in priorOperation.Consumes)
+            {
+                if (!Consumes.Contains(format))
+                {
+                    context.LogBreakingChange(ComparisonMessages.RequestBodyFormatNoLongerSupported, format);
+                }
+            }
+            context.Pop();
+
+            // Check that all the response body formats were also supported by the old version.
+
+            context.PushProperty("produces");
+            foreach (var format in Produces)
+            {
+                if (!priorOperation.Produces.Contains(format))
+                {
+                    context.LogBreakingChange(ComparisonMessages.ResponseBodyFormatNowSupported, format);
+                }
+            }
+            context.Pop();
 
             if (Responses != null && priorOperation.Responses != null)
             {
@@ -193,8 +217,8 @@ namespace AutoRest.Swagger.Model
             {
                 SwaggerParameter newParam = FindParameter(oldParam.Name, Parameters, currentRoot.Parameters);
 
-                // we should use PushItemByName instead of PushProperty because Swagger `parameters` is 
-                // an array of paremters.  
+                // we should use PushItemByName instead of PushProperty because Swagger `parameters` is
+                // an array of paremters.
                 context.PushItemByName(oldParam.Name);
 
                 if (newParam != null)
@@ -205,6 +229,9 @@ namespace AutoRest.Swagger.Model
                 {
                     // Removed required parameter
                     context.LogBreakingChange(ComparisonMessages.RemovedRequiredParameter, oldParam.Name);
+                } else {
+                    // Removed optional parameter
+                    context.LogBreakingChange(ComparisonMessages.RemovedOptionalParameter, oldParam.Name);
                 }
 
                 context.Pop();
@@ -223,7 +250,7 @@ namespace AutoRest.Swagger.Model
 
                 if (oldParam == null)
                 {
-                    // Did not find required parameter in the old swagger i.e required parameter is added                    
+                    // Did not find required parameter in the old swagger i.e required parameter is added
                     context.PushItemByName(newParam.Name);
                     if (newParam.IsRequired) {
                         context.LogBreakingChange(ComparisonMessages.AddingRequiredParameter, newParam.Name);
