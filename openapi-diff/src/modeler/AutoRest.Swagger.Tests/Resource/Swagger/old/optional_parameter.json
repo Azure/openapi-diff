@@ -41,7 +41,7 @@
           {
             "name": "f",
             "in": "query",
-            "required": true,
+            "required": false,
             "type": "string",
             "enum": [ "theonlyvalue" ]
           }

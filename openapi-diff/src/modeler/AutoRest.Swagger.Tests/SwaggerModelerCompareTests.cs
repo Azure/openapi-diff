@@ -301,6 +301,20 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
+        /// Verifies that if you remove a required parameter, it's found.
+        /// </summary>
+        [Fact]
+        public void OptionalParameterRemoved()
+        {
+            var messages = CompareSwagger("optional_parameter.json").ToArray();
+            var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedOptionalParameter.Id);
+            Assert.Single(missing);
+            var x = missing.First(m => m.Severity == Category.Error && m.OldJsonRef == "old/optional_parameter.json#/paths/~1api~1Parameters~1{a}/get/parameters/4");
+            Assert.Null(x.NewJson());
+            Assert.NotNull(x.OldJson());
+        }
+
+        /// <summary>
         /// Verifies that if you add a required property in the model, it's found.
         /// </summary>
         [Fact]
@@ -644,12 +658,8 @@ namespace AutoRest.Swagger.Tests
         public void RequestTypeContraintsWithNewEnum()
         {
             var messages = CompareSwagger("enum_values_changed.json").Where(m => m.NewJsonRef.Contains("Parameters")).ToArray();
-            var stricter = messages.Where(m => m.Id == ComparisonMessages.ConstraintIsStronger.Id).ToArray();
-            var weaker = messages.Where(m => m.Id == ComparisonMessages.ConstraintIsWeaker.Id).ToArray();
+     
             var removedValue = messages.Where(m => m.Id == ComparisonMessages.RemovedEnumValue.Id).ToArray();
-
-            Assert.Single(stricter);
-            Assert.Single(weaker);
             Assert.Single(removedValue);
         }
 
@@ -727,7 +737,7 @@ namespace AutoRest.Swagger.Tests
 
             Assert.Equal(11, stricter.Length);
             Assert.Equal(8, breaking.Length);
-            Assert.Equal(15, info.Length);
+            Assert.Equal(13, info.Length);
         }
 
         /// <summary>
@@ -768,7 +778,7 @@ namespace AutoRest.Swagger.Tests
 
             Assert.Equal(13, relaxed.Length);
             Assert.Equal(8, breaking.Length);
-            Assert.Equal(13, info.Length);
+            Assert.Equal(11, info.Length);
         }
 
         [Fact]
