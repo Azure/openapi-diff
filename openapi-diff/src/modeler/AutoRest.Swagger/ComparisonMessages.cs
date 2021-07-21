@@ -98,6 +98,14 @@
             Type = MessageType.Removal
         };
 
+        public static MessageTemplate RemovedOptionalParameter = new MessageTemplate
+        {
+            Id = 1046,
+            Code = nameof(ComparisonMessages.RemovedOptionalParameter),
+            Message = "The optional parameter '{0}' was removed in the new version.",
+            Type = MessageType.Removal
+        };
+
         public static MessageTemplate ChangedParameterOrder = new MessageTemplate
         {
             Id = 1042,

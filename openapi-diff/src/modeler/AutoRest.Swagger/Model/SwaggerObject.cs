@@ -177,38 +177,26 @@ namespace AutoRest.Swagger.Model
                 relaxes = this.Enum.Any(str => !prior.Enum.Contains(str));
 
 
-                if (context.Direction == DataDirection.Request)
+                if (constrains)
                 {
-                    if (constrains)
+                    IEnumerable<string> removedEnums = prior.Enum.Except(this.Enum);
+                    if (removedEnums.Any())
                     {
-                        IEnumerable<string> removedEnums = prior.Enum.Except(this.Enum);
-                        if (removedEnums.Any())
-                        {
-                            context.LogBreakingChange(ComparisonMessages.RemovedEnumValue, String.Join(", ", removedEnums.ToList()));
-                        }
-                        return;
+                        context.LogBreakingChange(ComparisonMessages.RemovedEnumValue, String.Join(", ", removedEnums.ToList()));
                     }
                 }
-                else if (context.Direction == DataDirection.Response)
+            
+                if (relaxes)
                 {
-                    if (relaxes)
+                    IEnumerable<string> addedEnums = this.Enum.Except(prior.Enum);
+                    if (addedEnums.Any())
                     {
-                        IEnumerable<string> addedEnums = this.Enum.Except(prior.Enum);
-                        if (addedEnums.Any())
-                        {
-                            if (!isEnumModelAsString) {
-                               context.LogBreakingChange(ComparisonMessages.AddedEnumValue, String.Join(", ", addedEnums.ToList()));
-                            }
+                        if (!isEnumModelAsString) {
+                            context.LogBreakingChange(ComparisonMessages.AddedEnumValue, String.Join(", ", addedEnums.ToList()));
                         }
-                        return;
                     }
                 }
             }
-
-            if (relaxes && constrains)
-                context.LogInfo(ComparisonMessages.ConstraintChanged, "enum");
-            else if (relaxes || constrains)
-                context.LogInfo(relaxes ? ComparisonMessages.ConstraintIsWeaker : ComparisonMessages.ConstraintIsStronger, "enum");
         }
 
         private void CompareProperties(ComparisonContext<ServiceDefinition> context, T prior)
