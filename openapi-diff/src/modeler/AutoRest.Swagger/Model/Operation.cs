@@ -229,6 +229,9 @@ namespace AutoRest.Swagger.Model
                 {
                     // Removed required parameter
                     context.LogBreakingChange(ComparisonMessages.RemovedRequiredParameter, oldParam.Name);
+                } else {
+                    // Removed optional parameter
+                    context.LogBreakingChange(ComparisonMessages.RemovedOptionalParameter, oldParam.Name);
                 }
 
                 context.Pop();
