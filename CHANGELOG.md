@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.1 Released on 2021-07-26
+
+- bugfix for rules -- 'addOptionalProperty' & 'ParameterInHasChanged'.
+
 ## 0.9.0 Released on 2021-07-21
 
 - add new rule 'removedOptionalParameter'.
