@@ -26,7 +26,7 @@
     "lodash": "^4.17.20",
     "minimist": "^1.2.3",
     "request": "^2.88.0",
-    "set-value": "^2.0.1",
+    "set-value": "^4.0.1",
     "source-map": "^0.7.3",
     "tslib": "^1.9.3",
     "winston": "^2.3.0",
