@@ -515,6 +515,34 @@ namespace AutoRest.Swagger.Model
                 }
             }
 
+            // detect the polymorphic concrecate model.
+            foreach (var schema in service.Definitions.Values.Where(d => !d.IsReferenced))
+            {
+                if (schema.Extensions != null && schema.Extensions.ContainsKey("x-ms-discriminator-value"))
+                {
+                    schema.IsReferenced = true;
+                    continue;
+                }
+
+                if (schema.AllOf == null)
+                {
+                    continue;
+                }
+
+                foreach (var property in schema.AllOf)
+                {
+                    if (!string.IsNullOrWhiteSpace(property.Reference))
+                    {
+
+                        if (FindDiscriminator(property.Reference, service.Definitions))
+                        {
+                            schema.IsReferenced = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
             var changed = true;
             while (changed)
             {
@@ -538,35 +566,7 @@ namespace AutoRest.Swagger.Model
                         }
                     }
                 }
-            }
-
-            // detect the polymorphic concrecate model.
-            foreach (var schema in service.Definitions.Values.Where(d => !d.IsReferenced))
-            {
-                if (schema.Extensions != null && schema.Extensions.ContainsKey("x-ms-discriminator-value"))
-                {
-                    schema.IsReferenced = true;
-                    continue;
-                }
-                
-                if (schema.AllOf == null)
-                {
-                    continue;
-                }
-
-                foreach (var property in schema.AllOf)
-                {
-                    if (!string.IsNullOrWhiteSpace(property.Reference))
-                    {
-                       
-                        if (FindDiscriminator(property.Reference,service.Definitions))
-                        {
-                            schema.IsReferenced = true;
-                            break;
-                        }
-                    }
-                }
-            }
+            }    
         }
 
         /// <summary>
