@@ -114,6 +114,30 @@ namespace AutoRest.Swagger.Model
 
             CheckParameters(context, priorOperation);
 
+            // Check that all the request body formats that were accepted still are.
+
+            context.PushProperty("consumes");
+            foreach (var format in priorOperation.Consumes)
+            {
+                if (!Consumes.Contains(format))
+                {
+                    context.LogBreakingChange(ComparisonMessages.RequestBodyFormatNoLongerSupported, format);
+                }
+            }
+            context.Pop();
+
+            // Check that all the response body formats were also supported by the old version.
+
+            context.PushProperty("produces");
+            foreach (var format in Produces)
+            {
+                if (!priorOperation.Produces.Contains(format))
+                {
+                    context.LogBreakingChange(ComparisonMessages.ResponseBodyFormatNowSupported, format);
+                }
+            }
+            context.Pop();
+
             if (Responses != null && priorOperation.Responses != null)
             {
                 context.PushProperty("responses");
@@ -191,7 +215,7 @@ namespace AutoRest.Swagger.Model
 
             foreach (var oldParam in priorOperationParameters)
             {
-                SwaggerParameter newParam = FindParameter(oldParam.Name, Parameters, currentRoot.Parameters);
+                SwaggerParameter newParam = FindParameterEx(oldParam, Parameters, currentRoot.Parameters);
 
                 // we should use PushItemByName instead of PushProperty because Swagger `parameters` is
                 // an array of paremters.
@@ -205,6 +229,9 @@ namespace AutoRest.Swagger.Model
                 {
                     // Removed required parameter
                     context.LogBreakingChange(ComparisonMessages.RemovedRequiredParameter, oldParam.Name);
+                } else {
+                    // Removed optional parameter
+                    context.LogBreakingChange(ComparisonMessages.RemovedOptionalParameter, oldParam.Name);
                 }
 
                 context.Pop();
@@ -219,7 +246,8 @@ namespace AutoRest.Swagger.Model
             {
                 if (newParam == null) continue;
 
-                SwaggerParameter oldParam = FindParameter(newParam.Name, priorOperation.Parameters, previousRoot.Parameters);
+                
+                SwaggerParameter oldParam = FindParameterEx(newParam, priorOperation.Parameters, previousRoot.Parameters);
 
                 if (oldParam == null)
                 {
@@ -235,6 +263,35 @@ namespace AutoRest.Swagger.Model
                 }
             }
             context.Pop();
+        }
+
+        /// <summary>
+        /// Finds given parameter in the list of operation parameters or global parameters ,
+        /// </summary>
+        /// <param name="parameter">the parameter to search</param>
+        /// <param name="operationParameters">list of operation parameters to search</param>
+        /// <param name="clientParameters">Dictionary of global paramters to search</param>
+        /// <returns>Swagger Parameter if found; otherwise null</returns>
+        private SwaggerParameter FindParameterEx(SwaggerParameter parameter, IEnumerable<SwaggerParameter> operationParameters, IDictionary<string, SwaggerParameter> clientParameters)
+        {
+            if (Parameters != null)
+            {
+                ///first try to find the param has same 'name' and 'in'
+                foreach (var param in operationParameters)
+                {
+                    if (parameter.Name.Equals(param.Name) && parameter.In.Equals(param.In))
+                        return param;
+
+                    var pRef = FindReferencedParameter(param.Reference, clientParameters);
+
+                    if (pRef != null && parameter.Name.Equals(pRef.Name) && parameter.In.Equals(pRef.In))
+                    {
+                        return pRef;
+                    }
+                }
+            }
+            /// then try to find the parameter has same 'name'
+            return FindParameter(parameter.Name, operationParameters, clientParameters);
         }
 
         /// <summary>

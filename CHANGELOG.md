@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.1 Released on 2021-07-26
+
+- bugfix for rules -- 'addOptionalProperty' & 'ParameterInHasChanged'.
+
+## 0.9.0 Released on 2021-07-21
+
+- add new rule 'removedOptionalParameter'.
+- bugfix for 'RequestBodyFormatNoLongerSupported' & 'ResponseBodyFormatNowSupported'
+- upgrade dotnet core version from 2.0 to 3.1.
+
 ## 0.8.12 Released on 2021-06-25
 
 - bug fix for checking circular allOf.

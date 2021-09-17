@@ -6,7 +6,7 @@
   <PropertyGroup>
     <RuntimeIdentifiers>win7-x64</RuntimeIdentifiers>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>OpenApiDiff</AssemblyName>
     <PackageTags>Microsoft OpenApiDiff</PackageTags>
     <Version>0.1.0</Version>
