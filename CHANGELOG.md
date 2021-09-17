@@ -1,5 +1,10 @@
 # Changelog
 
+
+## 0.9.2 Released on 2021-09-17
+
+- upgrade dependencies for security.
+
 ## 0.9.1 Released on 2021-07-26
 
 - bugfix for rules -- 'addOptionalProperty' & 'ParameterInHasChanged'.
