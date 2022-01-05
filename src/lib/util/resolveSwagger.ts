@@ -69,7 +69,7 @@ function getParamKey(source: any) {
 function getNextKey(source: sm.MutableStringMap<Data>) {
   const result = sm.keys(source).reduce((a, b) => (a > b ? a : b))
   if (result == undefined) {
-    return "0";
+    return "0"
   }
   return (+(result as string) + 1).toString()
 }
