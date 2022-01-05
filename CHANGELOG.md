@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.2 Released on 2022-01-05
+
+- bugfix for transforming path level parameters.
+
 ## 0.9.1 Released on 2021-07-26
 
 - bugfix for rules -- 'addOptionalProperty' & 'ParameterInHasChanged'.
