@@ -201,9 +201,13 @@ namespace AutoRest.Swagger.Model
 
             for (int i = 0; i < currentOperationParameters.Count(); i++)
             {
-                var curParameter = Parameters.ElementAt(i);
+                var curOriginalParameter = Parameters.ElementAt(i);
+                var curParameter = currentOperationParameters.ElementAt(i);
                 curParameter.Extensions.TryGetValue("x-ms-long-running-operation", out var curParameterLocation);
-                if (curParameter.In == ParameterLocation.Body || curParameterLocation == null || !curParameterLocation.Equals("method"))
+                if (
+                    !string.IsNullOrWhiteSpace(curOriginalParameter.Reference) &&
+                    (curParameterLocation == null || !curParameterLocation.Equals("method"))
+                    )
                 {
                     continue;
                 }
