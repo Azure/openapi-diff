@@ -239,6 +239,34 @@ describe("index", () => {
         type: "Info"
       },
       {
+        code: "RemovedOptionalParameter",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1046.md",
+        id: "1046",
+        message: "The optional parameter 'p1' was removed in the new version.",
+        mode: "Removal",
+        new: {},
+        old: {
+          location: "",
+          path: "paths./api/Operations.get.parameters",
+          ref: ""
+        },
+        type: "Error"
+      },
+      {
+        code: "AddingOptionalParameter",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1043.md",
+        id: "1043",
+        message: "The optional parameter 'p2' was added in the new version.",
+        mode: "Addition",
+        new: {
+          location: "",
+          path: "paths./api/Operations.get.parameters",
+          ref: ""
+        },
+        old: {},
+        type: "Error"
+      },
+      {
         code: "RemovedClientParameter",
         docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1007.md",
         id: "1007",
