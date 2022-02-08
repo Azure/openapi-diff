@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.3 Released on 2022-02-09
+
+- bugfix for 'ConstraintIsStronger'.
+
 ## 0.9.2 Released on 2022-01-05
 
 - bugfix for transforming path level parameters.
