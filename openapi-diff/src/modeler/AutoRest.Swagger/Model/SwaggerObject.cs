@@ -275,9 +275,9 @@ namespace AutoRest.Swagger.Model
                 // Flag stricter constraints for requests and relaxed constraints for responses.
                 if (prior.ExclusiveMaximum != ExclusiveMaximum || context.Direction == DataDirection.None)
                     context.LogBreakingChange(ComparisonMessages.ConstraintChanged, "maximum");
-                else if (context.Direction == DataDirection.Request && Narrows(prior.Maximum, Maximum, true))
+                else if (context.Direction == DataDirection.Request && Narrows(prior.Maximum, Maximum, false))
                     context.LogBreakingChange(ComparisonMessages.ConstraintIsStronger, "maximum");
-                else if (context.Direction == DataDirection.Response && Widens(prior.Maximum, Maximum, true))
+                else if (context.Direction == DataDirection.Response && Widens(prior.Maximum, Maximum, false))
                     context.LogBreakingChange(ComparisonMessages.ConstraintIsWeaker, "maximum");
                 else if (Narrows(prior.Maximum, Maximum, false))
                     context.LogInfo(ComparisonMessages.ConstraintIsStronger, "maximum");
@@ -295,9 +295,9 @@ namespace AutoRest.Swagger.Model
                     context.LogBreakingChange(ComparisonMessages.ConstraintIsStronger, "minimum");
                 else if (context.Direction == DataDirection.Response && Widens(prior.Minimum, Minimum, true))
                     context.LogBreakingChange(ComparisonMessages.ConstraintIsWeaker, "minimum");
-                else if (Narrows(prior.Minimum, Minimum, false))
+                else if (Narrows(prior.Minimum, Minimum, true))
                     context.LogInfo(ComparisonMessages.ConstraintIsStronger, "minimum");
-                else if (Widens(prior.Minimum, Minimum, false))
+                else if (Widens(prior.Minimum, Minimum, true))
                     context.LogInfo(ComparisonMessages.ConstraintIsWeaker, "minimum");
             }
             if ((prior.MaxLength == null && MaxLength != null) ||
@@ -325,9 +325,9 @@ namespace AutoRest.Swagger.Model
                     context.LogBreakingChange(ComparisonMessages.ConstraintIsStronger, "minimum");
                 else if (context.Direction == DataDirection.Response && Widens(prior.MinLength, MinLength, true))
                     context.LogBreakingChange(ComparisonMessages.ConstraintIsWeaker, "minimum");
-                else if (Narrows(prior.MinLength, MinLength, false))
+                else if (Narrows(prior.MinLength, MinLength, true))
                     context.LogInfo(ComparisonMessages.ConstraintIsStronger, "minLength");
-                else if (Widens(prior.MinLength, MinLength, false))
+                else if (Widens(prior.MinLength, MinLength, true))
                     context.LogInfo(ComparisonMessages.ConstraintIsWeaker, "minLength");
             }
             if ((prior.Pattern == null && Pattern != null) ||
