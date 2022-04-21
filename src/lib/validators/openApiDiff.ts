@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 import * as asyncFs from "@ts-common/fs"
@@ -228,9 +228,9 @@ export class OpenApiDiff {
     const outputFilePath = path.join(outputFolder, `${outputFileName}.json`)
     const outputMapFilePath = path.join(outputFolder, `${outputFileName}.map`)
     const autoRestCmd = tagName
-      ? `${this.autoRestPath()} ${swaggerPath} --tag=${tagName} --output-artifact=swagger-document.json` +
+      ? `${this.autoRestPath()} ${swaggerPath} --v2 --tag=${tagName} --output-artifact=swagger-document.json` +
         ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
-      : `${this.autoRestPath()} --input-file=${swaggerPath} --output-artifact=swagger-document.json` +
+      : `${this.autoRestPath()} --v2 --input-file=${swaggerPath} --output-artifact=swagger-document.json` +
         ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
 
     log.debug(`Executing: "${autoRestCmd}"`)

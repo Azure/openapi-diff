@@ -53,15 +53,15 @@ export type Logger = {
   readonly error: (v: string) => void
 }
 
-export let log: Logger = new winston.Logger({
-  transports: [
-    new winston.transports.Console({
-      level: "warn",
-      colorize: true,
-      prettyPrint: true,
-      humanReadableUnhandledException: true
-    })
-  ],
+const transports = {
+  console: new winston.transports.Console({
+    level: "warn",
+    format: winston.format.combine(winston.format.simple())
+  })
+}
+
+export let log: Logger = winston.createLogger({
+  transports: [transports.console],
   levels: customLogLevels
 }) as any
 
@@ -83,7 +83,7 @@ Object.defineProperties(log, {
       ) {
         throw new Error(`The logging level provided is "${level}". Valid values are: "${validLevels}".`)
       }
-      this.transports.console.level = level
+      transports.console.level = level
       return
     }
   },
@@ -121,14 +121,13 @@ Object.defineProperties(log, {
       currentLogFile = logFilePath
       this.directory = path.dirname(logFilePath)
       if (!this.transports.file) {
-        this.add(winston.transports.File, {
-          level: "silly",
-          colorize: false,
-          silent: false,
-          prettyPrint: true,
-          json: false,
-          filename: logFilePath
-        })
+        this.add(
+          new winston.transports.File({
+            level: "silly",
+            silent: false,
+            filename: logFilePath
+          })
+        )
       }
       return
     }
