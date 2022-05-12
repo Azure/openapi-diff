@@ -1,0 +1,257 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "contact": {
+      "email": "apiteam@swagger.io",
+      "name": "Swagger API Team",
+      "url": "http://swagger.io"
+    },
+    "description": "A sample API that uses a petstore as an example to demonstrate features in the Swagger 2.0 specification",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "termsOfService": "http://swagger.io/terms/",
+    "title": "Swagger Petstore",
+    "version": "1.0.0"
+  },
+  "host": "petstore.swagger.io",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/pets": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "collectionFormat": "multi",
+            "description": "tags to filter by",
+            "in": "query",
+            "items": {
+              "type": "string"
+            },
+            "name": "tags",
+            "required": false,
+            "type": "array"
+          },
+          {
+            "description": "maximum number of results to return",
+            "format": "int32",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "pet response",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Pet"
+              },
+              "type": "array"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "description": "Returns all pets from the system that the user has access to the system",
+        "operationId": "findPets"
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "Pet to add to the store",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewPet"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "pet response",
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "description": "Creates a new pet in the store. Duplicates are allowed",
+        "operationId": "addPet"
+      }
+    },
+    "/pets/{id}": {
+      "delete": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "ID of pet to delete",
+            "format": "int64",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "pet deleted"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "description": "deletes a single pet based on the ID supplied",
+        "operationId": "deletePet"
+      },
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "ID of pet to fetch",
+            "format": "int64",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "pet response",
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "description": "Returns a user based on a single ID, if the user does not have access to the pet",
+        "operationId": "find pet by id"
+      }
+    }
+  },
+  "definitions": {
+    "Error": {
+      "properties": {
+        "code": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "type": "object"
+    },
+    "NewPet": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "Pet": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/NewPet"
+        },
+        {
+          "properties": {
+            "id": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "petType": {
+              "$ref": "#/definitions/PetType"
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "PetType": {
+      "enum": [
+        "Mammals",
+        "Fish",
+        "Birds",
+        "Reptiles",
+        "Amphibians",
+        "Invertebrates"
+      ],
+      "type": "string",
+      "x-ms-enum": {
+        "name": "PetType",
+        "modelAsString": false,
+        "values": [
+          {
+            "value": 0,
+            "description": "humans and all other animals that are warm-blooded vertebrates",
+            "name": "Mammals"
+          },
+          {
+            "value": 1,
+            "description": "aquatic, craniate, gill-bearing animals that lack limbs with digits"
+          },
+          {
+            "value": 2,
+            "name": "Birds"
+          },
+          3,
+          4,
+          5
+        ],
+        "x-nullable": false
+      }
+    }
+  },
+  "x-components": {}
+}
