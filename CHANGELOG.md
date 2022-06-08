@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.6 Released on 2022-06-09
+
+- using autorest v3.6.1'.
+
 ## 0.9.3 Released on 2022-02-09
 
 - bugfix for 'ConstraintIsStronger'.
