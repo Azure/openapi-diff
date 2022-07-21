@@ -18,7 +18,7 @@ describe("index", () => {
     const expected = [
       {
         code: "NoVersionChange",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1001.md",
         id: "1001",
         message: "The versions have not changed.",
         mode: "Update",
@@ -48,7 +48,7 @@ describe("index", () => {
     const expected = [
       {
         code: "NoVersionChange",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1001.md",
         id: "1001",
         message: "The versions have not changed.",
         mode: "Update",
@@ -66,7 +66,7 @@ describe("index", () => {
       },
       {
         code: "AddedPath",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1038.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1038.md",
         id: "1038",
         message: "The new version is adding a path that was not found in the old version.",
         mode: "Addition",
@@ -93,7 +93,7 @@ describe("index", () => {
     const expected = [
       {
         code: "NoVersionChange",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1001.md",
         id: "1001",
         message: "The versions have not changed.",
         mode: "Update",
@@ -111,7 +111,7 @@ describe("index", () => {
       },
       {
         code: "AddedPath",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1038.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1038.md",
         id: "1038",
         message: "The new version is adding a path that was not found in the old version.",
         mode: "Addition",
@@ -139,7 +139,7 @@ describe("index", () => {
     const expected = [
       {
         code: "NoVersionChange",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1001.md",
         id: "1001",
         message: "The versions have not changed.",
         mode: "Update",
@@ -157,7 +157,7 @@ describe("index", () => {
       },
       {
         code: "RemovedPath",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1005.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1005.md",
         id: "1005",
         message: "The new version is missing a path that was found in the old version. Was path '/x' removed or restructured?",
         mode: "Removal",
@@ -222,7 +222,7 @@ describe("index", () => {
     const expected = [
       {
         code: "NoVersionChange",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1001.md",
         id: "1001",
         message: "The versions have not changed.",
         mode: "Update",
@@ -240,7 +240,7 @@ describe("index", () => {
       },
       {
         code: "RemovedOptionalParameter",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1046.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1046.md",
         id: "1046",
         message: "The optional parameter 'p1' was removed in the new version.",
         mode: "Removal",
@@ -254,7 +254,7 @@ describe("index", () => {
       },
       {
         code: "AddingOptionalParameter",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1043.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1043.md",
         id: "1043",
         message: "The optional parameter 'p2' was added in the new version.",
         mode: "Addition",
@@ -268,7 +268,7 @@ describe("index", () => {
       },
       {
         code: "RemovedClientParameter",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1007.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1007.md",
         id: "1007",
         message: "The new version is missing a client parameter that was found in the old version. Was 'P1' removed or renamed?",
         mode: "Removal",
@@ -299,7 +299,7 @@ describe("index", () => {
     const expected = [
       {
         code: "NoVersionChange",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1001.md",
         id: "1001",
         message: "The versions have not changed.",
         mode: "Update",
@@ -342,7 +342,7 @@ describe("index", () => {
           location: `${newFilePath}:1:1`
         },
         type: "Info",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1001.md",
         mode: "Update"
       },
       {
@@ -360,7 +360,7 @@ describe("index", () => {
           location: `${newFilePath}:22:13`
         },
         type: "Error",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1032.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1032.md",
         mode: "Update"
       },
       {
@@ -378,7 +378,7 @@ describe("index", () => {
           location: `${newFilePath}:41:9`
         },
         type: "Error",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1026.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1026.md",
         mode: "Update"
       },
       {
@@ -396,7 +396,7 @@ describe("index", () => {
           location: `${newFilePath}:41:9`
         },
         type: "Error",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1023.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1023.md",
         mode: "Update"
       },
       {
@@ -414,12 +414,12 @@ describe("index", () => {
           location: `${newFilePath}:22:13`
         },
         type: "Error",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1034.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1034.md",
         mode: "Addition"
       },
       {
         code: "DifferentAllOf",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1032.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1032.md",
         id: "1032",
         message: "The new version has a different 'allOf' property than the previous one.",
         mode: "Update",
@@ -450,7 +450,7 @@ describe("index", () => {
           location: `${newFilePath}:34:5`
         },
         type: "Error",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1034.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1034.md",
         mode: "Addition"
       }
     ]
@@ -480,7 +480,7 @@ describe("index", () => {
           location: `${newFilePath}:1:1`
         },
         type: "Info",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1001.md",
         mode: "Update"
       },
       {
@@ -498,12 +498,12 @@ describe("index", () => {
           location: `${newFilePath}:24:13`
         },
         type: "Error",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1032.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1032.md",
         mode: "Update"
       },
       {
         code: "DifferentAllOf",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1032.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1032.md",
         id: "1032",
         message: "The new version has a different 'allOf' property than the previous one.",
         mode: "Update",
@@ -546,7 +546,7 @@ describe("index", () => {
           location: `${newFilePath}:1:1`
         },
         type: "Info",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1001.md",
         mode: "Update"
       },
       {
@@ -564,12 +564,12 @@ describe("index", () => {
           location: `${newFilePath}:24:13`
         },
         type: "Error",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1032.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1032.md",
         mode: "Update"
       },
       {
         code: "DifferentAllOf",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1032.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1032.md",
         id: "1032",
         message: "The new version has a different 'allOf' property than the previous one.",
         mode: "Update",
@@ -612,7 +612,7 @@ describe("index", () => {
           location: `${newFilePath}:1:1`
         },
         type: "Info",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1001.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1001.md",
         mode: "Update"
       },
       {
@@ -630,12 +630,12 @@ describe("index", () => {
           location: `${newFilePath}:24:13`
         },
         type: "Error",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1032.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1032.md",
         mode: "Update"
       },
       {
         code: "DifferentAllOf",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1032.md",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1032.md",
         id: "1032",
         message: "The new version has a different 'allOf' property than the previous one.",
         mode: "Update",
@@ -679,7 +679,7 @@ describe("index", () => {
           location: `${newFilePath}:7:3`
         },
         type: "Warning",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1003.md"
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1003.md"
       }
     ]
     assert.deepStrictEqual(result, expected)
@@ -709,7 +709,7 @@ describe("index", () => {
           location: `${newFilePath}:7:3`
         },
         type: "Warning",
-        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1004.md"
+        docUrl: "https://github.com/Azure/openapi-diff/tree/main/docs/rules/1004.md"
       }
     ]
     assert.deepStrictEqual(result, expected)

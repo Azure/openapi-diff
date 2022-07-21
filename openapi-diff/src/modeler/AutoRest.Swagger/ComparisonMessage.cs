@@ -16,7 +16,7 @@ namespace AutoRest.Swagger
     /// </summary>
     public class ComparisonMessage
     {
-        public static string DocBaseUrl = "https://github.com/Azure/openapi-diff/tree/master/docs/rules/";
+        public static string DocBaseUrl = "https://github.com/Azure/openapi-diff/tree/main/docs/rules/";
 
         public ComparisonMessage(
             MessageTemplate template,
