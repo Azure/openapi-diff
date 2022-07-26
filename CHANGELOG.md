@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.7 Released on 2022-07-21
+
+- update documentation url.
+
 ## 0.9.6 Released on 2022-06-09
 
 - using autorest v3.6.1'.
