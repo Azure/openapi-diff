@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.7 Released on 2022-08-15
+
+- change rule 'TypeChanged' to 'Info' if adding 'type:object' to an schema with "properties".
+
 ## 0.9.6 Released on 2022-06-09
 
 - using autorest v3.6.1'.

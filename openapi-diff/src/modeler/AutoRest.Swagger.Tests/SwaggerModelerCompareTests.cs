@@ -151,6 +151,21 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
+        /// Verifies that if adding a 'type:object' to a schema with 'properties', it's not error.
+        /// </summary>
+        [Fact]
+        public void TypeObjectChanged()
+        {
+            var messages = CompareSwagger("type_changed_01.json").ToArray();
+            var missing = messages.Where(m => m.Id == ComparisonMessages.TypeChanged.Id);
+            Assert.NotEmpty(missing);
+            var error = missing.Where(err => err.NewJsonRef.StartsWith("new/type_changed.json#/definitions/")).FirstOrDefault();
+            Assert.NotNull(error);
+            Assert.Equal(Category.Info, error.Severity);
+            Assert.Equal("new/type_changed.json#/definitions/Database/properties/a", error.NewJsonRef);
+        }
+
+        /// <summary>
         /// Verifies that if you change the type format of a schema property, it's caught.
         /// </summary>
         [Fact]
