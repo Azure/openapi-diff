@@ -159,10 +159,10 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("type_changed_01.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.TypeChanged.Id);
             Assert.NotEmpty(missing);
-            var error = missing.Where(err => err.NewJsonRef.StartsWith("new/type_changed.json#/definitions/")).FirstOrDefault();
+            var error = missing.Where(err => err.NewJsonRef.StartsWith("new/type_changed_01.json#/definitions/")).FirstOrDefault();
             Assert.NotNull(error);
             Assert.Equal(Category.Info, error.Severity);
-            Assert.Equal("new/type_changed.json#/definitions/Database/properties/a", error.NewJsonRef);
+            Assert.Equal("new/type_changed_01.json#/definitions/Database/properties/a", error.NewJsonRef);
         }
 
         /// <summary>
