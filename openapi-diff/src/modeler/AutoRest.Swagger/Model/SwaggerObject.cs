@@ -133,7 +133,7 @@ namespace AutoRest.Swagger.Model
                     Type.HasValue ? Type.Value.ToString().ToLower() : "",
                     prior.Type.HasValue ? prior.Type.Value.ToString().ToLower() : "");
             }
-            var isObject = Type.Value.Equals("object") && (prior is Schema) ? (prior as Schema).Properties != null : false;
+            var isObject = Type.Value == DataType.Object && (this is Schema) ? (this as Schema).Properties != null : false;
             if (prior.Type.HasValue != Type.HasValue) {
                 if (!prior.Type.HasValue && Type.HasValue && isObject)
                 {
