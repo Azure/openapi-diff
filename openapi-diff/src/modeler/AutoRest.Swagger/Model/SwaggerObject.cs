@@ -127,7 +127,7 @@ namespace AutoRest.Swagger.Model
 
             // Are the types the same?
 
-            if ((Type.HasValue && prior.Type.Value != Type.Value))
+            if ((Type.HasValue && prior.Type.HasValue && prior.Type.Value != Type.Value))
             {
                 context.LogError(ComparisonMessages.TypeChanged, 
                     Type.HasValue ? Type.Value.ToString().ToLower() : "",
