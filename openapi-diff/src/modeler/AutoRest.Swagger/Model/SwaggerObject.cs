@@ -127,11 +127,25 @@ namespace AutoRest.Swagger.Model
 
             // Are the types the same?
 
-            if (prior.Type.HasValue != Type.HasValue || (Type.HasValue && prior.Type.Value != Type.Value))
+            if ((Type.HasValue && prior.Type.HasValue && prior.Type.Value != Type.Value))
             {
-                context.LogBreakingChange(ComparisonMessages.TypeChanged, 
+                context.LogError(ComparisonMessages.TypeChanged, 
                     Type.HasValue ? Type.Value.ToString().ToLower() : "",
                     prior.Type.HasValue ? prior.Type.Value.ToString().ToLower() : "");
+            }
+            var isObject = Type.HasValue && Type.Value == DataType.Object && (this is Schema) ? (this as Schema).Properties != null : false;
+            if (prior.Type.HasValue != Type.HasValue) {
+                if (!prior.Type.HasValue && Type.HasValue && isObject)
+                {
+                    context.LogInfo(ComparisonMessages.TypeChanged,
+                   Type.HasValue ? Type.Value.ToString().ToLower() : "",
+                   prior.Type.HasValue ? prior.Type.Value.ToString().ToLower() : "");
+                }
+                else {
+                    context.LogError(ComparisonMessages.TypeChanged,
+                   Type.HasValue ? Type.Value.ToString().ToLower() : "",
+                   prior.Type.HasValue ? prior.Type.Value.ToString().ToLower() : "");
+                }
             }
 
             // What about the formats?
