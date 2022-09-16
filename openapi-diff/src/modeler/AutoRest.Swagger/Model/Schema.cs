@@ -88,6 +88,11 @@ namespace AutoRest.Swagger.Model
                 throw new ArgumentNullException("context");
             }
 
+            if (Reference != null && !Reference.Equals(previous.Reference))
+            {
+                context.LogBreakingChange(ComparisonMessages.ReferenceRedirection);
+            }
+
             int referenced = 0;
 
             var thisSchema = this;

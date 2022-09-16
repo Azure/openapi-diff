@@ -369,5 +369,28 @@
             Message = "The new version has a different 'x-ms-longrunning-operation' value than the previous one.",
             Type = MessageType.Update
         };
+
+        public static MessageTemplate XmsEnumChanged = new MessageTemplate
+        {
+            Id = 1047,
+            Code = nameof(ComparisonMessages.XmsEnumChanged),
+            Message = "The new version has a different x-ms-enum '{0}' than the previous one.",
+            Type = MessageType.Update
+        };
+
+        public static MessageTemplate AddedXmsEnum = new MessageTemplate
+        {
+            Id = 1048,
+            Code = nameof(ComparisonMessages.AddedXmsEnum),
+            Message = "The new version adds a x-ms-enum extension.",
+            Type = MessageType.Addition
+        };
+        public static MessageTemplate RemovedXmsEnum = new MessageTemplate
+        {
+            Id = 1049,
+            Code = nameof(ComparisonMessages.RemovedXmsEnum),
+            Message = "The new version is missing a 'x-ms-enum' found in the old version.",
+            Type = MessageType.Removal
+        };
     }
 }

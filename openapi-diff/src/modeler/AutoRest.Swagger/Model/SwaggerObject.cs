@@ -177,6 +177,7 @@ namespace AutoRest.Swagger.Model
         {
             if (prior.Enum == null && this.Enum == null) return;
 
+            CompareXmsEnum(context,prior);
             bool relaxes = (prior.Enum != null && this.Enum == null);
             bool constrains = (prior.Enum == null && this.Enum != null);
             bool isEnumModelAsString = (this.XmsEnum != null && this.XmsEnum.ModelAsString == true);
@@ -210,6 +211,26 @@ namespace AutoRest.Swagger.Model
                         }
                     }
                 }
+            }
+        }
+
+        private void CompareXmsEnum(ComparisonContext<ServiceDefinition> context, T prior) {
+
+            if (this.XmsEnum == null && prior.XmsEnum != null)
+            {
+                context.LogError(ComparisonMessages.RemovedXmsEnum);
+            }
+            if (this.XmsEnum != null && prior.XmsEnum == null)
+            {
+                context.LogError(ComparisonMessages.AddedXmsEnum);
+            }
+            if (this.XmsEnum != null && prior.XmsEnum != null && !prior.XmsEnum.Name.Equals(this.XmsEnum.Name))
+            {
+                context.LogError(ComparisonMessages.XmsEnumChanged, "name");
+            }
+            if (this.XmsEnum != null && prior.XmsEnum != null && !prior.XmsEnum.ModelAsString != prior.XmsEnum.ModelAsString)
+            {
+                context.LogError(ComparisonMessages.XmsEnumChanged, "modelAsString");
             }
         }
 
