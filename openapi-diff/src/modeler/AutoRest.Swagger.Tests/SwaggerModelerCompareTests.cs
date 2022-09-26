@@ -511,8 +511,8 @@ namespace AutoRest.Swagger.Tests
         public void ParameterSchemaNameChanged()
         {
             var messages = CompareSwagger("operation_check_02.json").ToArray();
-            var redirected = messages.Where(m => m.Id == ComparisonMessages.ReferenceRedirection.Id);
-            Assert.Empty(redirected);
+            var redirected = messages.Where(m => m.Id == ComparisonMessages.ReferenceRedirection.Id).ToArray();
+            Assert.Equal(2,redirected.Length);
         }
 
         /// <summary>
@@ -877,6 +877,21 @@ namespace AutoRest.Swagger.Tests
         {
             var messages = CompareSwagger("added_optional_property.json").ToArray();
             Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.AddedOptionalProperty.Id).Count());
+        }
+
+        [Fact]
+        public void AddedOrRemovedXmsEnum()
+        {
+            var messages = CompareSwagger("xms_enum_added.json").ToArray();
+            Assert.Equal(2, messages.Where(m => m.Id == ComparisonMessages.AddedXmsEnum.Id).Count());
+            Assert.Equal(2, messages.Where(m => m.Id == ComparisonMessages.RemovedXmsEnum.Id).Count());
+        }
+
+        [Fact]
+        public void XmsEnumChanged()
+        {
+            var messages = CompareSwagger("xms_enum_changed.json").ToArray();
+            Assert.Equal(4, messages.Where(m => m.Id == ComparisonMessages.XmsEnumChanged.Id).Count());
         }
     }
 }

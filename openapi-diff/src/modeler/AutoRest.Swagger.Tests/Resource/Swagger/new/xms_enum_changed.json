@@ -1,0 +1,55 @@
+﻿{
+  "swagger": 2.0,
+  "info": {
+    "title": "type_changed",
+    "version": "1.0"
+  },
+  "host": "localhost:8000",
+  "schemes": [ "http", "https" ],
+  "consumes": [ "text/plain", "text/json" ],
+  "produces": [ "text/plain" ],
+  "paths": {
+    "/api/Parameters": {
+      "put": {
+        "tag": [ "Parameters" ],
+        "operationId": "Parameters_Put",
+        "produces": [
+          "text/plain"
+        ],
+        "parameters": [
+          {
+            "name": "database",
+            "in": "body",
+            "required": true,
+            "type": "object",
+            "schema": { "$ref": "#/definitions/Database" }
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Database": {
+      "properties": {
+        "a": {
+          "type": "string",
+          "readOnly": true,
+          "description": "This is a system generated property.\nThe _rid value is empty for this operation."
+        },
+        "b": {
+          "type": "string",
+          "enum": [
+            "A",
+            "B",
+            "C"
+          ],
+          "x-ms-enum": {
+            "name": "ResourceIdentityTypeNew",
+            "modelAsString": false
+          },
+          "description": "This property shows the number of databases returned."
+        }
+      }
+    }
+  }
+}

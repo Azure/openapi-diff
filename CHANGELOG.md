@@ -1,4 +1,7 @@
 # Changelog
+## 0.10.0 Released on 2022-09-15
+
+- Added rules: AddedXmsEnum,RemovedXmsEnum,XmsEnumChanged.
 
 ## 0.9.7 Released on 2022-08-15
 

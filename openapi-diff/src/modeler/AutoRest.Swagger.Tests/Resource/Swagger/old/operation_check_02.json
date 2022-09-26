@@ -1,5 +1,5 @@
 ﻿{
-  "swagger": 2.0,
+  "swagger": "2.0",
   "info": {
     "title": "operation_check_01",
     "version": "1.0"
@@ -9,7 +9,7 @@
   "paths": {
     "/api/Parameters": {
       "put": {
-        "tag": [ "Parameters" ],
+        "tags": [ "Parameters" ],
         "operationId": "Parameters_Put",
         "produces": [
           "text/plain"
@@ -19,13 +19,12 @@
             "name": "database",
             "in": "body",
             "required": true,
-            "type": "object",
             "schema": { "$ref": "#/definitions/Database" }
           }
-        ]
+        ],"responses": {}
       },
       "post": {
-        "tag": [ "Parameters" ],
+        "tags": [ "Parameters" ],
         "operationId": "Parameters_Post",
         "produces": [
           "text/plain"
@@ -35,15 +34,15 @@
             "name": "registry",
             "in": "body",
             "required": true,
-            "type": "object",
             "schema": { "$ref": "#/definitions/Registry" }
           }
-        ]
+        ],
+        "responses": {}
       }
     },
     "/api/Responses": {
       "get": {
-        "tag": [ "Responses" ],
+        "tags": [ "Responses" ],
         "operationId": "Responses_Get",
         "produces": [
           "text/plain"
