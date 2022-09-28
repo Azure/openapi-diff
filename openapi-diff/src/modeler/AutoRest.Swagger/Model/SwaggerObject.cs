@@ -228,7 +228,7 @@ namespace AutoRest.Swagger.Model
             {
                 context.LogError(ComparisonMessages.XmsEnumChanged, "name");
             }
-            if (this.XmsEnum != null && prior.XmsEnum != null && !prior.XmsEnum.ModelAsString != prior.XmsEnum.ModelAsString)
+            if (this.XmsEnum != null && prior.XmsEnum != null && prior.XmsEnum.ModelAsString != prior.XmsEnum.ModelAsString)
             {
                 context.LogError(ComparisonMessages.XmsEnumChanged, "modelAsString");
             }
