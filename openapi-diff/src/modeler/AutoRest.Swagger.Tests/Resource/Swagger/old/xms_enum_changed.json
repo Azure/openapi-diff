@@ -44,8 +44,7 @@
             "C"
           ],
           "x-ms-enum": {
-            "name": "ResourceIdentityType",
-            "modelAsString": true
+            "name": "ResourceIdentityType"
           },
           "description": "This property shows the number of databases returned."
         }
