@@ -142,6 +142,9 @@
           "readOnly": true,
           "description": "This is a system generated property.\nIt specifies the addressable path of the users resource."
         }
+      },
+      "default": {
+        "id": "test"
       }
     }
   }
