@@ -6,6 +6,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 
 namespace AutoRest.Swagger.Model
 {
@@ -51,7 +53,7 @@ namespace AutoRest.Swagger.Model
         /// <summary>
         /// Sets a default value to the parameter.
         /// </summary>
-        public virtual string Default { get; set; }
+        public virtual dynamic Default { get; set; }
 
         public virtual string MultipleOf { get; set; }
 
@@ -154,7 +156,7 @@ namespace AutoRest.Swagger.Model
 
             CompareItems(context, prior);
 
-            if (Default != null && !Default.Equals(prior.Default) || (Default == null && !string.IsNullOrEmpty(prior.Default)))
+            if ((Default != null || prior.Default != null) && !JToken.DeepEquals(Default,prior.Default))
             {
                 context.LogBreakingChange(ComparisonMessages.DefaultValueChanged);
             }

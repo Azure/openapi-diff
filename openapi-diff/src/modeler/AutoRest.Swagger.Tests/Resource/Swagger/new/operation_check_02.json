@@ -120,7 +120,8 @@
         "b": {
           "type": "integer",
           "readOnly": true,
-          "description": "This is a system generated property.\nThe resource id (_rid) is a unique identifier that is also hierarchical per the resource stack on the resource model. It is used internally for placement of and navigation to the database resource."
+          "description": "This is a system generated property.\nThe resource id (_rid) is a unique identifier that is also hierarchical per the resource stack on the resource model. It is used internally for placement of and navigation to the database resource.",
+          "default": 11
         },
         "c": {
           "type": "integer",
@@ -143,6 +144,10 @@
           "readOnly": true,
           "description": "This is a system generated property.\nIt specifies the addressable path of the users resource."
         }
+      }
+      ,
+      "default": {
+        "id": "test"
       }
     }
   }

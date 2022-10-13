@@ -166,6 +166,18 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
+        /// Verifies that if if you change the default value of a schema, it's caught .
+        /// </summary>
+        [Fact]
+        public void DefaultValueChanged()
+        {
+            var messages = CompareSwagger("default_changed_01.json").ToArray();
+            var errors = messages.Where(m => m.Id == ComparisonMessages.DefaultValueChanged.Id).ToArray();
+            Assert.NotNull(errors);
+            Assert.Equal(errors.Count(), 8);
+        }
+
+        /// <summary>
         /// Verifies that if you change the type format of a schema property, it's caught.
         /// </summary>
         [Fact]
