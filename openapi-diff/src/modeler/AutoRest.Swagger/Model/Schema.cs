@@ -88,7 +88,7 @@ namespace AutoRest.Swagger.Model
                 throw new ArgumentNullException("context");
             }
 
-            if (Reference != null && !Reference.Equals(previous.Reference))
+            if ((Reference != null && !Reference.Equals(previous.Reference)) || (previous.Reference != null && !previous.Reference.Equals(Reference)))
             {
                 context.LogBreakingChange(ComparisonMessages.ReferenceRedirection);
             }
@@ -259,23 +259,20 @@ namespace AutoRest.Swagger.Model
                 foreach (KeyValuePair<string, Schema> property in Properties)
                 {
                     // Case: Were any required properties added?
-                    if ((priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(property.Key, out var model)) &&
-                        (Required != null && Required.Contains(property.Key)))
+                    if (priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(property.Key, out var model))
                     {
-                        context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, property.Key);
-                    }
-
-                    // Case: Were any readOnly properties added in response direction?
-                    if (priorSchema.Properties != null && !priorSchema.Properties.TryGetValue(property.Key, out model))
-                    {
-                        if (context.Direction == DataDirection.Response && property.Value != null)
+                        if ((Required != null && Required.Contains(property.Key)))
+                        {
+                            context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, property.Key);
+                        }
+                        else if (context.Direction == DataDirection.Response && property.Value != null)
                         {
                             if (property.Value.ReadOnly == true)
                                 context.LogInfo(ComparisonMessages.AddedReadOnlyPropertyInResponse, property.Key);
                             else
                                 context.LogBreakingChange(ComparisonMessages.AddedPropertyInResponse, property.Key);
-                        } 
-                        else if (priorSchema.IsReferenced && property.Value != null && (Required == null || !Required.Contains(property.Key)))
+                        }
+                        else if(IsReferenced && property.Value != null)
                         {
                             context.LogBreakingChange(ComparisonMessages.AddedOptionalProperty, property.Key);
                         }

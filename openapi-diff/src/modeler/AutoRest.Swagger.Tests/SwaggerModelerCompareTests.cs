@@ -892,6 +892,13 @@ namespace AutoRest.Swagger.Tests
         }
 
         [Fact]
+        public void AddedOptionalPropertyInResponseSchema()
+        {
+            var messages = CompareSwagger("add_optional_property_01.json").ToArray();
+            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.AddedPropertyInResponse.Id).Count());
+        }
+
+        [Fact]
         public void AddedOrRemovedXmsEnum()
         {
             var messages = CompareSwagger("xms_enum_added.json").ToArray();
