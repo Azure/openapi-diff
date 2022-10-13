@@ -113,8 +113,8 @@ namespace AutoRest.Swagger.Model
                 }
             }
 
-            var thisModelName = thisSchema.XmsClientName != null ? thisSchema.XmsClientName : Reference ?? "";
-            var priorModelName = priorSchema.XmsClientName != null ? priorSchema.XmsClientName : previous.Reference ?? "";
+            var thisModelName = thisSchema.XmsClientName ?? Reference ?? "";
+            var priorModelName = priorSchema.XmsClientName ?? previous.Reference ?? "";
             if (!thisModelName.Equals(priorModelName))
             {
                 context.LogBreakingChange(ComparisonMessages.ReferenceRedirection);
@@ -250,6 +250,18 @@ namespace AutoRest.Swagger.Model
                     }
                     else
                     {
+                        // required to optional
+                        if (Required != null && Required.Contains(def.Key) && (priorSchema.Required == null || !priorSchema.Required.Contains(def.Key)))
+                        {
+                            context.LogBreakingChange(ComparisonMessages.RequiredStatusChange, true, false);
+                        }
+
+                        // optional to required
+                        if ((Required == null || !Required.Contains(def.Key)) && (priorSchema.Required != null && priorSchema.Required.Contains(def.Key)))
+                        {
+                            context.LogBreakingChange(ComparisonMessages.RequiredStatusChange, false, true);
+                        }
+
                         context.PushProperty(def.Key);
                         model.Compare(context, def.Value);
                         context.Pop();

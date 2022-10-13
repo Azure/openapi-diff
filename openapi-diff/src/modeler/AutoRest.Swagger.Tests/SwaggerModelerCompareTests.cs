@@ -485,6 +485,17 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
+        /// Verifies that if you make a required parameter optional, it's flagged, but not as an error.
+        /// </summary>
+        [Fact]
+        public void PropertyRequiredChanged()
+        {
+            var messages = CompareSwagger("property_required_status_changed.json").ToArray();
+            var missing = messages.Where(m => m.Id == ComparisonMessages.RequiredStatusChange.Id);
+            Assert.Equal(missing.Count(),2);
+        }
+
+        /// <summary>
         /// Verifieds that if you make an optional parameter required, it's caught.
         /// </summary>
         [Fact]

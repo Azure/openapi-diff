@@ -110,7 +110,9 @@ namespace AutoRest.Swagger.Model
 
             base.Compare(context, previous);
 
-            if (Reference != null && !Reference.Equals(prior.Reference))
+            var thisModelName = this.XmsClientName ?? Reference ?? "";
+            var priorModelName = previous.XmsClientName ?? previous.Reference ?? "";
+            if (!thisModelName.Equals(priorModelName))
             {
                 context.LogBreakingChange(ComparisonMessages.ReferenceRedirection);
             }

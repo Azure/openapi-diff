@@ -41,7 +41,7 @@
       }
     },
     "Register": {
-      "required": [ "b" ],
+      "required": [ "a"],
       "properties": {
         "a": {
           "type": "string",
