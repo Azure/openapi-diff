@@ -364,6 +364,24 @@ describe("index", () => {
         mode: "Update"
       },
       {
+        code: "RequiredStatusChange",
+        docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1025.md",
+        id: "1025",
+        message: "The 'required' status changed from the old version('True') to the new version('False').",
+        mode: "Update",
+        new: {
+          location: "file:///D:/a/1/s/src/test/expandsAllOf/new/property_format_change.json:35:7",
+          path: "definitions.Database.properties",
+          ref: "file:///D:/a/1/s/src/test/expandsAllOf/new/property_format_change.json#/definitions/Database/properties"
+        },
+        old: {
+          location: "file:///D:/a/1/s/src/test/expandsAllOf/old/property_format_change.json:35:7",
+          path: "definitions.Database.properties",
+          ref: "file:///D:/a/1/s/src/test/expandsAllOf/old/property_format_change.json#/definitions/Database/properties"
+        },
+        type: "Error"
+      },
+      {
         id: "1026",
         code: "TypeChanged",
         message: "The new version has a different type 'string' than the previous one 'integer'.",
