@@ -88,10 +88,7 @@ namespace AutoRest.Swagger.Model
                 throw new ArgumentNullException("context");
             }
 
-            if ((Reference != null && !Reference.Equals(previous.Reference)) || (previous.Reference != null && !previous.Reference.Equals(Reference)))
-            {
-                context.LogBreakingChange(ComparisonMessages.ReferenceRedirection);
-            }
+
 
             int referenced = 0;
 
@@ -114,6 +111,13 @@ namespace AutoRest.Swagger.Model
                 {
                     return context.Messages;
                 }
+            }
+
+            var thisModelName = thisSchema.XmsClientName != null ? thisSchema.XmsClientName : Reference ?? "";
+            var priorModelName = priorSchema.XmsClientName != null ? priorSchema.XmsClientName : previous.Reference ?? "";
+            if (!thisModelName.Equals(priorModelName))
+            {
+                context.LogBreakingChange(ComparisonMessages.ReferenceRedirection);
             }
 
             // Avoid doing the comparison repeatedly by marking for which direction it's already been done.

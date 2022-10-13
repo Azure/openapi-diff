@@ -912,5 +912,14 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("xms_enum_changed.json").ToArray();
             Assert.Equal(4, messages.Where(m => m.Id == ComparisonMessages.XmsEnumChanged.Id).Count());
         }
+
+        [Fact]
+        public void ReferenceChanged()
+        {
+            var messages = CompareSwagger("xms_client_name_changed.json").ToArray();
+            var redirected = messages.Where(m => m.Id == ComparisonMessages.ReferenceRedirection.Id).ToArray();
+            Assert.Equal(1, redirected.Count());
+            Assert.Equal(redirected[0].NewJsonRef, "new/xms_client_name_changed.json#/paths/~1api~1Parameters/post/parameters/0/schema");
+        }
     }
 }

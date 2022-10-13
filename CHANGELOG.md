@@ -2,7 +2,7 @@
 
 ## 0.10.1 Released on 2022-10-15
 
-- Bugfixes for ReferenceChanged,AddedPropertyInResponse,DefaultValueChanged.
+- Bugfixes for ReferenceRedirection,AddedPropertyInResponse,DefaultValueChanged.
 
 ## 0.10.0 Released on 2022-09-15
 

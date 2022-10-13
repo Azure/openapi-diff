@@ -82,6 +82,9 @@ namespace AutoRest.Swagger.Model
         [JsonProperty(PropertyName = "x-ms-enum")]
         public virtual XmsEnumExtension XmsEnum {get;set;}
 
+        [JsonProperty(PropertyName = "x-ms-client-name")]
+        public virtual string XmsClientName { get; set; }
+
         /// <summary>
         /// Compare a modified document node (this) to a previous one and look for breaking as well as non-breaking changes.
         /// </summary>
