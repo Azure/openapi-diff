@@ -902,11 +902,14 @@ namespace AutoRest.Swagger.Tests
             Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.AddedOptionalProperty.Id).Count());
         }
 
+
+        // Verify a inline schema of response was changed to reference schema and a new proeprty was added. 
         [Fact]
-        public void AddedOptionalPropertyInResponseSchema()
+        public void AddedOptionalPropertyToInlineResponseSchema()
         {
             var messages = CompareSwagger("add_optional_property_01.json").ToArray();
             Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.AddedPropertyInResponse.Id).Count());
+            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.ReferenceRedirection.Id).Count());
         }
 
         [Fact]
