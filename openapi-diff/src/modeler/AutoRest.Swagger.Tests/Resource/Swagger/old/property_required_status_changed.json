@@ -7,39 +7,8 @@
   "host": "localhost:8000",
   "schemes": [ "http", "https" ],
   "paths": {
-    "/api/Parameters": {
-      "put": {
-        "tags": [ "Parameters" ],
-        "operationId": "Parameters_Put",
-        "produces": [
-          "text/plain"
-        ],
-        "parameters": [
-          {
-            "name": "database",
-            "in": "body",
-            "required": true,
-            "schema": { "$ref": "#/definitions/DatabaseRenamed" }
-          }
-        ],
-        "responses": {
-          "200": {
-            "schema":{
-              "$ref": "#/definitions/DatabaseRenamed"
-            }
-          }
-        }
-      }
-    }
   },
 "definitions": {
-    "Error": {
-      "required": [ "message", "id" ],
-      "properties": {
-        "message": { "type": "string" },
-        "id": { "type": "integer" }
-      }
-    },
     "Register": {
       "required": [ "a"],
       "properties": {
@@ -75,85 +44,6 @@
           "description": "This is a system generated property.\nIt specifies the addressable path of the users resource."
         }
       }
-    },
-    "DatabaseRenamed": {
-      "description": "IP firewall rule",
-      "type": "object",
-      "allOf": [
-        {
-          "$ref": "#/definitions/Resource"
-        }
-      ],
-      "properties": {
-        "properties": {
-          "$ref": "#/definitions/IpFirewallRuleProperties",
-          "description": "IP firewall rule properties",
-          "x-ms-client-flatten": true
-        }
-      }
-    },
-    "IpFirewallRuleProperties": {
-      "description": "IP firewall rule properties",
-      "type": "object",
-      "properties": {
-        "endIpAddress": {
-          "description": "The end IP address of the firewall rule. Must be IPv4 format. Must be greater than or equal to startIpAddress",
-          "type": "string",
-          "x-ms-mutability": [
-            "create",
-            "read",
-            "update"
-          ]
-        },
-        "provisioningState": {
-          "description": "Resource provisioning state",
-          "enum": [
-            "Provisioning",
-            "Succeeded",
-            "Deleting",
-            "Failed",
-            "DeleteError"
-          ],
-          "type": "string",
-          "readOnly": true,
-          "x-ms-enum": {
-            "name": "ProvisioningState",
-            "modelAsString": true
-          }
-        },
-        "startIpAddress": {
-          "description": "The start IP address of the firewall rule. Must be IPv4 format",
-          "type": "string",
-          "x-ms-mutability": [
-            "create",
-            "read",
-            "update"
-          ]
-        }
-      }
-    },
-    "Resource": {
-      "title": "Resource",
-      "description": "Common fields that are returned in the response for all Azure Resource Manager resources",
-      "type": "object",
-      "properties": {
-        "id": {
-          "readOnly": true,
-          "type": "string",
-          "description": "Fully qualified resource ID for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}"
-        },
-        "name": {
-          "readOnly": true,
-          "type": "string",
-          "description": "The name of the resource"
-        },
-        "type": {
-          "readOnly": true,
-          "type": "string",
-          "description": "The type of the resource. E.g. \"Microsoft.Compute/virtualMachines\" or \"Microsoft.Storage/storageAccounts\""
-        }
-      },
-      "x-ms-azure-resource": true
     }
   }
 }
