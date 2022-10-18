@@ -485,7 +485,7 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
-        /// Verifies that if you make a required parameter optional, it's flagged, but not as an error.
+        /// Verifies that if you make a required property optional, it's flagged, but not as an error.
         /// </summary>
         [Fact]
         public void PropertyRequiredChanged()
