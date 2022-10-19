@@ -88,10 +88,7 @@ namespace AutoRest.Swagger.Model
                 throw new ArgumentNullException("context");
             }
 
-            if (Reference != null && !Reference.Equals(previous.Reference))
-            {
-                context.LogBreakingChange(ComparisonMessages.ReferenceRedirection);
-            }
+
 
             int referenced = 0;
 
@@ -114,6 +111,13 @@ namespace AutoRest.Swagger.Model
                 {
                     return context.Messages;
                 }
+            }
+
+            var thisModelName = thisSchema.XmsClientName ?? Reference ?? "";
+            var priorModelName = priorSchema.XmsClientName ?? previous.Reference ?? "";
+            if (!thisModelName.Equals(priorModelName))
+            {
+                context.LogBreakingChange(ComparisonMessages.ReferenceRedirection);
             }
 
             // Avoid doing the comparison repeatedly by marking for which direction it's already been done.
@@ -246,6 +250,18 @@ namespace AutoRest.Swagger.Model
                     }
                     else
                     {
+                        // required to optional
+                        if (Required != null && Required.Contains(def.Key) && (priorSchema.Required == null || !priorSchema.Required.Contains(def.Key)))
+                        {
+                            context.LogBreakingChange(ComparisonMessages.RequiredStatusChange, true, false);
+                        }
+
+                        // optional to required
+                        if ((Required == null || !Required.Contains(def.Key)) && (priorSchema.Required != null && priorSchema.Required.Contains(def.Key)))
+                        {
+                            context.LogBreakingChange(ComparisonMessages.RequiredStatusChange, false, true);
+                        }
+
                         context.PushProperty(def.Key);
                         model.Compare(context, def.Value);
                         context.Pop();
@@ -259,23 +275,20 @@ namespace AutoRest.Swagger.Model
                 foreach (KeyValuePair<string, Schema> property in Properties)
                 {
                     // Case: Were any required properties added?
-                    if ((priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(property.Key, out var model)) &&
-                        (Required != null && Required.Contains(property.Key)))
+                    if (priorSchema.Properties == null || !priorSchema.Properties.TryGetValue(property.Key, out var model))
                     {
-                        context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, property.Key);
-                    }
-
-                    // Case: Were any readOnly properties added in response direction?
-                    if (priorSchema.Properties != null && !priorSchema.Properties.TryGetValue(property.Key, out model))
-                    {
-                        if (context.Direction == DataDirection.Response && property.Value != null)
+                        if ((Required != null && Required.Contains(property.Key)))
+                        {
+                            context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, property.Key);
+                        }
+                        else if (context.Direction == DataDirection.Response && property.Value != null)
                         {
                             if (property.Value.ReadOnly == true)
                                 context.LogInfo(ComparisonMessages.AddedReadOnlyPropertyInResponse, property.Key);
                             else
                                 context.LogBreakingChange(ComparisonMessages.AddedPropertyInResponse, property.Key);
-                        } 
-                        else if (priorSchema.IsReferenced && property.Value != null && (Required == null || !Required.Contains(property.Key)))
+                        }
+                        else if(IsReferenced && property.Value != null)
                         {
                             context.LogBreakingChange(ComparisonMessages.AddedOptionalProperty, property.Key);
                         }

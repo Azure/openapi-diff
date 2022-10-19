@@ -485,6 +485,17 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
+        /// Verifies that if you make a required property optional, it's flagged, but not as an error.
+        /// </summary>
+        [Fact]
+        public void PropertyRequiredChanged()
+        {
+            var messages = CompareSwagger("property_required_status_changed.json").ToArray();
+            var missing = messages.Where(m => m.Id == ComparisonMessages.RequiredStatusChange.Id);
+            Assert.Equal(missing.Count(),2);
+        }
+
+        /// <summary>
         /// Verifieds that if you make an optional parameter required, it's caught.
         /// </summary>
         [Fact]
@@ -891,6 +902,16 @@ namespace AutoRest.Swagger.Tests
             Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.AddedOptionalProperty.Id).Count());
         }
 
+
+        // Verify a inline schema of response was changed to reference schema and a new proeprty was added. 
+        [Fact]
+        public void AddedOptionalPropertyToInlineResponseSchema()
+        {
+            var messages = CompareSwagger("add_optional_property_01.json").ToArray();
+            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.AddedPropertyInResponse.Id).Count());
+            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.ReferenceRedirection.Id).Count());
+        }
+
         [Fact]
         public void AddedOrRemovedXmsEnum()
         {
@@ -904,6 +925,15 @@ namespace AutoRest.Swagger.Tests
         {
             var messages = CompareSwagger("xms_enum_changed.json").ToArray();
             Assert.Equal(4, messages.Where(m => m.Id == ComparisonMessages.XmsEnumChanged.Id).Count());
+        }
+
+        [Fact]
+        public void ReferenceChanged()
+        {
+            var messages = CompareSwagger("xms_client_name_changed.json").ToArray();
+            var redirected = messages.Where(m => m.Id == ComparisonMessages.ReferenceRedirection.Id).ToArray();
+            Assert.Equal(1, redirected.Count());
+            Assert.Equal(redirected[0].NewJsonRef, "new/xms_client_name_changed.json#/paths/~1api~1Parameters/post/parameters/0/schema");
         }
     }
 }

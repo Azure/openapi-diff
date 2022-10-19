@@ -1,4 +1,9 @@
 # Changelog
+
+## 0.10.1 Released on 2022-10-15
+
+- Bugfixes for ReferenceRedirection,AddedPropertyInResponse,DefaultValueChanged.
+
 ## 0.10.0 Released on 2022-09-15
 
 - Added rules: AddedXmsEnum,RemovedXmsEnum,XmsEnumChanged.
