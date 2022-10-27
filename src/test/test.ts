@@ -367,7 +367,7 @@ describe("index", () => {
         code: "RequiredStatusChange",
         docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1025.md",
         id: "1025",
-        message: "The 'required' status changed from the old version('True') to the new version('False').",
+        message: "The 'required' status changed from the old version('False') to the new version('True').",
         mode: "Update",
         new: {
           location: "file:///D:/a/1/s/src/test/expandsAllOf/new/property_format_change.json:35:7",
