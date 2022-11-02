@@ -253,13 +253,13 @@ namespace AutoRest.Swagger.Model
                         // required to optional
                         if (Required != null && Required.Contains(def.Key) && (priorSchema.Required == null || !priorSchema.Required.Contains(def.Key)))
                         {
-                            context.LogBreakingChange(ComparisonMessages.RequiredStatusChange, true, false);
+                            context.LogBreakingChange(ComparisonMessages.RequiredStatusChange, false, true);
                         }
 
                         // optional to required
                         if ((Required == null || !Required.Contains(def.Key)) && (priorSchema.Required != null && priorSchema.Required.Contains(def.Key)))
                         {
-                            context.LogBreakingChange(ComparisonMessages.RequiredStatusChange, false, true);
+                            context.LogBreakingChange(ComparisonMessages.RequiredStatusChange, true, false);
                         }
 
                         context.PushProperty(def.Key);
