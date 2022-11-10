@@ -878,7 +878,7 @@ namespace AutoRest.Swagger.Tests
         public void XmsEnumModelAsString()
         {
             var messages = CompareSwagger("enum_as_string.json").ToArray();
-            Assert.Equal(1,messages.Where(m => m.Id == ComparisonMessages.AddedEnumValue.Id).ToList().Count());
+            Assert.Equal(2,messages.Where(m => m.Id == ComparisonMessages.AddedEnumValue.Id).ToList().Count());
         }
 
         [Fact]
