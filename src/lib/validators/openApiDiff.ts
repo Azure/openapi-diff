@@ -83,7 +83,7 @@ const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): Ch
 }
 
 function escape(filePath: string) {
-  return `"${filePath}"`;
+  return `"${filePath}"`
 }
 
 /**
