@@ -4,8 +4,6 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
-variables:
-  Codeql.Enabled: true
 
 steps:
 - script: npm install
