@@ -4,7 +4,6 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
-
 steps:
 - script: npm install
   displayName: npm install
