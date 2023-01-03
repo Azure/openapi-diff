@@ -102,6 +102,7 @@ export class ResolveSwagger {
     this.unifyXMsPaths()
     this.ConvertPathLevelParameter()
     this.ExpandDefinitions()
+    this.ConvertAdditionalProperty()
     this.generateNew()
     return this.innerSwagger
   }
@@ -145,6 +146,64 @@ export class ResolveSwagger {
       }
     }
   }
+
+  public ConvertAdditionalProperty() {
+    if (!this.innerSwagger) {
+      throw new Error("Null swagger object")
+    }
+    const swagger = this.innerSwagger as any
+    const paths = swagger.paths
+    if (paths && paths instanceof Object && toArray(sm.keys(paths)).length > 0) {
+      for (const v of sm.values(paths)) {
+        for (const [key, o] of sm.entries(v as any)) {
+          if (key.toLowerCase() !== "parameters") {
+           const operationParam = (o as any).parameters ? (o as any).parameters : []
+           operationParam.forEach((v:any) => v.schema && this.transformAdditionalProperty(v.schema))
+           const responses = (o as any).responses ? sm.values((o as any).responses) : []
+           responses.forEach((v: any) => v.schema && this.transformAdditionalProperty(v.schema))
+          }
+          else {
+            sm.values(o as any).forEach((v: any) => v.schema && this.transformAdditionalProperty(v.schema))
+          }
+        }
+      }
+    }
+    if (swagger.definitions) {
+       for (const o of sm.values(swagger.definitions)) {
+          this.transformAdditionalProperty(o)
+       }
+    }
+    if (swagger.parameters) {
+      for (const o of sm.values(swagger.parameters)) {
+        if ((o as any).schema) {
+          this.transformAdditionalProperty((o as any).schema)
+        }
+      }
+    }
+  }
+
+  private transformAdditionalProperty(schema:any) {
+    if ( typeof schema?.additionalProperties === "boolean") {
+      if (!schema?.additionalProperties) {
+        delete schema.additionalProperties
+      }
+      else {
+        schema.additionalProperties = { type: "object" }
+      }
+    }
+    if (schema.properties) {
+      for (const v of sm.values(schema.properties)) {
+       this.transformAdditionalProperty(v)
+      }
+    }
+
+    if (schema.allOf) {
+       for (const v of sm.values(schema.allOf)) {
+         this.transformAdditionalProperty(v)
+       }
+    }
+  }
+
   private ExpandDefinitions() {
     if (!this.innerSwagger) {
       throw new Error("Null swagger object")

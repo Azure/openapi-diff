@@ -1,0 +1,50 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "common_parameter_check_04",
+    "version": "1.0"
+  },
+  "parameters": {
+    "P0": {
+      "name": "p0",
+      "in": "query",
+      "type": "string"
+    },
+    "P2": {
+      "name": "p2",
+      "in": "body",
+      "schema": {
+          "type": "object",
+          "additionalProperties": false
+      }
+    }
+  },
+  "host": "localhost:8000",
+  "schemes": [ "http", "https" ],
+  "paths": {
+    "/api/Operations": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/P0"
+        },
+        {
+          "$ref": "#/parameters/P2"
+        }
+      ],
+      "get": {
+        "operationId": "Operations_Get",
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "default": {
+            "description": "Error response describing why the operation failed.",
+            "schema": {
+              "additionalProperties": true
+            }
+          }
+        }
+      }
+    }
+  }
+}
