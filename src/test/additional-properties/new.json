@@ -53,12 +53,14 @@
       }
     }
   },
-  "Foo": {
-    "type":"object",
-    "properties": {
-      "bar": {
-        "type":"object",
-        "additionalProperties":true
+  "definitions": {
+    "Foo": {
+      "type":"object",
+      "properties": {
+        "bar": {
+          "type":"object",
+          "additionalProperties":true
+        }
       }
     }
   }
