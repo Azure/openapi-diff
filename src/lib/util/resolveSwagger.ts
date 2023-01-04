@@ -188,7 +188,7 @@ export class ResolveSwagger {
         delete schema.additionalProperties
       }
       else {
-        schema.additionalProperties = { type: "object" }
+        schema.additionalProperties = {}
       }
     }
     if (schema.properties) {

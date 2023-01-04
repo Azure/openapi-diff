@@ -42,7 +42,24 @@
             "schema": {
               "additionalProperties": true
             }
+          },
+          "200": {
+            "description": "operation successfully .",
+            "schema": {
+              "$ref":"#/definitions/Foo"
+            }
           }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Foo": {
+      "type":"object",
+      "properties": {
+        "bar": {
+          "type":"object",
+          "additionalProperties":true
         }
       }
     }
