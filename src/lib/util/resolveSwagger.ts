@@ -157,21 +157,20 @@ export class ResolveSwagger {
       for (const v of sm.values(paths)) {
         for (const [key, o] of sm.entries(v as any)) {
           if (key.toLowerCase() !== "parameters") {
-           const operationParam = (o as any).parameters ? (o as any).parameters : []
-           operationParam.forEach((v:any) => v.schema && this.transformAdditionalProperty(v.schema))
-           const responses = (o as any).responses ? sm.values((o as any).responses) : []
-           responses.forEach((v: any) => v.schema && this.transformAdditionalProperty(v.schema))
-          }
-          else {
+            const operationParam = (o as any).parameters ? (o as any).parameters : []
+            operationParam.forEach((v: any) => v.schema && this.transformAdditionalProperty(v.schema))
+            const responses = (o as any).responses ? sm.values((o as any).responses) : []
+            responses.forEach((v: any) => v.schema && this.transformAdditionalProperty(v.schema))
+          } else {
             sm.values(o as any).forEach((v: any) => v.schema && this.transformAdditionalProperty(v.schema))
           }
         }
       }
     }
     if (swagger.definitions) {
-       for (const o of sm.values(swagger.definitions)) {
-          this.transformAdditionalProperty(o)
-       }
+      for (const o of sm.values(swagger.definitions)) {
+        this.transformAdditionalProperty(o)
+      }
     }
     if (swagger.parameters) {
       for (const o of sm.values(swagger.parameters)) {
@@ -182,25 +181,24 @@ export class ResolveSwagger {
     }
   }
 
-  private transformAdditionalProperty(schema:any) {
-    if ( typeof schema?.additionalProperties === "boolean") {
+  private transformAdditionalProperty(schema: any) {
+    if (typeof schema?.additionalProperties === "boolean") {
       if (!schema?.additionalProperties) {
         delete schema.additionalProperties
-      }
-      else {
+      } else {
         schema.additionalProperties = {}
       }
     }
     if (schema.properties) {
       for (const v of sm.values(schema.properties)) {
-       this.transformAdditionalProperty(v)
+        this.transformAdditionalProperty(v)
       }
     }
 
     if (schema.allOf) {
-       for (const v of sm.values(schema.allOf)) {
-         this.transformAdditionalProperty(v)
-       }
+      for (const v of sm.values(schema.allOf)) {
+        this.transformAdditionalProperty(v)
+      }
     }
   }
 
