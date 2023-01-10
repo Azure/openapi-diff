@@ -91,3 +91,9 @@
 [1045 - AddedOptionalProperty](rules/1045.md)
 
 [1046 - RemovedOptionalParameter](rules/1046.md)
+
+[1047 - XmsEnumChanged](rules/1047.md)
+
+[1048 - AddedXmsEnum](rules/1048.md)
+
+[1049 - RemovedXmsEnum](rules/1049.md)
