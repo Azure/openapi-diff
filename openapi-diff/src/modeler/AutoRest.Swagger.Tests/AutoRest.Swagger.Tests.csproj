@@ -4,7 +4,7 @@
   <Import Project="$(common)project-xunittest.proj" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp6.0</TargetFramework>
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
