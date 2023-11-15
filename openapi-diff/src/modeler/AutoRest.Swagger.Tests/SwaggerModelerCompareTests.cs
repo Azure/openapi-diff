@@ -899,7 +899,7 @@ namespace AutoRest.Swagger.Tests
         public void AddedOptionalProperty()
         {
             var messages = CompareSwagger("added_optional_property.json").ToArray();
-            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.AddedOptionalProperty.Id).Count());
+            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.AddedOptionalProperty.Id && m.Severity == Category.Warning).Count());
         }
 
 

@@ -71,6 +71,16 @@ namespace AutoRest.Swagger
                 formatArguments
             ));
 
+        public void LogWarning(MessageTemplate template, params object[] formatArguments)
+            => _messages.Add(new ComparisonMessage(
+                template, 
+                Path,
+                _PreviousRootDoc,
+                _CurrentRootDoc,
+                Category.Warning, 
+                formatArguments
+            ));
+
         public void LogError(MessageTemplate template, params object[] formatArguments)
             => _messages.Add(new ComparisonMessage(
                 template, 

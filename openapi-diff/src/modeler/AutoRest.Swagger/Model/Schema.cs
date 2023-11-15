@@ -290,7 +290,13 @@ namespace AutoRest.Swagger.Model
                         }
                         else if(IsReferenced && property.Value != null)
                         {
-                            context.LogBreakingChange(ComparisonMessages.AddedOptionalProperty, property.Key);
+                            // This is an Optional Property, therefore the minimal payload (e.g. just required fields)
+                            // from the previous API version remains valid in the new API version - therefore this
+                            // IS NOT a breaking change by definition.
+                            //
+                            // Whilst the additional field CAN be specified, it's OPTIONAL by design meaning this can
+                            // be omitted - and is therefore NOT a breaking change.
+                            context.LogWarning(ComparisonMessages.AddedOptionalProperty, property.Key);
                         }
                     }
                 }
