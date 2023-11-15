@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.10.4 Released on 2023-01-10
+
+- fix rule index & support additionalProperties:true
+
+## 0.10.3 Released on 2022-11-29
+
+- fix adding enum value & command line exception
+
+## 0.10.2 Released on 2022-11-02
+
+- bugfix for RequiredStatusChange
+
 ## 0.10.1 Released on 2022-10-15
 
 - Bugfixes for ReferenceRedirection,AddedPropertyInResponse,DefaultValueChanged.
