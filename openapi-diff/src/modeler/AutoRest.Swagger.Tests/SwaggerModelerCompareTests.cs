@@ -166,7 +166,7 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
-        /// Verifies that if if you change the default value of a schema, it's caught .
+        /// Verifies that if you change the default value of a schema, it's caught.
         /// </summary>
         [Fact]
         public void DefaultValueChanged()
@@ -174,7 +174,7 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("default_changed_01.json").ToArray();
             var errors = messages.Where(m => m.Id == ComparisonMessages.DefaultValueChanged.Id).ToArray();
             Assert.NotNull(errors);
-            Assert.Equal(errors.Count(), 8);
+            Assert.Equal(8, errors.Count());
         }
 
         /// <summary>
@@ -276,7 +276,7 @@ namespace AutoRest.Swagger.Tests
         {
             var messages = CompareSwagger("removed_operation_id.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.ModifiedOperationId.Id);
-            Assert.Equal(1, missing.Count());
+            Assert.Single(missing);
             var x = missing.First(m => m.Severity == Category.Error && m.NewJsonRef == "new/removed_operation_id.json#/paths/~1api~1Operations/get");
             Assert.NotNull(x.NewJson());
             Assert.NotNull(x.OldJson());
@@ -385,6 +385,10 @@ namespace AutoRest.Swagger.Tests
             Assert.Null(x.OldJson());
         }
 
+        /// <summary>
+        /// Verifies that if you add an optional parameter, it is flagged
+        /// </summary>
+        [Fact]
         public void OptionalParameterAdded()
         {
             var messages = CompareSwagger("optional_parameter.json").ToArray();
@@ -429,7 +433,7 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
-        /// Verifies that rules work on the recurive models
+        /// Verifies that rules work on the recursive models
         /// </summary>
         [Fact]
         public void RecursiveModels()
@@ -492,11 +496,11 @@ namespace AutoRest.Swagger.Tests
         {
             var messages = CompareSwagger("property_required_status_changed.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.RequiredStatusChange.Id);
-            Assert.Equal(missing.Count(),2);
+            Assert.Equal(2, missing.Count());
         }
 
         /// <summary>
-        /// Verifieds that if you make an optional parameter required, it's caught.
+        /// Verifies that if you make an optional parameter required, it's caught.
         /// </summary>
         [Fact]
         public void ParameterStatusMore()
@@ -693,7 +697,7 @@ namespace AutoRest.Swagger.Tests
         /// Verifies that making constraints stricter in requests are flagged, weaker are flagged and adding enum to parameters are flagged
         /// </summary>
         [Fact]
-        public void RequestTypeContraintsWithNewEnum()
+        public void RequestTypeConstraintsWithNewEnum()
         {
             var messages = CompareSwagger("enum_values_changed.json").Where(m => m.NewJsonRef.Contains("Parameters")).ToArray();
      
@@ -741,7 +745,7 @@ namespace AutoRest.Swagger.Tests
         /// Direction: requests
         /// </summary>
         [Fact]
-        public void GobalParamArrayFormatChanged()
+        public void GlobalParamArrayFormatChanged()
         {
             var messages = CompareSwagger("param_check_01.json").ToArray();
             var changed = messages.Where(m => m.Id == ComparisonMessages.ArrayCollectionFormatChanged.Id).ToArray();
@@ -766,7 +770,7 @@ namespace AutoRest.Swagger.Tests
         /// are just informational.
         /// </summary>
         [Fact]
-        public void GobalParamTypeConstraintsChanged()
+        public void GlobalParamTypeConstraintsChanged()
         {
             var messages = CompareSwagger("param_check_01.json").Where(m => m.NewJsonRef.Contains("parameters")).ToArray();
             var stricter = messages.Where(m => m.Id == ComparisonMessages.ConstraintIsStronger.Id && m.Severity == Category.Error).ToArray();
@@ -783,7 +787,7 @@ namespace AutoRest.Swagger.Tests
         /// Direction: responses
         /// </summary>
         [Fact]
-        public void GobalResponseArrayFormatChanged()
+        public void GlobalResponseArrayFormatChanged()
         {
             var messages = CompareSwagger("response_check_01.json").ToArray();
             var changed = messages.Where(m => m.Id == ComparisonMessages.ArrayCollectionFormatChanged.Id).ToArray();
@@ -892,24 +896,24 @@ namespace AutoRest.Swagger.Tests
         public void ChangedXmsLongRunningOperation()
         {
             var messages = CompareSwagger("long_running_operation.json").ToArray();
-            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.XmsLongRunningOperationChanged.Id).Count());
+            Assert.Single(messages.Where(m => m.Id == ComparisonMessages.XmsLongRunningOperationChanged.Id));
         }
 
         [Fact]
         public void AddedOptionalProperty()
         {
             var messages = CompareSwagger("added_optional_property.json").ToArray();
-            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.AddedOptionalProperty.Id).Count());
+            Assert.Single(messages.Where(m => m.Id == ComparisonMessages.AddedOptionalProperty.Id));
         }
 
 
-        // Verify a inline schema of response was changed to reference schema and a new proeprty was added. 
+        // Verify a inline schema of response was changed to reference schema and a new property was added. 
         [Fact]
         public void AddedOptionalPropertyToInlineResponseSchema()
         {
             var messages = CompareSwagger("add_optional_property_01.json").ToArray();
-            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.AddedPropertyInResponse.Id).Count());
-            Assert.Equal(1, messages.Where(m => m.Id == ComparisonMessages.ReferenceRedirection.Id).Count());
+            Assert.Single(messages.Where(m => m.Id == ComparisonMessages.AddedPropertyInResponse.Id));
+            Assert.Single(messages.Where(m => m.Id == ComparisonMessages.ReferenceRedirection.Id));
         }
 
         [Fact]
@@ -932,8 +936,8 @@ namespace AutoRest.Swagger.Tests
         {
             var messages = CompareSwagger("xms_client_name_changed.json").ToArray();
             var redirected = messages.Where(m => m.Id == ComparisonMessages.ReferenceRedirection.Id).ToArray();
-            Assert.Equal(1, redirected.Count());
-            Assert.Equal(redirected[0].NewJsonRef, "new/xms_client_name_changed.json#/paths/~1api~1Parameters/post/parameters/0/schema");
+            Assert.Single(redirected);
+            Assert.Equal("new/xms_client_name_changed.json#/paths/~1api~1Parameters/post/parameters/0/schema", redirected[0].NewJsonRef);
         }
     }
 }
