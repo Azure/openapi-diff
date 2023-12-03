@@ -1,36 +1,31 @@
-[![Build Status](https://dev.azure.com/azure-sdk/public/_apis/build/status/public.openapi-diff?branchName=master)](https://dev.azure.com/azure-sdk/public/_build/latest?definitionId=135&branchName=master)
+# About openapi-diff
 
-# How to install
+[![Build Status][build status]][build pipeline]
 
-```javascript
-npm install -g @azure/oad
-```
+This repository contains source code of `openapi-diff` aka `oad` aka "Breaking change detector tool" npm package.
+This package is invoked internally by the [azure-rest-api-specs] and [azure-rest-api-specs-pr] repos
+`Swagger Breaking Change` and `Breaking Change(Cross-Version)` GitHub checks, validating PRs submitted to them.
 
-# Usage
+For description of the overall process of which `oad` is part of, see https://aka.ms/azsdk/specreview.
 
-```bash
-vishrut@visshamac openapi-diff $ oad compare --help
-Commands:
-  compare <old-spec> <new-spec>  Compares old and new open api specification for
-                                 breaking changes.
+[build status]: https://dev.azure.com/azure-sdk/public/_apis/build/status/public.openapi-diff?branchName=main
+[build pipeline]: https://dev.azure.com/azure-sdk/public/_build/latest?definitionId=135&branchName=main
+[azure-rest-api-specs]: https://github.com/Azure/azure-rest-api-specs
+[azure-rest-api-specs-pr]: https://github.com/Azure/azure-rest-api-specs-pr
 
-Options:
-  --version          Show version number                               [boolean]
-  -l, --logLevel     Set the logging level for console.
-  [choices: "off", "json", "error", "warn", "info", "verbose", "debug", "silly"]
-                                                               [default: "warn"]
-  -f, --logFilepath  Set the log file path. It must be an absolute filepath. By
-                     default the logs will stored in a timestamp based log file
-                     at "/Users/vishrut/oad_output".
-  -j, --inJson       A boolean flag indicating whether output format of the
-                     messages is json.                 [boolean] [default: true]
-  -h, --help         Show help                                         [boolean]
-  -o, --oldTagName   The tag name for the old specification file.  If included it 
-                     indicates that the old spec file is a readme file
-  -n, --newTagName   The tag name for the new specification file.  If included it 
-                     indicates that the new spec file is a readme file
-```
+## npm package
 
-# Contributing
+- [@azure/oad] ![npm package version shield](https://img.shields.io/npm/v/@azure/oad)
+- [package.json]
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md)
+> [!CAUTION]  
+> Do not use the package [oad] ![npm package version shield](https://img.shields.io/npm/v/oad). It is deprecated and obsolete.
+
+[@azure/oad]: https://www.npmjs.com/package/@azure/oad
+[package.json]: /package.json
+[oad]: https://www.npmjs.com/package/oad
+
+## How to run locally
+
+See relevant section in [CONTRIBUTING.md](./CONTRIBUTING.md)
+
