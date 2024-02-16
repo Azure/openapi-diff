@@ -26,7 +26,7 @@
     "minimist": "^1.2.6",
     "request": "^2.88.0",
     "set-value": "^4.0.1",
-    "source-map": "^0.7.3",
+    "source-map": "^0.7.4",
     "tslib": "^1.9.3",
     "winston": "^3.7.2",
     "yargs": "^13.2.2",
