@@ -129,7 +129,7 @@ npm list -g oad # Should denote no packages installed
 - Use [`js - tools to npm - publish (@azure)`](https://dev.azure.com/azure-sdk/internal/_releaseDefinition?definitionId=24&_a=definition-pipeline) to publish the package to the public `npm` feed.
 - Verify in [`@azure/oad` versions] the package was published.
 - Save it to `openapi-platform` feed via [upstream feeds of `openapi-platform`].
-- If using `openapi-alps`, ensure to update relevant `package.json` files to depend on the new `@azure/oad` package version. Then do `rush update` and commit the changes.
+- When using `openapi-alps`, ensure that you update the relevant `package.json` files to depend on the new `@azure/oad` package version. Then, execute `rush update` and commit the changes.
 
 [`openapi-diff`]: https://github.com/Azure/openapi-diff
 [`dotnet restore`]: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-restore
