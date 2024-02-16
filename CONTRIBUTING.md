@@ -13,6 +13,7 @@ For more information see the [Code of Conduct FAQ](https://opensource.microsoft.
 * [Install `oad` globally from sources or npm feed](#install-oad-globally-from-sources-or-npm-feed)
   * [Uninstall `oad` globally](#uninstall-oad-globally)
 * [Purge the obsolete `oad` package from your system](#purge-the-obsolete-oad-package-from-your-system)
+* [Publish the package](#publish-the-package)
 
 <!-- <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>
 Table of contents generated with markdown-toc</a></i></small> -->
@@ -121,9 +122,22 @@ npm uninstall -g oad
 npm list -g oad # Should denote no packages installed
 ```
 
+## Publish the package
+
+- Ensure you bumped the package version in `openapi-diff` `package.json`.
+- Verify [`public.openapi-diff`] passed.
+- Use [`js - tools to npm - publish (@azure)`](https://dev.azure.com/azure-sdk/internal/_releaseDefinition?definitionId=24&_a=definition-pipeline) to publish the package to the public `npm` feed.
+- Verify in [`@azure/oad` versions] the package was published.
+- Save it to `openapi-platform` feed via [upstream feeds of `openapi-platform`].
+- When using `openapi-alps`, ensure that you update the relevant `package.json` files to depend on the new `@azure/oad` package version. Then, execute `rush update` and commit the changes.
+
 [`openapi-diff`]: https://github.com/Azure/openapi-diff
 [`dotnet restore`]: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-restore
 [`dotnet build`]: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-build
 [`dotnet test`]: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test
 [`npm link`]: https://docs.npmjs.com/cli/v10/commands/npm-link
 [the cache]: https://docs.npmjs.com/cli/v10/configuring-npm/folders#cache
+[`js - tools to npm - publish (@azure)`]: https://dev.azure.com/azure-sdk/internal/_release?definitionId=24&_a=releases&view=mine
+[`public.openapi-diff`]: https://dev.azure.com/azure-sdk/public/_build?definitionId=135&_a=summary
+[upstream feeds of `openapi-platform`]: https://devdiv.visualstudio.com/DevDiv/_artifacts/feed/openapi-platform/Npm/@azure%2Foad/upstreams/
+[`@azure/oad` versions]: https://www.npmjs.com/package/@azure/oad?activeTab=versions
