@@ -6,17 +6,22 @@ For more information see the [Code of Conduct FAQ](https://opensource.microsoft.
 
 ## Table of contents
 
-* [Prerequisites](#prerequisites)
-* [Build the code](#build-the-code)
-  * [Troubleshoot](#troubleshoot)
-* [Run `oad` locally from sources](#run-oad-locally-from-sources)
-* [Install `oad` globally from sources or npm feed](#install-oad-globally-from-sources-or-npm-feed)
-  * [Uninstall `oad` globally](#uninstall-oad-globally)
-* [Purge the obsolete `oad` package from your system](#purge-the-obsolete-oad-package-from-your-system)
-* [Publish the package](#publish-the-package)
+- [Contributing](#contributing)
+  - [Table of contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+  - [Build the code](#build-the-code)
+    - [Troubleshoot](#troubleshoot)
+  - [Run `oad` locally from sources](#run-oad-locally-from-sources)
+  - [Reproduce specs PR CI failure of `Swagger BreakingChange` or `BreakingChange(Cross-Version)`](#reproduce-specs-pr-ci-failure-of-swagger-breakingchange-or-breakingchangecross-version)
+  - [Install `oad` globally from sources or npm feed](#install-oad-globally-from-sources-or-npm-feed)
+    - [Uninstall `oad` globally](#uninstall-oad-globally)
+  - [Purge the obsolete `oad` package from your system](#purge-the-obsolete-oad-package-from-your-system)
+  - [Publish the package](#publish-the-package)
 
-<!-- <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>
-Table of contents generated with markdown-toc</a></i></small> -->
+<!-- One of the few situations where usage of HTML is justified and it is not sanitized away by GitHub -->
+<!-- markdownlint-disable MD033 -->
+<small><i><a href='https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one'>
+Table of contents generated with yzhang.markdown-all-in-one</a></i></small>
 
 ## Prerequisites
 
@@ -70,6 +75,18 @@ After you have built the C# and TypeScript code, you can run the `openapi-diff` 
 > [!CAUTION]
 > Following commands have different behavior: `oad`, `oad -h`, `oad --help`.
 > As of 11/2/2023 only `oad -h` appears to work as intended.
+
+## Reproduce specs PR CI failure of `Swagger BreakingChange` or `BreakingChange(Cross-Version)`
+
+If `Swagger BreakingChange` or  `BreakingChange(Cross-Version)` checks fail on your `Azure/azure-rest-api-specs[-pr]` PR,
+you can reproduce the failure locally as follows:
+
+- Open the GitHub check pane.
+- Click the hyperlinked `View Azure DevOps build log for more details.` Open the relevant job (`BreakingChange` or `CrossVersionBreakingChange`)
+  and a task within the job with the same name. Search for log `ENTER definition runOad`.
+  This log will show you the `oldSpec` and `newSpec` values, which you can pass as input to `oad` when running it locally,
+  per [Run `oad` locally from sources](#run-oad-locally-from-sources). 
+  Note you will have to clone locally relevant git branches with the specs.
 
 ## Install `oad` globally from sources or npm feed
 
@@ -126,10 +143,11 @@ npm list -g oad # Should denote no packages installed
 
 - Ensure you bumped the package version in `openapi-diff` `package.json`.
 - Verify [`public.openapi-diff`] passed.
-- Use [`js - tools to npm - publish (@azure)`](https://dev.azure.com/azure-sdk/internal/_releaseDefinition?definitionId=24&_a=definition-pipeline) to publish the package to the public `npm` feed.
+- Use [`js - tools to npm - publish (@azure)`] to publish the package to the public `npm` feed.
 - Verify in [`@azure/oad` versions] the package was published.
 - Save it to `openapi-platform` feed via [upstream feeds of `openapi-platform`].
-- When using `openapi-alps`, ensure that you update the relevant `package.json` files to depend on the new `@azure/oad` package version. Then, execute `rush update` and commit the changes.
+- When using `openapi-alps`, ensure that you update the relevant `package.json`
+  files to depend on the new `@azure/oad` package version. Then, execute `rush update` and commit the changes.
 
 [`openapi-diff`]: https://github.com/Azure/openapi-diff
 [`dotnet restore`]: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-restore
