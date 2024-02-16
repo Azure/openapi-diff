@@ -131,14 +131,12 @@ npm list -g oad # Should denote no packages installed
 - Save it to `openapi-platform` feed via [upstream feeds of `openapi-platform`]
 - If using `openapi-alps`, ensure to update `package.json` dependency on the new `@azure/oad`. Then do `rush update`.
 
-
 [`openapi-diff`]: https://github.com/Azure/openapi-diff
 [`dotnet restore`]: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-restore
 [`dotnet build`]: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-build
 [`dotnet test`]: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test
 [`npm link`]: https://docs.npmjs.com/cli/v10/commands/npm-link
 [the cache]: https://docs.npmjs.com/cli/v10/configuring-npm/folders#cache
-
 [`js - tools to npm - publish (@azure)`]: https://dev.azure.com/azure-sdk/internal/_release?definitionId=24&_a=releases&view=mine
 [`public.openapi-diff`]: https://dev.azure.com/azure-sdk/public/_build?definitionId=135&_a=summary
 [upstream feeds of `openapi-platform`]: https://devdiv.visualstudio.com/DevDiv/_artifacts/feed/openapi-platform/Npm/@azure%2Foad/upstreams/
