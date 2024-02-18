@@ -55,9 +55,6 @@ ipch/
 *.psess
 *.vsp
 
-# VS Code settings
-*.vscode
-
 # Code analysis
 *.CodeAnalysisLog.xml
 

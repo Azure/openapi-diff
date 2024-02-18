@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.5 Released on 2024-02-16
+
+- update source map version from 0.7.3 to 0.7.4 so that it works with Node 18.
+- fix minor code issues that were blocking local run
+- update docs
+
 ## 0.10.4 Released on 2023-01-10
 
 - fix rule index & support additionalProperties:true
