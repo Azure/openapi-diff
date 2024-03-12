@@ -3,8 +3,6 @@ import * as path from "path"
 import * as index from "../index"
 import { fileUrl } from "./fileUrl"
 
-jest.setTimeout(100000)
-
 describe("index", () => {
   it("simple", async () => {
     const diff = new index.OpenApiDiff({})

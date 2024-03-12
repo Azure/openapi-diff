@@ -1,8 +1,6 @@
 import * as assert from "assert"
 import { pathToJsonPointer } from "../lib/util/utils"
 
-jest.setTimeout(20000)
-
 describe("index", () => {
   it("get json point from json path", () => {
     let result = pathToJsonPointer("paths['Mircosoft.Compute/resoucemaneger'].operation.get[1].past")
