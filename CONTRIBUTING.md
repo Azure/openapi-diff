@@ -31,7 +31,7 @@ To execute any instructions in this file, first ensure you fulfill all the follo
 1. Install [.NET runtime and SDK](https://aka.ms/dotnet-download), version 6 or higher.
 1. Install [.NET CLI tools](https://github.com/dotnet/cli/releases) version 2.0.0 or higher.
 1. Execute all commands in this file from your [`openapi-diff`] git repo local clone root dir.
-1. Run `npm install` to install the required node modules.
+1. Run `npm ci` to install the required node modules.
 
 ## Build the code
 
