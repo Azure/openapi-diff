@@ -27,17 +27,19 @@ steps:
 - script: npm pack
   displayName: pack
 - task: CopyFiles@2
-  displayName: 'Copy Files to: drop'
+  displayName: 'Copy Files to: $(TargetFolder)'
   inputs:
     Contents: '*.tgz'
     TargetFolder: $(TargetFolder)
 - task: PublishBuildArtifacts@1
   inputs:
     pathtoPublish: $(Build.SourcesDirectory)/$(TargetFolder)
+    artifactName: $(TargetFolder)
 
 - task: securedevelopmentteam.vss-secure-development-tools.build-task-credscan.CredScan@2 # CredScan@2
   inputs:
     toolMajorVersion: 'V2'
+  condition: and(succeeded(), eq(variables['Agent.OS'],'Windows_NT')) # CredScan only supported on Windows
 
 - task: securedevelopmentteam.vss-secure-development-tools.build-task-postanalysis.PostAnalysis@1 # PostAnalysis@1
   inputs:
@@ -55,5 +57,4 @@ steps:
     Semmle: false
     TSLint: false
     ToolLogsNotFoundAction: 'Standard'
-
-
+  condition: and(succeeded(), eq(variables['Agent.OS'],'Windows_NT')) # CredScan only supported on Windows
