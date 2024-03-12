@@ -82,7 +82,7 @@
       "dist/**/*.js"
     ],
     "testMatch": [
-      "**/*test.js"
+      "**/*[tT]est.js"
     ]
   },
   "scripts": {
