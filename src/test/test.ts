@@ -1,12 +1,9 @@
 import * as assert from "assert"
 import * as path from "path"
 import * as index from "../index"
+import { fileUrl } from "./fileUrl"
 
 jest.setTimeout(100000)
-
-const fileUrl = (absPath: string) => {
-  return "file:///" + absPath.replace(/^\//, "").split("\\").join("/")
-}
 
 describe("index", () => {
   it("simple", async () => {
