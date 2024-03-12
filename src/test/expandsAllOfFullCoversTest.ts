@@ -1,16 +1,16 @@
-import * as assert from "assert";
-import * as path from "path";
-import * as index from "../index";
-import { fileUrl } from "./fileUrl";
+import * as assert from "assert"
+import * as path from "path"
+import * as index from "../index"
+import { fileUrl } from "./fileUrl"
 
 test("expands allOf full covers", async () => {
-  const diff = new index.OpenApiDiff({});
-  const oldFile = "src/test/expandsAllOf/old/property_format_change.json";
-  const newFile = "src/test/expandsAllOf/new/property_format_change.json";
-  const resultStr = await diff.compare(oldFile, newFile);
-  const result = JSON.parse(resultStr);
-  const newFilePath = fileUrl(path.resolve(newFile));
-  const oldFilePath = fileUrl(path.resolve(oldFile));
+  const diff = new index.OpenApiDiff({})
+  const oldFile = "src/test/expandsAllOf/old/property_format_change.json"
+  const newFile = "src/test/expandsAllOf/new/property_format_change.json"
+  const resultStr = await diff.compare(oldFile, newFile)
+  const result = JSON.parse(resultStr)
+  const newFilePath = fileUrl(path.resolve(newFile))
+  const oldFilePath = fileUrl(path.resolve(oldFile))
   const expected = [
     {
       id: "1001",
@@ -156,6 +156,6 @@ test("expands allOf full covers", async () => {
       docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1034.md",
       mode: "Addition"
     }
-  ];
-  assert.deepStrictEqual(result, expected);
-});
+  ]
+  assert.deepStrictEqual(result, expected)
+})

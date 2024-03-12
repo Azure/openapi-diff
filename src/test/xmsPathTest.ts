@@ -1,16 +1,16 @@
-import * as assert from "assert";
-import * as path from "path";
-import * as index from "../index";
-import { fileUrl } from "./fileUrl";
+import * as assert from "assert"
+import * as path from "path"
+import * as index from "../index"
+import { fileUrl } from "./fileUrl"
 
 test("xms-path", async () => {
-  const diff = new index.OpenApiDiff({});
-  const oldFile = "src/test/xmspath/old.json";
-  const newFile = "src/test/xmspath/new.json";
-  const resultStr = await diff.compare(oldFile, newFile);
-  const result = JSON.parse(resultStr);
-  const newFilePath = fileUrl(path.resolve(newFile));
-  const oldFilePath = fileUrl(path.resolve(oldFile));
+  const diff = new index.OpenApiDiff({})
+  const oldFile = "src/test/xmspath/old.json"
+  const newFile = "src/test/xmspath/new.json"
+  const resultStr = await diff.compare(oldFile, newFile)
+  const result = JSON.parse(resultStr)
+  const newFilePath = fileUrl(path.resolve(newFile))
+  const oldFilePath = fileUrl(path.resolve(oldFile))
   const expected = [
     {
       code: "NoVersionChange",
@@ -30,6 +30,6 @@ test("xms-path", async () => {
       },
       type: "Info"
     }
-  ];
-  assert.deepStrictEqual(result, expected);
-});
+  ]
+  assert.deepStrictEqual(result, expected)
+})

@@ -1,16 +1,16 @@
-import * as assert from "assert";
-import * as path from "path";
-import * as index from "../index";
-import { fileUrl } from "./fileUrl";
+import * as assert from "assert"
+import * as path from "path"
+import * as index from "../index"
+import { fileUrl } from "./fileUrl"
 
 test("flags 1004 - ResponseBodyFormatNowSupported", async () => {
-  const diff = new index.OpenApiDiff({});
-  const oldFile = "src/test/rule-1004/case1.old.json";
-  const newFile = "src/test/rule-1004/case1.new.json";
-  const resultStr = await diff.compare(oldFile, newFile);
-  const result = JSON.parse(resultStr);
-  const newFilePath = fileUrl(path.resolve(newFile));
-  const oldFilePath = fileUrl(path.resolve(oldFile));
+  const diff = new index.OpenApiDiff({})
+  const oldFile = "src/test/rule-1004/case1.old.json"
+  const newFile = "src/test/rule-1004/case1.new.json"
+  const resultStr = await diff.compare(oldFile, newFile)
+  const result = JSON.parse(resultStr)
+  const newFilePath = fileUrl(path.resolve(newFile))
+  const oldFilePath = fileUrl(path.resolve(oldFile))
   const expected = [
     {
       id: "1004",
@@ -30,6 +30,6 @@ test("flags 1004 - ResponseBodyFormatNowSupported", async () => {
       type: "Warning",
       docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1004.md"
     }
-  ];
-  assert.deepStrictEqual(result, expected);
-});
+  ]
+  assert.deepStrictEqual(result, expected)
+})
