@@ -4,9 +4,20 @@ trigger:
 variables:
   Codeql.Enabled: true
 
+strategy:
+  matrix:
+    Linux:
+      Pool: azsdk-pool-mms-ubuntu-2204-general
+      OsVmImage: ubuntu-22.04
+      TargetFolder: drop-linux
+    Windows:
+      Pool: azsdk-pool-mms-win-2022-general
+      OsVmImage: windows-2022
+      TargetFolder: drop
+
 pool:
-  name: azsdk-pool-mms-win-2022-general
-  vmImage: windows-2022
+  name: $(Pool)
+  vmImage: $(OSVmImage)
 
 steps:
 - script: npm install
@@ -19,10 +30,10 @@ steps:
   displayName: 'Copy Files to: drop'
   inputs:
     Contents: '*.tgz'
-    TargetFolder: drop
+    TargetFolder: $(TargetFolder)
 - task: PublishBuildArtifacts@1
   inputs:
-    pathtoPublish: $(Build.SourcesDirectory)/drop
+    pathtoPublish: $(Build.SourcesDirectory)/$(TargetFolder)
 
 - task: securedevelopmentteam.vss-secure-development-tools.build-task-credscan.CredScan@2 # CredScan@2
   inputs:
