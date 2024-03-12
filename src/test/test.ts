@@ -370,14 +370,14 @@ describe("index", () => {
         message: "The 'required' status changed from the old version('False') to the new version('True').",
         mode: "Update",
         new: {
-          location: "file:///D:/a/1/s/src/test/expandsAllOf/new/property_format_change.json:35:7",
+          location: `${newFilePath}:35:7`,
           path: "definitions.Database.properties",
-          ref: "file:///D:/a/1/s/src/test/expandsAllOf/new/property_format_change.json#/definitions/Database/properties"
+          ref: `${newFilePath}#/definitions/Database/properties`
         },
         old: {
-          location: "file:///D:/a/1/s/src/test/expandsAllOf/old/property_format_change.json:35:7",
+          location: `${oldFilePath}:35:7`,
           path: "definitions.Database.properties",
-          ref: "file:///D:/a/1/s/src/test/expandsAllOf/old/property_format_change.json#/definitions/Database/properties"
+          ref: `${oldFilePath}#/definitions/Database/properties`
         },
         type: "Error"
       },
