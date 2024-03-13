@@ -232,9 +232,9 @@ export class OpenApiDiff {
     const outputFilePath = path.join(outputFolder, `${outputFileName}.json`)
     const outputMapFilePath = path.join(outputFolder, `${outputFileName}.map`)
     const autoRestCmd = tagName
-      ? `${this.autoRestPath()} ${swaggerPath} --v3 --tag=${tagName} --output-artifact=swagger-document.json` +
+      ? `${this.autoRestPath()} ${swaggerPath} --v2 --tag=${tagName} --output-artifact=swagger-document.json` +
         ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
-      : `${this.autoRestPath()} --v3 --input-file=${swaggerPath} --output-artifact=swagger-document.json` +
+      : `${this.autoRestPath()} --v2 --input-file=${swaggerPath} --output-artifact=swagger-document.json` +
         ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
 
     log.debug(`Executing: "${autoRestCmd}"`)
