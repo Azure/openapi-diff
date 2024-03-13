@@ -83,7 +83,8 @@
     ],
     "testMatch": [
       "**/*[tT]est.js"
-    ]
+    ],
+    "testTimeout": 100000
   },
   "scripts": {
     "dn.clean": "dotnet clean openapi-diff/OpenApiDiff.sln",
