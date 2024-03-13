@@ -77,10 +77,6 @@
     "oad": "./dist/cli.js"
   },
   "jest": {
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "dist/**/*.js"
-    ],
     "testMatch": [
       "**/*[tT]est.js"
     ],
