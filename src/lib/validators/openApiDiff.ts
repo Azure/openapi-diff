@@ -228,13 +228,16 @@ export class OpenApiDiff {
       throw new Error(`File "${swaggerPath}" not found.`)
     }
 
+    const autorestVersion = process.env.OAD_AUTOREST_VERSION ?
+      `--version=${process.env.OAD_AUTOREST_VERSION}` :
+      '--v2';
     const outputFolder = await fs.promises.mkdtemp(path.join(os.tmpdir(), "oad-"))
     const outputFilePath = path.join(outputFolder, `${outputFileName}.json`)
     const outputMapFilePath = path.join(outputFolder, `${outputFileName}.map`)
     const autoRestCmd = tagName
-      ? `${this.autoRestPath()} ${swaggerPath} --v2 --tag=${tagName} --output-artifact=swagger-document.json` +
+      ? `${this.autoRestPath()} ${swaggerPath} ${autorestVersion} --tag=${tagName} --output-artifact=swagger-document.json` +
         ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
-      : `${this.autoRestPath()} --v2 --input-file=${swaggerPath} --output-artifact=swagger-document.json` +
+      : `${this.autoRestPath()} ${autorestVersion} --input-file=${swaggerPath} --output-artifact=swagger-document.json` +
         ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
 
     log.debug(`Executing: "${autoRestCmd}"`)
