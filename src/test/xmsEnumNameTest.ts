@@ -8,4 +8,8 @@ test("x-ms-enum.name", async () => {
     "src/test/x-ms-enum-name/target/openapi.json"
   )
   const result: index.Messages = JSON.parse(resultStr)
+  for (const v of result) {
+    console.log(v)
+    assert.deepStrictEqual(v.old.location !== undefined || v.new.location !== undefined, true)
+  }
 })
