@@ -228,7 +228,8 @@ namespace AutoRest.Swagger.Model
             {
                 context.LogError(ComparisonMessages.AddedXmsEnum);
             }
-            if (this.XmsEnum != null && prior.XmsEnum != null && !prior.XmsEnum.Name.Equals(this.XmsEnum.Name))
+            if (this.XmsEnum != null && prior.XmsEnum != null &&
+                !String.Equals(prior.XmsEnum.Name, this.XmsEnum.Name, StringComparison.Ordinal))
             {
                 context.LogError(ComparisonMessages.XmsEnumChanged, "name");
             }
