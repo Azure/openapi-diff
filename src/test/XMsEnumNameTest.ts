@@ -1,11 +1,11 @@
 import * as assert from "assert"
 import * as index from "../index"
 
-test("'Missing required property: name' at x-ms-enum", async () => {
+test("x-ms-enum.name", async () => {
   const diff = new index.OpenApiDiff({})
   const resultStr = await diff.compare(
-    "src/test/required-property-name-x-ms-enum/source/openapi.json",
-    "src/test/required-property-name-x-ms-enum/target/openapi.json"
+    "src/test/x-ms-enum-name/source/openapi.json",
+    "src/test/x-ms-enum-name/target/openapi.json"
   )
   const result: index.Messages = JSON.parse(resultStr)
 })
