@@ -1,0 +1,10 @@
+import { ConfigurationView } from "../configuration";
+import { JsonPath } from "../ref/jsonpath";
+import * as yaml from '../ref/yaml';
+import { Mappings } from "../ref/source-map";
+import { DataHandle, DataSink } from "../data-store/data-store";
+export declare function ShallowCopy(input: any, ...filter: Array<string>): any;
+export declare function resolveRValue(value: any, propertyName: string, higherPriority: any, lowerPriority: any, jsAware?: number): any;
+export declare function MergeOverwriteOrAppend(higherPriority: any, lowerPriority: any, concatListPathFilter?: (path: JsonPath) => boolean, path?: JsonPath): any;
+export declare function IdentitySourceMapping(sourceYamlFileName: string, sourceYamlAst: yaml.YAMLNode): Mappings;
+export declare function MergeYamls(config: ConfigurationView, yamlInputHandles: DataHandle[], sink: DataSink, verifyOAI2?: boolean): Promise<DataHandle>;
