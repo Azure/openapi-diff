@@ -1,4 +1,3 @@
-!generate-dts.js
 !post-install.js
 dist
 package-lock.json
