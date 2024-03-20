@@ -195,6 +195,12 @@ export class OpenApiDiff {
     return escape(path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll"))
   }
 
+  public autoRestCorePath(): string {
+    log.silly(`autorestCorePath is being called`)
+
+    return escape(path.join(__dirname, "..", "..", "..", "autorest-core"))
+  }
+
   /**
    * Processes the provided specification via autorest.
    *
@@ -231,10 +237,11 @@ export class OpenApiDiff {
     const outputFolder = await fs.promises.mkdtemp(path.join(os.tmpdir(), "oad-"))
     const outputFilePath = path.join(outputFolder, `${outputFileName}.json`)
     const outputMapFilePath = path.join(outputFolder, `${outputFileName}.map`)
+    const autoRestCorePath = this.autoRestCorePath()
     const autoRestCmd = tagName
-      ? `${this.autoRestPath()} ${swaggerPath} --v2 --tag=${tagName} --output-artifact=swagger-document.json` +
+      ? `${this.autoRestPath()} ${swaggerPath} --version=${autoRestCorePath} --tag=${tagName} --output-artifact=swagger-document.json` +
         ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
-      : `${this.autoRestPath()} --v2 --input-file=${swaggerPath} --output-artifact=swagger-document.json` +
+      : `${this.autoRestPath()} --version=${autoRestCorePath} --input-file=${swaggerPath} --output-artifact=swagger-document.json` +
         ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
 
     log.debug(`Executing: "${autoRestCmd}"`)
