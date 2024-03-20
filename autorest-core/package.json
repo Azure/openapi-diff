@@ -27,7 +27,6 @@
     "test": "./node_modules/.bin/mocha ./dist/test --timeout 100000",
     "build": "tsc -p . && shx cp schema/swagger-extensions.json dist/lib/pipeline && shx cp schema/example-schema.json dist/lib/pipeline && shx cp schema/swagger.json dist/lib/pipeline",
     "static-link": "static-link",
-    "postinstall": "node ./post-install --force",
     "reinstall": "shx rm ./package-lock.json && shx rm -rf ./node_modules && npm install",
     "prepack": "static-link && npm run build"
   },
