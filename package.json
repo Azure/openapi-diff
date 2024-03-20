@@ -59,6 +59,7 @@
     "node": ">=18.0.0"
   },
   "files": [
+    "autorest-core",
     "dist/lib",
     "dist/index.*",
     "dist/cli.*",
