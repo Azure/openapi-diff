@@ -29,6 +29,24 @@ test("xms-enum-name", async () => {
         location: `${oldFilePath}:1:1`
       },
       type: "Info"
+    },
+    {
+      code: "XmsEnumChanged",
+      docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1047.md",
+      id: "1047",
+      message: "The new version has a different x-ms-enum 'name' than the previous one.",
+      mode: "Update",
+      new: {
+        ref: `${newFilePath}#/definitions/Foo/properties/bar`,
+        path: "definitions.Foo.properties.bar",
+        location: `${newFilePath}:13:9`,
+      },
+      old: {
+        ref: `${oldFilePath}#/definitions/Foo/properties/bar`,
+        path: "definitions.Foo.properties.bar",
+        location: `${oldFilePath}:13:9`,
+      },
+      type: "Error"
     }
   ]
   assert.deepStrictEqual(result, expected)
