@@ -87,7 +87,7 @@ test("expands allOf full covers", async () => {
     {
       id: "1023",
       code: "TypeFormatChanged",
-      message: "The new version has a different format than the previous one.",
+      message: "The new version has a different format '' than the previous one 'AutoRest.Swagger.Model.Schema'.",
       old: {
         ref: `${oldFilePath}#/definitions/DataBaseProperties/properties/b`,
         path: "definitions.Database.properties.b",
