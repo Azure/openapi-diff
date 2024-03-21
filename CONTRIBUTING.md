@@ -146,8 +146,11 @@ npm list -g oad # Should denote no packages installed
 - Use [`js - tools to npm - publish (@azure)`] to publish the package to the public `npm` feed.
 - Verify in [`@azure/oad` versions] the package was published.
 - Save it to `openapi-platform` feed via [upstream feeds of `openapi-platform`].
-- When using `openapi-alps`, ensure that you update the relevant `package.json`
-  files to depend on the new `@azure/oad` package version. Then, execute `rush update` and commit the changes.
+- To make `openapi-alps` use the newly published package:
+  - Ensure that you update the relevant `package.json` files and then run `rush update` and commit the changes.
+    - Example file: [`private/azure-swagger-validation/azureSwaggerValidation/package.json`][azureSwaggerValidation package.json]
+    - Example `openapi-alps` PR doing the package update: [#537791]
+  - Redeploy relevant `openapi-alps` parts to pick up the new package, even if you didn't had to commit any changes. Follow [this doc][openapi-alps doc].
 
 [`openapi-diff`]: https://github.com/Azure/openapi-diff
 [`dotnet restore`]: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-restore
@@ -159,3 +162,6 @@ npm list -g oad # Should denote no packages installed
 [`public.openapi-diff`]: https://dev.azure.com/azure-sdk/public/_build?definitionId=135&_a=summary
 [upstream feeds of `openapi-platform`]: https://devdiv.visualstudio.com/DevDiv/_artifacts/feed/openapi-platform/Npm/@azure%2Foad/upstreams/
 [`@azure/oad` versions]: https://www.npmjs.com/package/@azure/oad?activeTab=versions
+[openapi-alps doc]: https://dev.azure.com/azure-sdk/internal/_wiki/wikis/internal.wiki/891/openapi-alps?anchor=testing-and-deploying-changes
+[azureSwaggerValidation package.json]: https://devdiv.visualstudio.com/DevDiv/_git/openapi-alps?path=/private/azure-swagger-validation/azureSwaggerValidation/package.json&version=GC78491f959bc714d1a0d35060e58fa6c5888bb828&line=44&lineEnd=44&lineStartColumn=7&lineEndColumn=16&lineStyle=plain&_a=contents
+[#537791]: https://devdiv.visualstudio.com/DevDiv/_git/openapi-alps/pullrequest/537791
