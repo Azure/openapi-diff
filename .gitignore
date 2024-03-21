@@ -222,6 +222,3 @@ dist/lib/dlls/**/*
 *.js
 coverage/
 dlls/
-
-# VSCode C# Dev Kit
-.mono
