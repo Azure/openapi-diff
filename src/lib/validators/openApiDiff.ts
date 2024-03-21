@@ -60,7 +60,7 @@ const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): Ch
         const jsonValue = JSON_Pointer.get(pf.resolvedJson, jsonPointer)
         position = getFilePosition(jsonValue)
       } catch (e) {
-        console.log(e.message)
+        console.log(e)
       }
     }
 
