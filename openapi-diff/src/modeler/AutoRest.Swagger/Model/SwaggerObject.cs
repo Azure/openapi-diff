@@ -42,7 +42,7 @@ namespace AutoRest.Swagger.Model
         /// Describes the type of additional properties in the data type.
         /// </summary>
         public virtual Schema AdditionalProperties { get; set; }
-        
+
         public virtual string Description { get; set; }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace AutoRest.Swagger.Model
 
             if ((Type.HasValue && prior.Type.HasValue && prior.Type.Value != Type.Value))
             {
-                context.LogError(ComparisonMessages.TypeChanged, 
+                context.LogError(ComparisonMessages.TypeChanged,
                     Type.HasValue ? Type.Value.ToString().ToLower() : "",
                     prior.Type.HasValue ? prior.Type.Value.ToString().ToLower() : "");
             }
@@ -206,7 +206,7 @@ namespace AutoRest.Swagger.Model
                         context.LogBreakingChange(ComparisonMessages.RemovedEnumValue, String.Join(", ", removedEnums.ToList()));
                     }
                 }
-            
+
                 if (relaxes)
                 {
                     IEnumerable<string> addedEnums = this.Enum.Except(prior.Enum);
@@ -283,11 +283,11 @@ namespace AutoRest.Swagger.Model
                 throw new ArgumentNullException("context");
             }
 
-            if (prior.Format == null && Format != null || 
+            if (prior.Format == null && Format != null ||
                 prior.Format != null && Format == null ||
                 prior.Format != null && Format != null && !prior.Format.Equals(Format) && !isFormatChangeAllowed(context,prior))
-            {   
-                context.LogBreakingChange(ComparisonMessages.TypeFormatChanged);
+            {
+                context.LogBreakingChange(ComparisonMessages.TypeFormatChanged, Format, prior);
             }
         }
 
@@ -415,8 +415,8 @@ namespace AutoRest.Swagger.Model
         {
             int p = 0;
             int c = 0;
-            return int.TryParse(previous, out p) && 
-                   int.TryParse(current, out c) && 
+            return int.TryParse(previous, out p) &&
+                   int.TryParse(current, out c) &&
                    (isLowerBound ? (c > p) : (c < p));
         }
 
