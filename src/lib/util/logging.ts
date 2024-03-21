@@ -50,7 +50,7 @@ export type Logger = {
   directory: unknown
   readonly silly: (v: string) => void
   readonly debug: (v: unknown) => void
-  readonly error: (v: string) => void
+  readonly error: (v: unknown) => void
 }
 
 const transports = {
