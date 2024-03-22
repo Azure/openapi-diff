@@ -39,12 +39,12 @@ test("xms-enum-name", async () => {
       new: {
         ref: `${newFilePath}#/definitions/Foo/properties/bar`,
         path: "definitions.Foo.properties.bar",
-        location: `${newFilePath}:13:9`,
+        location: `${newFilePath}:13:9`
       },
       old: {
         ref: `${oldFilePath}#/definitions/Foo/properties/bar`,
         path: "definitions.Foo.properties.bar",
-        location: `${oldFilePath}:13:9`,
+        location: `${oldFilePath}:13:9`
       },
       type: "Error"
     }
