@@ -40,7 +40,8 @@
           }
         }
       }
-    }
+    },
+    "?does-not-start-with-slash": {}
   },
   "paths": {
     "/api/Operations1": {
