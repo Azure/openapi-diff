@@ -41,8 +41,7 @@ test("xms-path", async () => {
         location: `${newFilePath}:44:5`,
         path: "paths.?does-not-start-with-slash"
       },
-      old: {
-      },
+      old: {},
       type: "Info"
     }
   ]
