@@ -44,7 +44,7 @@ test("xms-path", async () => {
       old: {
       },
       type: "Info"
-    }    
+    }
   ]
   assert.deepStrictEqual(result, expected)
 })
