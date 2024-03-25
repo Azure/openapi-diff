@@ -3,7 +3,8 @@ import * as path from "path"
 import { OpenApiDiff } from "../index"
 import { fileUrl } from "./fileUrl"
 
-test("operation-location", async () => {
+// Regression test for bug #310
+test("diffing a spec with operation-location bug with itself does not throw", async () => {
   const diff = new OpenApiDiff({})
   const file = "src/test/operation-location/operation-location.json"
   const resultStr = await diff.compare(file, file)
