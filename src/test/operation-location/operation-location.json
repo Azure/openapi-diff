@@ -1,0 +1,42 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "operation-location",
+    "version": "1.0"
+  },
+  "paths": {
+    "/foo": {
+      "post": {
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Consent"
+            },
+            "headers": {
+              "Operation-Id": {
+                "type": "string",
+                "description": "ID of the operation."
+              },
+              "Operation-Location": {
+                "description": "The location of the operation job. Use this URL to monitor operation status.",
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          },
+          "default": {
+            "description": "An error occurred.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "x-ms-long-running-operation": true,
+        "x-ms-long-running-operation-options": {
+          "final-state-via": "operation-location"
+        }
+      }
+    }
+  }
+}
