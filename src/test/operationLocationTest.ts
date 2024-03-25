@@ -1,10 +1,10 @@
 import * as assert from "assert"
 import * as path from "path"
-import * as index from "../index"
+import { OpenApiDiff } from "../index"
 import { fileUrl } from "./fileUrl"
 
 test("operation-location", async () => {
-  const diff = new index.OpenApiDiff({})
+  const diff = new OpenApiDiff({})
   const file = "src/test/operation-location/operation-location.json"
   const resultStr = await diff.compare(file, file)
   const result = JSON.parse(resultStr)
