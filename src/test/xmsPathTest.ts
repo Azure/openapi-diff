@@ -29,6 +29,20 @@ test("xms-path", async () => {
         path: ""
       },
       type: "Info"
+    },
+    {
+      code: "AddedPath",
+      docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1038.md",
+      id: "1038",
+      message: "The new version is adding a path that was not found in the old version.",
+      mode: "Addition",
+      new: {
+        ref: `${newFilePath}#/x-ms-paths/?does-not-start-with-slash`,
+        location: `${newFilePath}:44:5`,
+        path: "paths.?does-not-start-with-slash"
+      },
+      old: {},
+      type: "Info"
     }
   ]
   assert.deepStrictEqual(result, expected)
