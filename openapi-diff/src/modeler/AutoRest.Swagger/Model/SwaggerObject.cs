@@ -287,7 +287,7 @@ namespace AutoRest.Swagger.Model
                 prior.Format != null && Format == null ||
                 prior.Format != null && Format != null && !prior.Format.Equals(Format) && !isFormatChangeAllowed(context,prior))
             {
-                context.LogBreakingChange(ComparisonMessages.TypeFormatChanged, Format, prior);
+                context.LogBreakingChange(ComparisonMessages.TypeFormatChanged, Format, prior.Format);
             }
         }
 
