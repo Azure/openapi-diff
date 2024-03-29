@@ -16,7 +16,7 @@
       },
       "allOf": [
         {
-          "$ref": "/definitions/FooBarObject"
+          "$ref": "#/definitions/FooBarObject"
         }
       ]
     },
