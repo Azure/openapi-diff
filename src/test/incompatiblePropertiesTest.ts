@@ -1,7 +1,5 @@
 import * as assert from "assert"
-import * as path from "path"
 import * as index from "../index"
-import { fileUrl } from "./fileUrl"
 
 test("incompatible-properties", async () => {
   const diff = new index.OpenApiDiff({})
