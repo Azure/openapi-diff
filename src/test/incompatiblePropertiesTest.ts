@@ -3,7 +3,7 @@ import * as index from "../index"
 
 test("incompatible-properties", async () => {
   const diff = new index.OpenApiDiff({})
-  const file = "src/test/incompatible-properties/incompatible-properties.json"
+  const file = "src/test/specs/incompatible-properties.json"
 
   try {
     await diff.compare(file, file)
