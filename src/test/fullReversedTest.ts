@@ -1,12 +1,12 @@
 import { deepStrictEqual } from "assert"
 import { resolve } from "path"
-import * as index from ".."
+import { OpenApiDiff } from ".."
 import { fileUrl } from "./fileUrl"
 
 test("full reversed", async () => {
   const oldFile = "src/test/specs/full/new/readme.md"
   const newFile = "src/test/specs/full/old/readme.md"
-  const diff = new index.OpenApiDiff({})
+  const diff = new OpenApiDiff({})
   const resultStr = await diff.compare(oldFile, newFile, "2019", "2019")
   const result = JSON.parse(resultStr)
   const oldFilePath = fileUrl(resolve("src/test/specs/full/new/openapi.json"))
