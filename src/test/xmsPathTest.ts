@@ -1,16 +1,16 @@
-import * as assert from "assert"
-import * as path from "path"
-import * as index from "../index"
+import { deepStrictEqual } from "assert"
+import { resolve } from "path"
+import { OpenApiDiff } from ".."
 import { fileUrl } from "./fileUrl"
 
 test("xms-path", async () => {
-  const diff = new index.OpenApiDiff({})
+  const diff = new OpenApiDiff({})
   const oldFile = "src/test/specs/xmspath/old.json"
   const newFile = "src/test/specs/xmspath/new.json"
   const resultStr = await diff.compare(oldFile, newFile)
   const result = JSON.parse(resultStr)
-  const newFilePath = fileUrl(path.resolve(newFile))
-  const oldFilePath = fileUrl(path.resolve(oldFile))
+  const newFilePath = fileUrl(resolve(newFile))
+  const oldFilePath = fileUrl(resolve(oldFile))
   const expected = [
     {
       code: "NoVersionChange",
@@ -45,5 +45,5 @@ test("xms-path", async () => {
       type: "Info"
     }
   ]
-  assert.deepStrictEqual(result, expected)
+  deepStrictEqual(result, expected)
 })
