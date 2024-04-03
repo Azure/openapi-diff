@@ -1,22 +1,23 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { readFile } from "@ts-common/fs"
+import * as asyncFs from "@ts-common/fs"
+import * as jsonParser from "@ts-common/json-parser"
 import { getFilePosition } from "@ts-common/source-map"
-import { exec as childProcessExec } from "child_process"
-import { existsSync, promises } from "fs"
+import * as child_process from "child_process"
+import * as fs from "fs"
 import JSON_Pointer from "json-pointer"
-import { pathToPtr } from "json-refs"
-import { tmpdir } from "os"
-import { join, resolve } from "path"
-import { BasicSourceMapConsumer, IndexedSourceMapConsumer, SourceMapConsumer } from "source-map"
-import { promisify, inspect } from "util"
+import * as jsonRefs from "json-refs"
+import * as os from "os"
+import * as path from "path"
+import * as sourceMap from "source-map"
+import * as util from "util"
 import { log } from "../util/logging"
 import { ResolveSwagger } from "../util/resolveSwagger"
 import { pathToJsonPointer } from "../util/utils"
 const _ = require("lodash")
 
-const exec = promisify(childProcessExec)
+const exec = util.promisify(child_process.exec)
 
 export type Options = {
   readonly consoleLogLevel?: unknown
@@ -25,7 +26,7 @@ export type Options = {
 
 export type ProcessedFile = {
   readonly fileName: string
-  readonly map: BasicSourceMapConsumer | IndexedSourceMapConsumer
+  readonly map: sourceMap.BasicSourceMapConsumer | sourceMap.IndexedSourceMapConsumer
   readonly resolvedFileName: string
   readonly resolvedJson: any
 }
@@ -73,7 +74,7 @@ const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): Ch
     const name = originalPosition.name as string
     const namePath = name ? name.split("\n")[0] : ""
     const parsedPath = namePath ? (JSON.parse(namePath) as string[]) : ""
-    const ref = parsedPath ? `${originalPosition.source}${pathToPtr(parsedPath, true)}` : ""
+    const ref = parsedPath ? `${originalPosition.source}${jsonRefs.pathToPtr(parsedPath, true)}` : ""
     const location = `${originalPosition.source}:${originalPosition.line}:${(originalPosition.column as number) + 1}`
     return { ...change, ref, location }
   } else {
@@ -109,7 +110,7 @@ export class OpenApiDiff {
       throw new Error('options must be of type "object".')
     }
 
-    log.debug(`Initialized OpenApiDiff class with options = ${inspect(this.options, { depth: null })}`)
+    log.debug(`Initialized OpenApiDiff class with options = ${util.inspect(this.options, { depth: null })}`)
   }
 
   /**
@@ -154,8 +155,8 @@ export class OpenApiDiff {
 
     // When oad is installed globally
     {
-      const result = join(__dirname, "..", "..", "..", "node_modules", "autorest", "dist", "app.js")
-      if (existsSync(result)) {
+      const result = path.join(__dirname, "..", "..", "..", "node_modules", "autorest", "dist", "app.js")
+      if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
         return `node ${escape(result)}`
       }
@@ -163,8 +164,8 @@ export class OpenApiDiff {
 
     // When oad is installed locally
     {
-      const result = join(__dirname, "..", "..", "..", "..", "..", "autorest", "dist", "app.js")
-      if (existsSync(result)) {
+      const result = path.join(__dirname, "..", "..", "..", "..", "..", "autorest", "dist", "app.js")
+      if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
         return `node ${escape(result)}`
       }
@@ -172,8 +173,8 @@ export class OpenApiDiff {
 
     // Try to find autorest in `node-modules`
     {
-      const result = resolve("node_modules/.bin/autorest")
-      if (existsSync(result)) {
+      const result = path.resolve("node_modules/.bin/autorest")
+      if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
         return escape(result)
       }
@@ -191,7 +192,7 @@ export class OpenApiDiff {
   public openApiDiffDllPath(): string {
     log.silly(`openApiDiffDllPath is being called`)
 
-    return escape(join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll"))
+    return escape(path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll"))
   }
 
   /**
@@ -223,13 +224,13 @@ export class OpenApiDiff {
     log.debug(`swaggerPath = "${swaggerPath}"`)
     log.debug(`outputFileName = "${outputFileName}"`)
 
-    if (!existsSync(swaggerPath)) {
+    if (!fs.existsSync(swaggerPath)) {
       throw new Error(`File "${swaggerPath}" not found.`)
     }
 
-    const outputFolder = await promises.mkdtemp(join(tmpdir(), "oad-"))
-    const outputFilePath = join(outputFolder, `${outputFileName}.json`)
-    const outputMapFilePath = join(outputFolder, `${outputFileName}.map`)
+    const outputFolder = await fs.promises.mkdtemp(path.join(os.tmpdir(), "oad-"))
+    const outputFilePath = path.join(outputFolder, `${outputFileName}.json`)
+    const outputMapFilePath = path.join(outputFolder, `${outputFileName}.map`)
     const autoRestCmd = tagName
       ? `${this.autoRestPath()} ${swaggerPath} --v2 --tag=${tagName} --output-artifact=swagger-document.json` +
         ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
@@ -247,8 +248,8 @@ export class OpenApiDiff {
       throw new Error(stderr)
     }
 
-    const buffer = await readFile(outputMapFilePath)
-    const map = await new SourceMapConsumer(buffer.toString())
+    const buffer = await asyncFs.readFile(outputMapFilePath)
+    const map = await new sourceMap.SourceMapConsumer(buffer.toString())
 
     const resolveSwagger = new ResolveSwagger(outputFilePath, map)
     const resolvedJson = resolveSwagger.resolve()
@@ -290,11 +291,11 @@ export class OpenApiDiff {
     log.debug(`oldSwagger = "${oldSwagger}"`)
     log.debug(`newSwagger = "${newSwagger}"`)
 
-    if (!existsSync(oldSwagger)) {
+    if (!fs.existsSync(oldSwagger)) {
       throw new Error(`File "${oldSwagger}" not found.`)
     }
 
-    if (!existsSync(newSwagger)) {
+    if (!fs.existsSync(newSwagger)) {
       throw new Error(`File "${newSwagger}" not found.`)
     }
 
