@@ -5,8 +5,8 @@ import { fileUrl } from "./fileUrl"
 
 test("flags 1004 - ResponseBodyFormatNowSupported", async () => {
   const diff = new index.OpenApiDiff({})
-  const oldFile = "src/test/rule-1004/case1.old.json"
-  const newFile = "src/test/rule-1004/case1.new.json"
+  const oldFile = "src/test/specs/rule-1004/case1.old.json"
+  const newFile = "src/test/specs/rule-1004/case1.new.json"
   const resultStr = await diff.compare(oldFile, newFile)
   const result = JSON.parse(resultStr)
   const newFilePath = fileUrl(path.resolve(newFile))

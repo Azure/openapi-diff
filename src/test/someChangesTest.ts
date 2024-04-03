@@ -5,8 +5,8 @@ import { fileUrl } from "./fileUrl"
 
 test("some-changes", async () => {
   const diff = new index.OpenApiDiff({})
-  const oldFile = "src/test/some-changes/old.json"
-  const newFile = "src/test/some-changes/new.json"
+  const oldFile = "src/test/specs/some-changes/old.json"
+  const newFile = "src/test/specs/some-changes/new.json"
   const resultStr = await diff.compare(oldFile, newFile)
   const result = JSON.parse(resultStr)
   const newFilePath = fileUrl(path.resolve(newFile))
