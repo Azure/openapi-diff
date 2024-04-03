@@ -11,14 +11,15 @@ test("incompatible-properties", async () => {
   try {
     await diff.compare(file, file)
     assert.fail("expected diff.compare() to throw")
-  }
-  catch (error) {
-    const e = error as Error;
-    assert.equal(e.message, "incompatible properties : bar\n" +
-      "  definitions/FooBarString/properties/bar\n" +
-      `    at ${filePath}#L13:8\n` +
-      "  definitions/FooBarObject/properties/bar\n" +
-      `    at ${filePath}#L26:8`
+  } catch (error) {
+    const e = error as Error
+    assert.equal(
+      e.message,
+      "incompatible properties : bar\n" +
+        "  definitions/FooBarString/properties/bar\n" +
+        `    at ${filePath}#L13:8\n` +
+        "  definitions/FooBarObject/properties/bar\n" +
+        `    at ${filePath}#L26:8`
     )
   }
 })
