@@ -247,15 +247,16 @@ export class OpenApiDiff {
     if (stderr) {
       throw new Error(stderr)
     }
-    const resolveSwagger = new ResolveSwagger(outputFilePath)
+
+    const buffer = await asyncFs.readFile(outputMapFilePath)
+    const map = await new sourceMap.SourceMapConsumer(buffer.toString())
+
+    const resolveSwagger = new ResolveSwagger(outputFilePath, map)
     const resolvedJson = resolveSwagger.resolve()
     const resolvedPath: string = resolveSwagger.getResolvedPath()
     if (!resolvedJson) {
       throw new Error("resolve failed!")
     }
-
-    const buffer = await asyncFs.readFile(outputMapFilePath)
-    const map = await new sourceMap.SourceMapConsumer(buffer.toString())
 
     log.debug(`outputFilePath: "${outputFilePath}"`)
     return {
