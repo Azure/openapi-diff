@@ -1,14 +1,14 @@
-import { deepStrictEqual } from "assert"
-import { resolve } from "path"
-import { OpenApiDiff } from ".."
+import * as assert from "assert"
+import * as path from "path"
+import * as index from "../index"
 import { fileUrl } from "./fileUrl"
 
 test("simple", async () => {
-  const diff = new OpenApiDiff({})
+  const diff = new index.OpenApiDiff({})
   const file = "src/test/specs/simple.json"
   const resultStr = await diff.compare(file, file)
   const result = JSON.parse(resultStr)
-  const filePath = fileUrl(resolve(file))
+  const filePath = fileUrl(path.resolve(file))
   const expected = [
     {
       code: "NoVersionChange",
@@ -29,5 +29,5 @@ test("simple", async () => {
       type: "Info"
     }
   ]
-  deepStrictEqual(result, expected)
+  assert.deepStrictEqual(result, expected)
 })

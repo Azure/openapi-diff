@@ -1,16 +1,16 @@
-import { deepStrictEqual } from "assert"
-import { resolve } from "path"
-import { OpenApiDiff } from ".."
+import * as assert from "assert"
+import * as path from "path"
+import * as index from "../index"
 import { fileUrl } from "./fileUrl"
 
 test("expands allOf Models", async () => {
-  const diff = new OpenApiDiff({})
+  const diff = new index.OpenApiDiff({})
   const oldFile = "src/test/specs/expandsAllOf/old/expand_allOf_model.json"
   const newFile = "src/test/specs/expandsAllOf/new/expand_allOf_model.json"
   const resultStr = await diff.compare(oldFile, newFile)
   const result = JSON.parse(resultStr)
-  const newFilePath = fileUrl(resolve(newFile))
-  const oldFilePath = fileUrl(resolve(oldFile))
+  const newFilePath = fileUrl(path.resolve(newFile))
+  const oldFilePath = fileUrl(path.resolve(oldFile))
   const expected = [
     {
       id: "1001",
@@ -67,5 +67,5 @@ test("expands allOf Models", async () => {
       type: "Error"
     }
   ]
-  deepStrictEqual(result, expected)
+  assert.deepStrictEqual(result, expected)
 })
