@@ -97,7 +97,7 @@ export class ResolveSwagger {
 
   constructor(file: string, map: sourceMap.BasicSourceMapConsumer | sourceMap.IndexedSourceMapConsumer) {
     this.file = path.resolve(file)
-    this.map = map;
+    this.map = map
   }
   public resolve(): json.Json | undefined {
     const content: string = readFileSync(this.file, { encoding: "utf8" })
@@ -248,19 +248,20 @@ export class ResolveSwagger {
         sm.keys(allOfSchema.properties).forEach(key => {
           if (sm.keys(schemaList).some(k => k === key)) {
             if (!this.isEqual(allOfSchema.properties[key], schemaList[key])) {
-              const allOfProp = allOfSchema.properties[key];
-              const allOfPath = getPath(getInfo(allOfProp) as ObjectInfo);
-              const allOfOriginalPosition = this.map.originalPositionFor(getFilePosition(allOfProp) as FilePosition);
+              const allOfProp = allOfSchema.properties[key]
+              const allOfPath = getPath(getInfo(allOfProp) as ObjectInfo)
+              const allOfOriginalPosition = this.map.originalPositionFor(getFilePosition(allOfProp) as FilePosition)
 
-              const schemaListProp = schemaList[key];
-              const schemaListPath = getPath(getInfo(schemaListProp) as ObjectInfo);
-              const schemaListOriginalPosition = this.map.originalPositionFor(getFilePosition(schemaListProp) as FilePosition);
+              const schemaListProp = schemaList[key]
+              const schemaListPath = getPath(getInfo(schemaListProp) as ObjectInfo)
+              const schemaListOriginalPosition = this.map.originalPositionFor(getFilePosition(schemaListProp) as FilePosition)
 
-              throw new Error(`incompatible properties : ${key}\n` +
-                `  ${schemaListPath.join('/')}\n` +
-                `    at ${schemaListOriginalPosition.source}#L${schemaListOriginalPosition.line}:${schemaListOriginalPosition.column}\n` +
-                `  ${allOfPath.join('/')}\n` +
-                `    at ${allOfOriginalPosition.source}#L${allOfOriginalPosition.line}:${allOfOriginalPosition.column}`
+              throw new Error(
+                `incompatible properties : ${key}\n` +
+                  `  ${schemaListPath.join("/")}\n` +
+                  `    at ${schemaListOriginalPosition.source}#L${schemaListOriginalPosition.line}:${schemaListOriginalPosition.column}\n` +
+                  `  ${allOfPath.join("/")}\n` +
+                  `    at ${allOfOriginalPosition.source}#L${allOfOriginalPosition.line}:${allOfOriginalPosition.column}`
               )
             }
           } else {
