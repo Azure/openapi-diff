@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { existsSync, mkdirSync } from "fs"
-import { join, dirname } from "path"
+import * as fs from "fs"
+import * as path from "path"
 import * as winston from "winston"
 
 let currentLogFile: unknown
@@ -97,8 +97,8 @@ Object.defineProperties(log, {
         throw new Error('logDirectory cannot be null or undefined and must be of type "string".')
       }
 
-      if (!existsSync(logDirectory)) {
-        mkdirSync(logDirectory)
+      if (!fs.existsSync(logDirectory)) {
+        fs.mkdirSync(logDirectory)
       }
       logDir = logDirectory
       return
@@ -109,7 +109,7 @@ Object.defineProperties(log, {
     get() {
       if (!currentLogFile) {
         const filename = `validate_log_${getTimeStamp()}.log`
-        currentLogFile = this.directory ? join(this.directory, filename) : filename
+        currentLogFile = this.directory ? path.join(this.directory, filename) : filename
       }
 
       return currentLogFile
@@ -119,7 +119,7 @@ Object.defineProperties(log, {
         throw new Error("filepath cannot be null or undefined and must be of type string. It must be an absolute file path.")
       }
       currentLogFile = logFilePath
-      this.directory = dirname(logFilePath)
+      this.directory = path.dirname(logFilePath)
       if (!this.transports.file) {
         this.add(
           new winston.transports.File({
