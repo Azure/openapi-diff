@@ -1,6 +1,6 @@
 import * as assert from "assert"
 import * as path from "path"
-import * as index from "../index"
+import { OpenApiDiff } from ".."
 import { fileUrl } from "./fileUrl"
 
 // This test is part of regression test suite for https://github.com/Azure/azure-sdk-tools/issues/5981
@@ -8,7 +8,7 @@ import { fileUrl } from "./fileUrl"
 // When another property with the same name and compatible type is referenced
 // Then no issue is reported, as this is a valid scenario
 test("compatible-properties", async () => {
-  const diff = new index.OpenApiDiff({})
+  const diff = new OpenApiDiff({})
   const file = "src/test/specs/compatible-properties.json"
   const resultStr = await diff.compare(file, file)
   const result = JSON.parse(resultStr)

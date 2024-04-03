@@ -1,10 +1,10 @@
 import * as assert from "assert"
 import * as path from "path"
-import * as index from "../index"
+import { OpenApiDiff } from ".."
 import { fileUrl } from "./fileUrl"
 
 test("xms-path", async () => {
-  const diff = new index.OpenApiDiff({})
+  const diff = new OpenApiDiff({})
   const oldFile = "src/test/specs/xmspath/old.json"
   const newFile = "src/test/specs/xmspath/new.json"
   const resultStr = await diff.compare(oldFile, newFile)

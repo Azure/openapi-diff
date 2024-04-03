@@ -1,10 +1,10 @@
 import * as assert from "assert"
 import * as path from "path"
-import * as index from "../index"
+import { OpenApiDiff } from ".."
 import { fileUrl } from "./fileUrl"
 
 test("xms-enum-name", async () => {
-  const diff = new index.OpenApiDiff({})
+  const diff = new OpenApiDiff({})
   const oldFile = "src/test/specs/xms-enum-name/old.json"
   const newFile = "src/test/specs/xms-enum-name/new.json"
   const resultStr = await diff.compare(oldFile, newFile)

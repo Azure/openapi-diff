@@ -1,10 +1,10 @@
 import * as assert from "assert"
 import * as path from "path"
-import * as index from "../index"
+import { OpenApiDiff } from ".."
 import { fileUrl } from "./fileUrl"
 
 test("expands allOf Models", async () => {
-  const diff = new index.OpenApiDiff({})
+  const diff = new OpenApiDiff({})
   const oldFile = "src/test/specs/expandsAllOf/old/expand_allOf_model.json"
   const newFile = "src/test/specs/expandsAllOf/new/expand_allOf_model.json"
   const resultStr = await diff.compare(oldFile, newFile)
