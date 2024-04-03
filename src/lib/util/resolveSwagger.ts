@@ -3,7 +3,8 @@ import * as jsonParser from "@ts-common/json-parser"
 import * as jsonPointer from "json-pointer"
 
 import { toArray } from "@ts-common/iterator"
-import { cloneDeep, Data, FilePosition, getFilePosition } from "@ts-common/source-map"
+import { cloneDeep, Data, FilePosition, getFilePosition, getInfo, getPath, ObjectInfo } from "@ts-common/source-map"
+import * as sourceMap from "source-map"
 import * as sm from "@ts-common/string-map"
 import { readFileSync, writeFileSync } from "fs"
 import * as path from "path"
@@ -92,9 +93,11 @@ function mergeParameters<T extends sm.MutableStringMap<Data>>(source: T, target:
 export class ResolveSwagger {
   public innerSwagger: json.Json | undefined
   public file: string
+  public map: sourceMap.BasicSourceMapConsumer | sourceMap.IndexedSourceMapConsumer
 
-  constructor(file: string) {
+  constructor(file: string, map: sourceMap.BasicSourceMapConsumer | sourceMap.IndexedSourceMapConsumer) {
     this.file = path.resolve(file)
+    this.map = map
   }
   public resolve(): json.Json | undefined {
     const content: string = readFileSync(this.file, { encoding: "utf8" })
@@ -245,7 +248,21 @@ export class ResolveSwagger {
         sm.keys(allOfSchema.properties).forEach(key => {
           if (sm.keys(schemaList).some(k => k === key)) {
             if (!this.isEqual(allOfSchema.properties[key], schemaList[key])) {
-              throw new Error(`incompatible properties : ${key} `)
+              const allOfProp = allOfSchema.properties[key]
+              const allOfPath = getPath(getInfo(allOfProp) as ObjectInfo)
+              const allOfOriginalPosition = this.map.originalPositionFor(getFilePosition(allOfProp) as FilePosition)
+
+              const schemaListProp = schemaList[key]
+              const schemaListPath = getPath(getInfo(schemaListProp) as ObjectInfo)
+              const schemaListOriginalPosition = this.map.originalPositionFor(getFilePosition(schemaListProp) as FilePosition)
+
+              throw new Error(
+                `incompatible properties : ${key}\n` +
+                  `  ${schemaListPath.join("/")}\n` +
+                  `    at ${schemaListOriginalPosition.source}#L${schemaListOriginalPosition.line}:${schemaListOriginalPosition.column}\n` +
+                  `  ${allOfPath.join("/")}\n` +
+                  `    at ${allOfOriginalPosition.source}#L${allOfOriginalPosition.line}:${allOfOriginalPosition.column}`
+              )
             }
           } else {
             schemaList[key] = allOfSchema.properties[key]
