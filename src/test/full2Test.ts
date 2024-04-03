@@ -1,5 +1,5 @@
-import * as assert from "assert"
-import * as index from "../index"
+import { deepStrictEqual } from "assert"
+import { OpenApiDiff, Messages } from ".."
 
 test("full2", async () => {
   const source = {
@@ -12,10 +12,10 @@ test("full2", async () => {
     tag: "package-compute-2018-04"
   }
 
-  const diff = new index.OpenApiDiff({})
+  const diff = new OpenApiDiff({})
   const resultStr = await diff.compare(source.url, target.url, source.tag, target.tag)
-  const result: index.Messages = JSON.parse(resultStr)
+  const result: Messages = JSON.parse(resultStr)
   for (const v of result) {
-    assert.deepStrictEqual(v.old.location !== undefined || v.new.location !== undefined, true)
+    deepStrictEqual(v.old.location !== undefined || v.new.location !== undefined, true)
   }
 })

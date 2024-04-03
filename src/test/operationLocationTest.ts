@@ -1,6 +1,6 @@
-import * as assert from "assert"
-import * as path from "path"
-import { OpenApiDiff } from "../index"
+import { deepStrictEqual } from "assert"
+import { resolve } from "path"
+import { OpenApiDiff } from ".."
 import { fileUrl } from "./fileUrl"
 
 // Regression test for bug #310
@@ -9,7 +9,7 @@ test("diffing a spec with operation-location bug with itself does not throw", as
   const file = "src/test/specs/operation-location.json"
   const resultStr = await diff.compare(file, file)
   const result = JSON.parse(resultStr)
-  const filePath = fileUrl(path.resolve(file))
+  const filePath = fileUrl(resolve(file))
   const expected = [
     {
       code: "NoVersionChange",
@@ -30,5 +30,5 @@ test("diffing a spec with operation-location bug with itself does not throw", as
       type: "Info"
     }
   ]
-  assert.deepStrictEqual(result, expected)
+  deepStrictEqual(result, expected)
 })
