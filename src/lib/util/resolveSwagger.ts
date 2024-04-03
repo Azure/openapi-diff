@@ -1,13 +1,13 @@
-import { Json, stringify, JsonObject } from "@ts-common/json"
-import { parse } from "@ts-common/json-parser"
-import { get } from "json-pointer"
+import * as json from "@ts-common/json"
+import * as jsonParser from "@ts-common/json-parser"
+import * as jsonPointer from "json-pointer"
 
 import { toArray } from "@ts-common/iterator"
 import { cloneDeep, Data, FilePosition, getFilePosition, getInfo, getPath, ObjectInfo } from "@ts-common/source-map"
-import { BasicSourceMapConsumer, IndexedSourceMapConsumer } from "source-map"
-import { MutableStringMap, entries, keys, values } from "@ts-common/string-map"
+import * as sourceMap from "source-map"
+import * as sm from "@ts-common/string-map"
 import { readFileSync, writeFileSync } from "fs"
-import { resolve } from "path"
+import * as path from "path"
 import { pathToJsonPointer } from "./utils"
 
 /*
@@ -18,9 +18,9 @@ import { pathToJsonPointer } from "./utils"
  *
  * @returns {object} target - Returns the merged target object.
  */
-export function mergeObjects<T extends MutableStringMap<Data>>(source: T, target: T): T {
-  const result: MutableStringMap<Data> = target
-  for (const [key, sourceProperty] of entries(source)) {
+export function mergeObjects<T extends sm.MutableStringMap<Data>>(source: T, target: T): T {
+  const result: sm.MutableStringMap<Data> = target
+  for (const [key, sourceProperty] of sm.entries(source)) {
     if (Array.isArray(sourceProperty)) {
       const targetProperty = target[key]
       if (!targetProperty) {
@@ -67,18 +67,18 @@ function getParamKey(source: any) {
  * the source object is actually an array but treats as an object, so the its key must be number
  * @param source
  */
-function getNextKey(source: MutableStringMap<Data>) {
-  const result = keys(source).reduce((a, b) => (a > b ? a : b))
+function getNextKey(source: sm.MutableStringMap<Data>) {
+  const result = sm.keys(source).reduce((a, b) => (a > b ? a : b))
   if (result == undefined) {
     return "0"
   }
   return (+(result as string) + 1).toString()
 }
 
-function mergeParameters<T extends MutableStringMap<Data>>(source: T, target: T): T {
-  const result: MutableStringMap<Data> = target
-  for (const sourceProperty of values(source)) {
-    if (!values(target).some(v => getParamKey(v) === getParamKey(sourceProperty))) {
+function mergeParameters<T extends sm.MutableStringMap<Data>>(source: T, target: T): T {
+  const result: sm.MutableStringMap<Data> = target
+  for (const sourceProperty of sm.values(source)) {
+    if (!sm.values(target).some(v => getParamKey(v) === getParamKey(sourceProperty))) {
       result[getNextKey(result)] = sourceProperty
     }
   }
@@ -91,15 +91,15 @@ function mergeParameters<T extends MutableStringMap<Data>>(source: T, target: T)
  * new json with source location info
  */
 export class ResolveSwagger {
-  public innerSwagger: Json | undefined
+  public innerSwagger: json.Json | undefined
   public file: string
-  public map: BasicSourceMapConsumer | IndexedSourceMapConsumer
+  public map: sourceMap.BasicSourceMapConsumer | sourceMap.IndexedSourceMapConsumer
 
-  constructor(file: string, map: BasicSourceMapConsumer | IndexedSourceMapConsumer) {
-    this.file = resolve(file)
+  constructor(file: string, map: sourceMap.BasicSourceMapConsumer | sourceMap.IndexedSourceMapConsumer) {
+    this.file = path.resolve(file)
     this.map = map
   }
-  public resolve(): Json | undefined {
+  public resolve(): json.Json | undefined {
     const content: string = readFileSync(this.file, { encoding: "utf8" })
     this.parse(this.file, content)
     this.unifyXMsPaths()
@@ -117,8 +117,8 @@ export class ResolveSwagger {
     const swagger = this.innerSwagger as any
     const xmsPaths = swagger["x-ms-paths"]
     const paths = swagger.paths
-    if (xmsPaths && xmsPaths instanceof Object && toArray(keys(xmsPaths)).length > 0) {
-      for (const [property, v] of entries(xmsPaths)) {
+    if (xmsPaths && xmsPaths instanceof Object && toArray(sm.keys(xmsPaths)).length > 0) {
+      for (const [property, v] of sm.entries(xmsPaths)) {
         paths[property] = v
       }
       swagger.paths = mergeObjects(xmsPaths, paths)
@@ -132,13 +132,13 @@ export class ResolveSwagger {
     }
     const swagger = this.innerSwagger as any
     const paths = swagger.paths
-    if (paths && paths instanceof Object && toArray(keys(paths)).length > 0) {
-      for (const [property, v] of entries(paths)) {
+    if (paths && paths instanceof Object && toArray(sm.keys(paths)).length > 0) {
+      for (const [property, v] of sm.entries(paths)) {
         const pathsLevelParameters = (v as any).parameters
         if (!pathsLevelParameters) {
           continue
         }
-        for (const [key, o] of entries(v as any)) {
+        for (const [key, o] of sm.entries(v as any)) {
           // key != parameters indicates an http method
           if (key.toLowerCase() !== "parameters") {
             const operationParam = (o as any).parameters ? (o as any).parameters : []
@@ -156,27 +156,27 @@ export class ResolveSwagger {
     }
     const swagger = this.innerSwagger as any
     const paths = swagger.paths
-    if (paths && paths instanceof Object && toArray(keys(paths)).length > 0) {
-      for (const v of values(paths)) {
-        for (const [key, o] of entries(v as any)) {
+    if (paths && paths instanceof Object && toArray(sm.keys(paths)).length > 0) {
+      for (const v of sm.values(paths)) {
+        for (const [key, o] of sm.entries(v as any)) {
           if (key.toLowerCase() !== "parameters") {
             const operationParam = (o as any).parameters ? (o as any).parameters : []
             operationParam.forEach((v: any) => v.schema && this.transformAdditionalProperty(v.schema))
-            const responses = (o as any).responses ? values((o as any).responses) : []
+            const responses = (o as any).responses ? sm.values((o as any).responses) : []
             responses.forEach((v: any) => v.schema && this.transformAdditionalProperty(v.schema))
           } else {
-            values(o as any).forEach((v: any) => v.schema && this.transformAdditionalProperty(v.schema))
+            sm.values(o as any).forEach((v: any) => v.schema && this.transformAdditionalProperty(v.schema))
           }
         }
       }
     }
     if (swagger.definitions) {
-      for (const o of values(swagger.definitions)) {
+      for (const o of sm.values(swagger.definitions)) {
         this.transformAdditionalProperty(o)
       }
     }
     if (swagger.parameters) {
-      for (const o of values(swagger.parameters)) {
+      for (const o of sm.values(swagger.parameters)) {
         if ((o as any).schema) {
           this.transformAdditionalProperty((o as any).schema)
         }
@@ -193,13 +193,13 @@ export class ResolveSwagger {
       }
     }
     if (schema.properties) {
-      for (const v of values(schema.properties)) {
+      for (const v of sm.values(schema.properties)) {
         this.transformAdditionalProperty(v)
       }
     }
 
     if (schema.allOf) {
-      for (const v of values(schema.allOf)) {
+      for (const v of sm.values(schema.allOf)) {
         this.transformAdditionalProperty(v)
       }
     }
@@ -211,8 +211,8 @@ export class ResolveSwagger {
     }
     const swagger = this.innerSwagger as any
     const definitions = swagger.definitions
-    if (definitions && toArray(keys(definitions)).length > 0) {
-      for (const [property, v] of entries(definitions)) {
+    if (definitions && toArray(sm.keys(definitions)).length > 0) {
+      for (const [property, v] of sm.entries(definitions)) {
         const references = (v as any).allOf
         if (!references) {
           continue
@@ -233,7 +233,7 @@ export class ResolveSwagger {
     }
     this.checkCircularAllOf(schema, undefined, [])
     const schemaList = schema.properties ? schema.properties : {}
-    for (const reference of values(schema.allOf)) {
+    for (const reference of sm.values(schema.allOf)) {
       let allOfSchema = reference as any
       if (allOfSchema.$ref) {
         allOfSchema = this.dereference(allOfSchema.$ref)
@@ -245,8 +245,8 @@ export class ResolveSwagger {
         this.ExpandAllOf(allOfSchema)
       }
       if (allOfSchema.properties) {
-        keys(allOfSchema.properties).forEach(key => {
-          if (keys(schemaList).some(k => k === key)) {
+        sm.keys(allOfSchema.properties).forEach(key => {
+          if (sm.keys(schemaList).some(k => k === key)) {
             if (!this.isEqual(allOfSchema.properties[key], schemaList[key])) {
               const allOfProp = allOfSchema.properties[key]
               const allOfPath = getPath(getInfo(allOfProp) as ObjectInfo)
@@ -271,8 +271,8 @@ export class ResolveSwagger {
       }
       if (allOfSchema.required) {
         const requiredProperties = schema.required ? schema.required : []
-        values(allOfSchema.required).forEach(prop => {
-          if (!values(requiredProperties).some(v => v === prop)) {
+        sm.values(allOfSchema.required).forEach(prop => {
+          if (!sm.values(requiredProperties).some(v => v === prop)) {
             requiredProperties.push(prop)
           }
         })
@@ -324,7 +324,7 @@ export class ResolveSwagger {
         return
       }
       visited.push(schema)
-      values(schema.allOf)
+      sm.values(schema.allOf)
         .filter(s => (s as any).$ref)
         .forEach(s => {
           const ref = (s as any).$ref
@@ -382,7 +382,7 @@ export class ResolveSwagger {
   }
 
   private stringify(): string {
-    return stringify(this.innerSwagger as JsonObject)
+    return json.stringify(this.innerSwagger as json.JsonObject)
   }
 
   private generateNew() {
@@ -391,7 +391,7 @@ export class ResolveSwagger {
 
   private parse(url: string, data: string) {
     try {
-      this.innerSwagger = parse(url, data)
+      this.innerSwagger = jsonParser.parse(url, data)
     } catch (e) {
       console.log(JSON.stringify(e))
     }
@@ -409,7 +409,7 @@ export class ResolveSwagger {
     if (this.innerSwagger) {
       try {
         const pointer = pathToJsonPointer(jsonPath)
-        const value = get(this.innerSwagger as object, pointer)
+        const value = jsonPointer.get(this.innerSwagger as object, pointer)
         return getFilePosition(value)
       } catch (e) {
         console.log(JSON.stringify(e))

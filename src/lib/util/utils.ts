@@ -2,12 +2,12 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 import { execSync } from "child_process"
-import { readFileSync, existsSync, lstatSync, mkdirSync } from "fs"
-import { safeLoad } from "js-yaml"
-import { get, set, remove } from "json-pointer"
-import { join } from "path"
+import * as fs from "fs"
+import * as YAML from "js-yaml"
+import * as jsonPointer from "json-pointer"
+import * as path from "path"
 import request = require("request")
-import { inspect } from "util"
+import * as util from "util"
 import { log } from "./logging"
 
 /*
@@ -62,7 +62,7 @@ export async function parseJson(specPath: string) {
   } else {
     // local filepath
     try {
-      const fileContent = stripBOM(readFileSync(specPath, "utf8"))
+      const fileContent = stripBOM(fs.readFileSync(specPath, "utf8"))
       const result = parseContent(specPath, fileContent)
       docCache[specPath] = result
       return result
@@ -87,7 +87,7 @@ export function parseContent(filePath: string, fileContent: string) {
   if (/.*\.json$/gi.test(filePath)) {
     result = JSON.parse(fileContent)
   } else if (/.*\.ya?ml$/gi.test(filePath)) {
-    result = safeLoad(fileContent)
+    result = YAML.safeLoad(fileContent)
   } else {
     const msg =
       `We currently support "*.json" and "*.yaml | *.yml" file formats for validating swaggers.\n` +
@@ -164,7 +164,7 @@ export function makeRequest(options: Options) {
           res = parseContent(options.url, responseBody)
         }
       } catch (error) {
-        const msg = `An error occurred while parsing the file ${options.url}. The error is:\n ${inspect(error, { depth: null })}.`
+        const msg = `An error occurred while parsing the file ${options.url}. The error is:\n ${util.inspect(error, { depth: null })}.`
         const e = new Error(msg)
         reject(e)
       }
@@ -286,7 +286,7 @@ export function parseReferenceInSwagger(reference: string) {
  * @return {string} resolved path
  */
 export function joinPath(...args: string[]) {
-  let finalPath = join(...args)
+  let finalPath = path.join(...args)
   finalPath = finalPath.replace(/\\/gi, "/")
   finalPath = finalPath.replace(/^(http|https):\/(.*)/gi, "$1://$2")
   return finalPath
@@ -333,7 +333,7 @@ export function mergeObjects(source: { readonly [key: string]: unknown }, target
 export function getObject(doc: object, ptr: string) {
   let result
   try {
-    result = get(doc, ptr)
+    result = jsonPointer.get(doc, ptr)
   } catch (err) {
     log.error(err)
     throw err
@@ -353,7 +353,7 @@ export function getObject(doc: object, ptr: string) {
 export function setObject(doc: object, ptr: string, value: unknown) {
   let result
   try {
-    result = set(doc, ptr, value)
+    result = jsonPointer.set(doc, ptr, value)
   } catch (err) {
     log.error(err)
   }
@@ -369,7 +369,7 @@ export function setObject(doc: object, ptr: string, value: unknown) {
 export function removeObject(doc: object, ptr: string) {
   let result
   try {
-    result = remove(doc, ptr)
+    result = jsonPointer.remove(doc, ptr)
   } catch (err) {
     log.error(err)
   }
@@ -421,20 +421,20 @@ export function gitClone(url: string, directory: string) {
   }
 
   // If the directory exists then we assume that the repo to be cloned is already present.
-  if (existsSync(directory)) {
-    if (!lstatSync(directory).isDirectory()) {
+  if (fs.existsSync(directory)) {
+    if (!fs.lstatSync(directory).isDirectory()) {
       throw new Error(`"${directory}" must be a directory.`)
     }
     return
   } else {
-    mkdirSync(directory)
+    fs.mkdirSync(directory)
   }
 
   try {
     const cmd = `git clone ${url} ${directory}`
     execSync(cmd, { encoding: "utf8" })
   } catch (err) {
-    throw new Error(`An error occurred while cloning git repository: ${inspect(err, { depth: null })}.`)
+    throw new Error(`An error occurred while cloning git repository: ${util.inspect(err, { depth: null })}.`)
   }
 }
 
