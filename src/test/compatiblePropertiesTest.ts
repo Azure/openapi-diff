@@ -3,6 +3,10 @@ import * as path from "path"
 import * as index from "../index"
 import { fileUrl } from "./fileUrl"
 
+// This test is part of regression test suite for https://github.com/Azure/azure-sdk-tools/issues/5981
+// Given a property with given type and name
+// When another property with the same name and compatible type is referenced
+// Then no issue is reported, as this is a valid scenario
 test("compatible-properties", async () => {
   const diff = new index.OpenApiDiff({})
   const file = "src/test/specs/compatible-properties.json"
