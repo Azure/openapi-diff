@@ -47,7 +47,8 @@ export const handler = (argv: Argv) => {
     json: argv.j
   }
 
-  const compareFunc = oldTag && newTag ? compareTags(oldSpec, oldTag, newSpec, newTag, vOptions) : compare(oldSpec, newSpec, vOptions)
+  const compareFunc =
+    oldTag && newTag ? compareTags(oldSpec, oldTag, newSpec, newTag, vOptions) : compare(oldSpec, newSpec, vOptions)
 
   return compareFunc
     .then(result => {
