@@ -5,8 +5,8 @@ import { fileUrl } from "./fileUrl"
 
 test("Additional Properties is boolean", async () => {
   const diff = new index.OpenApiDiff({})
-  const oldFile = "src/test/additional-properties/old.json"
-  const newFile = "src/test/additional-properties/new.json"
+  const oldFile = "src/test/specs/additional-properties/old.json"
+  const newFile = "src/test/specs/additional-properties/new.json"
   const resultStr = await diff.compare(oldFile, newFile)
   const result = JSON.parse(resultStr)
   const newFilePath = fileUrl(path.resolve(newFile))

@@ -6,7 +6,7 @@ import { fileUrl } from "./fileUrl"
 // Regression test for bug #310
 test("diffing a spec with operation-location bug with itself does not throw", async () => {
   const diff = new OpenApiDiff({})
-  const file = "src/test/operation-location/operation-location.json"
+  const file = "src/test/specs/operation-location.json"
   const resultStr = await diff.compare(file, file)
   const result = JSON.parse(resultStr)
   const filePath = fileUrl(path.resolve(file))

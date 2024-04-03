@@ -5,8 +5,8 @@ import { fileUrl } from "./fileUrl"
 
 test("Move into allOf Models", async () => {
   const diff = new index.OpenApiDiff({})
-  const oldFile = "src/test/expandsAllOf/old/move_properties_into_allof_model.json"
-  const newFile = "src/test/expandsAllOf/new/move_properties_into_allof_model.json"
+  const oldFile = "src/test/specs/expandsAllOf/old/move_properties_into_allof_model.json"
+  const newFile = "src/test/specs/expandsAllOf/new/move_properties_into_allof_model.json"
   const resultStr = await diff.compare(oldFile, newFile)
   const result = JSON.parse(resultStr)
   const newFilePath = fileUrl(path.resolve(newFile))

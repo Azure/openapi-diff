@@ -5,7 +5,7 @@ import { fileUrl } from "./fileUrl"
 
 test("simple", async () => {
   const diff = new index.OpenApiDiff({})
-  const file = "src/test/simple/same.json"
+  const file = "src/test/specs/simple.json"
   const resultStr = await diff.compare(file, file)
   const result = JSON.parse(resultStr)
   const filePath = fileUrl(path.resolve(file))

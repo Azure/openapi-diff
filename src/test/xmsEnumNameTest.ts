@@ -5,8 +5,8 @@ import { fileUrl } from "./fileUrl"
 
 test("xms-enum-name", async () => {
   const diff = new index.OpenApiDiff({})
-  const oldFile = "src/test/xms-enum-name/old.json"
-  const newFile = "src/test/xms-enum-name/new.json"
+  const oldFile = "src/test/specs/xms-enum-name/old.json"
+  const newFile = "src/test/specs/xms-enum-name/new.json"
   const resultStr = await diff.compare(oldFile, newFile)
   const result = JSON.parse(resultStr)
   const newFilePath = fileUrl(path.resolve(newFile))
