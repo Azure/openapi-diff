@@ -3,7 +3,7 @@
 
 import { existsSync, mkdirSync } from "fs"
 import { join, dirname } from "path"
-import { transports as winstonTransports, format, createLogger } from "winston"
+import * as winston from "winston"
 
 let currentLogFile: unknown
 let logDir: unknown
@@ -54,13 +54,13 @@ export type Logger = {
 }
 
 const transports = {
-  console: new winstonTransports.Console({
+  console: new winston.transports.Console({
     level: "warn",
-    format: format.combine(format.simple())
+    format: winston.format.combine(winston.format.simple())
   })
 }
 
-export let log: Logger = createLogger({
+export let log: Logger = winston.createLogger({
   transports: [transports.console],
   levels: customLogLevels
 }) as any
@@ -122,7 +122,7 @@ Object.defineProperties(log, {
       this.directory = dirname(logFilePath)
       if (!this.transports.file) {
         this.add(
-          new winstonTransports.File({
+          new winston.transports.File({
             level: "silly",
             silent: false,
             filename: logFilePath
