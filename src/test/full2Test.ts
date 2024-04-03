@@ -3,12 +3,12 @@ import * as index from "../index"
 
 test("full2", async () => {
   const source = {
-    url: "src/test/full2/source/readme.md",
+    url: "src/test/specs/full2/source/readme.md",
     tag: "package-compute-only-2017-12"
   }
 
   const target = {
-    url: "src/test/full2/target/readme.md",
+    url: "src/test/specs/full2/target/readme.md",
     tag: "package-compute-2018-04"
   }
 

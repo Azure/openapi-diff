@@ -5,8 +5,8 @@ import { fileUrl } from "./fileUrl"
 
 test("Multiple Level AllOf", async () => {
   const diff = new index.OpenApiDiff({})
-  const oldFile = "src/test/expandsAllOf/old/multi_level_allOf.json"
-  const newFile = "src/test/expandsAllOf/new/multi_level_allOf.json"
+  const oldFile = "src/test/specs/expandsAllOf/old/multi_level_allOf.json"
+  const newFile = "src/test/specs/expandsAllOf/new/multi_level_allOf.json"
   const resultStr = await diff.compare(oldFile, newFile)
   const result = JSON.parse(resultStr)
   const newFilePath = fileUrl(path.resolve(newFile))
