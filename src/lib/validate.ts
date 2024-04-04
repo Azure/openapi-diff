@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 import { log } from "./util/logging"
-import * as OpenApiDiff from "./validators/openApiDiff"
+import { Options, OpenApiDiff } from "./validators/openApiDiff"
 
 /**
  * Wrapper method to compares old and new specifications.
@@ -18,14 +18,14 @@ import * as OpenApiDiff from "./validators/openApiDiff"
  * @param {boolean} [options.matchApiVersion] A boolean flag indicating whether to consider api-version while comparing.
  *
  */
-export function compare(oldSwagger: string, newSwagger: string, options: OpenApiDiff.Options) {
+export function compare(oldSwagger: string, newSwagger: string, options: Options) {
   if (!options) {
     options = {}
   }
 
   log.consoleLogLevel = options.consoleLogLevel || log.consoleLogLevel
   log.filepath = options.logFilepath || log.filepath
-  const openApiDiff = new OpenApiDiff.OpenApiDiff(options)
+  const openApiDiff = new OpenApiDiff(options)
 
   return openApiDiff.compare(oldSwagger, newSwagger)
 }
@@ -48,14 +48,14 @@ export function compare(oldSwagger: string, newSwagger: string, options: OpenApi
  * @param {boolean} [options.matchApiVersion] A boolean flag indicating whether to consider api-version while comparing.
  *
  */
-export function compareTags(oldSwagger: string, oldTag: string, newSwagger: string, newTag: string, options: OpenApiDiff.Options) {
+export function compareTags(oldSwagger: string, oldTag: string, newSwagger: string, newTag: string, options: Options) {
   if (!options) {
     options = {}
   }
 
   log.consoleLogLevel = options.consoleLogLevel || log.consoleLogLevel
   log.filepath = options.logFilepath || log.filepath
-  const openApiDiff = new OpenApiDiff.OpenApiDiff(options)
+  const openApiDiff = new OpenApiDiff(options)
 
   return openApiDiff.compare(oldSwagger, newSwagger, oldTag, newTag)
 }
