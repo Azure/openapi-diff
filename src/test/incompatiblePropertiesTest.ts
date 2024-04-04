@@ -1,5 +1,5 @@
-import { fail, equal } from "assert"
-import { resolve } from "path"
+import * as assert from "assert"
+import * as path from "path"
 import { OpenApiDiff } from ".."
 import { fileUrl } from "./fileUrl"
 
@@ -10,14 +10,14 @@ import { fileUrl } from "./fileUrl"
 test("incompatible-properties", async () => {
   const diff = new OpenApiDiff({})
   const file = "src/test/specs/incompatible-properties.json"
-  const filePath = fileUrl(resolve(file))
+  const filePath = fileUrl(path.resolve(file))
 
   try {
     await diff.compare(file, file)
-    fail("expected diff.compare() to throw")
+    assert.fail("expected diff.compare() to throw")
   } catch (error) {
     const e = error as Error
-    equal(
+    assert.equal(
       e.message,
       "incompatible properties : bar\n" +
         "  definitions/FooBarString/properties/bar\n" +

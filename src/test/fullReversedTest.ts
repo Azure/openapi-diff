@@ -1,5 +1,5 @@
-import { deepStrictEqual } from "assert"
-import { resolve } from "path"
+import * as assert from "assert"
+import * as path from "path"
 import { OpenApiDiff } from ".."
 import { fileUrl } from "./fileUrl"
 
@@ -9,9 +9,9 @@ test("full reversed", async () => {
   const diff = new OpenApiDiff({})
   const resultStr = await diff.compare(oldFile, newFile, "2019", "2019")
   const result = JSON.parse(resultStr)
-  const oldFilePath = fileUrl(resolve("src/test/specs/full/new/openapi.json"))
-  const oldFilePath2 = fileUrl(resolve("src/test/specs/full/new/openapi2.json"))
-  const newFilePath = fileUrl(resolve("src/test/specs/full/old/openapi.json"))
+  const oldFilePath = fileUrl(path.resolve("src/test/specs/full/new/openapi.json"))
+  const oldFilePath2 = fileUrl(path.resolve("src/test/specs/full/new/openapi2.json"))
+  const newFilePath = fileUrl(path.resolve("src/test/specs/full/old/openapi.json"))
   const expected = [
     {
       code: "NoVersionChange",
@@ -46,5 +46,5 @@ test("full reversed", async () => {
       type: "Error"
     }
   ]
-  deepStrictEqual(result, expected)
+  assert.deepStrictEqual(result, expected)
 })

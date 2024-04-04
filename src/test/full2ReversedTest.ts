@@ -1,5 +1,5 @@
-import { deepStrictEqual } from "assert"
-import { OpenApiDiff, Messages } from ".."
+import * as assert from "assert"
+import { Messages, OpenApiDiff } from ".."
 
 test("full2 reversed", async () => {
   const source = {
@@ -16,6 +16,6 @@ test("full2 reversed", async () => {
   const resultStr = await diff.compare(source.url, target.url, source.tag, target.tag)
   const result: Messages = JSON.parse(resultStr)
   for (const v of result) {
-    deepStrictEqual(v.old.location !== undefined || v.new.location !== undefined, true)
+    assert.deepStrictEqual(v.old.location !== undefined || v.new.location !== undefined, true)
   }
 })

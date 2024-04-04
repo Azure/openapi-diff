@@ -1,5 +1,5 @@
-import { deepStrictEqual } from "assert"
-import { resolve } from "path"
+import * as assert from "assert"
+import * as path from "path"
 import { OpenApiDiff } from ".."
 import { fileUrl } from "./fileUrl"
 
@@ -9,8 +9,8 @@ test("flags 1003 - RequestBodyFormatNoLongerSupported", async () => {
   const newFile = "src/test/specs/rule-1003/case1.new.json"
   const resultStr = await diff.compare(oldFile, newFile)
   const result = JSON.parse(resultStr)
-  const newFilePath = fileUrl(resolve(newFile))
-  const oldFilePath = fileUrl(resolve(oldFile))
+  const newFilePath = fileUrl(path.resolve(newFile))
+  const oldFilePath = fileUrl(path.resolve(oldFile))
   const expected = [
     {
       id: "1003",
@@ -31,5 +31,5 @@ test("flags 1003 - RequestBodyFormatNoLongerSupported", async () => {
       docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1003.md"
     }
   ]
-  deepStrictEqual(result, expected)
+  assert.deepStrictEqual(result, expected)
 })
