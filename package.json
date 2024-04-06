@@ -96,8 +96,8 @@
     "ts.test": "tsc && jest",
     "test": "npm run dn.test && npm run ts.test",
     "prepack": "npm ci && npm run dn.publish && tsc",
-    "tslint": "tslint --project tsconfig.json ./src/**/*.ts ",
-    "tslint-fix": "tslint --fix --project tsconfig.json ./src/**/*.ts",
+    "tslint": "tslint --project tsconfig.json \"./src/**/*.ts\"",
+    "tslint-fix": "tslint --fix --project tsconfig.json \"./src/**/*.ts\"",
     "tslint-check": "tslint-config-prettier-check ./tslint.json"
   }
 }

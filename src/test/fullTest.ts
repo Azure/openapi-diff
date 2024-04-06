@@ -1,17 +1,17 @@
 import * as assert from "assert"
 import * as path from "path"
-import * as index from "../index"
+import { OpenApiDiff } from ".."
 import { fileUrl } from "./fileUrl"
 
 test("full", async () => {
-  const oldFile = "src/test/full/old/readme.md"
-  const newFile = "src/test/full/new/readme.md"
-  const diff = new index.OpenApiDiff({})
+  const oldFile = "src/test/specs/full/old/readme.md"
+  const newFile = "src/test/specs/full/new/readme.md"
+  const diff = new OpenApiDiff({})
   const resultStr = await diff.compare(oldFile, newFile, "2019", "2019")
   const result = JSON.parse(resultStr)
-  const newFilePath = fileUrl(path.resolve("src/test/full/new/openapi.json").replace(/^\//, ""))
-  const newFilePath2 = fileUrl(path.resolve("src/test/full/new/openapi2.json"))
-  const oldFilePath = fileUrl(path.resolve("src/test/full/old/openapi.json"))
+  const newFilePath = fileUrl(path.resolve("src/test/specs/full/new/openapi.json").replace(/^\//, ""))
+  const newFilePath2 = fileUrl(path.resolve("src/test/specs/full/new/openapi2.json"))
+  const oldFilePath = fileUrl(path.resolve("src/test/specs/full/old/openapi.json"))
   const expected = [
     {
       code: "NoVersionChange",

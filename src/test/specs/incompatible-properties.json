@@ -1,0 +1,32 @@
+﻿{
+  "swagger": "2.0",
+  "info": {
+    "title": "xms-enum-name",
+    "version": "1.0"
+  },
+  "paths": {
+  },
+  "definitions": {
+    "FooBarString": {
+      "type":"object",
+      "properties": {
+        "bar": {
+          "type":"string"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/FooBarObject"
+        }
+      ]
+    },
+    "FooBarObject": {
+      "type":"object",
+      "properties": {
+        "bar": {
+          "type":"object"
+        }
+      }
+    }
+  }
+}

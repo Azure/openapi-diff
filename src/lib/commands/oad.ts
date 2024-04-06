@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 import { log } from "../util/logging"
-import * as validate from "../validate"
+import { compareTags, compare } from "../validate"
 
 export const command = "compare <old-spec> <new-spec>"
 
@@ -47,8 +47,7 @@ export const handler = (argv: Argv) => {
     json: argv.j
   }
 
-  const compareFunc =
-    oldTag && newTag ? validate.compareTags(oldSpec, oldTag, newSpec, newTag, vOptions) : validate.compare(oldSpec, newSpec, vOptions)
+  const compareFunc = oldTag && newTag ? compareTags(oldSpec, oldTag, newSpec, newTag, vOptions) : compare(oldSpec, newSpec, vOptions)
 
   return compareFunc
     .then(result => {

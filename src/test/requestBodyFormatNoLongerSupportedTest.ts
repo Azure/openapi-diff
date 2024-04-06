@@ -1,12 +1,12 @@
 import * as assert from "assert"
 import * as path from "path"
-import * as index from "../index"
+import { OpenApiDiff } from ".."
 import { fileUrl } from "./fileUrl"
 
 test("flags 1003 - RequestBodyFormatNoLongerSupported", async () => {
-  const diff = new index.OpenApiDiff({})
-  const oldFile = "src/test/rule-1003/case1.old.json"
-  const newFile = "src/test/rule-1003/case1.new.json"
+  const diff = new OpenApiDiff({})
+  const oldFile = "src/test/specs/rule-1003/case1.old.json"
+  const newFile = "src/test/specs/rule-1003/case1.new.json"
   const resultStr = await diff.compare(oldFile, newFile)
   const result = JSON.parse(resultStr)
   const newFilePath = fileUrl(path.resolve(newFile))

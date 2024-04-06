@@ -1,12 +1,12 @@
 import * as assert from "assert"
 import * as path from "path"
-import * as index from "../index"
+import { OpenApiDiff } from ".."
 import { fileUrl } from "./fileUrl"
 
 test("Additional Properties is boolean", async () => {
-  const diff = new index.OpenApiDiff({})
-  const oldFile = "src/test/additional-properties/old.json"
-  const newFile = "src/test/additional-properties/new.json"
+  const diff = new OpenApiDiff({})
+  const oldFile = "src/test/specs/additional-properties/old.json"
+  const newFile = "src/test/specs/additional-properties/new.json"
   const resultStr = await diff.compare(oldFile, newFile)
   const result = JSON.parse(resultStr)
   const newFilePath = fileUrl(path.resolve(newFile))
