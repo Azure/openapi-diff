@@ -147,8 +147,9 @@ npm list -g oad # Should denote no packages installed
 - Verify in [`@azure/oad` versions] the package was published.
 - Save it to `openapi-platform` feed via [upstream feeds of `openapi-platform`].
 - To make `openapi-alps` use the newly published package:
-  - Ensure that you update the relevant `package.json` files and then run `rush update` and commit the changes.
-    - ❗ If you did not modify any `package.json` at all, you must run `rush update --full`. Otherwise rush won't pick up the newly deployed newer package version.
+  - Ensure that you update the minimum package version in  relevant `package.json` files and then run `rush update` and commit the changes.
+    - ❗ Do the update even if semver rules say the new package version is in scope. E.g. if the version is `~0.10.7` but you published `0.10.8`, then still update the entry to `~0.10.8`.
+    - If you not modify any `package.json` at all, rush will not recognize the newly published package version. This can be worked around by running  `rush update --full`, but this is discouraged.
     - Example file: [`private/azure-swagger-validation/azureSwaggerValidation/package.json`][azureSwaggerValidation package.json]
     - Example `openapi-alps` PR doing the package update: [#537791]
   - Redeploy relevant `openapi-alps` parts to pick up the new package, even if you didn't had to commit any changes. Follow [this doc][openapi-alps doc].
