@@ -7,6 +7,11 @@ import { fileUrl } from "./fileUrl"
 // Given a property with given type and name
 // When another property with the same name and compatible type is referenced
 // Then no issue is reported, as this is a valid scenario
+//
+// Also ensures that $ref are resolved when determining if types are compatible.
+// For example, these should be compatible:
+// 1. "bar": { "type":"string" }
+// 2. "bar": { "$ref":"#/definitions/MyString" }, "MyString": { "type": "string" }
 test("compatible-properties", async () => {
   const diff = new OpenApiDiff({})
   const file = "src/test/specs/compatible-properties.json"
