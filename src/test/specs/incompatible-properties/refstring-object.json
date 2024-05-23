@@ -1,0 +1,34 @@
+﻿{
+  "swagger": "2.0",
+  "info": {
+    "title": "incompatible-properties",
+    "version": "1.0"
+  },
+  "paths": {},
+  "definitions": {
+    "Foo": {
+      "type": "object",
+      "properties": {
+        "refstring-object": {
+          "$ref": "#/definitions/MyString"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/Foo2"
+        }
+      ]
+    },
+    "Foo2": {
+      "type": "object",
+      "properties": {
+        "refstring-object": {
+          "type": "object"
+        }
+      }
+    },
+    "MyString": {
+      "type": "string"
+    }
+  }
+}

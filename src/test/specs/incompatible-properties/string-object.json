@@ -4,27 +4,26 @@
     "title": "incompatible-properties",
     "version": "1.0"
   },
-  "paths": {
-  },
+  "paths": {},
   "definitions": {
-    "FooBarString": {
-      "type":"object",
+    "Foo": {
+      "type": "object",
       "properties": {
-        "bar": {
-          "type":"string"
+        "string-object": {
+          "type": "string"
         }
       },
       "allOf": [
         {
-          "$ref": "#/definitions/FooBarObject"
+          "$ref": "#/definitions/Foo2"
         }
       ]
     },
-    "FooBarObject": {
-      "type":"object",
+    "Foo2": {
+      "type": "object",
       "properties": {
-        "bar": {
-          "type":"object"
+        "string-object": {
+          "type": "object"
         }
       }
     }

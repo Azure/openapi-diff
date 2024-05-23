@@ -7,26 +7,47 @@
   "paths": {
   },
   "definitions": {
-    "FooBarString": {
+    "Foo": {
       "type":"object",
       "properties": {
-        "bar": {
+        "string-string": {
           "type":"string"
+        },
+        "string-refstring": {
+          "type":"string"
+        },
+        "refstring-string": {
+          "$ref": "#/definitions/MyString"
+        },
+        "refstring-refstring": {
+          "$ref": "#/definitions/MyString"
         }
       },
       "allOf": [
         {
-          "$ref": "#/definitions/FooBarString2"
+          "$ref": "#/definitions/Foo2"
         }
       ]
     },
-    "FooBarString2": {
+    "Foo2": {
       "type":"object",
       "properties": {
-        "bar": {
+        "string-string": {
           "type":"string"
+        },
+        "string-refstring": {
+          "$ref": "#/definitions/MyString"
+        },
+        "refstring-string": {
+          "type":"string"
+        },
+        "refstring-refstring": {
+          "$ref": "#/definitions/MyString"
         }
       }
+    },
+    "MyString": {
+      "type": "string"
     }
   }
 }
