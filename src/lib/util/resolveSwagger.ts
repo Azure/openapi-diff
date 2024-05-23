@@ -303,14 +303,11 @@ export class ResolveSwagger {
     //  it identifies the URI of a schema to use. 
     //  All other properties in a "$ref" object MUST be ignored.
     //
-    if (parentProperty.$ref && unwrappedProperty.$ref) {
-      return this.isEqual(this.dereference(parentProperty.$ref), this.dereference(unwrappedProperty.$ref))
-    }
-    if (parentProperty.$ref) {
-      return this.isEqual(this.dereference(parentProperty.$ref), unwrappedProperty)
-    }
-    if (unwrappedProperty.$ref) {
-      return this.isEqual(parentProperty, this.dereference(unwrappedProperty.$ref))
+    if (parentProperty.$ref || unwrappedProperty.$ref) {
+      return this.isEqual(
+        parentProperty.$ref ? this.dereference(parentProperty.$ref) : parentProperty,
+        unwrappedProperty.$ref ? this.dereference(unwrappedProperty.$ref) : unwrappedProperty
+      )
     }
 
     if ((!parentProperty.type || parentProperty.type === "object") && (!unwrappedProperty.type || unwrappedProperty.type === "object")) {
