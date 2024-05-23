@@ -1,7 +1,7 @@
 ﻿{
   "swagger": "2.0",
   "info": {
-    "title": "xms-enum-name",
+    "title": "incompatible-properties",
     "version": "1.0"
   },
   "paths": {
