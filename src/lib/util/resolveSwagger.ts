@@ -293,6 +293,23 @@ export class ResolveSwagger {
     if (!unwrappedProperty) {
       throw new Error("Null unwrapped property.")
     }
+
+    // Note: per https://editor-next.swagger.io/ tooltip when hovering over '$ref', 
+    // other properties must be ignored when $ref is present:
+    //
+    //  $ref: string
+    //  Any time a subschema is expected, a schema may instead use an object containing a "$ref" property. 
+    //  The value of the $ref is a URI Reference. Resolved against the current URI base, 
+    //  it identifies the URI of a schema to use. 
+    //  All other properties in a "$ref" object MUST be ignored.
+    //
+    if (parentProperty.$ref || unwrappedProperty.$ref) {
+      return this.isEqual(
+        parentProperty.$ref ? this.dereference(parentProperty.$ref) : parentProperty,
+        unwrappedProperty.$ref ? this.dereference(unwrappedProperty.$ref) : unwrappedProperty
+      )
+    }
+
     if ((!parentProperty.type || parentProperty.type === "object") && (!unwrappedProperty.type || unwrappedProperty.type === "object")) {
       let parentPropertyToCompare = parentProperty
       let unwrappedPropertyToCompare = unwrappedProperty
