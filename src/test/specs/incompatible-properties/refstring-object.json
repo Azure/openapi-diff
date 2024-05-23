@@ -1,7 +1,7 @@
 ﻿{
   "swagger": "2.0",
   "info": {
-    "title": "incompatible-properties",
+    "title": "incompatible-properties-refstring-object",
     "version": "1.0"
   },
   "paths": {},
