@@ -12,9 +12,7 @@ import { fileUrl } from "./fileUrl"
 // For example, these should be incompatible:
 // 1. "bar": { "type":"string" }
 // 2. "bar": { "$ref":"#/definitions/MyObject" }, "MyObject": { "type": "object" }
-test.each(
-  ["string-object", "string-refobject", "refstring-object", "refstring-refobject"]
-)("incompatible-properties-%s", async (prop) => {
+test.each(["string-object", "string-refobject", "refstring-object", "refstring-refobject"])("incompatible-properties-%s", async prop => {
   const diff = new OpenApiDiff({})
   const file = `src/test/specs/incompatible-properties/${prop}.json`
   const filePath = fileUrl(path.resolve(file))
