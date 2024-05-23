@@ -303,31 +303,16 @@ export class ResolveSwagger {
     //  it identifies the URI of a schema to use. 
     //  All other properties in a "$ref" object MUST be ignored.
     //
-    if (parentProperty.$ref || unwrappedProperty.$ref) {
-      return this.isEqual(
-        parentProperty.$ref ? this.dereference(parentProperty.$ref) : parentProperty,
-        unwrappedProperty.$ref ? this.dereference(unwrappedProperty.$ref) : unwrappedProperty
-      )
-    }
+    parentProperty = parentProperty.$ref ? this.dereference(parentProperty.$ref) : parentProperty
+    unwrappedProperty = unwrappedProperty.$ref ? this.dereference(unwrappedProperty.$ref) : unwrappedProperty
 
     if ((!parentProperty.type || parentProperty.type === "object") && (!unwrappedProperty.type || unwrappedProperty.type === "object")) {
-      let parentPropertyToCompare = parentProperty
-      let unwrappedPropertyToCompare = unwrappedProperty
-      if (parentProperty.$ref) {
-        parentPropertyToCompare = this.dereference(parentProperty.$ref)
-      }
-      if (unwrappedProperty.$ref) {
-        unwrappedPropertyToCompare = this.dereference(unwrappedProperty.$ref)
-      }
-      if (parentPropertyToCompare === unwrappedPropertyToCompare) {
-        return true
-      }
-      return false
-    }
-    if (parentProperty.type === "array" && unwrappedProperty.type === "array") {
+      return (parentProperty === unwrappedProperty)
+    } else if (parentProperty.type === "array" && unwrappedProperty.type === "array") {
       return this.isEqual(parentProperty.items, unwrappedProperty.items)
+    } else {
+      return (parentProperty.type === unwrappedProperty.type) && (parentProperty.format === unwrappedProperty.format)
     }
-    return parentProperty.type === unwrappedProperty.type && parentProperty.format === unwrappedProperty.format
   }
 
   private checkCircularAllOf(schema: any, visited: any[] | undefined, referenceChain: string[]) {
