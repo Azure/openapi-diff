@@ -8,6 +8,7 @@
   },
   "description": "OpenApi Specification Diff tool",
   "license": "MIT",
+  "type": "module",
   "dependencies": {
     "@ts-common/fs": "^0.2.0",
     "@ts-common/iterator": "^0.3.6",
@@ -33,16 +34,20 @@
     "yargs-parser": "^13.1.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.4.0",
+    "@types/eslint__js": "^8.42.3",
     "@types/jest": "^29.5.12",
     "@types/js-yaml": "^3.12.1",
     "@types/json-pointer": "^1.0.30",
     "@types/node": "^18.11.9",
     "@types/request": "^2.48.1",
     "@types/yargs": "^13.0.0",
+    "eslint": "^8.57.0",
     "jest": "^29.7.0",
     "prettier": "^3.3.2",
     "ts-jest": "^29.1.4",
-    "typescript": "~5.4.5"
+    "typescript": "~5.4.5",
+    "typescript-eslint": "^7.13.0"
   },
   "homepage": "https://github.com/Azure/openapi-diff",
   "repository": {
@@ -92,6 +97,11 @@
     "tsc": "tsc",
     "ts.test": "tsc && jest",
     "test": "npm run dn.test && npm run ts.test",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --fix",
+    "prettier": "prettier . --check --end-of-line auto",
+    "prettier:debug": "prettier . --check --end-of-line auto --log-level debug",
+    "prettier:write": "prettier . --end-of-line auto --write",
     "prepack": "npm ci && npm run dn.publish && tsc"
   }
 }
