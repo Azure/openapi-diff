@@ -220,5 +220,6 @@ dist/lib/dlls/**/*
 
 *.d.ts.map
 *.js
+!eslint.config.js
 coverage/
 dlls/

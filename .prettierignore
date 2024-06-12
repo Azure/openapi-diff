@@ -1,0 +1,5 @@
+*.json
+*.md
+*.jsonc
+.prettierrc
+azure-pipelines.yml
