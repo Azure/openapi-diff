@@ -903,8 +903,46 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void ChangedParameterOrder()
         {
+            // Reference:
+            // https://github.com/Azure/autorest/blob/main/docs/generate/how-autorest-generates-code-from-openapi.md#specifying-required-parameters-and-properties
             var messages = CompareSwagger("parameter_order_change.json").ToArray();
             Assert.Equal(2, messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id).Count());
+        }
+
+        [Fact]
+        public void ChangedGlobalParameterOrder()
+        {
+            var messages = CompareSwagger("global_parameter_order_change.json").ToArray();
+
+            // Changed order from:
+            //    ( Implicit , Method1  , Client  , Method2 )
+            // to ( Method2  , Implicit , Method1 , Client  )
+            //
+            // So there are two errors reported:
+            // - On Method1, as now it is before Method2
+            // - On Method2, as now it is after Method1
+            //
+            // There are no errors for Implicit and Client as their order doesn't matter.
+            //
+            // Reference: https://github.com/Azure/autorest/blob/main/docs/extensions/readme.md#x-ms-parameter-location
+            Assert.Equal(2, messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id).Count());
+        }
+
+        [Fact]
+        public void DidNotChangeGlobalParameterOrder()
+        {
+            var messages = CompareSwagger("global_parameter_order_no_change.json").ToArray();
+
+            // Changed order from:
+            //    ( Implicit , Method1 , Client  , Method2  )
+            // to ( Method1  , Client  , Method2 , Implicit )
+            //
+            // So there is no issue with order change:
+            // The Method1 param still comes before Method2 param, and order
+            // of Implicit and Client doesn't matter.
+            //
+            // Reference: https://github.com/Azure/autorest/blob/main/docs/extensions/readme.md#x-ms-parameter-location
+            Assert.Equal(0, messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id).Count());
         }
 
         [Fact]

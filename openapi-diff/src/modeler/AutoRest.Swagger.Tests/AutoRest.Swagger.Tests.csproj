@@ -11,9 +11,11 @@
 
   <ItemGroup>
     <None Remove="Resource\Swagger\new\enum_as_string.json" />
-    <None Remove="Resource\Swagger\new\parameter_order_change_global.json" />
+    <None Remove="Resource\Swagger\new\global_parameter_no_order_change.json" />
+    <None Remove="Resource\Swagger\new\global_parameter_order_change.json" />
     <None Remove="Resource\Swagger\old\enum_as_string.json" />
-    <None Remove="Resource\Swagger\old\parameter_order_change_global.json" />
+    <None Remove="Resource\Swagger\old\global_parameter_no_order_change.json" />
+    <None Remove="Resource\Swagger\old\global_parameter_order_change.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +25,9 @@
     <Content Include="Resource\Swagger\new\changed_operation_id.json" />
     <Content Include="Resource\Swagger\new\enum_as_string.json" />
     <Content Include="Resource\Swagger\new\enum_values_changed.json" />
+    <Content Include="Resource\Swagger\new\global_parameter_no_order_change.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resource\Swagger\new\misc_checks_01.json" />
     <Content Include="Resource\Swagger\new\misc_checks_02.json" />
     <Content Include="Resource\Swagger\new\operation_check_01.json" />
@@ -30,7 +35,7 @@
     <Content Include="Resource\Swagger\new\operation_check_03.json" />
     <Content Include="Resource\Swagger\new\operation_check_04.json" />
     <Content Include="Resource\Swagger\new\operation_check_05.json" />
-    <Content Include="Resource\Swagger\new\parameter_order_change_global.json">
+    <Content Include="Resource\Swagger\new\global_parameter_order_change.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resource\Swagger\new\param_check_01.json" />
@@ -62,7 +67,10 @@
     <Content Include="Resource\Swagger\old\added_required_property.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resource\Swagger\old\parameter_order_change_global.json">
+    <Content Include="Resource\Swagger\old\global_parameter_no_order_change.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\Swagger\old\global_parameter_order_change.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resource\Swagger\old\recursive_model.json" />

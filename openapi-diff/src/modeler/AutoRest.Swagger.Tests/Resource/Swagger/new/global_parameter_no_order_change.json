@@ -19,13 +19,13 @@
                         "$ref": "#/parameters/MethodLocationParam1"
                     },
                     {
-                        "$ref": "#/parameters/ImplicitLocationParam"
+                        "$ref": "#/parameters/ClientLocationParam"
                     },
                     {
                         "$ref": "#/parameters/MethodLocationParam2"
                     },
                     {
-                        "$ref": "#/parameters/ClientLocationParam"
+                        "$ref": "#/parameters/ImplicitLocationParam"
                     }
                 ]
             }
