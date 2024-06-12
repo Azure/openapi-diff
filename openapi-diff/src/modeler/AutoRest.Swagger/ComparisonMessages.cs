@@ -310,7 +310,7 @@
         {
             Id = 1023,
             Code = nameof(ComparisonMessages.TypeFormatChanged),
-            Message = "The new version has a different format '{0}' than the previous one '{1}'.",
+            Message = "The new version has a different format '{0}' than the previous one '{1}'. Path (new): '{2}'.",
             Type = MessageType.Update
         };
 

@@ -114,6 +114,10 @@ namespace AutoRest.Swagger
 
         public string NewLocation() => Location(NewDoc, NewJson());
 
+        /// <summary>
+        /// The output of this method call is parsed into OadMessage type in openapi-alps,
+        /// by openapi-alps breaking-change.ts / runOad function.
+        /// </summary>
         public string GetValidationMessagesAsJson()
         {
             var rawMessage = new JsonComparisonMessage

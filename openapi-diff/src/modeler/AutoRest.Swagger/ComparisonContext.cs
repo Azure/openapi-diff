@@ -101,6 +101,10 @@ namespace AutoRest.Swagger
             }
         }
 
+        public string PathJsonPointerInPreviousDoc => Path.JsonPointer(_PreviousRootDoc);
+
+        public string PathJsonPointerInCurrentDoc => Path.JsonPointer(_CurrentRootDoc);
+
         private IList<ComparisonMessage> _messages = new List<ComparisonMessage>();
     }
 

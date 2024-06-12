@@ -129,10 +129,9 @@ namespace AutoRest.Swagger.Tests
             var messages = CompareSwagger("removed_definition.json").ToArray();
             var missing = messages.Where(m => m.Id == ComparisonMessages.RemovedDefinition.Id);
             Assert.NotEmpty(missing);
-            var missing0 = missing.First();
-            Assert.Equal(Category.Error, missing0.Severity);
-            Assert.NotNull(missing0.NewJson());
-            Assert.NotNull(missing0.OldJson());
+            ComparisonMessage firstMessage = missing.First();
+            Assert.Equal(Category.Error, firstMessage.Severity);
+            Assert.NotNull(firstMessage.NewJson());
         }
 
         /// <summary>
@@ -183,13 +182,16 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void PropertyTypeFormatChanged()
         {
-            var messages = CompareSwagger("misc_checks_01.json").ToArray();
-            var missing = messages.Where(m => m.Id == ComparisonMessages.TypeFormatChanged.Id);
+            ComparisonMessage[] messages = CompareSwagger("misc_checks_01.json").ToArray();
+            List<ComparisonMessage> missing =
+                messages.Where(m => m.Id == ComparisonMessages.TypeFormatChanged.Id).ToList();
             Assert.NotEmpty(missing);
-            var error = missing.Where(err => err.NewJsonRef.StartsWith("new/misc_checks_01.json#/definitions/")).FirstOrDefault();
+            ComparisonMessage error = missing.FirstOrDefault(err => err.NewJsonRef.StartsWith("new/misc_checks_01.json#/definitions/"));
             Assert.NotNull(error);
             Assert.Equal(Category.Error, error.Severity);
             Assert.Equal("new/misc_checks_01.json#/definitions/Database/properties/c", error.NewJsonRef);
+            Assert.Contains(error.OldJsonRef, error.Message);
+            Assert.Contains(error.NewJsonRef, error.Message);
         }
 
         /// <summary>

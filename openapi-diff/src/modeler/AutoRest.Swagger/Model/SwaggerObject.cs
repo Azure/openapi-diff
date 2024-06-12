@@ -285,9 +285,14 @@ namespace AutoRest.Swagger.Model
 
             if (prior.Format == null && Format != null ||
                 prior.Format != null && Format == null ||
-                prior.Format != null && Format != null && !prior.Format.Equals(Format) && !isFormatChangeAllowed(context,prior))
+                prior.Format != null && Format != null && !prior.Format.Equals(Format) && !isFormatChangeAllowed(context, prior))
             {
-                context.LogBreakingChange(ComparisonMessages.TypeFormatChanged, Format, prior.Format);
+                context.LogBreakingChange(
+                    ComparisonMessages.TypeFormatChanged,
+                    Format,
+                    prior.Format,
+                    context.PathJsonPointerInCurrentDoc                    
+                    );
             }
         }
 
