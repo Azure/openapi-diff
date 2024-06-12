@@ -55,6 +55,5 @@ steps:
     RoslynAnalyzers: false
     SDLNativeRules: false
     Semmle: false
-    TSLint: false
     ToolLogsNotFoundAction: 'Standard'
   condition: and(succeeded(), eq(variables['Agent.OS'],'Windows_NT')) # CredScan only supported on Windows
