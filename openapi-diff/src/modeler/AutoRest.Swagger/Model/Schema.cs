@@ -189,7 +189,7 @@ namespace AutoRest.Swagger.Model
         /// If the new model has new required properties that are not readOnly, it is a breaking change.
         /// In case there are any issues with property definitions, like:
         /// - properties being listed as required but not actually defined,
-        /// - properties changing their read-only status
+        /// - or properties changing their read-only status.
         /// Then we conservatively also treat such cases as breaking changes.
         ///
         /// Related:
