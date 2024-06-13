@@ -184,7 +184,7 @@ namespace AutoRest.Swagger.Model
         }
 
         /// <summary>
-        /// Compares list of required properties of this model.
+        /// Compares list of required properties of this (i.e. "new") model to the previous (i.e. "old") model.
         ///
         /// If the new model has new required properties that are not readOnly, it is a breaking change.
         /// In case there are any issues with property definitions, like:
