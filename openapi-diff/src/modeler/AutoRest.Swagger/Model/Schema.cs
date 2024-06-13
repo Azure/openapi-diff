@@ -207,7 +207,7 @@ namespace AutoRest.Swagger.Model
                 return;
             }
 
-            List<string> newRequiredNonReadOnlyPropNames = new List<string>();
+            var newRequiredNonReadOnlyPropNames = new List<string>();
             foreach (string requiredPropName in Required)
             {
                 Properties.TryGetValue(requiredPropName, out Schema propSchema);
