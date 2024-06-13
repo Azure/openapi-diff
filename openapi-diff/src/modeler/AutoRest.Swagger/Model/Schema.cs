@@ -184,27 +184,54 @@ namespace AutoRest.Swagger.Model
         }
 
         /// <summary>
-        /// Comapares list of required properties of this model
+        /// Compares list of required properties of this model.
+        ///
+        /// If the new model has new required properties that are not readOnly, it is a breaking change.
+        /// In case there are any issues with property definitions, like e.g. properties being listed as required
+        /// but not actually defined, conservatively it is also assumed to be a breaking change.
+        ///
+        /// Related:
+        /// https://stackoverflow.com/questions/40113049/how-to-specify-if-a-field-is-optional-or-required-in-openapi-swagger
+        /// https://github.com/Azure/azure-sdk-tools/issues/7184
         /// </summary>
-        /// <param name="context">Comaprision Context</param>
+        /// <param name="context">Comparison Context</param>
         /// <param name="priorSchema">Schema of the old model</param>
         private void CompareRequired(ComparisonContext<ServiceDefinition> context, Schema priorSchema)
         {
+            // If Required list is null then no properties are required in the new model,
+            // so there are no breaking changes.
             if (Required == null)
             {
                 return;
             }
 
-            if (Required != null && priorSchema.Required == null)
+            List<string> newRequiredNonReadOnlyPropNames = new List<string>();
+            foreach (string requiredPropName in Required)
             {
-                context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, String.Join(", ", Required));
-                return;
+                Properties.TryGetValue(requiredPropName, out Schema propSchema);
+                priorSchema.Properties.TryGetValue(requiredPropName, out Schema priorPropSchema);
+                if (propSchema is null || priorPropSchema is null)
+                {
+                    // If propSchema is null then the property is marked as required but not actually defined in the model.
+                    // This is model issue and we report it.
+                    // If priorPropSchema is null then the property was not actually defined in the old model,
+                    // so we conservatively assume it is a newly required property, even if the old
+                    // model listed this not-defined property as required (which would be the old model definition issue).
+                    newRequiredNonReadOnlyPropNames.Add(requiredPropName);
+                    break;
+                }
+
+                bool propIsReadOnly = propSchema.ReadOnly && priorPropSchema.ReadOnly == true;
+                bool propWasRequired = priorSchema.Required?.Contains(requiredPropName) == true;
+                if (!propWasRequired && !propIsReadOnly)
+                {
+                    newRequiredNonReadOnlyPropNames.Add(requiredPropName);
+                }
             }
 
-            List<string> addedRequiredProperties = Required.Except(priorSchema.Required).ToList();
-            if (addedRequiredProperties.Count > 0)
+            if (newRequiredNonReadOnlyPropNames.Any())
             {
-                context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, String.Join(", ", addedRequiredProperties));
+                context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, string.Join(", ", newRequiredNonReadOnlyPropNames));
             }
         }
 

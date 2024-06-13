@@ -342,18 +342,33 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
-        /// Verifies that if you add a required property in the model, it's found.
+        /// Verifies that if you add a required property in the model, it is reported.
         /// </summary>
         [Fact]
         public void AddedRequiredProperty()
         {
-            var messages = CompareSwagger("added_required_property.json").ToArray();
-            var missing = messages.Where(m => m.Severity == Category.Error && m.Id == ComparisonMessages.AddedRequiredProperty.Id);
+            ComparisonMessage[] messages = CompareSwagger("added_required_property.json").ToArray();
+            List<ComparisonMessage> missing = messages.Where(
+                m => m.Severity == Category.Error && m.Id == ComparisonMessages.AddedRequiredProperty.Id).ToList();
             Assert.Equal(2, missing.Count());
-            var error = missing.First();
+            ComparisonMessage error = missing.First();
             Assert.Equal("new/added_required_property.json#/paths/~1api~1Parameters/put/parameters/0/schema", error.NewJsonRef);
             Assert.NotNull(error.NewJson());
             Assert.NotNull(error.OldJson());
+        }
+
+        /// <summary>
+        /// Verifies that if you add a required property in the model on a property that is 'readOnly',
+        /// it is not reported.
+        /// Details: https://github.com/Azure/azure-sdk-tools/issues/7184
+        /// </summary>
+        [Fact]
+        public void AddedReadOnlyRequiredProperty()
+        {
+            ComparisonMessage[] messages = CompareSwagger("added_readonly_required_property.json").ToArray();
+            List<ComparisonMessage> addedReqPropMessages = messages.Where(
+                m => m.Severity == Category.Error && m.Id == ComparisonMessages.AddedRequiredProperty.Id).ToList();
+            Assert.Equal(0, addedReqPropMessages.Count);
         }
 
         /// <summary>
