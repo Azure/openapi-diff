@@ -224,11 +224,11 @@ namespace AutoRest.Swagger.Model
                 }
 
                 bool propWasRequired = priorSchema.Required?.Contains(requiredPropName) == true;
-                // Note that property is considered read-only only if it was consistently read-only in the old and new model.
+                // Note that property is considered read-only only if it is consistently read-only both in the old and new models.
                 bool propIsReadOnly = propSchema.ReadOnly && priorPropSchema.ReadOnly;
                 if (!propWasRequired && !propIsReadOnly)
                 {
-                    // Property is newly required as is not read-only, hence it is a breaking change.
+                    // Property is newly required and it is not read-only, hence it is a breaking change.
                     newRequiredNonReadOnlyPropNames.Add(requiredPropName);
                 }
             }
