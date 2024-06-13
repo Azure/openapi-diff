@@ -213,18 +213,19 @@ namespace AutoRest.Swagger.Model
                 if (propSchema is null || priorPropSchema is null)
                 {
                     // If propSchema is null then the property is marked as required but not actually defined in the model.
-                    // This is model issue and we report it.
+                    // This is a model definition issue and we report it.
                     // If priorPropSchema is null then the property was not actually defined in the old model,
-                    // so we conservatively assume it is a newly required property, even if the old
-                    // model listed this not-defined property as required (which would be the old model definition issue).
+                    // so we conservatively assume it is a newly required property, even if the old model
+                    // listed this not-then-defined property as required (which would be the old model definition issue).
                     newRequiredNonReadOnlyPropNames.Add(requiredPropName);
                     break;
                 }
 
-                bool propIsReadOnly = propSchema.ReadOnly && priorPropSchema.ReadOnly == true;
                 bool propWasRequired = priorSchema.Required?.Contains(requiredPropName) == true;
+                bool propIsReadOnly = propSchema.ReadOnly && priorPropSchema.ReadOnly;
                 if (!propWasRequired && !propIsReadOnly)
                 {
+                    // Property is newly required as is not read-only, hence it is a breaking change.
                     newRequiredNonReadOnlyPropNames.Add(requiredPropName);
                 }
             }

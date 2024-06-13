@@ -105,7 +105,7 @@ test("expands allOf full covers", async () => {
     {
       id: "1034",
       code: "AddedRequiredProperty",
-      message: "The new version has new required property 'a' that was not found in the old version.",
+      message: "The new version lists new non-read-only properties as required: 'a'. These properties were not listed as required in the old version.",
       old: {
         ref: `${oldFilePath}#/paths/~1api~1Parameters/put/parameters/0/schema`,
         path: "paths./api/Parameters.put.parameters[0].schema",
@@ -141,7 +141,7 @@ test("expands allOf full covers", async () => {
     {
       id: "1034",
       code: "AddedRequiredProperty",
-      message: "The new version has new required property 'a' that was not found in the old version.",
+      message: "The new version lists new non-read-only properties as required: 'a'. These properties were not listed as required in the old version.",
       old: {
         ref: `${oldFilePath}#/definitions/Database`,
         path: "definitions.Database",
