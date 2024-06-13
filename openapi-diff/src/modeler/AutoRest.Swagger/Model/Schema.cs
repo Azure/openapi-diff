@@ -187,8 +187,10 @@ namespace AutoRest.Swagger.Model
         /// Compares list of required properties of this model.
         ///
         /// If the new model has new required properties that are not readOnly, it is a breaking change.
-        /// In case there are any issues with property definitions, like e.g. properties being listed as required
-        /// but not actually defined, conservatively it is also assumed to be a breaking change.
+        /// In case there are any issues with property definitions, like:
+        /// - properties being listed as required but not actually defined,
+        /// - properties changing their read-only status
+        /// Then we conservatively also treat such cases as breaking changes.
         ///
         /// Related:
         /// https://stackoverflow.com/questions/40113049/how-to-specify-if-a-field-is-optional-or-required-in-openapi-swagger
@@ -222,6 +224,7 @@ namespace AutoRest.Swagger.Model
                 }
 
                 bool propWasRequired = priorSchema.Required?.Contains(requiredPropName) == true;
+                // Note that property is considered read-only only if it was consistently read-only in the old and new model.
                 bool propIsReadOnly = propSchema.ReadOnly && priorPropSchema.ReadOnly;
                 if (!propWasRequired && !propIsReadOnly)
                 {
