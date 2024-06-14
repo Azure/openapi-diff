@@ -1,0 +1,26 @@
+parameters:
+  - name: ArtifactName
+    type: string
+    default: 'drop'
+
+steps:
+  - script: npm ci
+    displayName: npm ci
+  - script: npm run lint
+    displayName: lint
+  - script: npm run prettier
+    displayName: prettier
+  - script: npm test
+    displayName: test
+  - script: npm pack
+    displayName: pack
+  - task: CopyFiles@2
+    displayName: 'Copy Files to Staging'
+    inputs:
+      Contents: '*.tgz'
+      TargetFolder: $(Build.ArtifactStagingDirectory)
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: $(Build.ArtifactStagingDirectory)
+      artifactName: ${{ parameters.ArtifactName }}
