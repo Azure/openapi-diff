@@ -2,7 +2,7 @@ trigger:
 - main
 
 extends:
-  template: /eng/templates/stages/1es-redirect.yml
+  template: /eng/1es-redirect.yml
   parameters:
     stages:
     - stage: Build
