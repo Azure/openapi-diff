@@ -22,6 +22,8 @@ pool:
 steps:
 - script: npm ci
   displayName: npm ci
+- script: npm run lint
+  displayName: lint
 - script: npm test
   displayName: test
 - script: npm pack
