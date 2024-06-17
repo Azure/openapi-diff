@@ -1,90 +1,93 @@
 trigger:
 - main
 
-stages:
-  - stage: Build
-    variables:
-      - template: /eng/image.yml
-    jobs:
-      - job: Build_linux
-
-        pool:
-          name: $(LINUXPOOL)
-          image: $(LINUXVMIMAGE)
-          os: linux
-
-        steps:
-          template: /eng/test-steps.yml
-          parameters:
-            ArtifactName: drop-linux
-
-      - job: Build_Windows
-
-        pool:
-          name: $(WINDOWSPOOL)
-          image: $(WINDOWSVMIMAGE)
-          os: windows
-
-        steps:
-          template: /eng/test-steps.yml
-          parameters:
-            ArtifactName: drop
-
-
-  # only include if running on `internal` build with manual queue, otherwise never include
-  - ${{ if and(in(variables['Build.Reason'], 'Manual', ''), eq(variables['System.TeamProject'], 'internal'))}}:
-    - stage: Publish
-      displayName: Publish
-      dependsOn: Build_And_Test
-
+extends:
+  template: /eng/templates/stages/1es-redirect.yml
+  parameters:
+    stages:
+    - stage: Build
+      variables:
+        - template: /eng/image.yml
       jobs:
-        - deployment: Publish
-          environment: 'package-publish'
+        - job: Build_linux
+
           pool:
-            name: azsdk-pool-mms-ubuntu-2004-general
-            image: azsdk-pool-mms-ubuntu-2004-1espt
+            name: $(LINUXPOOL)
+            image: $(LINUXVMIMAGE)
             os: linux
 
-          strategy:
-            runOnce:
-              deploy:
-                steps:
-                - checkout: self
-                  submodules: false
+          steps:
+            template: /eng/test-steps.yml
+            parameters:
+              ArtifactName: drop-linux
 
-                - download: current
-                  artifact: drop
-                  timeoutInMinutes: 5
+        - job: Build_Windows
 
-                - task: PowerShell@2
-                  inputs:
-                    filePath: '$(Build.SourcesDirectory)/eng/scripts/determine-release-tag.ps1'
-                    failOnStderr: true
-                    pwsh: true
+          pool:
+            name: $(WINDOWSPOOL)
+            image: $(WINDOWSVMIMAGE)
+            os: windows
 
-                - pwsh: |
-                    Write-Host "Will deploy with tag of $(Tag)"
-                    Get-ChildItem "$(Pipeline.Workspace)/drop" -Recurse -Force `
-                      | Where-Object { $_.Name -like "*.tgz" } `
-                      | Copy-Item -Destination "$(Build.ArtifactStagingDirectory)"
+          steps:
+            template: /eng/test-steps.yml
+            parameters:
+              ArtifactName: drop
 
-                    Get-ChildItem "$(Build.ArtifactStagingDirectory)" -Recurse -Force | % { Write-Host $_.FullName }
-                  displayName: Move artifact to $(Build.ArtifactStagingDirectory)
 
-                - task: EsrpRelease@7
-                  inputs:
-                    displayName: 'Publish oav to ESRP'
-                    ConnectedServiceName: 'Azure SDK Engineering System'
-                    ClientId: '5f81938c-2544-4f1f-9251-dd9de5b8a81b'
-                    KeyVaultName: 'AzureSDKEngKeyVault'
-                    AuthCertName: 'azure-sdk-esrp-release-auth-certificate'
-                    SignCertName: 'azure-sdk-esrp-release-sign-certificate'
-                    Intent: 'PackageDistribution'
-                    ContentType: 'npm'
-                    FolderLocation: $(Build.ArtifactStagingDirectory)
-                    Owners: ${{ coalesce(variables['Build.RequestedForEmail'], 'azuresdk@microsoft.com') }}
-                    Approvers: 'azuresdk@microsoft.com'
-                    ServiceEndpointUrl: 'https://api.esrp.microsoft.com'
-                    MainPublisher: 'ESRPRELPACMANTEST'
-                    DomainTenantId: '72f988bf-86f1-41af-91ab-2d7cd011db47'
-                    productstate: $(Tag)
+    # only include if running on `internal` build with manual queue, otherwise never include
+    - ${{ if and(in(variables['Build.Reason'], 'Manual', ''), eq(variables['System.TeamProject'], 'internal'))}}:
+      - stage: Publish
+        displayName: Publish
+        dependsOn: Build_And_Test
+
+        jobs:
+          - deployment: Publish
+            environment: 'package-publish'
+            pool:
+              name: azsdk-pool-mms-ubuntu-2004-general
+              image: azsdk-pool-mms-ubuntu-2004-1espt
+              os: linux
+
+            strategy:
+              runOnce:
+                deploy:
+                  steps:
+                  - checkout: self
+                    submodules: false
+
+                  - download: current
+                    artifact: drop
+                    timeoutInMinutes: 5
+
+                  - task: PowerShell@2
+                    inputs:
+                      filePath: '$(Build.SourcesDirectory)/eng/scripts/determine-release-tag.ps1'
+                      failOnStderr: true
+                      pwsh: true
+
+                  - pwsh: |
+                      Write-Host "Will deploy with tag of $(Tag)"
+                      Get-ChildItem "$(Pipeline.Workspace)/drop" -Recurse -Force `
+                        | Where-Object { $_.Name -like "*.tgz" } `
+                        | Copy-Item -Destination "$(Build.ArtifactStagingDirectory)"
+
+                      Get-ChildItem "$(Build.ArtifactStagingDirectory)" -Recurse -Force | % { Write-Host $_.FullName }
+                    displayName: Move artifact to $(Build.ArtifactStagingDirectory)
+
+                  - task: EsrpRelease@7
+                    inputs:
+                      displayName: 'Publish oav to ESRP'
+                      ConnectedServiceName: 'Azure SDK Engineering System'
+                      ClientId: '5f81938c-2544-4f1f-9251-dd9de5b8a81b'
+                      KeyVaultName: 'AzureSDKEngKeyVault'
+                      AuthCertName: 'azure-sdk-esrp-release-auth-certificate'
+                      SignCertName: 'azure-sdk-esrp-release-sign-certificate'
+                      Intent: 'PackageDistribution'
+                      ContentType: 'npm'
+                      FolderLocation: $(Build.ArtifactStagingDirectory)
+                      Owners: ${{ coalesce(variables['Build.RequestedForEmail'], 'azuresdk@microsoft.com') }}
+                      Approvers: 'azuresdk@microsoft.com'
+                      ServiceEndpointUrl: 'https://api.esrp.microsoft.com'
+                      MainPublisher: 'ESRPRELPACMANTEST'
+                      DomainTenantId: '72f988bf-86f1-41af-91ab-2d7cd011db47'
+                      productstate: $(Tag)
