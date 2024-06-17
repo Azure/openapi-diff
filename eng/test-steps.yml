@@ -20,7 +20,7 @@ steps:
       Contents: '*.tgz'
       TargetFolder: $(Build.ArtifactStagingDirectory)
 
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathtoPublish: $(Build.ArtifactStagingDirectory)
-      artifactName: ${{ parameters.ArtifactName }}
+  - template: /eng/publish-1es-artifact.yml
+    parameters:
+      ArtifactName: ${{ parameters.ArtifactName }}
+      ArtifactPath: $(Build.ArtifactStagingDirectory)
