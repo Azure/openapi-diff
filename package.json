@@ -9,7 +9,7 @@
   "description": "OpenApi Specification Diff tool",
   "license": "MIT",
   "dependencies": {
-    "@biomejs/biome": "^1.8.0",
+    "@biomejs/biome": "^1.8.1",
     "@ts-common/fs": "^0.2.0",
     "@ts-common/iterator": "^0.3.6",
     "@ts-common/json": "^0.3.1",
