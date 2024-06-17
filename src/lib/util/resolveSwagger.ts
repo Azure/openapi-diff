@@ -27,8 +27,7 @@ export function mergeObjects<T extends sm.MutableStringMap<Data>>(source: T, tar
         result[key] = sourceProperty
       } else if (!Array.isArray(targetProperty)) {
         throw new Error(
-          `Cannot merge ${key} from source object into target object because the same property ` +
-            `in target object is not (of the same type) an Array.`
+          `Cannot merge ${key} from source object into target object because the same property in target object is not (of the same type) an Array.`
         )
       } else {
         result[key] = mergeArrays(sourceProperty, targetProperty)
@@ -69,7 +68,7 @@ function getParamKey(source: any) {
  */
 function getNextKey(source: sm.MutableStringMap<Data>) {
   const result = sm.keys(source).reduce((a, b) => (a > b ? a : b))
-  if (result == undefined) {
+  if (result === undefined) {
     return "0"
   }
   return (+(result as string) + 1).toString()
@@ -122,7 +121,7 @@ export class ResolveSwagger {
         paths[property] = v
       }
       swagger.paths = mergeObjects(xmsPaths, paths)
-      delete swagger["x-ms-paths"]
+      swagger["x-ms-paths"] = undefined
     }
   }
 
@@ -145,7 +144,7 @@ export class ResolveSwagger {
             paths[property][key].parameters = mergeParameters(pathsLevelParameters, operationParam)
           }
         }
-        delete (v as any).parameters
+        ;(v as any).parameters = undefined
       }
     }
   }
@@ -187,7 +186,7 @@ export class ResolveSwagger {
   private transformAdditionalProperty(schema: any) {
     if (typeof schema?.additionalProperties === "boolean") {
       if (!schema?.additionalProperties) {
-        delete schema.additionalProperties
+        schema.additionalProperties = undefined
       } else {
         schema.additionalProperties = {}
       }
@@ -238,7 +237,7 @@ export class ResolveSwagger {
       if (allOfSchema.$ref) {
         allOfSchema = this.dereference(allOfSchema.$ref)
         if (!allOfSchema) {
-          throw new Error("Invalid reference:" + allOfSchema.$ref)
+          throw new Error(`Invalid reference:${allOfSchema.$ref}`)
         }
       }
       if (allOfSchema.allOf) {
@@ -308,11 +307,11 @@ export class ResolveSwagger {
 
     if ((!parentProperty.type || parentProperty.type === "object") && (!unwrappedProperty.type || unwrappedProperty.type === "object")) {
       return parentProperty === unwrappedProperty
-    } else if (parentProperty.type === "array" && unwrappedProperty.type === "array") {
-      return this.isEqual(parentProperty.items, unwrappedProperty.items)
-    } else {
-      return parentProperty.type === unwrappedProperty.type && parentProperty.format === unwrappedProperty.format
     }
+    if (parentProperty.type === "array" && unwrappedProperty.type === "array") {
+      return this.isEqual(parentProperty.items, unwrappedProperty.items)
+    }
+    return parentProperty.type === unwrappedProperty.type && parentProperty.format === unwrappedProperty.format
   }
 
   private checkCircularAllOf(schema: any, visited: any[] | undefined, referenceChain: string[]) {
@@ -320,7 +319,7 @@ export class ResolveSwagger {
     referenceChain = referenceChain ? referenceChain : []
     if (schema) {
       if (visited.includes(schema)) {
-        throw new Error("Found circular allOf reference: " + referenceChain.join("-> "))
+        throw new Error(`Found circular allOf reference: ${referenceChain.join("-> ")}`)
       }
       if (!schema.allOf) {
         return
@@ -365,12 +364,10 @@ export class ResolveSwagger {
       if (definitions[model]) {
         if (definitions[model].$ref) {
           return this.dereferenceInner(definitions[model].$ref, visitedRefs)
-        } else {
-          return definitions[model]
         }
-      } else {
-        throw new Error("Invalid reference:" + ref)
+        return definitions[model]
       }
+      throw new Error(`Invalid reference:${ref}`)
     }
   }
   private dereference(ref: string) {
@@ -378,9 +375,8 @@ export class ResolveSwagger {
     if (model) {
       const refSet = new Set<string>()
       return this.dereferenceInner(ref, refSet)
-    } else {
-      throw new Error("Invalid ref: " + ref)
     }
+    throw new Error(`Invalid ref: ${ref}`)
   }
 
   private stringify(): string {

@@ -52,9 +52,9 @@ export type Messages = ReadonlyArray<Message>
 
 const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): ChangeProperties => {
   if (change.location) {
-    let position
-    let jsonPointer
-    if (change.path != undefined) {
+    let position: any
+    let jsonPointer: any
+    if (change.path !== undefined) {
       try {
         jsonPointer = pathToJsonPointer(change.path)
         const jsonValue = JSON_Pointer.get(pf.resolvedJson, jsonPointer)
@@ -77,11 +77,11 @@ const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): Ch
     const ref = parsedPath ? `${originalPosition.source}${jsonRefs.pathToPtr(parsedPath, true)}` : ""
     const location = `${originalPosition.source}:${originalPosition.line}:${(originalPosition.column as number) + 1}`
     return { ...change, ref, location }
-  } else {
-    return {}
   }
+  return {}
 }
 
+// biome-ignore lint/suspicious/noShadowRestrictedNames: This is a valid use case for shadowing.
 function escape(filePath: string) {
   return `"${filePath}"`
 }
@@ -101,7 +101,7 @@ export class OpenApiDiff {
    * @param {boolean} [options.matchApiVersion] A boolean flag indicating whether to consider api-version while comparing.
    */
   constructor(private options: Options) {
-    log.silly(`Initializing OpenApiDiff class`)
+    log.silly("Initializing OpenApiDiff class")
 
     if (this.options === null || this.options === undefined) {
       this.options = {}
@@ -126,7 +126,7 @@ export class OpenApiDiff {
    *
    */
   public async compare(oldSwagger: string, newSwagger: string, oldTag?: string, newTag?: string) {
-    log.silly(`compare is being called`)
+    log.silly("compare is being called")
     const results = []
     results[0] = await this.processViaAutoRest(oldSwagger, "old", oldTag)
     results[1] = await this.processViaAutoRest(newSwagger, "new", newTag)
@@ -139,7 +139,7 @@ export class OpenApiDiff {
    * @returns {string} Path to the dotnet executable.
    */
   public dotNetPath(): string {
-    log.silly(`dotNetPath is being called`)
+    log.silly("dotNetPath is being called")
 
     // Assume that dotnet is in the PATH
     return "dotnet"
@@ -151,7 +151,7 @@ export class OpenApiDiff {
    * @returns {string} Path to the autorest app.js file.
    */
   public autoRestPath(): string {
-    log.silly(`autoRestPath is being called`)
+    log.silly("autoRestPath is being called")
 
     // When oad is installed globally
     {
@@ -190,7 +190,7 @@ export class OpenApiDiff {
    * @returns {string} Path to the OpenApiDiff.dll.
    */
   public openApiDiffDllPath(): string {
-    log.silly(`openApiDiffDllPath is being called`)
+    log.silly("openApiDiffDllPath is being called")
 
     return escape(path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll"))
   }
@@ -206,7 +206,7 @@ export class OpenApiDiff {
    *
    */
   public async processViaAutoRest(swaggerPath: string, outputFileName: string, tagName?: string): Promise<ProcessedFile> {
-    log.silly(`processViaAutoRest is being called`)
+    log.silly("processViaAutoRest is being called")
 
     if (swaggerPath === null || swaggerPath === undefined || typeof swaggerPath.valueOf() !== "string" || !swaggerPath.trim().length) {
       throw new Error('swaggerPath is a required parameter of type "string" and it cannot be an empty string.')
@@ -276,7 +276,7 @@ export class OpenApiDiff {
    *
    */
   public async processViaOpenApiDiff(oldSwaggerFile: ProcessedFile, newSwaggerFile: ProcessedFile) {
-    log.silly(`processViaOpenApiDiff is being called`)
+    log.silly("processViaOpenApiDiff is being called")
 
     const oldSwagger = oldSwaggerFile.resolvedFileName
     const newSwagger = newSwaggerFile.resolvedFileName

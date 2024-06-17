@@ -59,17 +59,16 @@ export async function parseJson(specPath: string) {
     const res = makeRequest({ url: specPath, errorOnNon200Response: true })
     docCache[specPath] = res
     return res
-  } else {
-    // local filepath
-    try {
-      const fileContent = stripBOM(fs.readFileSync(specPath, "utf8"))
-      const result = parseContent(specPath, fileContent)
-      docCache[specPath] = result
-      return result
-    } catch (err) {
-      log.error(err)
-      return err
-    }
+  }
+  // local filepath
+  try {
+    const fileContent = stripBOM(fs.readFileSync(specPath, "utf8"))
+    const result = parseContent(specPath, fileContent)
+    docCache[specPath] = result
+    return result
+  } catch (err) {
+    log.error(err)
+    return err
   }
 }
 
@@ -89,9 +88,7 @@ export function parseContent(filePath: string, fileContent: string) {
   } else if (/.*\.ya?ml$/gi.test(filePath)) {
     result = YAML.safeLoad(fileContent)
   } else {
-    const msg =
-      `We currently support "*.json" and "*.yaml | *.yml" file formats for validating swaggers.\n` +
-      `The current file extension in "${filePath}" is not supported.`
+    const msg = `We currently support "*.json" and "*.yaml | *.yml" file formats for validating swaggers.\nThe current file extension in "${filePath}" is not supported.`
     throw new Error(msg)
   }
   return result
@@ -107,14 +104,13 @@ export function run(genfun: () => any) {
   const gen = genfun()
   // This is the async loop pattern
   function next(err?: unknown, answer?: unknown) {
-    let res
+    let res: any
     if (err) {
       // if err, throw it into the wormhole
       return gen.throw(err)
-    } else {
-      // if good value, send it
-      res = gen.next(answer)
     }
+    // if good value, send it
+    res = gen.next(answer)
     if (!res.done) {
       // if we are not at the end
       // we have an async request to
@@ -202,9 +198,9 @@ export function executePromisesSequentially(promiseFactories: ReadonlyArray<any>
  * @return {string} result A random string
  */
 export function generateRandomId(prefix: string, existingIds: object) {
-  let randomStr
+  let randomStr: string
   while (true) {
-    randomStr = Math.random().toString(36).substr(2, 12)
+    randomStr = Math.random().toString(36).substring(2, 14)
     if (prefix && typeof prefix.valueOf() === "string") {
       randomStr = prefix + randomStr
     }
@@ -260,7 +256,7 @@ export function parseReferenceInSwagger(reference: string) {
       const segments = reference.split("#")
       result.filePath = segments[0]
       result.localReference = {
-        value: "#" + segments[1],
+        value: `#${segments[1]}`,
         accessorProperty: segments[1].slice(1).replace("/", ".")
       }
     }
@@ -331,7 +327,7 @@ export function mergeObjects(source: { readonly [key: string]: unknown }, target
  * @returns {any} result - Returns the value that the ptr points to, in the doc.
  */
 export function getObject(doc: object, ptr: string) {
-  let result
+  let result: any
   try {
     result = jsonPointer.get(doc, ptr)
   } catch (err) {
@@ -351,7 +347,7 @@ export function getObject(doc: object, ptr: string) {
  * location provided by the ptr in the doc.
  */
 export function setObject(doc: object, ptr: string, value: unknown) {
-  let result
+  let result: any
   try {
     result = jsonPointer.set(doc, ptr, value)
   } catch (err) {
@@ -367,7 +363,7 @@ export function setObject(doc: object, ptr: string, value: unknown) {
  * @param {string} ptr The json reference pointer.
  */
 export function removeObject(doc: object, ptr: string) {
-  let result
+  let result: any
   try {
     result = jsonPointer.remove(doc, ptr)
   } catch (err) {
@@ -392,8 +388,8 @@ export function getProvider(path: string) {
   }
 
   const providerRegEx = /\/providers\/(:?[^{\/]+)/gi
-  let result
-  let pathMatch
+  let result = ""
+  let pathMatch: string[] | null
 
   // Loop over the paths to find the last matched provider namespace
   while ((pathMatch = providerRegEx.exec(path)) != null) {
@@ -426,9 +422,8 @@ export function gitClone(url: string, directory: string) {
       throw new Error(`"${directory}" must be a directory.`)
     }
     return
-  } else {
-    fs.mkdirSync(directory)
   }
+  fs.mkdirSync(directory)
 
   try {
     const cmd = `git clone ${url} ${directory}`
@@ -493,13 +488,14 @@ export function isPureObject(model: Model) {
     Object.keys(model.properties).length === 0
   ) {
     return true
-  } else if (!model.type && model.properties && Object.keys(model.properties).length === 0) {
-    return true
-  } else if (model.type && typeof model.type.valueOf() === "string" && model.type === "object" && !model.properties) {
-    return true
-  } else {
-    return false
   }
+  if (!model.type && model.properties && Object.keys(model.properties).length === 0) {
+    return true
+  }
+  if (model.type && typeof model.type.valueOf() === "string" && model.type === "object" && !model.properties) {
+    return true
+  }
+  return false
 }
 
 /**
@@ -535,7 +531,7 @@ export function relaxModelLikeEntities(model: Model) {
   if (model.properties) {
     const modelProperties = model.properties
     for (const propName in modelProperties) {
-      const isPropRequired = model.required ? model.required.some(p => p == propName) : false
+      const isPropRequired = model.required ? model.required.some(p => p === propName) : false
       const mp = modelProperties[propName]
       if (mp) {
         if (mp.properties) {
@@ -585,5 +581,5 @@ export function pathToJsonPointer(jsonPath: string): string {
     })
   }
 
-  return !result ? "" : "/" + result
+  return !result ? "" : `/${result}`
 }

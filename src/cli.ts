@@ -21,9 +21,7 @@ yargs
   })
   .option("f", {
     alias: "logFilepath",
-    describe:
-      `Set the log file path. It must be an absolute filepath. ` +
-      `By default the logs will stored in a timestamp based log file at "${defaultLogDir}".`
+    describe: `Set the log file path. It must be an absolute filepath. By default the logs will stored in a timestamp based log file at "${defaultLogDir}".`
   })
   .global(["h", "l", "f"])
   .help().argv

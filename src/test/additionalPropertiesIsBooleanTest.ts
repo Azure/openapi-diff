@@ -37,9 +37,9 @@ test("Additional Properties is boolean", async () => {
       message: "The new version adds an 'additionalProperties' element.",
       mode: "Addition",
       new: {
-        location: ``,
+        location: "",
         path: "paths./api/Operations.get.parameters",
-        ref: ``
+        ref: ""
       },
       old: {},
       type: "Error"

@@ -16,22 +16,16 @@ function getTimeStamp() {
   // We pad each value so that sorted directory listings show the files in chronological order
   function pad(number: number) {
     if (number < 10) {
-      return "0" + number
+      return `0${number}`
     }
 
     return number.toString()
   }
 
   const now = new Date()
-  return (
-    pad(now.getFullYear()) +
-    pad(now.getMonth() + 1) +
-    pad(now.getDate()) +
-    "_" +
-    pad(now.getHours()) +
-    pad(now.getMinutes()) +
-    pad(now.getSeconds())
-  )
+  return `${
+    pad(now.getFullYear()) + pad(now.getMonth() + 1) + pad(now.getDate())
+  }_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`
 }
 const customLogLevels = {
   off: 0,
@@ -63,7 +57,7 @@ const transports = {
 export const log: Logger = winston.createLogger({
   transports: [transports.console],
   levels: customLogLevels
-}) as any
+}) as unknown as Logger
 
 Object.defineProperties(log, {
   consoleLogLevel: {
