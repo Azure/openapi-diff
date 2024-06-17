@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 import { log } from "./util/logging"
-import { Options, OpenApiDiff } from "./validators/openApiDiff"
+import { OpenApiDiff, type Options } from "./validators/openApiDiff"
 
 /**
  * Wrapper method to compares old and new specifications.

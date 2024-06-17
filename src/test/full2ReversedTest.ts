@@ -1,5 +1,5 @@
 import * as assert from "assert"
-import { Messages, OpenApiDiff } from ".."
+import { type Messages, OpenApiDiff } from ".."
 
 test("full2 reversed", async () => {
   const source = {

@@ -1,17 +1,17 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
+import * as child_process from "child_process"
+import * as fs from "fs"
+import * as os from "os"
+import * as path from "path"
+import * as util from "util"
 import * as asyncFs from "@ts-common/fs"
 import * as jsonParser from "@ts-common/json-parser"
 import { getFilePosition } from "@ts-common/source-map"
-import * as child_process from "child_process"
-import * as fs from "fs"
 import JSON_Pointer from "json-pointer"
 import * as jsonRefs from "json-refs"
-import * as os from "os"
-import * as path from "path"
 import * as sourceMap from "source-map"
-import * as util from "util"
 import { log } from "../util/logging"
 import { ResolveSwagger } from "../util/resolveSwagger"
 import { pathToJsonPointer } from "../util/utils"

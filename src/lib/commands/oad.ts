@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 import { log } from "../util/logging"
-import { compareTags, compare } from "../validate"
+import { compare, compareTags } from "../validate"
 
 export const command = "compare <old-spec> <new-spec>"
 

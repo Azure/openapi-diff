@@ -3,9 +3,9 @@
 
 import { execSync } from "child_process"
 import * as fs from "fs"
+import * as path from "path"
 import * as YAML from "js-yaml"
 import * as jsonPointer from "json-pointer"
-import * as path from "path"
 import request = require("request")
 import * as util from "util"
 import { log } from "./logging"
@@ -149,8 +149,8 @@ export type Response = {
  * @return {Promise} promise - A promise that resolves to the responseBody or rejects to an error.
  */
 export function makeRequest(options: Options) {
-  const promise = new Promise(function (resolve, reject) {
-    request(options, function (err: unknown, response: Response, responseBody: string) {
+  const promise = new Promise((resolve, reject) => {
+    request(options, (err: unknown, response: Response, responseBody: string) => {
       if (err) {
         reject(err)
       }
@@ -185,7 +185,7 @@ export function makeRequest(options: Options) {
  */
 export function executePromisesSequentially(promiseFactories: ReadonlyArray<any>) {
   let result = Promise.resolve()
-  promiseFactories.forEach(function (promiseFactory) {
+  promiseFactories.forEach(promiseFactory => {
     result = result.then(promiseFactory)
   })
   return result
@@ -315,7 +315,7 @@ export function parseJsonWithPathFragments(...args: string[]) {
  * @returns {object} target - Returns the merged target object.
  */
 export function mergeObjects(source: { readonly [key: string]: unknown }, target: { [key: string]: unknown }) {
-  Object.keys(source).forEach(function (key) {
+  Object.keys(source).forEach(key => {
     target[key] = source[key]
   })
   return target
@@ -391,7 +391,7 @@ export function getProvider(path: string) {
     throw new Error("path is a required parameter of type string and it cannot be an empty string.")
   }
 
-  const providerRegEx = new RegExp("/providers/(:?[^{/]+)", "gi")
+  const providerRegEx = /\/providers\/(:?[^{\/]+)/gi
   let result
   let pathMatch
 

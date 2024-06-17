@@ -60,7 +60,7 @@ const transports = {
   })
 }
 
-export let log: Logger = winston.createLogger({
+export const log: Logger = winston.createLogger({
   transports: [transports.console],
   levels: customLogLevels
 }) as any
@@ -76,11 +76,7 @@ Object.defineProperties(log, {
         level = "warn"
       }
       const validLevels = Object.keys(customLogLevels)
-      if (
-        !validLevels.some(function (item) {
-          return item === level
-        })
-      ) {
+      if (!validLevels.some(item => item === level)) {
         throw new Error(`The logging level provided is "${level}". Valid values are: "${validLevels}".`)
       }
       transports.console.level = level

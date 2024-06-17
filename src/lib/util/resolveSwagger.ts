@@ -2,12 +2,12 @@ import * as json from "@ts-common/json"
 import * as jsonParser from "@ts-common/json-parser"
 import * as jsonPointer from "json-pointer"
 
-import { toArray } from "@ts-common/iterator"
-import { cloneDeep, Data, FilePosition, getFilePosition, getInfo, getPath, ObjectInfo } from "@ts-common/source-map"
-import * as sourceMap from "source-map"
-import * as sm from "@ts-common/string-map"
 import { readFileSync, writeFileSync } from "fs"
 import * as path from "path"
+import { toArray } from "@ts-common/iterator"
+import { type Data, type FilePosition, type ObjectInfo, cloneDeep, getFilePosition, getInfo, getPath } from "@ts-common/source-map"
+import * as sm from "@ts-common/string-map"
+import type * as sourceMap from "source-map"
 import { pathToJsonPointer } from "./utils"
 
 /*
