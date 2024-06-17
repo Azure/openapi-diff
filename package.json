@@ -85,13 +85,11 @@
     "dn.restore": "dotnet restore openapi-diff/OpenApiDiff.sln",
     "dn.build": "npm run dn.clean && npm run dn.restore && dotnet build -c release openapi-diff/OpenApiDiff.sln /nologo /clp:NoSummary",
     "dn.publish": "npm run dn.build && dotnet publish -c release openapi-diff/src/core/OpenApiDiff/OpenApiDiff.csproj",
-    "dn.test": "npm run tslint && npm run dn.build && dotnet test openapi-diff/src/modeler/AutoRest.Swagger.Tests/AutoRest.Swagger.Tests.csproj",
+    "dn.test": "npm run lint && npm run dn.build && dotnet test openapi-diff/src/modeler/AutoRest.Swagger.Tests/AutoRest.Swagger.Tests.csproj",
     "tsc": "tsc",
     "ts.test": "tsc && jest",
     "test": "npm run dn.test && npm run ts.test",
     "prepack": "npm ci && npm run dn.publish && tsc",
-    "tslint": "tslint --project tsconfig.json \"./src/**/*.ts\"",
-    "tslint-fix": "tslint --fix --project tsconfig.json \"./src/**/*.ts\"",
-    "lint": "biome check --apply ./src"
+    "lint": "biome check --fix"
   }
 }
