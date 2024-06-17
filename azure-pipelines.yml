@@ -17,9 +17,9 @@ extends:
             os: linux
 
           steps:
-            template: /eng/test-steps.yml
-            parameters:
-              ArtifactName: drop-linux
+            - template: /eng/test-steps.yml
+              parameters:
+                ArtifactName: drop-linux
 
         - job: Build_Windows
 
@@ -29,9 +29,9 @@ extends:
             os: windows
 
           steps:
-            template: /eng/test-steps.yml
-            parameters:
-              ArtifactName: drop
+            - template: /eng/test-steps.yml
+              parameters:
+                ArtifactName: drop
 
 
     # only include if running on `internal` build with manual queue, otherwise never include
