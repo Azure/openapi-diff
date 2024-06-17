@@ -5,15 +5,13 @@
     "version": "1.0"
   },
   "host": "localhost:8000",
-  "schemes": [ "http", "https" ],
+  "schemes": ["http", "https"],
   "paths": {
     "/api/Operations": {
       "post": {
-        "tag": [ "Operations" ],
+        "tag": ["Operations"],
         "operationId": "Operations_Post",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [
           {
             "name": "accountName",
@@ -49,7 +47,7 @@
       "type": "object",
       "properties": {
         "code": { "type": "string" },
-        "message": { "type": "string", "readOnly":  true },
+        "message": { "type": "string", "readOnly": true },
         "target": { "type": "string" },
         "details": {
           "description": "Inner errors.",

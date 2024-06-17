@@ -5,46 +5,38 @@
     "version": "1.0"
   },
   "host": "localhost:8000",
-  "schemes": [ "http", "https" ],
+  "schemes": ["http", "https"],
   "paths": {
     "/api/Paths": {
       "get": {
-        "tag": [ "Paths" ],
+        "tag": ["Paths"],
         "operationId": "Paths_Get",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [],
         "responses": {}
       }
     },
     "/api/Operations": {
       "get": {
-        "tag": [ "Operations" ],
+        "tag": ["Operations"],
         "operationId": "Operations_Get",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [],
         "responses": {}
       },
       "post": {
-        "tag": [ "Operations" ],
+        "tag": ["Operations"],
         "operationId": "Operations_Post",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [],
         "responses": {}
       }
     },
     "/api/Parameters/{a}": {
       "get": {
-        "tag": [ "Parameters" ],
+        "tag": ["Parameters"],
         "operationId": "Parameters_Get",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [
           {
             "name": "a",
@@ -75,18 +67,16 @@
             "in": "query",
             "required": true,
             "type": "string",
-            "enum": [ "theonlyvalue" ]
+            "enum": ["theonlyvalue"]
           }
         ]
       }
     },
     "/api/Responses": {
       "get": {
-        "tag": [ "Responses" ],
+        "tag": ["Responses"],
         "operationId": "Responses_Get",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [],
         "responses": {
           "200": {

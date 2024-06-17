@@ -5,11 +5,11 @@
     "version": "1.0"
   },
   "host": "localhost:8000",
-  "schemes": [ "http", "https" ],
+  "schemes": ["http", "https"],
   "paths": {
     "/api/Parameters": {
       "get": {
-        "tag": [ "Responses" ],
+        "tag": ["Responses"],
         "operationId": "Responses_Get",
         "parameters": [
           {
@@ -36,13 +36,12 @@
             "type": "integer",
             "required": true
           }
-
         ]
       }
     },
     "/api/Responses": {
       "get": {
-        "tag": [ "Responses" ],
+        "tag": ["Responses"],
         "operationId": "Responses_Get",
         "parameters": [],
         "responses": {

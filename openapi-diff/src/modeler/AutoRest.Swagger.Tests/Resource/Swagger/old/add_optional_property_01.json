@@ -5,15 +5,13 @@
     "version": "1.0"
   },
   "host": "localhost:8000",
-  "schemes": [ "http", "https" ],
+  "schemes": ["http", "https"],
   "paths": {
     "/api/Parameters": {
       "put": {
-        "tags": [ "Parameters" ],
+        "tags": ["Parameters"],
         "operationId": "Parameters_Put",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [
           {
             "name": "database",
@@ -24,24 +22,24 @@
         ],
         "responses": {
           "200": {
-            "schema":{
-              "type":"object"
+            "schema": {
+              "type": "object"
+            }
           }
         }
       }
     }
-  }
   },
   "definitions": {
     "Error": {
-      "required": [ "message", "id" ],
+      "required": ["message", "id"],
       "properties": {
         "message": { "type": "string" },
         "id": { "type": "integer" }
       }
     },
     "Register": {
-      "required": [ "id" ],
+      "required": ["id"],
       "properties": {
         "a": {
           "type": "string",
@@ -99,21 +97,11 @@
         "endIpAddress": {
           "description": "The end IP address of the firewall rule. Must be IPv4 format. Must be greater than or equal to startIpAddress",
           "type": "string",
-          "x-ms-mutability": [
-            "create",
-            "read",
-            "update"
-          ]
+          "x-ms-mutability": ["create", "read", "update"]
         },
         "provisioningState": {
           "description": "Resource provisioning state",
-          "enum": [
-            "Provisioning",
-            "Succeeded",
-            "Deleting",
-            "Failed",
-            "DeleteError"
-          ],
+          "enum": ["Provisioning", "Succeeded", "Deleting", "Failed", "DeleteError"],
           "type": "string",
           "readOnly": true,
           "x-ms-enum": {
@@ -124,11 +112,7 @@
         "startIpAddress": {
           "description": "The start IP address of the firewall rule. Must be IPv4 format",
           "type": "string",
-          "x-ms-mutability": [
-            "create",
-            "read",
-            "update"
-          ]
+          "x-ms-mutability": ["create", "read", "update"]
         }
       }
     },

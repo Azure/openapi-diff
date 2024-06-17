@@ -5,15 +5,13 @@
     "version": "1.0"
   },
   "host": "localhost:8000",
-  "schemes": [ "http", "https" ],
+  "schemes": ["http", "https"],
   "paths": {
     "/api/Parameters": {
       "get": {
-        "tag": [ "Parameters" ],
+        "tag": ["Parameters"],
         "operationId": "Parameters_Get",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [
           {
             "name": "a",
@@ -62,11 +60,9 @@
         ]
       },
       "put": {
-        "tag": [ "Parameters" ],
+        "tag": ["Parameters"],
         "operationId": "Parameters_Put",
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "name": "a",

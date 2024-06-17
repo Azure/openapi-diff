@@ -5,20 +5,13 @@
     "version": "1.0"
   },
   "host": "localhost:8000",
-  "schemes": [ 
-    "http", 
-    "https" 
-  ],
+  "schemes": ["http", "https"],
   "paths": {
     "/api/Operations": {
       "get": {
-        "tag": [ 
-          "Operations"
-        ],
+        "tag": ["Operations"],
         "operationId": "Operations_Get",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [],
         "responses": {}
       }

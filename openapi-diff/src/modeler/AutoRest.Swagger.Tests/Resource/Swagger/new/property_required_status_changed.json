@@ -5,12 +5,11 @@
     "version": "1.0"
   },
   "host": "localhost:8000",
-  "schemes": [ "http", "https" ],
-  "paths": {
-  },
-"definitions": {
+  "schemes": ["http", "https"],
+  "paths": {},
+  "definitions": {
     "Register": {
-      "required": [ "b"],
+      "required": ["b"],
       "properties": {
         "a": {
           "type": "string",

@@ -5,15 +5,13 @@
     "version": "1.0"
   },
   "host": "localhost:8000",
-  "schemes": [ "http", "https" ],
+  "schemes": ["http", "https"],
   "paths": {
     "/api/Parameters": {
       "put": {
-        "tags": [ "Parameters" ],
+        "tags": ["Parameters"],
         "operationId": "Parameters_Put",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [
           {
             "name": "database",
@@ -21,14 +19,13 @@
             "required": true,
             "schema": { "$ref": "#/definitions/Database" }
           }
-        ],"responses": {}
+        ],
+        "responses": {}
       },
       "post": {
-        "tags": [ "Parameters" ],
+        "tags": ["Parameters"],
         "operationId": "Parameters_Post",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [
           {
             "name": "registry",
@@ -42,11 +39,9 @@
     },
     "/api/Responses": {
       "get": {
-        "tags": [ "Responses" ],
+        "tags": ["Responses"],
         "operationId": "Responses_Get",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [],
         "responses": {
           "200": {
@@ -68,15 +63,15 @@
   },
   "definitions": {
     "Error": {
-      "required": [ "message", "id" ],
+      "required": ["message", "id"],
       "properties": {
         "message": { "type": "string" },
         "id": { "type": "string" }
       }
     },
     "Database": {
-      "x-ms-client-name":"database",
-      "required": [ "id" ],
+      "x-ms-client-name": "database",
+      "required": ["id"],
       "properties": {
         "a": {
           "type": "string",
@@ -111,7 +106,7 @@
       }
     },
     "Registry": {
-      "required": [ "id" ],
+      "required": ["id"],
       "properties": {
         "a": {
           "type": "string",

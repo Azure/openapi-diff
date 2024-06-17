@@ -5,17 +5,15 @@
     "version": "1.0"
   },
   "host": "localhost:8000",
-  "schemes": [ "http", "https" ],
-  "consumes": [ "text/plain", "text/json" ],
-  "produces": [ "text/plain" ],
+  "schemes": ["http", "https"],
+  "consumes": ["text/plain", "text/json"],
+  "produces": ["text/plain"],
   "paths": {
     "/api/Parameters": {
       "put": {
-        "tag": [ "Parameters" ],
+        "tag": ["Parameters"],
         "operationId": "Parameters_Put",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [
           {
             "name": "database",
@@ -35,34 +33,31 @@
           "type": "string",
           "readOnly": true,
           "description": "This is a system generated property.\nThe _rid value is empty for this operation.",
-          "default":"a"
+          "default": "a"
         },
         "b": {
           "type": "string",
-          "enum": [
-            "A",
-            "B"
-          ],
+          "enum": ["A", "B"],
           "x-ms-enum": {
             "name": "ResourceIdentityType",
             "modelAsString": true
           },
           "description": "This property shows the number of databases returned."
         },
-         "c": {
+        "c": {
           "type": "number",
           "description": "This is a system generated property.\nThe _rid value is empty for this operation.",
-          "default":1
+          "default": 1
         }
       },
-      "default": { "b":"test"}
+      "default": { "b": "test" }
     }
   },
-  "DatabaseList":{ 
-    "type":"array",
-     "items": {
-       "$ref": "#/definitions/Database"
-     },
-     "default": [{"c":2}]
+  "DatabaseList": {
+    "type": "array",
+    "items": {
+      "$ref": "#/definitions/Database"
+    },
+    "default": [{ "c": 2 }]
   }
 }

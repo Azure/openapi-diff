@@ -5,15 +5,13 @@
     "version": "1.0"
   },
   "host": "localhost:8000",
-  "schemes": [ "http", "https" ],
+  "schemes": ["http", "https"],
   "paths": {
     "/api/Parameters": {
       "put": {
-        "tags": [ "Parameters" ],
+        "tags": ["Parameters"],
         "operationId": "Parameters_Put",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [
           {
             "name": "database",
@@ -25,11 +23,9 @@
         "responses": {}
       },
       "post": {
-        "tags": [ "Parameters" ],
+        "tags": ["Parameters"],
         "operationId": "Parameters_Post",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [
           {
             "name": "registry",
@@ -43,11 +39,9 @@
     },
     "/api/Responses": {
       "get": {
-        "tags": [ "Responses" ],
+        "tags": ["Responses"],
         "operationId": "Responses_Get",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [],
         "responses": {
           "200": {
@@ -69,15 +63,15 @@
   },
   "definitions": {
     "Error": {
-      "required": [ "message", "id" ],
+      "required": ["message", "id"],
       "properties": {
         "message": { "type": "string" },
         "id": { "type": "integer" }
       }
     },
     "DatabaseRenamed": {
-      "x-ms-client-name":"database",
-      "required": [ "id" ],
+      "x-ms-client-name": "database",
+      "required": ["id"],
       "properties": {
         "a": {
           "type": "string",
@@ -112,7 +106,7 @@
       }
     },
     "Register": {
-      "required": [ "id" ],
+      "required": ["id"],
       "properties": {
         "a": {
           "type": "string",
@@ -145,8 +139,7 @@
           "readOnly": true,
           "description": "This is a system generated property.\nIt specifies the addressable path of the users resource."
         }
-      }
-      ,
+      },
       "default": {
         "id": "test"
       }

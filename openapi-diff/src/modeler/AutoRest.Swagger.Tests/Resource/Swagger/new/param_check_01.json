@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "host": "localhost:8000",
-  "schemes": [ "http", "https" ],
+  "schemes": ["http", "https"],
   "definitions": {
     "A": {
       "type": "object",
@@ -48,11 +48,11 @@
         },
         "f": {
           "type": "string",
-          "enum": [ "A", "B", "C" ]
+          "enum": ["A", "B", "C"]
         },
         "g": {
           "type": "string",
-          "enum": [ "A", "B" ]
+          "enum": ["A", "B"]
         }
       }
     }
@@ -111,12 +111,12 @@
     "f": {
       "type": "string",
       "in": "header",
-      "enum": [ "A", "B", "C" ]
+      "enum": ["A", "B", "C"]
     },
     "g": {
       "type": "string",
       "in": "header",
-      "enum": [ "A", "B" ]
+      "enum": ["A", "B"]
     }
   }
 }

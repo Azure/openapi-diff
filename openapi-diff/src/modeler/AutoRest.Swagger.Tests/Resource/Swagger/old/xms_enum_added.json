@@ -5,17 +5,15 @@
     "version": "1.0"
   },
   "host": "localhost:8000",
-  "schemes": [ "http", "https" ],
-  "consumes": [ "text/plain", "text/json" ],
-  "produces": [ "text/plain" ],
+  "schemes": ["http", "https"],
+  "consumes": ["text/plain", "text/json"],
+  "produces": ["text/plain"],
   "paths": {
     "/api/Parameters": {
       "put": {
-        "tag": [ "Parameters" ],
+        "tag": ["Parameters"],
         "operationId": "Parameters_Put",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [
           {
             "name": "database",
@@ -35,19 +33,11 @@
           "type": "string",
           "readOnly": true,
           "description": "This is a system generated property.\nThe _rid value is empty for this operation.",
-          "enum": [
-            "A",
-            "B",
-            "C"
-          ]
+          "enum": ["A", "B", "C"]
         },
         "b": {
           "type": "string",
-          "enum": [
-            "A",
-            "B",
-            "C"
-          ],
+          "enum": ["A", "B", "C"],
           "x-ms-enum": {
             "name": "ResourceIdentityType",
             "modelAsString": true

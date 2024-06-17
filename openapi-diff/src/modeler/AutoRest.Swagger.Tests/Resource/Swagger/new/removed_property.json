@@ -9,22 +9,13 @@
     }
   },
   "host": "management.azure.com",
-  "schemes": [
-    "https"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json",
-    "text/json"
-  ],
+  "schemes": ["https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json", "text/json"],
   "paths": {
     "/subscriptions/{subscriptionId}/providers/Microsoft.Storage/checkNameAvailability": {
       "post": {
-        "tags": [
-          "StorageAccounts"
-        ],
+        "tags": ["StorageAccounts"],
         "operationId": "StorageAccounts_CheckNameAvailability",
         "description": "Checks that the storage account name is valid and is not already in use.",
         "parameters": [
@@ -56,9 +47,7 @@
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{accountName}": {
       "put": {
-        "tags": [
-          "StorageAccounts"
-        ],
+        "tags": ["StorageAccounts"],
         "operationId": "StorageAccounts_Create",
         "description": "Asynchronously creates a new storage account with the specified parameters. If an account is already created and a subsequent create request is issued with different properties, the account properties will be updated. If an account is already created and a subsequent create or update request is issued with the exact same set of properties, the request will succeed.",
         "parameters": [
@@ -104,9 +93,7 @@
         "x-ms-long-running-operation": true
       },
       "delete": {
-        "tags": [
-          "StorageAccounts"
-        ],
+        "tags": ["StorageAccounts"],
         "operationId": "StorageAccounts_Delete",
         "description": "Deletes a storage account in Microsoft Azure.",
         "parameters": [
@@ -139,9 +126,7 @@
         }
       },
       "get": {
-        "tags": [
-          "StorageAccounts"
-        ],
+        "tags": ["StorageAccounts"],
         "operationId": "StorageAccounts_GetProperties",
         "description": "Returns the properties for the specified storage account including but not limited to name, SKU name, location, and account status. The ListKeys operation should be used to retrieve storage keys.",
         "parameters": [
@@ -174,9 +159,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "StorageAccounts"
-        ],
+        "tags": ["StorageAccounts"],
         "operationId": "StorageAccounts_Update",
         "description": "The update operation can be used to update the SKU, encryption, access tier, or tags for a storage account. It can also be used to map the account to a custom domain. Only one custom domain is supported per storage account; the replacement/change of custom domain is not supported. In order to replace an old custom domain, the old value must be cleared/unregistered before a new value can be set. The update of multiple properties is supported. This call does not change the storage keys for the account. If you want to change the storage account keys, use the regenerate keys operation. The location and name of the storage account cannot be changed after creation.",
         "parameters": [
@@ -220,9 +203,7 @@
     },
     "/subscriptions/{subscriptionId}/providers/Microsoft.Storage/storageAccounts": {
       "get": {
-        "tags": [
-          "StorageAccounts"
-        ],
+        "tags": ["StorageAccounts"],
         "operationId": "StorageAccounts_List",
         "description": "Lists all the storage accounts available under the subscription. Note that storage keys are not returned; use the ListKeys operation for this.",
         "parameters": [
@@ -248,9 +229,7 @@
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts": {
       "get": {
-        "tags": [
-          "StorageAccounts"
-        ],
+        "tags": ["StorageAccounts"],
         "operationId": "StorageAccounts_ListByResourceGroup",
         "description": "Lists all the storage accounts available under the given resource group. Note that storage keys are not returned; use the ListKeys operation for this.",
         "parameters": [
@@ -279,9 +258,7 @@
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{accountName}/listKeys": {
       "post": {
-        "tags": [
-          "StorageAccounts"
-        ],
+        "tags": ["StorageAccounts"],
         "operationId": "StorageAccounts_ListKeys",
         "description": "Lists the access keys for the specified storage account.",
         "parameters": [
@@ -316,9 +293,7 @@
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{accountName}/regenerateKey": {
       "post": {
-        "tags": [
-          "StorageAccounts"
-        ],
+        "tags": ["StorageAccounts"],
         "operationId": "StorageAccounts_RegenerateKey",
         "description": "Regenerates one of the access keys for the specified storage account.",
         "parameters": [
@@ -362,9 +337,7 @@
     },
     "/subscriptions/{subscriptionId}/providers/Microsoft.Storage/usages": {
       "get": {
-        "tags": [
-          "Usage"
-        ],
+        "tags": ["Usage"],
         "operationId": "Usage_List",
         "description": "Gets the current usage count and the limit for the resources under the subscription.",
         "parameters": [
@@ -390,9 +363,7 @@
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{accountName}/ListAccountSas": {
       "post": {
-        "tags": [
-          "StorageAccounts"
-        ],
+        "tags": ["StorageAccounts"],
         "operationId": "StorageAccounts_ListAccountSAS",
         "description": "List SAS credentials of a storage account.",
         "parameters": [
@@ -436,9 +407,7 @@
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{accountName}/ListServiceSas": {
       "post": {
-        "tags": [
-          "StorageAccounts"
-        ],
+        "tags": ["StorageAccounts"],
         "operationId": "StorageAccounts_ListServiceSAS",
         "description": "List service SAS credentials of a specific resource.",
         "parameters": [
@@ -489,13 +458,10 @@
         },
         "type": {
           "type": "string",
-          "enum": [ "Microsoft.Storage/storageAccounts" ]
+          "enum": ["Microsoft.Storage/storageAccounts"]
         }
       },
-      "required": [
-        "name",
-        "type"
-      ],
+      "required": ["name", "type"],
       "description": "The parameters used to check the availabity of the storage account name."
     },
     "CheckNameAvailabilityResult": {
@@ -509,10 +475,7 @@
           "readOnly": true,
           "type": "string",
           "description": "Gets the reason that a storage account name could not be used. The Reason element is only returned if NameAvailable is false.",
-          "enum": [
-            "AccountNameInvalid",
-            "AlreadyExists"
-          ],
+          "enum": ["AccountNameInvalid", "AlreadyExists"],
           "x-ms-enum": {
             "name": "Reason",
             "modelAsString": false
@@ -531,13 +494,7 @@
         "name": {
           "type": "string",
           "description": "Gets or sets the sku name. Required for account creation; optional for update. Note that in older versions, sku name was called accountType.",
-          "enum": [
-            "Standard_LRS",
-            "Standard_GRS",
-            "Standard_RAGRS",
-            "Standard_ZRS",
-            "Premium_LRS"
-          ],
+          "enum": ["Standard_LRS", "Standard_GRS", "Standard_RAGRS", "Standard_ZRS", "Premium_LRS"],
           "x-ms-enum": {
             "name": "SkuName",
             "modelAsString": false
@@ -547,19 +504,14 @@
           "readOnly": true,
           "type": "string",
           "description": "Gets the sku tier. This is based on the SKU name.",
-          "enum": [
-            "Standard",
-            "Premium"
-          ],
+          "enum": ["Standard", "Premium"],
           "x-ms-enum": {
             "name": "SkuTier",
             "modelAsString": false
           }
         }
       },
-      "required": [
-        "name"
-      ],
+      "required": ["name"],
       "description": "The SKU of the storage account."
     },
     "CustomDomain": {
@@ -573,9 +525,7 @@
           "description": "Indicates whether indirect CName validation is enabled. Default value is false. This should only be set on updates."
         }
       },
-      "required": [
-        "name"
-      ],
+      "required": ["name"],
       "description": "The custom domain assigned to this storage account. This can be set via Update."
     },
     "EncryptionService": {
@@ -625,10 +575,10 @@
         "keySource": {
           "type": "string",
           "description": "The encryption keySource (provider). Possible values (case-insensitive):  Microsoft.Storage",
-          "enum": [ "Microsoft.Storage" ]
+          "enum": ["Microsoft.Storage"]
         }
       },
-      "required": [ "keySource" ],
+      "required": ["keySource"],
       "description": "The encryption settings on the storage account."
     },
     "StorageAccountPropertiesCreateParameters": {
@@ -644,10 +594,7 @@
         "accessTier": {
           "type": "string",
           "description": "Required for storage accounts where kind = BlobStorage. The access tier used for billing.",
-          "enum": [
-            "Hot",
-            "Cool"
-          ],
+          "enum": ["Hot", "Cool"],
           "x-ms-enum": {
             "name": "AccessTier",
             "modelAsString": false
@@ -671,10 +618,7 @@
         "kind1": {
           "type": "string",
           "description": "Required. Indicates the type of storage account.",
-          "enum": [
-            "Storage",
-            "BlobStorage"
-          ],
+          "enum": ["Storage", "BlobStorage"],
           "x-ms-enum": {
             "name": "Kind",
             "modelAsString": false
@@ -696,11 +640,7 @@
           "$ref": "#/definitions/StorageAccountPropertiesCreateParameters"
         }
       },
-      "required": [
-        "sku",
-        "kind",
-        "location"
-      ],
+      "required": ["sku", "kind", "location"],
       "description": "The parameters used when creating a storage account."
     },
     "Endpoints": {
@@ -734,11 +674,7 @@
           "readOnly": true,
           "type": "string",
           "description": "Gets the status of the storage account at the time the operation was called.",
-          "enum": [
-            "Creating",
-            "ResolvingDNS",
-            "Succeeded"
-          ],
+          "enum": ["Creating", "ResolvingDNS", "Succeeded"],
           "x-ms-enum": {
             "name": "ProvisioningState",
             "modelAsString": false
@@ -758,10 +694,7 @@
           "readOnly": true,
           "type": "string",
           "description": "Gets the status indicating whether the primary location of the storage account is available or unavailable.",
-          "enum": [
-            "available",
-            "unavailable"
-          ],
+          "enum": ["available", "unavailable"],
           "x-ms-enum": {
             "name": "AccountStatus",
             "modelAsString": false
@@ -782,10 +715,7 @@
           "readOnly": true,
           "type": "string",
           "description": "Gets the status indicating whether the secondary location of the storage account is available or unavailable. Only available if the SKU name is Standard_GRS or Standard_RAGRS.",
-          "enum": [
-            "available",
-            "unavailable"
-          ],
+          "enum": ["available", "unavailable"],
           "x-ms-enum": {
             "name": "AccountStatus",
             "modelAsString": false
@@ -816,10 +746,7 @@
           "readOnly": true,
           "type": "string",
           "description": "Required for storage accounts where kind = BlobStorage. The access tier used for billing.",
-          "enum": [
-            "Hot",
-            "Cool"
-          ],
+          "enum": ["Hot", "Cool"],
           "x-ms-enum": {
             "name": "AccessTier",
             "modelAsString": false
@@ -845,10 +772,7 @@
           "readOnly": true,
           "type": "string",
           "description": "Gets the Kind.",
-          "enum": [
-            "Storage",
-            "BlobStorage"
-          ],
+          "enum": ["Storage", "BlobStorage"],
           "x-ms-enum": {
             "name": "Kind",
             "modelAsString": false
@@ -882,10 +806,7 @@
           "readOnly": true,
           "type": "string",
           "description": "Permissions for the key -- read-only or full permissions.",
-          "enum": [
-            "Read",
-            "Full"
-          ],
+          "enum": ["Read", "Full"],
           "x-ms-enum": {
             "name": "KeyPermission",
             "modelAsString": false
@@ -926,9 +847,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "keyName"
-      ],
+      "required": ["keyName"],
       "description": "The parameters used to regenerate the storage account key."
     },
     "StorageAccountPropertiesUpdateParameters": {
@@ -944,10 +863,7 @@
         "accessTier": {
           "type": "string",
           "description": "Required for storage accounts where kind = BlobStorage. The access tier used for billing.",
-          "enum": [
-            "Hot",
-            "Cool"
-          ],
+          "enum": ["Hot", "Cool"],
           "x-ms-enum": {
             "name": "AccessTier",
             "modelAsString": false
@@ -1003,14 +919,7 @@
           "readOnly": true,
           "type": "string",
           "description": "Gets the unit of measurement.",
-          "enum": [
-            "Count",
-            "Bytes",
-            "Seconds",
-            "Percent",
-            "CountsPerSecond",
-            "BytesPerSecond"
-          ],
+          "enum": ["Count", "Bytes", "Seconds", "Percent", "CountsPerSecond", "BytesPerSecond"],
           "x-ms-enum": {
             "name": "UsageUnit",
             "modelAsString": false
@@ -1084,37 +993,19 @@
       "properties": {
         "signedServices": {
           "type": "string",
-          "enum": [
-            "b",
-            "q",
-            "t",
-            "f"
-          ],
+          "enum": ["b", "q", "t", "f"],
           "x-ms-client-name": "Services",
           "description": "The signed services accessible with the account SAS. Possible values include: Blob (b), Queue (q), Table (t), File (f)."
         },
         "signedResourceTypes": {
           "type": "string",
-          "enum": [
-            "s",
-            "c",
-            "o"
-          ],
+          "enum": ["s", "c", "o"],
           "x-ms-client-name": "ResourceTypes",
           "description": "The signed resource types that are accessible with the account SAS. Service (s): Access to service-level APIs; Container (c): Access to container-level APIs; Object (o): Access to object-level APIs for blobs, queue messages, table entities, and files."
         },
         "signedPermission": {
           "type": "string",
-          "enum": [
-            "r",
-            "d",
-            "w",
-            "l",
-            "a",
-            "c",
-            "u",
-            "p"
-          ],
+          "enum": ["r", "d", "w", "l", "a", "c", "u", "p"],
           "x-ms-client-name": "Permissions",
           "description": "The signed permissions for the account SAS. Possible values include: Read (r), Write (w), Delete (d), List (l), Add (a), Create (c), Update (u) and Process (p)."
         },
@@ -1125,10 +1016,7 @@
         },
         "signedProtocol": {
           "type": "string",
-          "enum": [
-            "https,http",
-            "https"
-          ],
+          "enum": ["https,http", "https"],
           "x-ms-enum": {
             "name": "HttpProtocol",
             "modelAsString": false
@@ -1153,12 +1041,7 @@
           "description": "The key to sign the account SAS token with."
         }
       },
-      "required": [
-        "signedServices",
-        "signedResourceTypes",
-        "signedPermission",
-        "signedExpiry"
-      ],
+      "required": ["signedServices", "signedResourceTypes", "signedPermission", "signedExpiry"],
       "description": "The parameters to list SAS credentials of a storage account."
     },
     "ListAccountSasResponse": {
@@ -1179,27 +1062,13 @@
         },
         "signedResource": {
           "type": "string",
-          "enum": [
-            "b",
-            "c",
-            "f",
-            "s"
-          ],
+          "enum": ["b", "c", "f", "s"],
           "x-ms-client-name": "Resource",
           "description": "The signed services accessible with the service SAS. Possible values include: Blob (b), Container (c), File (f), Share (s)."
         },
         "signedPermission": {
           "type": "string",
-          "enum": [
-            "r",
-            "d",
-            "w",
-            "l",
-            "a",
-            "c",
-            "u",
-            "p"
-          ],
+          "enum": ["r", "d", "w", "l", "a", "c", "u", "p"],
           "x-ms-client-name": "Permissions",
           "description": "The signed permissions for the service SAS. Possible values include: Read (r), Write (w), Delete (d), List (l), Add (a), Create (c), Update (u) and Process (p)."
         },
@@ -1210,10 +1079,7 @@
         },
         "signedProtocol": {
           "type": "string",
-          "enum": [
-            "https,http",
-            "https"
-          ],
+          "enum": ["https,http", "https"],
           "x-ms-enum": {
             "name": "HttpProtocol",
             "modelAsString": false
@@ -1289,10 +1155,7 @@
           "description": "The response header override for content type."
         }
       },
-      "required": [
-        "canonicalizedResource",
-        "signedResource"
-      ],
+      "required": ["canonicalizedResource", "signedResource"],
       "description": "The parameters to list service SAS credentials of a speicific resource."
     },
     "ListServiceSasResponse": {

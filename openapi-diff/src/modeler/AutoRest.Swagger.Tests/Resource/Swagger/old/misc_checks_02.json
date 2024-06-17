@@ -5,10 +5,10 @@
     "version": "1.0"
   },
   "host": "localhost:8000",
-  "schemes": [ "http", "https" ],
+  "schemes": ["http", "https"],
   "definitions": {
     "Database": {
-      "required": [ "id" ],
+      "required": ["id"],
       "properties": {
         "a": {
           "type": "string",
@@ -43,7 +43,7 @@
       }
     },
     "Unreferenced": {
-      "required": [ "id" ],
+      "required": ["id"],
       "properties": {
         "a": {
           "type": "string",
