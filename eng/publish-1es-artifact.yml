@@ -8,8 +8,8 @@
 # SbomEnabled - Set whether to auto-inject 1es pipeline template sbom tasks
 
 parameters:
-  ArtifactName: ''
-  ArtifactPath: ''
+  ArtifactName: ""
+  ArtifactPath: ""
   CustomCondition: true
   SbomEnabled: true
 
@@ -25,8 +25,8 @@ steps:
 
   - task: 1ES.PublishPipelineArtifact@1
     condition: and(succeededOrFailed(), ${{ parameters.CustomCondition }})
-    displayName: 'Publish ${{ parameters.ArtifactName }} Artifacts'
+    displayName: "Publish ${{ parameters.ArtifactName }} Artifacts"
     inputs:
-      artifactName: '$(PublishArtifactName)'
-      targetPath: '${{ parameters.ArtifactPath }}'
+      artifactName: "$(PublishArtifactName)"
+      targetPath: "${{ parameters.ArtifactPath }}"
       sbomEnabled: ${{ parameters.SbomEnabled }}

@@ -10,15 +10,15 @@ resources:
       ref: refs/tags/canary
 
 parameters:
-- name: stages
-  type: stageList
-  default: []
-- name: Use1ESOfficial
-  type: boolean
-  default: true
-- name: oneESTemplateTag
-  type: string
-  default: release
+  - name: stages
+    type: stageList
+    default: []
+  - name: Use1ESOfficial
+    type: boolean
+    default: true
+  - name: oneESTemplateTag
+    type: string
+    default: release
 
 extends:
   ${{ if and(parameters.Use1ESOfficial, eq(parameters.oneESTemplateTag, 'canary')) }}:
@@ -42,8 +42,8 @@ extends:
         submodules: false
       sourceRepositoriesToScan:
         include:
-        - repository: self
-          submodule: false
+          - repository: self
+            submodule: false
         runInSingleJob: true
       sourceAnalysisPool:
         name: azsdk-pool-mms-win-2022-general

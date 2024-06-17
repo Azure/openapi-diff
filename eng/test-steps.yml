@@ -1,7 +1,7 @@
 parameters:
   - name: ArtifactName
     type: string
-    default: 'drop'
+    default: "drop"
 
 steps:
   - script: npm ci
@@ -15,9 +15,9 @@ steps:
   - script: npm pack
     displayName: pack
   - task: CopyFiles@2
-    displayName: 'Copy Files to Staging'
+    displayName: "Copy Files to Staging"
     inputs:
-      Contents: '*.tgz'
+      Contents: "*.tgz"
       TargetFolder: $(Build.ArtifactStagingDirectory)
 
   - template: /eng/publish-1es-artifact.yml
