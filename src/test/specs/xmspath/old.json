@@ -17,7 +17,7 @@
     }
   },
   "host": "localhost:8000",
-  "schemes": [ "http", "https" ],
+  "schemes": ["http", "https"],
   "paths": {
     "/api/Operations": {
       "parameters": [
@@ -30,9 +30,7 @@
       ],
       "get": {
         "operationId": "Operations_Get",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "responses": {
           "default": {
             "description": "Error response describing why the operation failed.",
@@ -52,9 +50,7 @@
       ],
       "post": {
         "operationId": "Operations_Post",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "responses": {
           "default": {
             "description": "Error response describing why the operation failed.",

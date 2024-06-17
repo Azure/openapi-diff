@@ -4,17 +4,16 @@
     "title": "compatible-properties",
     "version": "1.0"
   },
-  "paths": {
-  },
+  "paths": {},
   "definitions": {
     "Foo": {
-      "type":"object",
+      "type": "object",
       "properties": {
         "string-string": {
-          "type":"string"
+          "type": "string"
         },
         "string-refstring": {
-          "type":"string"
+          "type": "string"
         },
         "refstring-string": {
           "$ref": "#/definitions/MyString"
@@ -30,16 +29,16 @@
       ]
     },
     "Foo2": {
-      "type":"object",
+      "type": "object",
       "properties": {
         "string-string": {
-          "type":"string"
+          "type": "string"
         },
         "string-refstring": {
           "$ref": "#/definitions/MyString"
         },
         "refstring-string": {
-          "type":"string"
+          "type": "string"
         },
         "refstring-refstring": {
           "$ref": "#/definitions/MyString"

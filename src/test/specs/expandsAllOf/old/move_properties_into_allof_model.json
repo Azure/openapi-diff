@@ -5,17 +5,15 @@
     "version": "1.0"
   },
   "host": "localhost:8000",
-  "schemes": [ "http", "https" ],
-  "consumes": [ "text/plain", "text/json" ],
-  "produces": [ "text/plain" ],
+  "schemes": ["http", "https"],
+  "consumes": ["text/plain", "text/json"],
+  "produces": ["text/plain"],
   "paths": {
     "/api/Parameters": {
       "put": {
-        "tags": [ "Parameters" ],
+        "tags": ["Parameters"],
         "operationId": "Parameters_Put",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [
           {
             "name": "database",
@@ -38,16 +36,15 @@
         "a": {
           "type": "string",
           "description": "Enum.",
-          "enum": [ "a1", "a2", "a3" ]
-
+          "enum": ["a1", "a2", "a3"]
         },
         "b": {
           "type": "string",
           "description": "Enum.",
-          "enum": [ "b1" ]
+          "enum": ["b1"]
         }
       },
-      "required": [ "b" ]
+      "required": ["b"]
     }
   }
 }

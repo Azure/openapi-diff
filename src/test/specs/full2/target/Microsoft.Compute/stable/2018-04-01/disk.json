@@ -6,20 +6,12 @@
     "version": "2018-04-01"
   },
   "host": "management.azure.com",
-  "schemes": [
-    "https"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
+  "schemes": ["https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
   "security": [
     {
-      "azure_auth": [
-        "user_impersonation"
-      ]
+      "azure_auth": ["user_impersonation"]
     }
   ],
   "securityDefinitions": {
@@ -36,9 +28,7 @@
   "paths": {
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/disks/{diskName}": {
       "put": {
-        "tags": [
-          "Disks"
-        ],
+        "tags": ["Disks"],
         "operationId": "Disks_CreateOrUpdate",
         "description": "Creates or updates a disk.",
         "parameters": [
@@ -72,7 +62,7 @@
             }
           },
           "202": {
-            "description":"Accepted",
+            "description": "Accepted",
             "schema": {
               "$ref": "#/definitions/Disk"
             }
@@ -81,9 +71,7 @@
         "x-ms-long-running-operation": true
       },
       "patch": {
-        "tags": [
-          "Disks"
-        ],
+        "tags": ["Disks"],
         "operationId": "Disks_Update",
         "description": "Updates (patches) a disk.",
         "parameters": [
@@ -126,9 +114,7 @@
         "x-ms-long-running-operation": true
       },
       "get": {
-        "tags": [
-          "Disks"
-        ],
+        "tags": ["Disks"],
         "operationId": "Disks_Get",
         "description": "Gets information about a disk.",
         "parameters": [
@@ -155,9 +141,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Disks"
-        ],
+        "tags": ["Disks"],
         "operationId": "Disks_Delete",
         "description": "Deletes a disk.",
         "parameters": [
@@ -190,9 +174,7 @@
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/disks": {
       "get": {
-        "tags": [
-          "Disks"
-        ],
+        "tags": ["Disks"],
         "operationId": "Disks_ListByResourceGroup",
         "description": "Lists all the disks under a resource group.",
         "parameters": [
@@ -221,9 +203,7 @@
     },
     "/subscriptions/{subscriptionId}/providers/Microsoft.Compute/disks": {
       "get": {
-        "tags": [
-          "Disks"
-        ],
+        "tags": ["Disks"],
         "operationId": "Disks_List",
         "description": "Lists all the disks under a subscription.",
         "parameters": [
@@ -249,9 +229,7 @@
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/disks/{diskName}/beginGetAccess": {
       "post": {
-        "tags": [
-          "Disks"
-        ],
+        "tags": ["Disks"],
         "operationId": "Disks_GrantAccess",
         "description": "Grants access to a disk.",
         "parameters": [
@@ -293,9 +271,7 @@
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/disks/{diskName}/endGetAccess": {
       "post": {
-        "tags": [
-          "Disks"
-        ],
+        "tags": ["Disks"],
         "operationId": "Disks_RevokeAccess",
         "description": "Revokes access to a disk.",
         "parameters": [
@@ -325,9 +301,7 @@
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/snapshots/{snapshotName}": {
       "put": {
-        "tags": [
-          "Snapshots"
-        ],
+        "tags": ["Snapshots"],
         "operationId": "Snapshots_CreateOrUpdate",
         "description": "Creates or updates a snapshot.",
         "parameters": [
@@ -370,9 +344,7 @@
         "x-ms-long-running-operation": true
       },
       "patch": {
-        "tags": [
-          "Snapshots"
-        ],
+        "tags": ["Snapshots"],
         "operationId": "Snapshots_Update",
         "description": "Updates (patches) a snapshot.",
         "parameters": [
@@ -415,9 +387,7 @@
         "x-ms-long-running-operation": true
       },
       "get": {
-        "tags": [
-          "Snapshots"
-        ],
+        "tags": ["Snapshots"],
         "operationId": "Snapshots_Get",
         "description": "Gets information about a snapshot.",
         "parameters": [
@@ -444,9 +414,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Snapshots"
-        ],
+        "tags": ["Snapshots"],
         "operationId": "Snapshots_Delete",
         "description": "Deletes a snapshot.",
         "parameters": [
@@ -479,9 +447,7 @@
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/snapshots": {
       "get": {
-        "tags": [
-          "Snapshots"
-        ],
+        "tags": ["Snapshots"],
         "operationId": "Snapshots_ListByResourceGroup",
         "description": "Lists snapshots under a resource group.",
         "parameters": [
@@ -510,9 +476,7 @@
     },
     "/subscriptions/{subscriptionId}/providers/Microsoft.Compute/snapshots": {
       "get": {
-        "tags": [
-          "Snapshots"
-        ],
+        "tags": ["Snapshots"],
         "operationId": "Snapshots_List",
         "description": "Lists snapshots under a subscription.",
         "parameters": [
@@ -538,9 +502,7 @@
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/snapshots/{snapshotName}/beginGetAccess": {
       "post": {
-        "tags": [
-          "Snapshots"
-        ],
+        "tags": ["Snapshots"],
         "operationId": "Snapshots_GrantAccess",
         "description": "Grants access to a snapshot.",
         "parameters": [
@@ -582,9 +544,7 @@
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/snapshots/{snapshotName}/endGetAccess": {
       "post": {
-        "tags": [
-          "Snapshots"
-        ],
+        "tags": ["Snapshots"],
         "operationId": "Snapshots_RevokeAccess",
         "description": "Revokes access to a snapshot.",
         "parameters": [
@@ -644,9 +604,7 @@
           "description": "Resource tags"
         }
       },
-      "required": [
-        "location"
-      ],
+      "required": ["location"],
       "x-ms-azure-resource": true
     },
     "Disk": {
@@ -660,9 +618,9 @@
           "$ref": "#/definitions/DiskSku"
         },
         "zones": {
-            "type": "array",
-            "items": {
-                "type": "string"
+          "type": "array",
+          "items": {
+            "type": "string"
           },
           "description": "The Logical zone list for Disk."
         },
@@ -711,20 +669,14 @@
           "description": "The uri to fetch the next page of disks. Call ListNext() with this to fetch the next page of disks."
         }
       },
-      "required": [
-        "value"
-      ],
+      "required": ["value"],
       "description": "The List Disks operation response."
     },
     "DiskSku": {
       "properties": {
         "name": {
           "type": "string",
-          "enum": [
-            "Standard_LRS",
-            "Premium_LRS",
-            "StandardSSD_LRS"
-          ],
+          "enum": ["Standard_LRS", "Premium_LRS", "StandardSSD_LRS"],
           "x-ms-enum": {
             "name": "StorageAccountTypes",
             "modelAsString": true
@@ -744,11 +696,7 @@
       "properties": {
         "name": {
           "type": "string",
-          "enum": [
-            "Standard_LRS",
-            "Premium_LRS",
-            "Standard_ZRS"
-          ],
+          "enum": ["Standard_LRS", "Premium_LRS", "Standard_ZRS"],
           "x-ms-enum": {
             "name": "SnapshotStorageAccountTypes",
             "modelAsString": true
@@ -775,10 +723,7 @@
         "osType": {
           "type": "string",
           "description": "The Operating System type.",
-          "enum": [
-            "Windows",
-            "Linux"
-          ],
+          "enum": ["Windows", "Linux"],
           "x-ms-enum": {
             "name": "OperatingSystemTypes",
             "modelAsString": false
@@ -803,9 +748,7 @@
           "description": "The disk provisioning state."
         }
       },
-      "required": [
-        "creationData"
-      ],
+      "required": ["creationData"],
       "description": "Disk resource properties."
     },
     "EncryptionSettings": {
@@ -836,10 +779,7 @@
           "description": "Url pointing to a key or secret in KeyVault"
         }
       },
-      "required": [
-        "secretUrl",
-        "sourceVault"
-      ],
+      "required": ["secretUrl", "sourceVault"],
       "description": "Key Vault Secret Url and vault id of the encryption key "
     },
     "KeyVaultAndKeyReference": {
@@ -853,10 +793,7 @@
           "description": "Url pointing to a key or secret in KeyVault"
         }
       },
-      "required": [
-        "keyUrl",
-        "sourceVault"
-      ],
+      "required": ["keyUrl", "sourceVault"],
       "description": "Key Vault Key Url and vault id of KeK, KeK is optional and when provided is used to unwrap the encryptionKey"
     },
     "SourceVault": {
@@ -873,10 +810,7 @@
         "osType": {
           "type": "string",
           "description": "the Operating System type.",
-          "enum": [
-            "Windows",
-            "Linux"
-          ],
+          "enum": ["Windows", "Linux"],
           "x-ms-enum": {
             "name": "OperatingSystemTypes",
             "modelAsString": false
@@ -898,14 +832,7 @@
       "properties": {
         "createOption": {
           "type": "string",
-          "enum": [
-            "Empty",
-            "Attach",
-            "FromImage",
-            "Import",
-            "Copy",
-            "Restore"
-          ],
+          "enum": ["Empty", "Attach", "FromImage", "Import", "Copy", "Restore"],
           "x-ms-enum": {
             "name": "DiskCreateOption",
             "modelAsString": true
@@ -929,9 +856,7 @@
           "description": "If createOption is Copy, this is the ARM id of the source snapshot or disk."
         }
       },
-      "required": [
-        "createOption"
-      ],
+      "required": ["createOption"],
       "description": "Data used when creating a disk."
     },
     "ImageDiskReference": {
@@ -946,19 +871,14 @@
           "description": "If the disk is created from an image's data disk, this is an index that indicates which of the data disks in the image to use. For OS disks, this field is null."
         }
       },
-      "required": [
-        "id"
-      ],
+      "required": ["id"],
       "description": "The source image used for creating the disk."
     },
     "GrantAccessData": {
       "properties": {
         "access": {
           "type": "string",
-          "enum": [
-            "None",
-            "Read"
-          ],
+          "enum": ["None", "Read"],
           "x-ms-enum": {
             "name": "AccessLevel",
             "modelAsString": true
@@ -970,10 +890,7 @@
           "description": "Time duration in seconds until the SAS access expires."
         }
       },
-      "required": [
-        "access",
-        "durationInSeconds"
-      ],
+      "required": ["access", "durationInSeconds"],
       "description": "Data used for requesting a SAS."
     },
     "AccessUri": {
@@ -1041,9 +958,7 @@
           "description": "The uri to fetch the next page of snapshots. Call ListNext() with this to fetch the next page of snapshots."
         }
       },
-      "required": [
-        "value"
-      ],
+      "required": ["value"],
       "description": "The List Snapshots operation response."
     }
   },

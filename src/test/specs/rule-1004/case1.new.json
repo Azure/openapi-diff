@@ -4,10 +4,7 @@
     "title": "title",
     "version": "2021-06-26"
   },
-  "produces":[
-    "application/json",
-    "text/plain"
-  ],
+  "produces": ["application/json", "text/plain"],
   "paths": {
     "/pets": {
       "get": {

@@ -5,17 +5,15 @@
     "version": "1.0"
   },
   "host": "localhost:8000",
-  "schemes": [ "http", "https" ],
-  "consumes": [ "text/plain", "text/json" ],
-  "produces": [ "text/plain" ],
+  "schemes": ["http", "https"],
+  "consumes": ["text/plain", "text/json"],
+  "produces": ["text/plain"],
   "paths": {
     "/api/Parameters": {
       "put": {
-        "tags": [ "Parameters" ],
+        "tags": ["Parameters"],
         "operationId": "Parameters_Put",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "parameters": [
           {
             "name": "database",
@@ -38,32 +36,28 @@
         "a": {
           "type": "string",
           "description": "Enum.",
-          "enum": [ "a1", "a2", "a3" ]
+          "enum": ["a1", "a2", "a3"]
         }
       },
-      "allOf":[
-        { "$ref":"#/definitions/BaseProperties"}
-      ],
-      "required": [ "a" ]
+      "allOf": [{ "$ref": "#/definitions/BaseProperties" }],
+      "required": ["a"]
     },
-    "DataBaseProperties" :{
-      "properties" : {
+    "DataBaseProperties": {
+      "properties": {
         "b": {
           "type": "string",
           "description": "Enum.",
-          "enum": [
-            "b1"
-          ]
+          "enum": ["b1"]
         },
-         "c":{
-          "type":"integer",
+        "c": {
+          "type": "integer",
           "format": "int32",
           "description": "inter"
         }
       },
-      "required":["b"]
+      "required": ["b"]
     },
-    "BaseProperties" :{
+    "BaseProperties": {
       "allOf": [
         {
           "$ref": "#/definitions/DataBaseProperties"

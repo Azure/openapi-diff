@@ -4,9 +4,7 @@
     "title": "title",
     "version": "2021-06-26"
   },
-  "consumes":[
-    "application/json"
-  ],
+  "consumes": ["application/json"],
   "paths": {
     "/pets": {
       "post": {

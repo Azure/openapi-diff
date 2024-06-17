@@ -6,22 +6,12 @@
     "version": "2018-04-01"
   },
   "host": "management.azure.com",
-  "schemes": [
-    "https"
-  ],
-  "consumes": [
-    "application/json",
-    "text/json"
-  ],
-  "produces": [
-    "application/json",
-    "text/json"
-  ],
+  "schemes": ["https"],
+  "consumes": ["application/json", "text/json"],
+  "produces": ["application/json", "text/json"],
   "security": [
     {
-      "azure_auth": [
-        "user_impersonation"
-      ]
+      "azure_auth": ["user_impersonation"]
     }
   ],
   "securityDefinitions": {
@@ -38,9 +28,7 @@
   "paths": {
     "/subscriptions/{subscriptionId}/providers/Microsoft.Compute/locations/{location}/runCommands": {
       "get": {
-        "tags": [
-          "VirtualMachineRunCommands"
-        ],
+        "tags": ["VirtualMachineRunCommands"],
         "operationId": "VirtualMachineRunCommands_List",
         "description": "Lists all available run commands for a subscription in a location.",
         "parameters": [
@@ -74,9 +62,7 @@
     },
     "/subscriptions/{subscriptionId}/providers/Microsoft.Compute/locations/{location}/runCommands/{commandId}": {
       "get": {
-        "tags": [
-          "VirtualMachineRunCommands"
-        ],
+        "tags": ["VirtualMachineRunCommands"],
         "operationId": "VirtualMachineRunCommands_Get",
         "description": "Gets specific run command for a subscription in a location.",
         "parameters": [
@@ -114,9 +100,7 @@
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmName}/runCommand": {
       "post": {
-        "tags": [
-          "VirtualMachines"
-        ],
+        "tags": ["VirtualMachines"],
         "operationId": "VirtualMachines_RunCommand",
         "description": "Run command on the VM.",
         "parameters": [
@@ -169,9 +153,7 @@
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachineScaleSets/{vmScaleSetName}/virtualmachines/{instanceId}/runCommand": {
       "post": {
-        "tags": [
-          "VirtualMachineScaleSetVMs"
-        ],
+        "tags": ["VirtualMachineScaleSetVMs"],
         "operationId": "VirtualMachineScaleSetVMs_RunCommand",
         "description": "Run command on a virtual machine in a VM scale set.",
         "parameters": [
@@ -242,10 +224,7 @@
           "description": "The run command parameter value."
         }
       },
-      "required": [
-        "name",
-        "value"
-      ],
+      "required": ["name", "value"],
       "description": "Describes the properties of a run command parameter."
     },
     "RunCommandInput": {
@@ -269,9 +248,7 @@
           "description": "The run command parameters."
         }
       },
-      "required": [
-        "commandId"
-      ],
+      "required": ["commandId"],
       "description": "Capture Virtual Machine parameters."
     },
     "RunCommandParameterDefinition": {
@@ -294,10 +271,7 @@
           "default": false
         }
       },
-      "required": [
-        "name",
-        "type"
-      ],
+      "required": ["name", "type"],
       "description": "Describes the properties of a run command parameter."
     },
     "RunCommandDocumentBase": {
@@ -313,10 +287,7 @@
         "osType": {
           "type": "string",
           "description": "The Operating System type.",
-          "enum": [
-            "Windows",
-            "Linux"
-          ],
+          "enum": ["Windows", "Linux"],
           "x-ms-enum": {
             "name": "OperatingSystemTypes",
             "modelAsString": false
@@ -331,13 +302,7 @@
           "description": "The VM run command description."
         }
       },
-      "required": [
-        "$schema",
-        "id",
-        "osType",
-        "label",
-        "description"
-      ],
+      "required": ["$schema", "id", "osType", "label", "description"],
       "description": "Describes the properties of a Run Command metadata."
     },
     "RunCommandDocument": {
@@ -362,9 +327,7 @@
           "description": "The parameters used by the script."
         }
       },
-      "required": [
-        "script"
-      ],
+      "required": ["script"],
       "description": "Describes the properties of a Run Command."
     },
     "RunCommandListResult": {
@@ -381,9 +344,7 @@
           "description": "The uri to fetch the next page of run commands. Call ListNext() with this to fetch the next page of run commands."
         }
       },
-      "required": [
-        "value"
-      ],
+      "required": ["value"],
       "description": "The List Virtual Machine operation response."
     },
     "InstanceViewStatus": {
@@ -395,11 +356,7 @@
         "level": {
           "type": "string",
           "description": "The level code.",
-          "enum": [
-            "Info",
-            "Warning",
-            "Error"
-          ],
+          "enum": ["Info", "Warning", "Error"],
           "x-ms-enum": {
             "name": "StatusLevelTypes",
             "modelAsString": false

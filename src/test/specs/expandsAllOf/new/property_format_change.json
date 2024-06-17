@@ -43,7 +43,7 @@
           "description": "Enum."
         }
       },
-      "required": ["b","a"]
+      "required": ["b", "a"]
     }
   }
 }

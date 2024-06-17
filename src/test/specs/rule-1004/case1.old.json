@@ -4,9 +4,7 @@
     "title": "title",
     "version": "2021-06-25"
   },
-  "produces":[
-    "application/json"
-  ],
+  "produces": ["application/json"],
   "paths": {
     "/pets": {
       "get": {
