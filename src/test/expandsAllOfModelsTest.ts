@@ -37,12 +37,12 @@ test("expands allOf Models", async () => {
       old: {
         ref: `${oldFilePath}#/paths/~1api~1Parameters/put/parameters/0/schema`,
         path: "paths./api/Parameters.put.parameters[0].schema",
-        location: `${oldFilePath}:24:13`
+        location: `${oldFilePath}:22:13`
       },
       new: {
         ref: `${newFilePath}#/paths/~1api~1Parameters/put/parameters/0/schema`,
         path: "paths./api/Parameters.put.parameters[0].schema",
-        location: `${newFilePath}:24:13`
+        location: `${newFilePath}:22:13`
       },
       type: "Error",
       docUrl: "https://github.com/Azure/openapi-diff/tree/master/docs/rules/1032.md",
@@ -55,12 +55,12 @@ test("expands allOf Models", async () => {
       message: "The new version has a different 'allOf' property than the previous one.",
       mode: "Update",
       new: {
-        location: `${newFilePath}:36:5`,
+        location: `${newFilePath}:34:5`,
         path: "definitions.Database",
         ref: `${newFilePath}#/definitions/Database`
       },
       old: {
-        location: `${oldFilePath}:36:5`,
+        location: `${oldFilePath}:34:5`,
         path: "definitions.Database",
         ref: `${oldFilePath}#/definitions/Database`
       },

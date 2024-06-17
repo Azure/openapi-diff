@@ -38,7 +38,7 @@ test("xms-path", async () => {
       mode: "Addition",
       new: {
         ref: `${newFilePath}#/x-ms-paths/?does-not-start-with-slash`,
-        location: `${newFilePath}:44:5`,
+        location: `${newFilePath}:42:5`,
         path: "paths.?does-not-start-with-slash"
       },
       old: {},

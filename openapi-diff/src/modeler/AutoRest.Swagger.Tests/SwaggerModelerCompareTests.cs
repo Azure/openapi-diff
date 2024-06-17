@@ -308,7 +308,7 @@ namespace AutoRest.Swagger.Tests
             var output = x.GetValidationMessagesAsJson();
             var raw = JToken.Parse(output);
             Assert.Equal(JTokenType.Object, raw.Type);
-            Assert.Equal("new/added_path.json:38:15", raw["new"]["location"].Value<string>());
+            Assert.Equal("new/added_path.json:27:15", raw["new"]["location"].Value<string>());
             Assert.Equal("paths./api/Operations.post", raw["new"]["path"].Value<string>());
             Assert.Null(raw["old"]["location"]);
         }
