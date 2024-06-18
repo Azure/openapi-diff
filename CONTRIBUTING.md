@@ -141,10 +141,9 @@ npm list -g oad # Should denote no packages installed
 
 ## Publish the package
 
-- Ensure you bumped the package version in `openapi-diff` `package.json`.
-- Verify [`public.openapi-diff`] passed.
-- Use [`js - tools to npm - publish (@azure)`] to publish the package to the public `npm` feed.
-- Verify in [`@azure/oad` versions] the package was published.
+- Ensure you bumped the package version in [`openapi-diff`] `package.json`.
+- Queue a run of the [`openapi-diff-build`] and approve the 'publish' stage.
+- Verify in [`@azure/oad` versions] the package was published on npmjs.org.
 - Save it to `openapi-platform` feed via [upstream feeds of `openapi-platform`].
 - To make `openapi-alps` use the newly published package:
   - Ensure that you update the minimum package version in  relevant `package.json` files and then run `rush update` and commit the changes.
@@ -160,7 +159,7 @@ npm list -g oad # Should denote no packages installed
 [`dotnet test`]: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test
 [`npm link`]: https://docs.npmjs.com/cli/v10/commands/npm-link
 [the cache]: https://docs.npmjs.com/cli/v10/configuring-npm/folders#cache
-[`js - tools to npm - publish (@azure)`]: https://dev.azure.com/azure-sdk/internal/_release?definitionId=24&_a=releases&view=mine
+[`openapi-diff-build`]: https://dev.azure.com/azure-sdk/internal/_build/index?definitionId=7030
 [`public.openapi-diff`]: https://dev.azure.com/azure-sdk/public/_build?definitionId=135&_a=summary
 [upstream feeds of `openapi-platform`]: https://devdiv.visualstudio.com/DevDiv/_artifacts/feed/openapi-platform/Npm/@azure%2Foad/upstreams/
 [`@azure/oad` versions]: https://www.npmjs.com/package/@azure/oad?activeTab=versions

@@ -1,64 +1,93 @@
 trigger:
 - main
 
-variables:
-  Codeql.Enabled: true
+extends:
+  template: /eng/1es-redirect.yml
+  parameters:
+    stages:
+    - stage: Build
+      variables:
+        - template: /eng/image.yml
+      jobs:
+        - job: Build_linux
 
-strategy:
-  matrix:
-    Linux:
-      Pool: azsdk-pool-mms-ubuntu-2204-general
-      OsVmImage: ubuntu-22.04
-      TargetFolder: drop-linux
-    Windows:
-      Pool: azsdk-pool-mms-win-2022-general
-      OsVmImage: windows-2022
-      TargetFolder: drop
+          pool:
+            name: $(LINUXPOOL)
+            image: $(LINUXVMIMAGE)
+            os: linux
 
-pool:
-  name: $(Pool)
-  vmImage: $(OSVmImage)
+          steps:
+            - template: /eng/test-steps.yml
+              parameters:
+                ArtifactName: drop-linux
 
-steps:
-- script: npm ci
-  displayName: npm ci
-- script: npm run lint
-  displayName: lint
-- script: npm run prettier
-  displayName: prettier
-- script: npm test
-  displayName: test
-- script: npm pack
-  displayName: pack
-- task: CopyFiles@2
-  displayName: 'Copy Files to: $(TargetFolder)'
-  inputs:
-    Contents: '*.tgz'
-    TargetFolder: $(TargetFolder)
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: $(Build.SourcesDirectory)/$(TargetFolder)
-    artifactName: $(TargetFolder)
+        - job: Build_Windows
 
-- task: securedevelopmentteam.vss-secure-development-tools.build-task-credscan.CredScan@2 # CredScan@2
-  inputs:
-    toolMajorVersion: 'V2'
-  condition: and(succeeded(), eq(variables['Agent.OS'],'Windows_NT')) # CredScan only supported on Windows
+          pool:
+            name: $(WINDOWSPOOL)
+            image: $(WINDOWSVMIMAGE)
+            os: windows
 
-- task: securedevelopmentteam.vss-secure-development-tools.build-task-postanalysis.PostAnalysis@1 # PostAnalysis@1
-  inputs:
-    AllTools: false
-    APIScan: false
-    BinSkim: false
-    CodesignValidation: false
-    CredScan: true
-    FortifySCA: false
-    FxCop: false
-    ModernCop: false
-    PoliCheck: false
-    RoslynAnalyzers: false
-    SDLNativeRules: false
-    Semmle: false
-    TSLint: false
-    ToolLogsNotFoundAction: 'Standard'
-  condition: and(succeeded(), eq(variables['Agent.OS'],'Windows_NT')) # CredScan only supported on Windows
+          steps:
+            - template: /eng/test-steps.yml
+              parameters:
+                ArtifactName: drop
+
+
+    # only include if running on `internal` build with manual queue, otherwise never include
+    - ${{ if and(in(variables['Build.Reason'], 'Manual', ''), eq(variables['System.TeamProject'], 'internal'))}}:
+      - stage: Publish
+        displayName: Publish
+        dependsOn: Build_And_Test
+
+        jobs:
+          - deployment: Publish
+            environment: 'package-publish'
+            pool:
+              name: azsdk-pool-mms-ubuntu-2004-general
+              image: azsdk-pool-mms-ubuntu-2004-1espt
+              os: linux
+
+            strategy:
+              runOnce:
+                deploy:
+                  steps:
+                  - checkout: self
+                    submodules: false
+
+                  - download: current
+                    artifact: drop
+                    timeoutInMinutes: 5
+
+                  - task: PowerShell@2
+                    inputs:
+                      filePath: '$(Build.SourcesDirectory)/eng/scripts/determine-release-tag.ps1'
+                      failOnStderr: true
+                      pwsh: true
+
+                  - pwsh: |
+                      Write-Host "Will deploy with tag of $(Tag)"
+                      Get-ChildItem "$(Pipeline.Workspace)/drop" -Recurse -Force `
+                        | Where-Object { $_.Name -like "*.tgz" } `
+                        | Copy-Item -Destination "$(Build.ArtifactStagingDirectory)"
+
+                      Get-ChildItem "$(Build.ArtifactStagingDirectory)" -Recurse -Force | % { Write-Host $_.FullName }
+                    displayName: Move artifact to $(Build.ArtifactStagingDirectory)
+
+                  - task: EsrpRelease@7
+                    inputs:
+                      displayName: 'Publish oav to ESRP'
+                      ConnectedServiceName: 'Azure SDK Engineering System'
+                      ClientId: '5f81938c-2544-4f1f-9251-dd9de5b8a81b'
+                      KeyVaultName: 'AzureSDKEngKeyVault'
+                      AuthCertName: 'azure-sdk-esrp-release-auth-certificate'
+                      SignCertName: 'azure-sdk-esrp-release-sign-certificate'
+                      Intent: 'PackageDistribution'
+                      ContentType: 'npm'
+                      FolderLocation: $(Build.ArtifactStagingDirectory)
+                      Owners: ${{ coalesce(variables['Build.RequestedForEmail'], 'azuresdk@microsoft.com') }}
+                      Approvers: 'azuresdk@microsoft.com'
+                      ServiceEndpointUrl: 'https://api.esrp.microsoft.com'
+                      MainPublisher: 'ESRPRELPACMANTEST'
+                      DomainTenantId: '72f988bf-86f1-41af-91ab-2d7cd011db47'
+                      productstate: $(Tag)
