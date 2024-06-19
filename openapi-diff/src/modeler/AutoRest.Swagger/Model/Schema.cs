@@ -186,15 +186,18 @@ namespace AutoRest.Swagger.Model
         /// <summary>
         /// Compares list of required properties of this (i.e. "new") model to the previous (i.e. "old") model.
         ///
-        /// If the new model has new required properties that are not readOnly, it is a breaking change.
-        /// In case there are any issues with property definitions, like:
-        /// - properties being listed as required but not actually defined,
-        /// - or properties changing their read-only status.
-        /// Then we conservatively also treat such cases as breaking changes.
-        ///
+        /// 1. If the property **was** required and **is** required: do not report a breaking change.
+        ///     This is regardless of property being actually defined or not (previously or now).
+        /// 2. If the property **was not** required and **is** required then:
+        ///     - If the property **was defined and read-only** and **is defined and read-only** then do not report breaking change.
+        ///     - In all other cases, report a breaking change.
+        ///         - E.g. if the property **was not required and not defined** and now **is required and defined and read-only**
+        ///           this still counts as a breaking change.
+        /// 
         /// Related:
         /// https://stackoverflow.com/questions/40113049/how-to-specify-if-a-field-is-optional-or-required-in-openapi-swagger
         /// https://github.com/Azure/azure-sdk-tools/issues/7184
+        /// https://github.com/Azure/openapi-diff/pull/336#discussion_r1638996922
         /// </summary>
         /// <param name="context">Comparison Context</param>
         /// <param name="priorSchema">Schema of the old model</param>
@@ -212,24 +215,17 @@ namespace AutoRest.Swagger.Model
             {
                 Properties.TryGetValue(requiredPropName, out Schema propSchema);
                 priorSchema.Properties.TryGetValue(requiredPropName, out Schema priorPropSchema);
-                if (propSchema is null || priorPropSchema is null)
-                {
-                    // If propSchema is null then the property is marked as required but not actually defined in the model.
-                    // This is a model definition issue and we report it.
-                    // If priorPropSchema is null then the property was not actually defined in the old model,
-                    // so we conservatively assume it is a newly required property, even if the old model
-                    // listed this not-then-defined property as required (which would be the old model definition issue).
-                    newRequiredNonReadOnlyPropNames.Add(requiredPropName);
-                    break;
-                }
-
                 bool propWasRequired = priorSchema.Required?.Contains(requiredPropName) == true;
                 // Note that property is considered read-only only if it is consistently read-only both in the old and new models.
-                bool propIsReadOnly = propSchema.ReadOnly && priorPropSchema.ReadOnly;
+                bool propIsReadOnly = propSchema?.ReadOnly == true && priorPropSchema?.ReadOnly == true;
                 if (!propWasRequired && !propIsReadOnly)
                 {
                     // Property is newly required and it is not read-only, hence it is a breaking change.
                     newRequiredNonReadOnlyPropNames.Add(requiredPropName);
+                }
+                else
+                {
+                    // Property was required and is required, or it is read-only, hence it is not a breaking change.
                 }
             }
 
