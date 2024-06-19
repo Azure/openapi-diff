@@ -14,7 +14,7 @@
         {
             Id = 1034,
             Code = nameof(ComparisonMessages.AddedRequiredProperty),
-            Message = "The new version has new required property '{0}' that was not found in the old version.",
+            Message = "The new version lists new non-read-only properties as required: '{0}'. These properties were not listed as required in the old version.",
             Type = MessageType.Addition
         };
 
