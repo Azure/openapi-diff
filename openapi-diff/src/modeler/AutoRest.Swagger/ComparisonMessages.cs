@@ -110,7 +110,7 @@
         {
             Id = 1042,
             Code = nameof(ComparisonMessages.ChangedParameterOrder),
-            Message = "The order of parameter with Name: '{0}' In: '{1}' was changed. ",
+            Message = "The order of parameter with Name: '{0}', In: '{1}', was changed.",
             Type = MessageType.Update
         };
 
