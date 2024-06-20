@@ -309,24 +309,21 @@ namespace AutoRest.Swagger.Model
 
             while (currIndex < currParamsCount)
             {
-                SwaggerParameter currParam = currParamsResolvedOrdered[currIndex];
-                SwaggerParameter priorParam =
+                SwaggerParameter currParamAtIndex = currParamsResolvedOrdered[currIndex];
+                SwaggerParameter priorParamAtIndex =
                     currIndex < priorParamsCount ? priorParamsResolvedOrdered[currIndex] : null;
 
                 bool paramExistedBefore = priorParamsInfo.Any(
-                    candidateInfo => candidateInfo.param.Name == currParam.Name &&
-                                     candidateInfo.param.In == currParam.In);
+                    candidatePriorParamInfo => ParamsAreSame(candidatePriorParamInfo.param, currParamAtIndex));
 
                 if (paramExistedBefore)
                 {
-
-                    // Here we assume a parameter is uniquely identified by the pair of its properties : "Name" and "In".
-                    if (currParam.Name != priorParam?.Name || currParam.In != priorParam?.In)
+                    if (!ParamsAreSame(currParamAtIndex, priorParamAtIndex))
                     {
                         context.LogBreakingChange(
                             ComparisonMessages.ChangedParameterOrder,
-                            currParam.Name,
-                            currParam.In);
+                            currParamAtIndex.Name,
+                            currParamAtIndex.In);
                     }
                 }
                 else
@@ -337,6 +334,12 @@ namespace AutoRest.Swagger.Model
                 currIndex++;
             }
         }
+
+        /// <summary>
+        /// Here we assume a parameter is uniquely identified by the pair of its properties : "Name" and "In".
+        /// </summary>
+        private static bool ParamsAreSame(SwaggerParameter currParam, SwaggerParameter priorParam)
+            => currParam.Name == priorParam?.Name && currParam.In == priorParam?.In;
 
         /// <summary>
         /// Determines if given parameter's order matters. See the comments within this method for details,
