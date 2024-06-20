@@ -262,7 +262,7 @@ namespace AutoRest.Swagger.Model
         /// by index. If at any point current and prior params differ (see implementation of this method
         /// to see how we determine if two params differ), then we report a breaking change.
         ///
-        /// If a new parameter was added to current version whose order matters, we will not report any
+        /// If a new parameter, whose order matters, was added to current version, we will not report any
         /// breaking changes on it as it didn't exist before. However, its addition may still shift
         /// other parameters' order, and that will be reported as breaking change. E.g.:
         /// [Foo, Bar] -> [Qux, Foo, Bar].
