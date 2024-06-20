@@ -186,50 +186,15 @@ namespace AutoRest.Swagger.Model
 
             context.PushProperty("parameters");
 
-            List<SwaggerParameter> priorOperationParameters =
-                priorOperation.Parameters.Select(
-                    param =>
-                        string.IsNullOrWhiteSpace(param.Reference)
-                            ? param
-                            : FindReferencedParameter(param.Reference, previousRoot.Parameters)
-                ).ToList();
+            List<SwaggerParameter> currParamsResolved =
+                Parameters.Select(param => ResolveParam(param, currentRoot)).ToList();
 
-            List<SwaggerParameter> currentOperationParameters =
-                Parameters.Select(
-                    param =>
-                        string.IsNullOrWhiteSpace(param.Reference)
-                            ? param
-                            : FindReferencedParameter(param.Reference, currentRoot.Parameters)).ToList();
+            List<SwaggerParameter> priorParamsResolved =
+                priorOperation.Parameters.Select(param => ResolveParam(param, previousRoot)).ToList();
 
-            for (int i = 0; i < currentOperationParameters.Count; i++)
-            {
-                SwaggerParameter curOriginalParameter = Parameters.ElementAt(i);
-                SwaggerParameter curParameter = currentOperationParameters.ElementAt(i);
-                curParameter.Extensions.TryGetValue("x-ms-parameter-location", out object curParameterLocation);
-                if (
-                    !string.IsNullOrWhiteSpace(curOriginalParameter.Reference) &&
-                    (curParameterLocation == null || !curParameterLocation.Equals("method"))
-                )
-                {
-                    // If the parameter is a Reference then we assume it is a global parameter.
-                    // If the global parameter definition does not declare "x-ms-parameter-location"
-                    // then we assume it defaults to "client" and so its order does not matter.
-                    // If the global parameter definition declares "x-ms-parameter-location" 
-                    // to any value different from "method", then we assume its order does not matter.
-                    // When we assume the parameter order does not matter, then we continue
-                    // here to avoid checking for ordering change.
-                    // Read more at:
-                    // https://github.com/Azure/azure-sdk-tools/issues/7170#issuecomment-2162156876
-                    continue;
-                }
-                int priorIndex = FindParameterIndex(curParameter, priorOperationParameters);
-                if (priorIndex != -1 && priorIndex != i)
-                {
-                    context.LogBreakingChange(ComparisonMessages.ChangedParameterOrder, curParameter.Name);
-                }
-            }
+            DetectChangedParameterOrder(context, currParamsResolved, priorParamsResolved);
 
-            foreach (SwaggerParameter oldParam in priorOperationParameters)
+            foreach (SwaggerParameter oldParam in priorParamsResolved)
             {
                 SwaggerParameter newParam = FindParameterEx(oldParam, Parameters, currentRoot.Parameters);
 
@@ -280,6 +245,62 @@ namespace AutoRest.Swagger.Model
                 context.Pop();
             }
             context.Pop();
+        }
+
+        private static SwaggerParameter ResolveParam(SwaggerParameter param, ServiceDefinition serviceDef)
+            => string.IsNullOrWhiteSpace(param.Reference)
+                ? param
+                : FindReferencedParameter(param.Reference, serviceDef.Parameters);
+
+        private void DetectChangedParameterOrder(
+            ComparisonContext<ServiceDefinition> context,
+            List<SwaggerParameter> currParamsResolved,
+            List<SwaggerParameter> priorParamsResolved)
+        {
+            // To detect which parameters order change has caused breaking change we first must
+            // filter out all parameters whose order does not matter.
+            // Once we filter out such parameters, we can determine order change by comparing
+            // position index of all the remaining parameters. Without such pre-filtering this would
+            // throw off computations.
+            //
+            // For an example, consider following params:
+            // [Foo, Bar, Qux]
+            // whose order changed to
+            // [Foo, Qux, Bar].
+            // In such case if the order of "Foo" and "Bar" matters
+            // but the order of "Qux" does not matter,
+            // then there is no breaking change here, because "Bar" correctly remains
+            // *after* "Foo" param.
+            //
+            // We uniquely identify a parameter by the unique pair of its properties: "Name" and "In".
+
+            for (int i = 0; i < currParamsResolved.Count; i++)
+            {
+                SwaggerParameter currParam = Parameters.ElementAt(i);
+                SwaggerParameter currParamResolved = currParamsResolved.ElementAt(i);
+                currParamResolved.Extensions.TryGetValue("x-ms-parameter-location", out object curParameterLocation);
+                if (
+                    !string.IsNullOrWhiteSpace(currParam.Reference) &&
+                    (curParameterLocation == null || !curParameterLocation.Equals("method"))
+                )
+                {
+                    // If the parameter is a Reference then we assume it is a global parameter.
+                    // If the global parameter definition does not declare "x-ms-parameter-location"
+                    // then we assume it defaults to "client" and so its order does not matter.
+                    // If the global parameter definition declares "x-ms-parameter-location" 
+                    // to any value different from "method", then we assume its order does not matter.
+                    // When we assume the parameter order does not matter, then we continue
+                    // here to avoid checking for ordering change.
+                    // Read more at:
+                    // https://github.com/Azure/azure-sdk-tools/issues/7170#issuecomment-2162156876
+                    continue;
+                }
+                int priorIndex = FindParameterIndex(currParamResolved, priorParamsResolved);
+                if (priorIndex != -1 && priorIndex != i)
+                {
+                    context.LogBreakingChange(ComparisonMessages.ChangedParameterOrder, currParamResolved.Name);
+                }
+            }
         }
 
         /// <summary>
@@ -342,11 +363,11 @@ namespace AutoRest.Swagger.Model
             return null;
         }
 
-        private int FindParameterIndex(SwaggerParameter parameter, IEnumerable<SwaggerParameter> operationParameters)
+        private int FindParameterIndex(SwaggerParameter parameter, IList<SwaggerParameter> @params)
         {
-            for (int i = 0; i < operationParameters.Count(); i++)
+            for (int i = 0; i < @params.Count; i++)
             {
-                if (operationParameters.ElementAt(i).Name == parameter.Name && operationParameters.ElementAt(i).In == parameter.In)
+                if (@params.ElementAt(i).Name == parameter.Name && @params.ElementAt(i).In == parameter.In)
                 {
                     return i;
                 }
