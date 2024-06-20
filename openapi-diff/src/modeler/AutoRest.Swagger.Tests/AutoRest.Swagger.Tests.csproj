@@ -15,7 +15,6 @@
     <Content Include="Resource\Swagger\new\changed_operation_id.json" />
     <Content Include="Resource\Swagger\new\enum_as_string.json" />
     <Content Include="Resource\Swagger\new\enum_values_changed.json" />
-    <Content Include="Resource\Swagger\new\global_parameter_no_order_change.json" />
     <Content Include="Resource\Swagger\new\misc_checks_01.json" />
     <Content Include="Resource\Swagger\new\misc_checks_02.json" />
     <Content Include="Resource\Swagger\new\operation_check_01.json" />
@@ -24,6 +23,7 @@
     <Content Include="Resource\Swagger\new\operation_check_04.json" />
     <Content Include="Resource\Swagger\new\operation_check_05.json" />
     <Content Include="Resource\Swagger\new\global_parameter_order_change.json" />
+    <Content Include="Resource\Swagger\new\global_parameter_no_order_change.json" />
     <Content Include="Resource\Swagger\new\param_check_01.json" />
     <Content Include="Resource\Swagger\new\removed_definition.json" />
     <Content Include="Resource\Swagger\new\removed_operation.json" />
@@ -49,7 +49,6 @@
     <Content Include="Resource\Swagger\new\version_check_03.json" />
     <Content Include="Resource\Swagger\new\version_check_04.json" />
     <Content Include="Resource\Swagger\old\added_readonly_required_property.json" />
-    <Content Include="Resource\Swagger\old\added_required_property.json" />
     <Content Include="Resource\Swagger\old\added_required_property.json" />
     <Content Include="Resource\Swagger\old\global_parameter_no_order_change.json" />
     <Content Include="Resource\Swagger\old\global_parameter_order_change.json" />
