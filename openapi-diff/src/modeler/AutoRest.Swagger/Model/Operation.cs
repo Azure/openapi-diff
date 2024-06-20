@@ -263,6 +263,12 @@ namespace AutoRest.Swagger.Model
         /// by index. If at any point current and prior params differ (see implementation of this method
         /// to see how we determine if two params differ), then we report a breaking change.
         ///
+        /// If a new parameter was added to current version whose order matters, we will not report any
+        /// breaking changes on it as it didn't exist before. However, its addition may still shift
+        /// other parameters' order, and that will be reported as breaking change. E.g.:
+        /// [Foo, Bar] -> [Qux, Foo, Bar].
+        /// Here Qux has been added thus shifting Foo and Bar's order.
+        /// 
         /// If a parameter definition has changed from prior version in such way that its order now matters
         /// but previously didn't, then we assume its order matters. E.g. the parameter was converted from
         /// "client" to "method".
@@ -308,11 +314,27 @@ namespace AutoRest.Swagger.Model
                 SwaggerParameter priorParam =
                     currIndex < priorParamsCount ? priorParamsResolvedOrdered[currIndex] : null;
 
-                // Here we assume a parameter is uniquely identified by the pair of its properties : "Name" and "In".
-                if (currParam.Name != priorParam?.Name || currParam.In != priorParam?.In)
+                bool paramExistedBefore = priorParamsInfo.Any(
+                    candidateInfo => candidateInfo.param.Name == currParam.Name &&
+                                     candidateInfo.param.In == currParam.In);
+
+                if (paramExistedBefore)
                 {
-                    context.LogBreakingChange(ComparisonMessages.ChangedParameterOrder, currParam.Name, currParam.In);
+
+                    // Here we assume a parameter is uniquely identified by the pair of its properties : "Name" and "In".
+                    if (currParam.Name != priorParam?.Name || currParam.In != priorParam?.In)
+                    {
+                        context.LogBreakingChange(
+                            ComparisonMessages.ChangedParameterOrder,
+                            currParam.Name,
+                            currParam.In);
+                    }
                 }
+                else
+                {
+                    // The parameter did not exist in the prior params, hence it cannot have changed its order.
+                }
+
                 currIndex++;
             }
         }
