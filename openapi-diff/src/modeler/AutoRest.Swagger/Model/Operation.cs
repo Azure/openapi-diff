@@ -205,12 +205,21 @@ namespace AutoRest.Swagger.Model
             {
                 SwaggerParameter curOriginalParameter = Parameters.ElementAt(i);
                 SwaggerParameter curParameter = currentOperationParameters.ElementAt(i);
-                curParameter.Extensions.TryGetValue("x-ms-long-running-operation", out object curParameterLocation);
+                curParameter.Extensions.TryGetValue("x-ms-parameter-location", out object curParameterLocation);
                 if (
                     !string.IsNullOrWhiteSpace(curOriginalParameter.Reference) &&
                     (curParameterLocation == null || !curParameterLocation.Equals("method"))
-                    )
+                )
                 {
+                    // If the parameter is a Reference then we assume it is a global parameter.
+                    // If the global parameter definition does not declare "x-ms-parameter-location"
+                    // then we assume it defaults to "client" and so its order does not matter.
+                    // If the global parameter definition declares "x-ms-parameter-location" 
+                    // to any value different from "method", then we assume its order does not matter.
+                    // When we assume the parameter order does not matter, then we continue
+                    // here to avoid checking for ordering change.
+                    // Read more at:
+                    // https://github.com/Azure/azure-sdk-tools/issues/7170#issuecomment-2162156876
                     continue;
                 }
                 int priorIndex = FindParameterIndex(curParameter, priorOperationParameters);
@@ -386,6 +395,11 @@ namespace AutoRest.Swagger.Model
                     // because it has different number of elements or its second element is not "parameters".
                     // Silently ignoring that param reference by doing nothing here.
                 }
+            }
+            else
+            {
+                // The reference is null or does not start with "#".
+                // Silently ignoring it by doing nothing here.
             }
 
             return null;

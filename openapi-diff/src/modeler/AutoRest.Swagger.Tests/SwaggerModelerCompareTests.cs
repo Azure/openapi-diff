@@ -931,7 +931,7 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void DidNotChangeGlobalParameterOrder()
         {
-            var messages = CompareSwagger("global_parameter_order_no_change.json").ToArray();
+            var messages = CompareSwagger("global_parameter_no_order_change.json").ToArray();
 
             // Changed order from:
             //    ( Implicit , Method1 , Client  , Method2  )
