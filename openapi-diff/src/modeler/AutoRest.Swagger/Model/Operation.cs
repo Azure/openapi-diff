@@ -173,7 +173,6 @@ namespace AutoRest.Swagger.Model
             return context.Messages;
         }
 
-        // kja todo
         /// <summary>
         /// Check that no parameters were removed or reordered, and compare them if it's not the case
         /// </summary>
