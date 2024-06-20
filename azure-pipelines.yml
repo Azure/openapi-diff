@@ -5,7 +5,7 @@ extends:
   template: /eng/1es-redirect.yml
   parameters:
     stages:
-    - stage: Build
+    - stage: Build_And_Test
       variables:
         - template: /eng/image.yml
       jobs:
