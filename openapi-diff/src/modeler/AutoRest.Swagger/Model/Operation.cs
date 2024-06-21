@@ -191,6 +191,7 @@ namespace AutoRest.Swagger.Model
             List<(SwaggerParameter param, bool isGlobal)> priorParamsResolved =
                 priorOperation.Parameters.Select(param => ResolveParam(param, previousRoot)).ToList();
 
+            DetectChangedParameterLocation(context, currParamsResolved, priorParamsResolved);
             DetectChangedParameterOrder(context, currParamsResolved, priorParamsResolved);
 
             foreach (var paramInfo in priorParamsResolved)
@@ -251,6 +252,47 @@ namespace AutoRest.Swagger.Model
             => string.IsNullOrWhiteSpace(param.Reference)
                 ? (param, false)
                 : (FindReferencedParameter(param.Reference, serviceDef.Parameters), true);
+
+        /// <summary>
+        /// Report breaking change if parameter location has changed.
+        /// See "1050 - ParameterLocationHasChanged" in docs/rules/1050.md for details.
+        ///
+        /// Parameter location could have changed only if that parameter existed in the previous version and
+        /// still exists in the new version.
+        /// </summary>
+        private void DetectChangedParameterLocation(
+            ComparisonContext<ServiceDefinition> context,
+            List<(SwaggerParameter param, bool isGlobal)> currParamsInfo,
+            List<(SwaggerParameter param, bool isGlobal)> priorParamsInfo)
+        {
+            // kja WIP
+            priorParamsInfo.ForEach(
+                priorParamInfo
+                    =>
+                {
+                    (SwaggerParameter param, bool isGlobal) matchingCurrParamInfo = currParamsInfo.FirstOrDefault(
+                        currParamInfo => ParamsAreSame(currParamInfo.param, priorParamInfo.param));
+                    if (matchingCurrParamInfo == default)
+                    {
+                        var priorLocationIsMethod = ParamLocationIsMethod(priorParamInfo);
+                        var currLocationIsMethod = ParamLocationIsMethod(matchingCurrParamInfo);
+                        if (priorLocationIsMethod ^ currLocationIsMethod)
+                        {
+                            context.LogBreakingChange(
+                                ComparisonMessages.ParameterLocationHasChanged,
+                                priorParamInfo.param.Name,
+                                priorParamInfo.param.In,
+                                priorLocationIsMethod,
+                                currLocationIsMethod);
+                        }
+                    }
+                    else
+                    {
+                        // The parameter existed in the previous version but does not exist in the new version
+                        // hence its location could not have changed.
+                    }
+                });
+        }
 
         /// <summary>
         /// This method reports breaking change on parameters whose order matters and it has changed.
@@ -322,6 +364,12 @@ namespace AutoRest.Swagger.Model
         private static bool ParamsAreSame(SwaggerParameter currParam, SwaggerParameter priorParam)
             => currParam != null && priorParam != null && currParam.Name == priorParam.Name &&
                currParam.In == priorParam.In;
+
+        /// <summary>
+        /// We assume that parameter location is "method" if, and only if, its order matters.
+        /// </summary>
+        private bool ParamLocationIsMethod((SwaggerParameter param, bool isGlobal) paramInfo)
+            => ParamOrderMatters(paramInfo);
 
         /// <summary>
         /// Determines if given parameter's order matters. See the comments within this method for details,

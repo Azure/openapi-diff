@@ -396,7 +396,7 @@
         {
             Id = 1050,
             Code = nameof(ComparisonMessages.ParameterLocationHasChanged),
-            Message = "Parameter location has changed. Name: '{0}'. In: '{1}'. Old location: '{2}'. New location: '{3}'.",
+            Message = "Parameter location has changed. Name: '{0}'. In: '{1}'. Old location is method: '{2}'. New location is method: '{3}'.",
             Type = MessageType.Update
         };
     }
