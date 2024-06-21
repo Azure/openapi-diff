@@ -265,16 +265,20 @@ namespace AutoRest.Swagger.Model
         /// If a new parameter, whose order matters, was added to current version, we will not report any
         /// breaking changes on it as it didn't exist before. However, its addition may still shift
         /// other parameters' order, and that will be reported as breaking change. E.g.:
-        /// [Foo, Bar] -> [Qux, Foo, Bar].
+        /// [Foo, Bar] -> [Qux, Foo, Bar]. // kja add test for this. And also for [Foo, Bar, Qux] where all orders matter.
         /// Here Qux has been added thus shifting Foo and Bar's order.
-        /// 
-        /// If a parameter definition has changed from prior version in such way that its order now matters
-        /// but previously didn't, then we assume its order matters. E.g. the parameter was converted from
-        /// "client" to "method".
         ///
-        /// If a parameter definition has changed from prior version in such way that its order previously
-        /// mattered, but now it does not, then we assume order does not matter. E.g. the parameter
-        /// was converted from "method" to "client".
+        /// If a parameter definition has changed in such a way that its order now matters, but previously
+        /// it did not, then we will not report a ComparisonMessages.ChangedParameterOrder breaking change
+        /// on that parameters, but we do expect a different breaking change will be reported by a different rule.
+        /// This case can happen when parameter location was converted from "client" to "method".
+        /// // kja add test for: params changed from "client" to "method"
+        /// 
+        /// If a parameter definition has changed in such a way that its order previously mattered,
+        /// but now it does not, then we will not report a ComparisonMessages.ChangedParameterOrder breaking change
+        /// on that parameter, but we do expect a different breaking change will be reported by a different rule.
+        /// This case can happen when parameter location was converted from "method" to "client".
+        /// // kja add test for: params changed from "method" to "client".
         /// 
         /// Additional context provided at:
         /// https://github.com/Azure/azure-sdk-tools/issues/7170#issuecomment-2162156876
@@ -290,48 +294,25 @@ namespace AutoRest.Swagger.Model
             SwaggerParameter[] priorParamsResolvedOrdered =
                 priorParamsInfo.Where(ParamOrderMatters).Select(paramInfo => paramInfo.param).ToArray();
 
-            if (!currParamsResolvedOrdered.Any())
-            {
-                // If there are no params that must be ordered, then there cannot be param ordering breaking change.
-                return;
-            }
-
-            if (!priorParamsResolvedOrdered.Any())
-            {
-                // If there are params that must be ordered, but previously there were no params that must be ordered,
-                // then there cannot be param ordering breaking change.
-            }
-
-            int currParamsCount = currParamsResolvedOrdered.Length;
             int priorParamsCount = priorParamsResolvedOrdered.Length;
 
-            int currIndex = 0;
+            int paramIndex = 0;
 
-            while (currIndex < currParamsCount)
+            while (paramIndex < priorParamsCount)
             {
-                SwaggerParameter currParamAtIndex = currParamsResolvedOrdered[currIndex];
-                SwaggerParameter priorParamAtIndex =
-                    currIndex < priorParamsCount ? priorParamsResolvedOrdered[currIndex] : null;
+                SwaggerParameter currParamAtIndex =
+                    paramIndex < priorParamsCount ? currParamsResolvedOrdered[paramIndex] : null;
+                SwaggerParameter priorParamAtIndex = priorParamsResolvedOrdered[paramIndex];
 
-                bool paramExistedBefore = priorParamsInfo.Any(
-                    candidatePriorParamInfo => ParamsAreSame(candidatePriorParamInfo.param, currParamAtIndex));
-
-                if (paramExistedBefore)
+                if (!ParamsAreSame(currParamAtIndex, priorParamAtIndex))
                 {
-                    if (!ParamsAreSame(currParamAtIndex, priorParamAtIndex))
-                    {
-                        context.LogBreakingChange(
-                            ComparisonMessages.ChangedParameterOrder,
-                            currParamAtIndex.Name,
-                            currParamAtIndex.In);
-                    }
-                }
-                else
-                {
-                    // The parameter did not exist in the prior params, hence it cannot have changed its order.
+                    context.LogBreakingChange(
+                        ComparisonMessages.ChangedParameterOrder,
+                        priorParamAtIndex.Name,
+                        priorParamAtIndex.In);
                 }
 
-                currIndex++;
+                paramIndex++;
             }
         }
 
@@ -339,11 +320,12 @@ namespace AutoRest.Swagger.Model
         /// Here we assume a parameter is uniquely identified by the pair of its properties : "Name" and "In".
         /// </summary>
         private static bool ParamsAreSame(SwaggerParameter currParam, SwaggerParameter priorParam)
-            => currParam.Name == priorParam?.Name && currParam.In == priorParam?.In;
+            => currParam != null && priorParam != null && currParam.Name == priorParam.Name &&
+               currParam.In == priorParam.In;
 
         /// <summary>
         /// Determines if given parameter's order matters. See the comments within this method for details,
-        /// as well as comment on DetectChangedParameterOrder.
+        /// as well as comment on DetectChangedParameterOrder method.
         /// </summary>
         private bool ParamOrderMatters((SwaggerParameter param, bool isGlobal) paramInfo)
         {
@@ -351,9 +333,13 @@ namespace AutoRest.Swagger.Model
             {
                 // If the parameter is not a global parameter then we assume its order matters.
                 // We assume this because we assume that the parameters are generated into C# code
-                // via AutoRest implementation. According to the example in [1] these parameters
-                // are by default method parameters, hence their order matters.
+                // via AutoRest implementation. According to this implementation example in [1],
+                // these parameters are by default method parameters, hence their order matters.
+                // We also assume, as explained in [2], that it is not possible to override parameter
+                // location to one whose order doesn't matter: the extension "x-ms-parameter-location"
+                // will be ignored even if defined.
                 // [1] https://github.com/Azure/autorest/blob/765bc784b0cad173d47f931a04724936a6948b4c/docs/generate/how-autorest-generates-code-from-openapi.md#specifying-required-parameters-and-properties
+                // [2] https://github.com/Azure/autorest/blob/765bc784b0cad173d47f931a04724936a6948b4c/docs/extensions/readme.md#x-ms-parameter-location
                 return true;
             }
 
