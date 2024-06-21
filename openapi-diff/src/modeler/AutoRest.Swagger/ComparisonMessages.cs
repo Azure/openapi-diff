@@ -392,5 +392,12 @@
             Message = "The new version is missing a 'x-ms-enum' found in the old version.",
             Type = MessageType.Removal
         };
+        public static MessageTemplate ParameterLocationHasChanged = new MessageTemplate
+        {
+            Id = 1050,
+            Code = nameof(ComparisonMessages.ParameterLocationHasChanged),
+            Message = "Parameter location has changed. Name: '{0}'. In: '{1}'. Old location: '{2}'. New location: '{3}'.",
+            Type = MessageType.Update
+        };
     }
 }

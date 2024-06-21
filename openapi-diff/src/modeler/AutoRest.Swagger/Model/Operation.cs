@@ -272,13 +272,13 @@ namespace AutoRest.Swagger.Model
         /// it did not, then we will not report a ComparisonMessages.ChangedParameterOrder breaking change
         /// on that parameters, but we do expect a different breaking change will be reported by a different rule.
         /// This case can happen when parameter location was converted from "client" to "method".
-        /// // kja add test for: params changed from "client" to "method"
+        /// // kja add test for: params changed from "client" to "method". Also test for no ChangedParamOrder in it.
         /// 
         /// If a parameter definition has changed in such a way that its order previously mattered,
         /// but now it does not, then we will not report a ComparisonMessages.ChangedParameterOrder breaking change
         /// on that parameter, but we do expect a different breaking change will be reported by a different rule.
         /// This case can happen when parameter location was converted from "method" to "client".
-        /// // kja add test for: params changed from "method" to "client".
+        /// // kja add test for: params changed from "method" to "client". Also test for no ChangedParamOrder in it.
         /// 
         /// Additional context provided at:
         /// https://github.com/Azure/azure-sdk-tools/issues/7170#issuecomment-2162156876

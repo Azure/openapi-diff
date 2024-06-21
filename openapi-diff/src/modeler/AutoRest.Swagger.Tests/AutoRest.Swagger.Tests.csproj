@@ -24,6 +24,7 @@
     <Content Include="Resource\Swagger\new\operation_check_05.json" />
     <Content Include="Resource\Swagger\new\global_parameter_order_change.json" />
     <Content Include="Resource\Swagger\new\global_parameter_no_order_change.json" />
+    <Content Include="Resource\Swagger\new\parameter_location_change.json" />
     <Content Include="Resource\Swagger\new\param_check_01.json" />
     <Content Include="Resource\Swagger\new\removed_definition.json" />
     <Content Include="Resource\Swagger\new\removed_operation.json" />
@@ -52,6 +53,7 @@
     <Content Include="Resource\Swagger\old\added_required_property.json" />
     <Content Include="Resource\Swagger\old\global_parameter_no_order_change.json" />
     <Content Include="Resource\Swagger\old\global_parameter_order_change.json" />
+    <Content Include="Resource\Swagger\old\parameter_location_change.json" />
     <Content Include="Resource\Swagger\old\recursive_model.json" />
     <Content Include="Resource\Swagger\old\changed_operation_id.json" />
     <Content Include="Resource\Swagger\old\added_path.json" />

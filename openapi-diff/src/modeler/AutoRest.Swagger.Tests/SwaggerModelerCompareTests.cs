@@ -992,5 +992,18 @@ namespace AutoRest.Swagger.Tests
             Assert.Single(redirected);
             Assert.Equal("new/xms_client_name_changed.json#/paths/~1api~1Parameters/post/parameters/0/schema", redirected[0].NewJsonRef);
         }
+
+        [Fact]
+        public void ParameterLocationChanged()
+        {
+            // kja WIP
+            var messages = CompareSwagger("parameter_location_change.json").ToArray();
+            var errors = messages.Where(m => m.Id == ComparisonMessages.ParameterLocationHasChanged.Id);
+            Assert.NotEmpty(errors);
+            var error = errors.First();
+            Assert.Equal(Category.Error, error.Severity);
+            // Assert.NotNull(error.NewJsonRef);
+            // Assert.Equal("old/operation_check_01.json#/paths/~1api~1Parameters~1{a}/get/parameters/1", error.OldJsonRef);
+        }
     }
 }
