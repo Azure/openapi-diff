@@ -146,7 +146,7 @@ npm list -g oad # Should denote no packages installed
 - Verify in [`@azure/oad` versions] that the newest package version was published on npmjs.org. You can also run `npm show @azure/oad`.
 - Save it to `openapi-platform` feed via [upstream feeds of `openapi-platform`].
   - For the desired version, you must click `Save to feed` in the context menu of the hidden triple-dot button on the right. It will reveal on hover.
-  - You may need to wait a bit until the newest version shows up in `Upstream Versions` tab.
+  - You may need to wait a bit until the newest version shows up in the `Upstream Versions` tab.
 - To make `openapi-alps` use the newly published package:
   - Ensure that you update the minimum package version in relevant [`package.json`][azureSwaggerValidation package.json] files and then run `rush update` and commit the changes.
   - ❗ Do the update even if semver rules say the new package version is in scope. E.g. if the version is `~0.10.7` but you published `0.10.8`, then still update the entry to `~0.10.8`.
