@@ -362,8 +362,9 @@ namespace AutoRest.Swagger.Model
                     else
                     {
                         // If param order does not matter in the new spec we not report ComparisonMessages.ChangedParameterOrder breaking change.
-                        // However, it is still a breaking change the parameter location so that its order doesn't matter, or to remove a parameter altogether.
-                        // We expect other breaking changes to be reported in such case.
+                        // However, it is still a breaking change to a) change the parameter location so that its order doesn't matter, 
+                        // OR b) to remove a parameter altogether.
+                        // We expect other breaking changes to be reported in such case like e.g. ComparisonMessages.ParameterLocationHasChanged.
                     }
                 }
 
