@@ -1025,5 +1025,34 @@ namespace AutoRest.Swagger.Tests
                 "Parameter location has changed. Name: 'from_implicit_global_client_to_implicit_method'. In: 'Query'. Old location is method: 'False'. New location is method: 'True'.",
                 locationChangedMessages[2].Message);
         }
+
+        [Fact]
+        public void ParameterRemoved()
+        {
+            ComparisonMessage[] messages = CompareSwagger("removed_parameter.json")
+                .Where(msg => msg.Severity == Category.Error).ToArray();
+
+            ComparisonMessage[] removedReqParamMessages = messages.Where(m => m.Id == ComparisonMessages.RemovedRequiredParameter.Id).ToArray();
+            ComparisonMessage[] removedOptParamMessages = messages.Where(m => m.Id == ComparisonMessages.RemovedOptionalParameter.Id).ToArray();
+
+            Assert.Equal(6, messages.Length);
+            Assert.Equal(4, removedReqParamMessages.Length);
+            Assert.Equal(2, removedOptParamMessages.Length);
+
+            string[] reqParamNames = { "path_param", "path_param_req", "query_param_req", "body_param_req" };
+            string[] optParamNames = { "body_param", "query_param" };
+
+            string[] reqParamMessageStrings = removedReqParamMessages.Select(msg => msg.Message).ToArray();
+            string[] optParamMessageStrings = removedOptParamMessages.Select(msg => msg.Message).ToArray();
+
+            foreach (var reqParamName in reqParamNames)
+            {
+                Assert.True(reqParamMessageStrings.Any(str => str.Contains(reqParamName)));
+            }
+            foreach (var optParamName in optParamNames)
+            {
+                Assert.True(optParamMessageStrings.Any(str => str.Contains(optParamName)));
+            }
+        }
     }
 }
