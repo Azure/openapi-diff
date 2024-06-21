@@ -142,7 +142,7 @@ npm list -g oad # Should denote no packages installed
 ## Publish the package
 
 - Ensure you bumped the package version in [`openapi-diff`] `package.json`.
-- Queue a run of the [`openapi-diff` pipeline] and approve the 'publish' stage. (Note: there is also the [`public.openapi-diff` pipeline] for CI checks.)
+- Queue a run of the [`openapi-diff` pipeline] and approve the `publish` stage. (Note: there is also the [`public.openapi-diff` pipeline] for CI checks.)
 - Verify in [`@azure/oad` versions] that the newest package version was published on npmjs.org. You can also run `npm show @azure/oad`.
 - Save it to `openapi-platform` feed via [upstream feeds of `openapi-platform`].
   - For the desired version, you must click `Save to feed` in the context menu of the hidden triple-dot button on the right. It will reveal on hover.
