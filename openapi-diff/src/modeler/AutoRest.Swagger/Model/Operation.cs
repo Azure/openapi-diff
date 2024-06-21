@@ -257,15 +257,14 @@ namespace AutoRest.Swagger.Model
         /// Report breaking change if parameter location has changed.
         /// See "1050 - ParameterLocationHasChanged" in docs/rules/1050.md for details.
         ///
-        /// Parameter location could have changed only if that parameter existed in the previous version and
-        /// still exists in the new version.
+        /// We report ComparisonMessages.ParameterLocationHasChanged breaking change only if
+        /// given parameter existed in the previous version, still exists in the new version, and its location has changed.
         /// </summary>
         private void DetectChangedParameterLocation(
             ComparisonContext<ServiceDefinition> context,
             List<(SwaggerParameter param, bool isGlobal)> currParamsInfo,
             List<(SwaggerParameter param, bool isGlobal)> priorParamsInfo)
         {
-            // kja WIP
             priorParamsInfo.ForEach(
                 priorParamInfo
                     =>
@@ -307,7 +306,7 @@ namespace AutoRest.Swagger.Model
         /// If a new parameter, whose order matters, was added to current version, we will not report any
         /// breaking changes on it as it didn't exist before. However, its addition may still shift
         /// other parameters' order, and that will be reported as breaking change. E.g.:
-        /// [Foo, Bar] -> [Qux, Foo, Bar]. // kja add test for this. And also for [Foo, Bar, Qux] where all orders matter.
+        /// [Foo, Bar] -> [Qux, Foo, Bar].
         /// Here Qux has been added thus shifting Foo and Bar's order.
         ///
         /// If a parameter definition has changed in such a way that its order now matters, but previously

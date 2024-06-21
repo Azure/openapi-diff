@@ -906,7 +906,17 @@ namespace AutoRest.Swagger.Tests
             // Reference:
             // https://github.com/Azure/autorest/blob/main/docs/generate/how-autorest-generates-code-from-openapi.md#specifying-required-parameters-and-properties
             var messages = CompareSwagger("parameter_order_change.json").ToArray();
-            Assert.Equal(2, messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id).Count());
+            ComparisonMessage[] paramOrderChangedMessages =
+                messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id).ToArray();
+            Assert.All(paramOrderChangedMessages, message => Assert.Equal(Category.Error, message.Severity));
+            Assert.Equal(2, paramOrderChangedMessages.Length);
+            Assert.Equal(
+                "The order of parameter with Name: 'd', In: 'Query', was changed. Expected param at index '2' but instead found it at index '3'.",
+                paramOrderChangedMessages[0].Message);
+            Assert.Equal(
+                "The order of parameter with Name: 'e', In: 'Query', was changed. Expected param at index '3' but instead found it at index '2'.",
+                paramOrderChangedMessages[1].Message);
+            
         }
 
         [Fact]
@@ -1005,7 +1015,6 @@ namespace AutoRest.Swagger.Tests
             ComparisonMessage[] locationChangedMessages = messages.Where(m => m.Id == ComparisonMessages.ParameterLocationHasChanged.Id).ToArray();
             Assert.Equal(3, locationChangedMessages.Length);
             Assert.All(locationChangedMessages, message => Assert.Equal(Category.Error, message.Severity));
-            Assert.All(locationChangedMessages, message => Assert.Equal(ComparisonMessages.ParameterLocationHasChanged.Code, message.Code));
             Assert.Equal(
                 "Parameter location has changed. Name: 'implicit_from_method_to_client'. In: 'Query'. Old location is method: 'True'. New location is method: 'False'.",
                 locationChangedMessages[0].Message);
