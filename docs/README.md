@@ -97,3 +97,5 @@
 [1048 - AddedXmsEnum](rules/1048.md)
 
 [1049 - RemovedXmsEnum](rules/1049.md)
+
+[1050 - ParameterLocationHasChanged](rules/1050.md)
