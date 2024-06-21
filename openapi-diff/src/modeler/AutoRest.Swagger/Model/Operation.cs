@@ -294,14 +294,14 @@ namespace AutoRest.Swagger.Model
             SwaggerParameter[] priorParamsResolvedOrdered =
                 priorParamsInfo.Where(ParamOrderMatters).Select(paramInfo => paramInfo.param).ToArray();
 
+            int currParamsCount = currParamsResolvedOrdered.Length;
             int priorParamsCount = priorParamsResolvedOrdered.Length;
 
             int paramIndex = 0;
-
             while (paramIndex < priorParamsCount)
             {
                 SwaggerParameter currParamAtIndex =
-                    paramIndex < priorParamsCount ? currParamsResolvedOrdered[paramIndex] : null;
+                    paramIndex < currParamsCount ? currParamsResolvedOrdered[paramIndex] : null;
                 SwaggerParameter priorParamAtIndex = priorParamsResolvedOrdered[paramIndex];
 
                 if (!ParamsAreSame(currParamAtIndex, priorParamAtIndex))
