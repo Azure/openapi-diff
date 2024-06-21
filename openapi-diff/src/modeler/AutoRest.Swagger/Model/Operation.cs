@@ -313,14 +313,14 @@ namespace AutoRest.Swagger.Model
         /// If a parameter definition has changed in such a way that its order now matters, but previously
         /// it did not, then we will not report a ComparisonMessages.ChangedParameterOrder breaking change
         /// on that parameters, but we do expect a different breaking change will be reported by a different rule.
-        /// This case can happen when parameter location was converted from "client" to "method".
-        /// // kja add test for: params changed from "client" to "method". Also test for no ChangedParamOrder in it.
+        /// For example, if parameter location was converted from "client" to "method" then
+        /// ComparisonMessages.ParameterLocationHasChanged should be reported.
         /// 
         /// If a parameter definition has changed in such a way that its order previously mattered,
         /// but now it does not, then we will not report a ComparisonMessages.ChangedParameterOrder breaking change
         /// on that parameter, but we do expect a different breaking change will be reported by a different rule.
-        /// This case can happen when parameter location was converted from "method" to "client".
-        /// // kja add test for: params changed from "method" to "client". Also test for no ChangedParamOrder in it.
+        /// For example, if parameter location was converted from "method" to "client" then
+        /// ComparisonMessages.ParameterLocationHasChanged should be reported.
         /// 
         /// Additional context provided at:
         /// https://github.com/Azure/azure-sdk-tools/issues/7170#issuecomment-2162156876
@@ -348,10 +348,24 @@ namespace AutoRest.Swagger.Model
 
                 if (!ParamsAreSame(currParamAtIndex, priorParamAtIndex))
                 {
-                    context.LogBreakingChange(
-                        ComparisonMessages.ChangedParameterOrder,
-                        priorParamAtIndex.Name,
-                        priorParamAtIndex.In);
+                    int newParamIndex = FindParameterIndex(priorParamAtIndex, currParamsResolvedOrdered);
+                    bool paramOrderDoesMatterInNewSpec = newParamIndex != -1;
+
+                    if (paramOrderDoesMatterInNewSpec)
+                    {
+                        context.LogBreakingChange(
+                            ComparisonMessages.ChangedParameterOrder,
+                            priorParamAtIndex.Name,
+                            priorParamAtIndex.In,
+                            paramIndex,
+                            newParamIndex);
+                    }
+                    else
+                    {
+                        // If param order does not matter in the new spec we not report ComparisonMessages.ChangedParameterOrder breaking change.
+                        // However, it is still a breaking change the parameter location so that its order doesn't matter, or to remove a parameter altogether.
+                        // We expect other breaking changes to be reported in such case.
+                    }
                 }
 
                 paramIndex++;
@@ -462,6 +476,19 @@ namespace AutoRest.Swagger.Model
             }
             return null;
         }
+
+        private int FindParameterIndex(SwaggerParameter parameter, IList<SwaggerParameter> operationParameters)
+        {
+            for (int i = 0; i < operationParameters.Count; i++)
+            {
+                if (ParamsAreSame(operationParameters.ElementAt(i), parameter))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
         private OperationResponse FindResponse(string name)
         {
             Responses.TryGetValue(name, out var response);

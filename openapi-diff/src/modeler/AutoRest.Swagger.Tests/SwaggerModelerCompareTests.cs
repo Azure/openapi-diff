@@ -996,20 +996,25 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void ParameterLocationChanged()
         {
-            var messages = CompareSwagger("parameter_location_change.json").ToArray();
-            ComparisonMessage[] errors = messages.Where(m => m.Id == ComparisonMessages.ParameterLocationHasChanged.Id).ToArray();
-            Assert.Equal(3, errors.Length);
-            Assert.All(errors, message => Assert.Equal(Category.Error, message.Severity));
-            Assert.All(errors, message => Assert.Equal(ComparisonMessages.ParameterLocationHasChanged.Code, message.Code));
+            ComparisonMessage[] messages = CompareSwagger("parameter_location_change.json").ToArray();
+
+            // We assert there are no ComparisonMessages.ChangedParameterOrder breaking changes because
+            // the compared swaggers do not reorder any parameters.
+            Assert.Empty(messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id));
+
+            ComparisonMessage[] locationChangedMessages = messages.Where(m => m.Id == ComparisonMessages.ParameterLocationHasChanged.Id).ToArray();
+            Assert.Equal(3, locationChangedMessages.Length);
+            Assert.All(locationChangedMessages, message => Assert.Equal(Category.Error, message.Severity));
+            Assert.All(locationChangedMessages, message => Assert.Equal(ComparisonMessages.ParameterLocationHasChanged.Code, message.Code));
             Assert.Equal(
                 "Parameter location has changed. Name: 'implicit_from_method_to_client'. In: 'Query'. Old location is method: 'True'. New location is method: 'False'.",
-                errors[0].Message);
+                locationChangedMessages[0].Message);
             Assert.Equal(
                 "Parameter location has changed. Name: 'global_from_client_to_method'. In: 'Query'. Old location is method: 'False'. New location is method: 'True'.",
-                errors[1].Message);
+                locationChangedMessages[1].Message);
             Assert.Equal(
                 "Parameter location has changed. Name: 'from_implicit_global_client_to_implicit_method'. In: 'Query'. Old location is method: 'False'. New location is method: 'True'.",
-                errors[2].Message);
+                locationChangedMessages[2].Message);
         }
     }
 }
