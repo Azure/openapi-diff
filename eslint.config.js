@@ -33,8 +33,7 @@ module.exports = tseslint.config(
     rules: {
       // Rules disabled as part of migration from tslint
       // https://github.com/Azure/openapi-diff/pull/335
-      // kja turned off to check if it works in CI
-      // "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unnecessary-type-assertion": "off",
       "@typescript-eslint/no-unsafe-argument": "off",
       "@typescript-eslint/no-unsafe-assignment": "off",
