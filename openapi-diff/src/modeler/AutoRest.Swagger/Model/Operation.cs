@@ -338,7 +338,7 @@ namespace AutoRest.Swagger.Model
                 // We also assume, as explained in [2], that it is not possible to override parameter
                 // location to one whose order doesn't matter: the extension "x-ms-parameter-location"
                 // will be ignored even if defined.
-                // [1] https://github.com/Azure/autorest/blob/765bc784b0cad173d47f931a04724936a6948b4c/docs/generate/how-autorest-generates-code-from-openapi.md#specifying-required-parameters-and-properties
+                // [1] https://github.com/Azure /autorest/blob/765bc784b0cad173d47f931a04724936a6948b4c/docs/generate/how-autorest-generates-code-from-openapi.md#specifying-required-parameters-and-properties
                 // [2] https://github.com/Azure/autorest/blob/765bc784b0cad173d47f931a04724936a6948b4c/docs/extensions/readme.md#x-ms-parameter-location
                 return true;
             }
