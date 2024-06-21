@@ -272,7 +272,7 @@ namespace AutoRest.Swagger.Model
                 {
                     (SwaggerParameter param, bool isGlobal) matchingCurrParamInfo = currParamsInfo.FirstOrDefault(
                         currParamInfo => ParamsAreSame(currParamInfo.param, priorParamInfo.param));
-                    if (matchingCurrParamInfo == default)
+                    if (matchingCurrParamInfo != default)
                     {
                         var priorLocationIsMethod = ParamLocationIsMethod(priorParamInfo);
                         var currLocationIsMethod = ParamLocationIsMethod(matchingCurrParamInfo);

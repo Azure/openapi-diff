@@ -45,7 +45,7 @@
             "type": "string"
         },
         "FromImplicitGlobalClientToImplicitMethod": {
-            "name": "from_implicit_global_client_to_implict_method",
+            "name": "from_implicit_global_client_to_implicit_method",
             "in": "query",
             "type": "string"
         }

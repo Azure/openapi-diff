@@ -996,14 +996,20 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void ParameterLocationChanged()
         {
-            // kja WIP
             var messages = CompareSwagger("parameter_location_change.json").ToArray();
-            var errors = messages.Where(m => m.Id == ComparisonMessages.ParameterLocationHasChanged.Id);
-            Assert.NotEmpty(errors);
-            var error = errors.First();
-            Assert.Equal(Category.Error, error.Severity);
-            // Assert.NotNull(error.NewJsonRef);
-            // Assert.Equal("old/operation_check_01.json#/paths/~1api~1Parameters~1{a}/get/parameters/1", error.OldJsonRef);
+            ComparisonMessage[] errors = messages.Where(m => m.Id == ComparisonMessages.ParameterLocationHasChanged.Id).ToArray();
+            Assert.Equal(3, errors.Length);
+            Assert.All(errors, message => Assert.Equal(Category.Error, message.Severity));
+            Assert.All(errors, message => Assert.Equal(ComparisonMessages.ParameterLocationHasChanged.Code, message.Code));
+            Assert.Equal(
+                "Parameter location has changed. Name: 'implicit_from_method_to_client'. In: 'Query'. Old location is method: 'True'. New location is method: 'False'.",
+                errors[0].Message);
+            Assert.Equal(
+                "Parameter location has changed. Name: 'global_from_client_to_method'. In: 'Query'. Old location is method: 'False'. New location is method: 'True'.",
+                errors[1].Message);
+            Assert.Equal(
+                "Parameter location has changed. Name: 'from_implicit_global_client_to_implicit_method'. In: 'Query'. Old location is method: 'False'. New location is method: 'True'.",
+                errors[2].Message);
         }
     }
 }
