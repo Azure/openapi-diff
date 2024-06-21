@@ -8,7 +8,7 @@
 // by openapi-alps:
 // https://github.com/Azure/openapi-diff/pull/335/files#r1649413983
 
-const eslint = require("@eslint/js");
+const eslint = require("@eslint/js")
 const tseslint = require("typescript-eslint")
 
 module.exports = tseslint.config(
