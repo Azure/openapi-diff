@@ -91,7 +91,7 @@
     "dn.publish": "npm run dn.build && dotnet publish -c release openapi-diff/src/core/OpenApiDiff/OpenApiDiff.csproj",
     "dn.test": "npm run dn.build && dotnet test openapi-diff/src/modeler/AutoRest.Swagger.Tests/AutoRest.Swagger.Tests.csproj",
     "tsc": "tsc",
-    "ts.test": "jest src/**",
+    "ts.test": "jest",
     "test": "npm run dn.test && npm run ts.test",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --fix",
