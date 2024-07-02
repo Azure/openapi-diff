@@ -1,0 +1,53 @@
+﻿{
+    "swagger": 2.0,
+    "info": {
+        "title": "parameter_location_change",
+        "version": "1.0"
+    },
+    "host": "localhost:8000",
+    "schemes": [ "http", "https" ],
+    "paths": {
+        "/api/Parameters": {
+            "get": {
+                "tag": [ "Parameters" ],
+                "operationId": "Parameters_Get",
+                "produces": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "name": "implicit_from_method_to_client",
+                        "in": "query",
+                        "type": "string"
+                    },
+                    {
+                        "$ref": "#/parameters/GlobalFromClientToMethodParam"
+                    },
+                    {
+                        "$ref": "#/parameters/GlobalFromClientToClientParam"
+                    },
+                    {
+                        "$ref": "#/parameters/FromImplicitGlobalClientToImplicitMethod"
+                    }
+                ]
+            }
+        }
+    },
+    "parameters": {
+        "GlobalFromClientToMethodParam": {
+            "name": "global_from_client_to_method",
+            "in": "query",
+            "type": "string"
+        },
+        "GlobalFromClientToClientParam": {
+            "name": "global_from_client_to_client",
+            "in": "query",
+            "type": "string"
+        },
+        "FromImplicitGlobalClientToImplicitMethod": {
+            "name": "from_implicit_global_client_to_implicit_method",
+            "in": "query",
+            "type": "string"
+        }
+    }
+}

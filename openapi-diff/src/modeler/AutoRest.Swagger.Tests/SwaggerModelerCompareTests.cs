@@ -342,18 +342,33 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
-        /// Verifies that if you add a required property in the model, it's found.
+        /// Verifies that if you add a required property in the model, it is reported.
         /// </summary>
         [Fact]
         public void AddedRequiredProperty()
         {
-            var messages = CompareSwagger("added_required_property.json").ToArray();
-            var missing = messages.Where(m => m.Severity == Category.Error && m.Id == ComparisonMessages.AddedRequiredProperty.Id);
+            ComparisonMessage[] messages = CompareSwagger("added_required_property.json").ToArray();
+            List<ComparisonMessage> missing = messages.Where(
+                m => m.Severity == Category.Error && m.Id == ComparisonMessages.AddedRequiredProperty.Id).ToList();
             Assert.Equal(2, missing.Count());
-            var error = missing.First();
+            ComparisonMessage error = missing.First();
             Assert.Equal("new/added_required_property.json#/paths/~1api~1Parameters/put/parameters/0/schema", error.NewJsonRef);
             Assert.NotNull(error.NewJson());
             Assert.NotNull(error.OldJson());
+        }
+
+        /// <summary>
+        /// Verifies that if you add a required property in the model on a property that is 'readOnly',
+        /// it is not reported.
+        /// Details: https://github.com/Azure/azure-sdk-tools/issues/7184
+        /// </summary>
+        [Fact]
+        public void AddedReadOnlyRequiredProperty()
+        {
+            ComparisonMessage[] messages = CompareSwagger("added_readonly_required_property.json").ToArray();
+            List<ComparisonMessage> addedReqPropMessages = messages.Where(
+                m => m.Severity == Category.Error && m.Id == ComparisonMessages.AddedRequiredProperty.Id).ToList();
+            Assert.Equal(0, addedReqPropMessages.Count);
         }
 
         /// <summary>
@@ -888,8 +903,56 @@ namespace AutoRest.Swagger.Tests
         [Fact]
         public void ChangedParameterOrder()
         {
+            // Reference:
+            // https://github.com/Azure/autorest/blob/main/docs/generate/how-autorest-generates-code-from-openapi.md#specifying-required-parameters-and-properties
             var messages = CompareSwagger("parameter_order_change.json").ToArray();
+            ComparisonMessage[] paramOrderChangedMessages =
+                messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id).ToArray();
+            Assert.All(paramOrderChangedMessages, message => Assert.Equal(Category.Error, message.Severity));
+            Assert.Equal(2, paramOrderChangedMessages.Length);
+            Assert.Equal(
+                "The order of parameter with Name: 'd', In: 'Query', was changed. Expected param at index '2' but instead found it at index '3'.",
+                paramOrderChangedMessages[0].Message);
+            Assert.Equal(
+                "The order of parameter with Name: 'e', In: 'Query', was changed. Expected param at index '3' but instead found it at index '2'.",
+                paramOrderChangedMessages[1].Message);
+            
+        }
+
+        [Fact]
+        public void ChangedGlobalParameterOrder()
+        {
+            var messages = CompareSwagger("global_parameter_order_change.json").ToArray();
+
+            // Changed order from:
+            //    ( Implicit , Method1  , Client  , Method2 )
+            // to ( Method2  , Implicit , Method1 , Client  )
+            //
+            // So there are two errors reported:
+            // - On Method1, as now it is before Method2
+            // - On Method2, as now it is after Method1
+            //
+            // There are no errors for Implicit and Client as their order doesn't matter.
+            //
+            // Reference: https://github.com/Azure/autorest/blob/main/docs/extensions/readme.md#x-ms-parameter-location
             Assert.Equal(2, messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id).Count());
+        }
+
+        [Fact]
+        public void DidNotChangeGlobalParameterOrder()
+        {
+            var messages = CompareSwagger("global_parameter_no_order_change.json").ToArray();
+
+            // Changed order from:
+            //    ( Implicit , Method1 , Client  , Method2  )
+            // to ( Method1  , Client  , Method2 , Implicit )
+            //
+            // So there is no issue with order change:
+            // The Method1 param still comes before Method2 param, and order
+            // of Implicit and Client doesn't matter.
+            //
+            // Reference: https://github.com/Azure/autorest/blob/main/docs/extensions/readme.md#x-ms-parameter-location
+            Assert.Equal(0, messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id).Count());
         }
 
         [Fact]
@@ -938,6 +1001,58 @@ namespace AutoRest.Swagger.Tests
             var redirected = messages.Where(m => m.Id == ComparisonMessages.ReferenceRedirection.Id).ToArray();
             Assert.Single(redirected);
             Assert.Equal("new/xms_client_name_changed.json#/paths/~1api~1Parameters/post/parameters/0/schema", redirected[0].NewJsonRef);
+        }
+
+        [Fact]
+        public void ParameterLocationChanged()
+        {
+            ComparisonMessage[] messages = CompareSwagger("parameter_location_change.json").ToArray();
+
+            // We assert there are no ComparisonMessages.ChangedParameterOrder breaking changes because
+            // the compared swaggers do not reorder any parameters.
+            Assert.Empty(messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id));
+
+            ComparisonMessage[] locationChangedMessages = messages.Where(m => m.Id == ComparisonMessages.ParameterLocationHasChanged.Id).ToArray();
+            Assert.Equal(3, locationChangedMessages.Length);
+            Assert.All(locationChangedMessages, message => Assert.Equal(Category.Error, message.Severity));
+            Assert.Equal(
+                "Parameter location has changed. Name: 'implicit_from_method_to_client'. In: 'Query'. Old location is method: 'True'. New location is method: 'False'.",
+                locationChangedMessages[0].Message);
+            Assert.Equal(
+                "Parameter location has changed. Name: 'global_from_client_to_method'. In: 'Query'. Old location is method: 'False'. New location is method: 'True'.",
+                locationChangedMessages[1].Message);
+            Assert.Equal(
+                "Parameter location has changed. Name: 'from_implicit_global_client_to_implicit_method'. In: 'Query'. Old location is method: 'False'. New location is method: 'True'.",
+                locationChangedMessages[2].Message);
+        }
+
+        [Fact]
+        public void ParameterRemoved()
+        {
+            ComparisonMessage[] messages = CompareSwagger("removed_parameter.json")
+                .Where(msg => msg.Severity == Category.Error).ToArray();
+
+            ComparisonMessage[] removedReqParamMessages = messages.Where(m => m.Id == ComparisonMessages.RemovedRequiredParameter.Id).ToArray();
+            ComparisonMessage[] removedOptParamMessages = messages.Where(m => m.Id == ComparisonMessages.RemovedOptionalParameter.Id).ToArray();
+
+            Assert.Equal(6, messages.Length);
+            Assert.Equal(4, removedReqParamMessages.Length);
+            Assert.Equal(2, removedOptParamMessages.Length);
+
+            string[] reqParamNames = { "path_param", "path_param_req", "query_param_req", "body_param_req" };
+            string[] optParamNames = { "body_param", "query_param" };
+
+            string[] reqParamMessageStrings = removedReqParamMessages.Select(msg => msg.Message).ToArray();
+            string[] optParamMessageStrings = removedOptParamMessages.Select(msg => msg.Message).ToArray();
+
+            foreach (var reqParamName in reqParamNames)
+            {
+                Assert.True(reqParamMessageStrings.Any(str => str.Contains(reqParamName)));
+            }
+            foreach (var optParamName in optParamNames)
+            {
+                Assert.True(optParamMessageStrings.Any(str => str.Contains(optParamName)));
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿{
   "swagger": 2.0,
   "info": {
-    "title": "parameter_order_change",
+    "title": "removed_parameter",
     "version": "1.0"
   },
   "host": "localhost:8000",
@@ -16,35 +16,38 @@
         ],
         "parameters": [
           {
-            "name": "a",
+            "name": "path_param_req",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
-            "name": "b",
+            "name": "query_param_req",
             "in": "query",
             "required": true,
             "type": "string"
           },
           {
-            "name": "e",
+            "name": "body_param_req",
+            "in": "body",
+            "required": true,
+            "type": "string"
+          },
+{
+            "name": "path_param",
+            "in": "path",
+            "type": "string"
+          },
+          {
+            "name": "query_param",
             "in": "query",
             "type": "string"
           },
           {
-            "name": "d",
-            "in": "query",
-            "required": true,
+            "name": "body_param",
+            "in": "body",
             "type": "string"
           },
-          {
-            "name": "f",
-            "in": "query",
-            "required": true,
-            "type": "string",
-            "enum": [ "theonlyvalue" ]
-          }
         ]
       }
     }

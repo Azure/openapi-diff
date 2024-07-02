@@ -5,19 +5,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp6.0</TargetFramework>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resource\Swagger\new\enum_as_string.json" />
-    <None Remove="Resource\Swagger\old\enum_as_string.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Resource\Swagger\new\added_path.json" />
-    <Content Include="Resource\Swagger\new\added_required_property.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Resource\Swagger\new\added_readonly_required_property.json" />
+    <Content Include="Resource\Swagger\new\added_required_property.json" />
     <Content Include="Resource\Swagger\new\changed_operation_id.json" />
     <Content Include="Resource\Swagger\new\enum_as_string.json" />
     <Content Include="Resource\Swagger\new\enum_values_changed.json" />
@@ -28,9 +22,13 @@
     <Content Include="Resource\Swagger\new\operation_check_03.json" />
     <Content Include="Resource\Swagger\new\operation_check_04.json" />
     <Content Include="Resource\Swagger\new\operation_check_05.json" />
+    <Content Include="Resource\Swagger\new\global_parameter_order_change.json" />
+    <Content Include="Resource\Swagger\new\global_parameter_no_order_change.json" />
+    <Content Include="Resource\Swagger\new\parameter_location_change.json" />
     <Content Include="Resource\Swagger\new\param_check_01.json" />
     <Content Include="Resource\Swagger\new\removed_definition.json" />
     <Content Include="Resource\Swagger\new\removed_operation.json" />
+    <Content Include="Resource\Swagger\new\removed_parameter.json" />
     <Content Include="Resource\Swagger\new\removed_path.json" />
     <Content Include="Resource\Swagger\new\required_parameter.json" />
     <Content Include="Resource\Swagger\new\response_check_01.json" />
@@ -52,9 +50,12 @@
     <Content Include="Resource\Swagger\new\version_check_02.json" />
     <Content Include="Resource\Swagger\new\version_check_03.json" />
     <Content Include="Resource\Swagger\new\version_check_04.json" />
-    <Content Include="Resource\Swagger\old\added_required_property.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Resource\Swagger\old\added_readonly_required_property.json" />
+    <Content Include="Resource\Swagger\old\added_required_property.json" />
+    <Content Include="Resource\Swagger\old\global_parameter_no_order_change.json" />
+    <Content Include="Resource\Swagger\old\global_parameter_order_change.json" />
+    <Content Include="Resource\Swagger\old\parameter_location_change.json" />
+    <Content Include="Resource\Swagger\old\removed_parameter.json" />
     <Content Include="Resource\Swagger\old\recursive_model.json" />
     <Content Include="Resource\Swagger\old\changed_operation_id.json" />
     <Content Include="Resource\Swagger\old\added_path.json" />
