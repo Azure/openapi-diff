@@ -17,9 +17,9 @@ jobs:
             target-folder: drop
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
 
@@ -34,15 +34,3 @@ jobs:
 
       - name: test
         run: npm test
-
-      - name: pack
-        run: npm pack
-
-      - name: Copy Files to target-folder
-        run: mkdir -p ${{ matrix.target-folder }} && cp *.tgz ${{ matrix.target-folder }}
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ matrix.target-folder }}
-          path: ${{ matrix.target-folder }}
