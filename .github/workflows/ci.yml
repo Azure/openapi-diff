@@ -1,0 +1,48 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target-folder: drop-linux
+          - os: windows-latest
+            target-folder: drop
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+
+      - name: npm ci
+        run: npm ci
+
+      - name: lint
+        run: npm run lint
+
+      - name: prettier
+        run: npm run prettier
+
+      - name: test
+        run: npm test
+
+      - name: pack
+        run: npm pack
+
+      - name: Copy Files to target-folder
+        run: mkdir -p ${{ matrix.target-folder }} && cp *.tgz ${{ matrix.target-folder }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.target-folder }}
+          path: ${{ matrix.target-folder }}
