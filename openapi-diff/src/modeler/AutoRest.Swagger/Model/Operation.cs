@@ -86,10 +86,7 @@ namespace AutoRest.Swagger.Model
             Operation previous
         )
         {
-            var priorOperation = previous;
-
-            var currentRoot = context.CurrentRoot;
-            var previousRoot = context.PreviousRoot;
+            Operation priorOperation = previous;
 
             if (priorOperation == null)
             {
@@ -102,12 +99,12 @@ namespace AutoRest.Swagger.Model
             {
                 context.LogBreakingChange(ComparisonMessages.ModifiedOperationId, priorOperation.OperationId, OperationId);
             }
-            Extensions.TryGetValue("x-ms-long-running-operation", out var currentLongrunningOperationValue);
-            priorOperation.Extensions.TryGetValue("x-ms-long-running-operation", out var priorLongrunningOperationValue);
+            Extensions.TryGetValue("x-ms-long-running-operation", out var currentLongRunningOperationValue);
+            priorOperation.Extensions.TryGetValue("x-ms-long-running-operation", out var priorLongRunningOperationValue);
 
-            currentLongrunningOperationValue = currentLongrunningOperationValue == null ? false : currentLongrunningOperationValue;
-            priorLongrunningOperationValue = priorLongrunningOperationValue == null ? false : priorLongrunningOperationValue;
-            if (!currentLongrunningOperationValue.Equals(priorLongrunningOperationValue))
+            currentLongRunningOperationValue = currentLongRunningOperationValue ?? false;
+            priorLongRunningOperationValue = priorLongRunningOperationValue ?? false;
+            if (!currentLongRunningOperationValue.Equals(priorLongRunningOperationValue))
             {
                 context.LogBreakingChange(ComparisonMessages.XmsLongRunningOperationChanged);
             }
@@ -143,7 +140,7 @@ namespace AutoRest.Swagger.Model
                 context.PushProperty("responses");
                 foreach (var response in Responses)
                 {
-                    var oldResponse = priorOperation.FindResponse(response.Key, priorOperation.Responses);
+                    var oldResponse = priorOperation.FindResponse(response.Key);
 
                     context.PushProperty(response.Key);
 
@@ -161,7 +158,7 @@ namespace AutoRest.Swagger.Model
 
                 foreach (var response in priorOperation.Responses)
                 {
-                    var newResponse = this.FindResponse(response.Key, this.Responses);
+                    var newResponse = this.FindResponse(response.Key);
 
                     if (newResponse == null)
                     {
@@ -179,51 +176,31 @@ namespace AutoRest.Swagger.Model
         /// <summary>
         /// Check that no parameters were removed or reordered, and compare them if it's not the case
         /// </summary>
-        /// <param name="context">Comaprision Context</param>
+        /// <param name="context">Comparison Context</param>
         /// <param name="priorOperation">Operation object of old swagger</param>
         private void CheckParameters(ComparisonContext<ServiceDefinition> context, Operation priorOperation)
         {
-            // Check that no parameters were removed or reordered, and compare them if it's not the case.
-
-            var currentRoot = context.CurrentRoot;
-            var previousRoot = context.PreviousRoot;
+            ServiceDefinition currentRoot = context.CurrentRoot;
+            ServiceDefinition previousRoot = context.PreviousRoot;
 
             context.PushProperty("parameters");
 
-            var priorOperationParameters = priorOperation.Parameters.Select(param =>
-                string.IsNullOrWhiteSpace(param.Reference) ? param :
-                FindReferencedParameter(param.Reference, previousRoot.Parameters)
-            );
+            List<(SwaggerParameter param, bool isGlobal)> currParamsResolved =
+                Parameters.Select(param => ResolveParam(param, currentRoot)).ToList();
 
-            var currentOperationParameters = Parameters.Select(param =>
-                string.IsNullOrWhiteSpace(param.Reference) ? param :
-                FindReferencedParameter(param.Reference, currentRoot.Parameters));
+            List<(SwaggerParameter param, bool isGlobal)> priorParamsResolved =
+                priorOperation.Parameters.Select(param => ResolveParam(param, previousRoot)).ToList();
 
-            for (int i = 0; i < currentOperationParameters.Count(); i++)
+            DetectChangedParameterLocation(context, currParamsResolved, priorParamsResolved);
+            DetectChangedParameterOrder(context, currParamsResolved, priorParamsResolved);
+
+            foreach (var paramInfo in priorParamsResolved)
             {
-                var curOriginalParameter = Parameters.ElementAt(i);
-                var curParameter = currentOperationParameters.ElementAt(i);
-                curParameter.Extensions.TryGetValue("x-ms-long-running-operation", out var curParameterLocation);
-                if (
-                    !string.IsNullOrWhiteSpace(curOriginalParameter.Reference) &&
-                    (curParameterLocation == null || !curParameterLocation.Equals("method"))
-                    )
-                {
-                    continue;
-                }
-                var priorIndex = FindParameterIndex(curParameter, priorOperationParameters);
-                if (priorIndex != -1 && priorIndex != i)
-                {
-                    context.LogBreakingChange(ComparisonMessages.ChangedParameterOrder, curParameter.Name);
-                }
-            }
-
-            foreach (var oldParam in priorOperationParameters)
-            {
+                (SwaggerParameter oldParam, bool _) = paramInfo;
                 SwaggerParameter newParam = FindParameterEx(oldParam, Parameters, currentRoot.Parameters);
 
                 // we should use PushItemByName instead of PushProperty because Swagger `parameters` is
-                // an array of paremters.
+                // an array of parameters.
                 context.PushItemByName(oldParam.Name);
 
                 if (newParam != null)
@@ -243,46 +220,219 @@ namespace AutoRest.Swagger.Model
             }
 
             // Check that no required or optional parameters were added.
-            var allParamters = Parameters.Select(param =>
-                                        string.IsNullOrWhiteSpace(param.Reference) ?
-                                        param : FindReferencedParameter(param.Reference, currentRoot.Parameters))
-                                        .Where(p => p != null);
-            foreach (var newParam in allParamters)
-            {
-                if (newParam == null) continue;
+            List<SwaggerParameter> allParameters = Parameters.Select(
+                    param =>
+                        string.IsNullOrWhiteSpace(param.Reference)
+                            ? param
+                            : FindReferencedParameter(param.Reference, currentRoot.Parameters))
+                .Where(p => p != null).ToList();
 
-                
+            foreach (SwaggerParameter newParam in allParameters)
+            {
                 SwaggerParameter oldParam = FindParameterEx(newParam, priorOperation.Parameters, previousRoot.Parameters);
 
-                if (oldParam == null)
-                {
-                    // Did not find required parameter in the old swagger i.e required parameter is added
-                    context.PushItemByName(newParam.Name);
-                    if (newParam.IsRequired) {
-                        context.LogBreakingChange(ComparisonMessages.AddingRequiredParameter, newParam.Name);
-                    }
-                    else {
-                        context.LogBreakingChange(ComparisonMessages.AddingOptionalParameter, newParam.Name);
-                    }
-                    context.Pop();
-                }
+                if (oldParam != null)
+                    continue;
+
+                // Did not find required parameter in the old swagger i.e. required parameter is added
+                context.PushItemByName(newParam.Name);
+
+                context.LogBreakingChange(
+                    newParam.IsRequired
+                        ? ComparisonMessages.AddingRequiredParameter
+                        : ComparisonMessages.AddingOptionalParameter,
+                    newParam.Name);
+
+                context.Pop();
             }
             context.Pop();
         }
 
+        private static (SwaggerParameter param, bool isGlobal) ResolveParam(SwaggerParameter param, ServiceDefinition serviceDef)
+            => string.IsNullOrWhiteSpace(param.Reference)
+                ? (param, false)
+                : (FindReferencedParameter(param.Reference, serviceDef.Parameters), true);
+
         /// <summary>
-        /// Finds given parameter in the list of operation parameters or global parameters ,
+        /// Report breaking change if parameter location has changed.
+        /// See "1050 - ParameterLocationHasChanged" in docs/rules/1050.md for details.
+        ///
+        /// We report ComparisonMessages.ParameterLocationHasChanged breaking change only if
+        /// given parameter existed in the previous version, still exists in the new version, and its location has changed.
+        /// </summary>
+        private void DetectChangedParameterLocation(
+            ComparisonContext<ServiceDefinition> context,
+            List<(SwaggerParameter param, bool isGlobal)> currParamsInfo,
+            List<(SwaggerParameter param, bool isGlobal)> priorParamsInfo)
+        {
+            priorParamsInfo.ForEach(
+                priorParamInfo
+                    =>
+                {
+                    (SwaggerParameter param, bool isGlobal) matchingCurrParamInfo = currParamsInfo.FirstOrDefault(
+                        currParamInfo => ParamsAreSame(currParamInfo.param, priorParamInfo.param));
+                    if (matchingCurrParamInfo != default)
+                    {
+                        var priorLocationIsMethod = ParamLocationIsMethod(priorParamInfo);
+                        var currLocationIsMethod = ParamLocationIsMethod(matchingCurrParamInfo);
+                        if (priorLocationIsMethod ^ currLocationIsMethod)
+                        {
+                            context.LogBreakingChange(
+                                ComparisonMessages.ParameterLocationHasChanged,
+                                priorParamInfo.param.Name,
+                                priorParamInfo.param.In,
+                                priorLocationIsMethod,
+                                currLocationIsMethod);
+                        }
+                    }
+                    else
+                    {
+                        // The parameter existed in the previous version but does not exist in the new version
+                        // hence its location could not have changed.
+                    }
+                });
+        }
+
+        /// <summary>
+        /// This method reports breaking change on parameters whose order matters and it has changed.
+        ///
+        /// This method works by first filtering out all parameters whose order does not matter.
+        /// To see how do we determine if parameter order matters, consult the ParamOrderMatters method.
+        ///
+        /// Once we have the collection of current and prior params whose order matters, we compare their order
+        /// by index. If at any point current and prior params differ (see implementation of this method
+        /// to see how we determine if two params differ), then we report a breaking change.
+        ///
+        /// If a new parameter, whose order matters, was added to current version, we will not report any
+        /// breaking changes on it as it didn't exist before. However, its addition may still shift
+        /// other parameters' order, and that will be reported as breaking change. E.g.:
+        /// [Foo, Bar] -> [Qux, Foo, Bar].
+        /// Here Qux has been added thus shifting Foo and Bar's order.
+        ///
+        /// If a parameter definition has changed in such a way that its order now matters, but previously
+        /// it did not, then we will not report a ComparisonMessages.ChangedParameterOrder breaking change
+        /// on that parameters, but we do expect a different breaking change will be reported by a different rule.
+        /// For example, if parameter location was converted from "client" to "method" then
+        /// ComparisonMessages.ParameterLocationHasChanged should be reported.
+        /// 
+        /// If a parameter definition has changed in such a way that its order previously mattered,
+        /// but now it does not, then we will not report a ComparisonMessages.ChangedParameterOrder breaking change
+        /// on that parameter, but we do expect a different breaking change will be reported by a different rule.
+        /// For example, if parameter location was converted from "method" to "client" then
+        /// ComparisonMessages.ParameterLocationHasChanged should be reported.
+        /// 
+        /// Additional context provided at:
+        /// https://github.com/Azure/azure-sdk-tools/issues/7170#issuecomment-2162156876
+        /// </summary>
+        private void DetectChangedParameterOrder(
+            ComparisonContext<ServiceDefinition> context,
+            List<(SwaggerParameter param, bool isGlobal)> currParamsInfo,
+            List<(SwaggerParameter param, bool isGlobal)> priorParamsInfo)
+        {
+            SwaggerParameter[] currParamsResolvedOrdered =
+                currParamsInfo.Where(ParamOrderMatters).Select(paramInfo => paramInfo.param).ToArray();
+
+            SwaggerParameter[] priorParamsResolvedOrdered =
+                priorParamsInfo.Where(ParamOrderMatters).Select(paramInfo => paramInfo.param).ToArray();
+
+            int currParamsCount = currParamsResolvedOrdered.Length;
+            int priorParamsCount = priorParamsResolvedOrdered.Length;
+
+            int paramIndex = 0;
+            while (paramIndex < priorParamsCount)
+            {
+                SwaggerParameter currParamAtIndex =
+                    paramIndex < currParamsCount ? currParamsResolvedOrdered[paramIndex] : null;
+                SwaggerParameter priorParamAtIndex = priorParamsResolvedOrdered[paramIndex];
+
+                if (!ParamsAreSame(currParamAtIndex, priorParamAtIndex))
+                {
+                    int newParamIndex = FindParameterIndex(priorParamAtIndex, currParamsResolvedOrdered);
+                    bool paramOrderDoesMatterInNewSpec = newParamIndex != -1;
+
+                    if (paramOrderDoesMatterInNewSpec)
+                    {
+                        context.LogBreakingChange(
+                            ComparisonMessages.ChangedParameterOrder,
+                            priorParamAtIndex.Name,
+                            priorParamAtIndex.In,
+                            paramIndex,
+                            newParamIndex);
+                    }
+                    else
+                    {
+                        // If param order does not matter in the new spec we not report ComparisonMessages.ChangedParameterOrder breaking change.
+                        // However, it is still a breaking change to a) change the parameter location so that its order doesn't matter, 
+                        // OR b) to remove a parameter altogether.
+                        // We expect other breaking changes to be reported in such case like e.g. ComparisonMessages.ParameterLocationHasChanged.
+                    }
+                }
+
+                paramIndex++;
+            }
+        }
+
+        /// <summary>
+        /// Here we assume a parameter is uniquely identified by the pair of its properties : "Name" and "In".
+        /// </summary>
+        private static bool ParamsAreSame(SwaggerParameter currParam, SwaggerParameter priorParam)
+            => currParam != null && priorParam != null && currParam.Name == priorParam.Name &&
+               currParam.In == priorParam.In;
+
+        /// <summary>
+        /// We assume that parameter location is "method" if, and only if, its order matters.
+        /// </summary>
+        private bool ParamLocationIsMethod((SwaggerParameter param, bool isGlobal) paramInfo)
+            => ParamOrderMatters(paramInfo);
+
+        /// <summary>
+        /// Determines if given parameter's order matters. See the comments within this method for details,
+        /// as well as comment on DetectChangedParameterOrder method.
+        /// </summary>
+        private bool ParamOrderMatters((SwaggerParameter param, bool isGlobal) paramInfo)
+        {
+            if (!paramInfo.isGlobal)
+            {
+                // If the parameter is not a global parameter then we assume its order matters.
+                // We assume this because we assume that the parameters are generated into C# code
+                // via AutoRest implementation. According to this implementation example in [1],
+                // these parameters are by default method parameters, hence their order matters.
+                // We also assume, as explained in [2], that it is not possible to override parameter
+                // location to one whose order doesn't matter: the extension "x-ms-parameter-location"
+                // will be ignored even if defined.
+                // [1] https://github.com/Azure /autorest/blob/765bc784b0cad173d47f931a04724936a6948b4c/docs/generate/how-autorest-generates-code-from-openapi.md#specifying-required-parameters-and-properties
+                // [2] https://github.com/Azure/autorest/blob/765bc784b0cad173d47f931a04724936a6948b4c/docs/extensions/readme.md#x-ms-parameter-location
+                return true;
+            }
+
+            paramInfo.param.Extensions.TryGetValue("x-ms-parameter-location", out object paramLocation);
+
+            // Per [2], if the global parameter definition does not declare "x-ms-parameter-location"
+            // then we assume it defaults to "client" and so its order does not matter.
+            // If the global parameter definition declares "x-ms-parameter-location" 
+            // to any value different from "method", then we assume its order does not matter.
+            // Otherwise, parameter either is not a global parameter, or its "x-ms-parameter-location" key
+            // is set to "method", hence its order matters.
+            // [2] https://github.com/Azure/autorest/blob/765bc784b0cad173d47f931a04724936a6948b4c/docs/extensions/readme.md#x-ms-parameter-location
+            return paramLocation != null && paramLocation.Equals("method");
+        }
+
+        /// <summary>
+        /// Finds given parameter in the list of operation parameters or global parameters
         /// </summary>
         /// <param name="parameter">the parameter to search</param>
         /// <param name="operationParameters">list of operation parameters to search</param>
-        /// <param name="clientParameters">Dictionary of global paramters to search</param>
+        /// <param name="clientParameters">Dictionary of global parameters to search</param>
         /// <returns>Swagger Parameter if found; otherwise null</returns>
-        private SwaggerParameter FindParameterEx(SwaggerParameter parameter, IEnumerable<SwaggerParameter> operationParameters, IDictionary<string, SwaggerParameter> clientParameters)
+        private SwaggerParameter FindParameterEx(
+            SwaggerParameter parameter,
+            IList<SwaggerParameter> operationParameters,
+            IDictionary<string, SwaggerParameter> clientParameters)
         {
             if (Parameters != null)
             {
-                ///first try to find the param has same 'name' and 'in'
-                foreach (var param in operationParameters)
+                // first try to find the param has same 'name' and 'in'
+                foreach (SwaggerParameter param in operationParameters)
                 {
                     if (parameter.Name.Equals(param.Name) && parameter.In.Equals(param.In))
                         return param;
@@ -295,7 +445,8 @@ namespace AutoRest.Swagger.Model
                     }
                 }
             }
-            /// then try to find the parameter has same 'name'
+            
+            // then try to find the parameter has same 'name'
             return FindParameter(parameter.Name, operationParameters, clientParameters);
         }
 
@@ -304,7 +455,7 @@ namespace AutoRest.Swagger.Model
         /// </summary>
         /// <param name="name">name of the parameter to search</param>
         /// <param name="operationParameters">list of operation parameters to search</param>
-        /// <param name="clientParameters">Dictionary of global paramters to search</param>
+        /// <param name="clientParameters">Dictionary of global parameters to search</param>
         /// <returns>Swagger Parameter if found; otherwise null</returns>
         private SwaggerParameter FindParameter(string name, IEnumerable<SwaggerParameter> operationParameters, IDictionary<string, SwaggerParameter> clientParameters)
         {
@@ -326,11 +477,11 @@ namespace AutoRest.Swagger.Model
             return null;
         }
 
-        private int FindParameterIndex(SwaggerParameter parameter, IEnumerable<SwaggerParameter> operationParameters)
+        private int FindParameterIndex(SwaggerParameter parameter, IList<SwaggerParameter> operationParameters)
         {
-            for (int i = 0; i < operationParameters.Count(); i++)
+            for (int i = 0; i < operationParameters.Count; i++)
             {
-                if (operationParameters.ElementAt(i).Name == parameter.Name && operationParameters.ElementAt(i).In == parameter.In)
+                if (ParamsAreSame(operationParameters.ElementAt(i), parameter))
                 {
                     return i;
                 }
@@ -338,33 +489,52 @@ namespace AutoRest.Swagger.Model
             return -1;
         }
 
-        private OperationResponse FindResponse(string name, IDictionary<string, OperationResponse> responses)
+        private OperationResponse FindResponse(string name)
         {
-            OperationResponse response = null;
-            this.Responses.TryGetValue(name, out response);
+            Responses.TryGetValue(name, out var response);
             return response;
         }
 
         /// <summary>
         /// Finds referenced parameter
         /// </summary>
-        /// <param name="reference">Name of the reference to search for</param>
-        /// <param name="parameters">Dictionary of parameters for the search</param>
+        /// <param name="reference">Name of the reference to search for. Expected to be in format of #/parameters/{paramName}</param>
+        /// <param name="parameters">Dictionary of parameters for the search. Expected to be keyed with {paramName}s</param>
         /// <returns>Swagger Parameter if found; otherwise null</returns>
         private static SwaggerParameter FindReferencedParameter(
-            string reference, IDictionary<string, SwaggerParameter> parameters
-        )
+            string reference,
+            IDictionary<string, SwaggerParameter> parameters)
         {
             if (reference != null && reference.StartsWith("#", StringComparison.Ordinal))
             {
-                var parts = reference.Split('/');
+                string[] parts = reference.Split('/');
                 if (parts.Length == 3 && parts[1].Equals("parameters"))
                 {
-                    if (parameters.TryGetValue(parts[2], out var p))
+                    if (parameters.TryGetValue(parts[2], out var param))
                     {
-                        return p;
+                        return param;
+                    }
+                    else
+                    {
+                        // Given the parameter reference of form
+                        // #/parameters/<paramName>
+                        // the parameter named <paramName> could not be found in the "parameters"
+                        // input to this method.
+                        // Silently ignoring that param reference by doing nothing here.
                     }
                 }
+                else
+                {
+                    // The parameter reference does not conform to the format of: 
+                    // #/parameters/<paramName>
+                    // because it has different number of elements or its second element is not "parameters".
+                    // Silently ignoring that param reference by doing nothing here.
+                }
+            }
+            else
+            {
+                // The reference is null or does not start with "#".
+                // Silently ignoring it by doing nothing here.
             }
 
             return null;

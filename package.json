@@ -1,6 +1,6 @@
 {
   "name": "@azure/oad",
-  "version": "0.10.9",
+  "version": "0.10.12",
   "author": {
     "name": "Microsoft Corporation",
     "email": "azsdkteam@microsoft.com",
@@ -8,7 +8,6 @@
   },
   "description": "OpenApi Specification Diff tool",
   "license": "MIT",
-  "type": "module",
   "dependencies": {
     "@ts-common/fs": "^0.2.0",
     "@ts-common/iterator": "^0.3.6",
@@ -79,13 +78,9 @@
     "oad": "./dist/cli.js"
   },
   "jest": {
+    "preset": "ts-jest",
     "collectCoverage": true,
-    "collectCoverageFrom": [
-      "dist/**/*.js"
-    ],
-    "testMatch": [
-      "**/*[tT]est.js"
-    ],
+    "testMatch": ["**/*[tT]est.ts"],
     "testTimeout": 100000
   },
   "scripts": {
@@ -95,7 +90,7 @@
     "dn.publish": "npm run dn.build && dotnet publish -c release openapi-diff/src/core/OpenApiDiff/OpenApiDiff.csproj",
     "dn.test": "npm run dn.build && dotnet test openapi-diff/src/modeler/AutoRest.Swagger.Tests/AutoRest.Swagger.Tests.csproj",
     "tsc": "tsc",
-    "ts.test": "tsc && jest",
+    "ts.test": "jest",
     "test": "npm run dn.test && npm run ts.test",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --fix",

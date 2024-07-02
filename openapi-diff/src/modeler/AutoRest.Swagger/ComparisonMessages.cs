@@ -14,7 +14,7 @@
         {
             Id = 1034,
             Code = nameof(ComparisonMessages.AddedRequiredProperty),
-            Message = "The new version has new required property '{0}' that was not found in the old version.",
+            Message = "The new version lists new non-read-only properties as required: '{0}'. These properties were not listed as required in the old version.",
             Type = MessageType.Addition
         };
 
@@ -110,7 +110,7 @@
         {
             Id = 1042,
             Code = nameof(ComparisonMessages.ChangedParameterOrder),
-            Message = "The order of parameter '{0}' was changed. ",
+            Message = "The order of parameter with Name: '{0}', In: '{1}', was changed. Expected param at index '{2}' but instead found it at index '{3}'.",
             Type = MessageType.Update
         };
 
@@ -391,6 +391,13 @@
             Code = nameof(ComparisonMessages.RemovedXmsEnum),
             Message = "The new version is missing a 'x-ms-enum' found in the old version.",
             Type = MessageType.Removal
+        };
+        public static MessageTemplate ParameterLocationHasChanged = new MessageTemplate
+        {
+            Id = 1050,
+            Code = nameof(ComparisonMessages.ParameterLocationHasChanged),
+            Message = "Parameter location has changed. Name: '{0}'. In: '{1}'. Old location is method: '{2}'. New location is method: '{3}'.",
+            Type = MessageType.Update
         };
     }
 }

@@ -184,27 +184,54 @@ namespace AutoRest.Swagger.Model
         }
 
         /// <summary>
-        /// Comapares list of required properties of this model
+        /// Compares list of required properties of this (i.e. "new") model to the previous (i.e. "old") model.
+        ///
+        /// 1. If the property **was** required and **is** required: do not report a breaking change.
+        ///     This is regardless of property being actually defined or not (previously or now).
+        /// 2. If the property **was not** required and **is** required then:
+        ///     - If the property **was defined and read-only** and **is defined and read-only** then do not report breaking change.
+        ///     - In all other cases, report a breaking change.
+        ///         - E.g. if the property **was not required and not defined** and now **is required and defined and read-only**
+        ///           this still counts as a breaking change.
+        /// 
+        /// Related:
+        /// https://stackoverflow.com/questions/40113049/how-to-specify-if-a-field-is-optional-or-required-in-openapi-swagger
+        /// https://github.com/Azure/azure-sdk-tools/issues/7184
+        /// https://github.com/Azure/openapi-diff/pull/336#discussion_r1638996922
         /// </summary>
-        /// <param name="context">Comaprision Context</param>
+        /// <param name="context">Comparison Context</param>
         /// <param name="priorSchema">Schema of the old model</param>
         private void CompareRequired(ComparisonContext<ServiceDefinition> context, Schema priorSchema)
         {
+            // If Required list is null then no properties are required in the new model,
+            // so there are no breaking changes.
             if (Required == null)
             {
                 return;
             }
 
-            if (Required != null && priorSchema.Required == null)
+            var newRequiredNonReadOnlyPropNames = new List<string>();
+            foreach (string requiredPropName in Required)
             {
-                context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, String.Join(", ", Required));
-                return;
+                Properties.TryGetValue(requiredPropName, out Schema propSchema);
+                priorSchema.Properties.TryGetValue(requiredPropName, out Schema priorPropSchema);
+                bool propWasRequired = priorSchema.Required?.Contains(requiredPropName) == true;
+                // Note that property is considered read-only only if it is consistently read-only both in the old and new models.
+                bool propIsReadOnly = propSchema?.ReadOnly == true && priorPropSchema?.ReadOnly == true;
+                if (!propWasRequired && !propIsReadOnly)
+                {
+                    // Property is newly required and it is not read-only, hence it is a breaking change.
+                    newRequiredNonReadOnlyPropNames.Add(requiredPropName);
+                }
+                else
+                {
+                    // Property was required and is required, or it is read-only, hence it is not a breaking change.
+                }
             }
 
-            List<string> addedRequiredProperties = Required.Except(priorSchema.Required).ToList();
-            if (addedRequiredProperties.Count > 0)
+            if (newRequiredNonReadOnlyPropNames.Any())
             {
-                context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, String.Join(", ", addedRequiredProperties));
+                context.LogBreakingChange(ComparisonMessages.AddedRequiredProperty, string.Join(", ", newRequiredNonReadOnlyPropNames));
             }
         }
 
