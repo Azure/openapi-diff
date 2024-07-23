@@ -213,14 +213,16 @@ namespace AutoRest.Swagger.Model
             var newRequiredNonReadOnlyPropNames = new List<string>();
             foreach (string requiredPropName in Required)
             {
-                Properties.TryGetValue(requiredPropName, out Schema propSchema);
-                priorSchema.Properties.TryGetValue(requiredPropName, out Schema priorPropSchema);
-                bool propWasRequired = priorSchema.Required?.Contains(requiredPropName) == true;
+                Schema propSchema = null;
+                Schema priorPropSchema = null;
+                Properties?.TryGetValue(requiredPropName, out propSchema);
+                priorSchema?.Properties?.TryGetValue(requiredPropName, out priorPropSchema);
+                bool propWasRequired = priorSchema?.Required?.Contains(requiredPropName) == true;
                 // Note that property is considered read-only only if it is consistently read-only both in the old and new models.
                 bool propIsReadOnly = propSchema?.ReadOnly == true && priorPropSchema?.ReadOnly == true;
                 if (!propWasRequired && !propIsReadOnly)
                 {
-                    // Property is newly required and it is not read-only, hence it is a breaking change.
+                    // Property is newly required, and it is not read-only, hence it is a breaking change.
                     newRequiredNonReadOnlyPropNames.Add(requiredPropName);
                 }
                 else
