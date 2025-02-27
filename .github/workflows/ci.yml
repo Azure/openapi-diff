@@ -13,10 +13,10 @@ jobs:
         include:
           - os: ubuntu-latest
             target-folder: drop-linux
-            node-version: 18.x
+            node-version: 22.x
           - os: windows-latest
             target-folder: drop
-            node-version: 22.x
+            node-version: 18.x
 
     steps:
       - uses: actions/checkout@v4
