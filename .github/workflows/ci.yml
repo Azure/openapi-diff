@@ -34,5 +34,9 @@ jobs:
       - name: prettier
         run: npm run prettier
 
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6'
+
       - name: test
         run: npm test
