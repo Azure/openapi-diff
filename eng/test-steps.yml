@@ -4,6 +4,9 @@ parameters:
     default: "drop"
 
 steps:
+  - task: UseDotNet@2
+    inputs:
+      version: 6.x
   - script: npm ci
     displayName: npm ci
   - script: npm run lint
