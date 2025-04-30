@@ -23,6 +23,10 @@ jobs:
         with:
           node-version: "20"
 
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "6"
+
       - name: npm ci
         run: npm ci
 
