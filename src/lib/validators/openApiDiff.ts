@@ -177,7 +177,7 @@ export class OpenApiDiff {
       const result = path.join(__dirname, "..", "..", "..", "node_modules", "autorest", "dist", "app.js")
       if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
-        return `node ${escape(result)}`
+        return `node ${escapeShellArg(result)}`
       }
     }
 
@@ -186,7 +186,7 @@ export class OpenApiDiff {
       const result = path.join(__dirname, "..", "..", "..", "..", "..", "autorest", "dist", "app.js")
       if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
-        return `node ${escape(result)}`
+        return `node ${escapeShellArg(result)}`
       }
     }
 
@@ -195,7 +195,7 @@ export class OpenApiDiff {
       const result = path.resolve("node_modules/.bin/autorest")
       if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
-        return escape(result)
+        return escapeShellArg(result)
       }
     }
 
@@ -211,7 +211,7 @@ export class OpenApiDiff {
   public openApiDiffDllPath(): string {
     log.silly(`openApiDiffDllPath is being called`)
 
-    return escape(path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll"))
+    return escapeShellArg(path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll"))
   }
 
   /**
