@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.14 2025-06-19
+
+- escaped the input string when construct the autorest command
+
 ## 0.10.5 Released on 2024-02-16
 
 - update source map version from 0.7.3 to 0.7.4 so that it works with Node 18.

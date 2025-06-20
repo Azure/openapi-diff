@@ -10,6 +10,7 @@ import JSON_Pointer from "json-pointer"
 import * as jsonRefs from "json-refs"
 import * as os from "os"
 import * as path from "path"
+import { quote } from "shell-quote"
 import * as sourceMap from "source-map"
 import * as util from "util"
 import { log } from "../util/logging"
@@ -82,8 +83,26 @@ const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): Ch
   }
 }
 
-function escape(filePath: string) {
-  return `"${filePath}"`
+/**
+ * Safely escapes shell arguments for cross-platform compatibility
+ * @param arg The argument to escape
+ * @returns The safely escaped argument
+ */
+function escapeShellArg(arg: string): string {
+  if (typeof arg !== "string") {
+    throw new Error("Argument must be a string")
+  }
+
+  if (process.platform === "win32") {
+    // For Windows cmd.exe, wrap in double quotes and escape internal quotes
+    // This handles paths with spaces and special characters safely
+    // Double quotes are escaped by doubling them in Windows
+    return `"${arg.replace(/"/g, '""')}"`
+  } else {
+    // On Unix-like systems, use shell-quote for proper escaping
+    // shell-quote handles all edge cases including spaces, special chars, etc.
+    return quote([arg])
+  }
 }
 
 /**
@@ -158,7 +177,7 @@ export class OpenApiDiff {
       const result = path.join(__dirname, "..", "..", "..", "node_modules", "autorest", "dist", "app.js")
       if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
-        return `node ${escape(result)}`
+        return `node ${escapeShellArg(result)}`
       }
     }
 
@@ -167,7 +186,7 @@ export class OpenApiDiff {
       const result = path.join(__dirname, "..", "..", "..", "..", "..", "autorest", "dist", "app.js")
       if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
-        return `node ${escape(result)}`
+        return `node ${escapeShellArg(result)}`
       }
     }
 
@@ -176,7 +195,7 @@ export class OpenApiDiff {
       const result = path.resolve("node_modules/.bin/autorest")
       if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
-        return escape(result)
+        return escapeShellArg(result)
       }
     }
 
@@ -192,7 +211,7 @@ export class OpenApiDiff {
   public openApiDiffDllPath(): string {
     log.silly(`openApiDiffDllPath is being called`)
 
-    return escape(path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll"))
+    return escapeShellArg(path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll"))
   }
 
   /**
@@ -231,11 +250,12 @@ export class OpenApiDiff {
     const outputFolder = await fs.promises.mkdtemp(path.join(os.tmpdir(), "oad-"))
     const outputFilePath = path.join(outputFolder, `${outputFileName}.json`)
     const outputMapFilePath = path.join(outputFolder, `${outputFileName}.map`)
+    // Cross-platform shell argument escaping - behavior is validated in shellEscapingTest.ts
     const autoRestCmd = tagName
-      ? `${this.autoRestPath()} ${swaggerPath} --v2 --tag=${tagName} --output-artifact=swagger-document.json` +
-        ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
-      : `${this.autoRestPath()} --v2 --input-file=${swaggerPath} --output-artifact=swagger-document.json` +
-        ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
+      ? `${this.autoRestPath()} ${escapeShellArg(swaggerPath)} --v2 --tag=${escapeShellArg(tagName)} --output-artifact=swagger-document.json` +
+        ` --output-artifact=swagger-document.map --output-file=${escapeShellArg(outputFileName)} --output-folder=${escapeShellArg(outputFolder)}`
+      : `${this.autoRestPath()} --v2 --input-file=${escapeShellArg(swaggerPath)} --output-artifact=swagger-document.json` +
+        ` --output-artifact=swagger-document.map --output-file=${escapeShellArg(outputFileName)} --output-folder=${escapeShellArg(outputFolder)}`
 
     log.debug(`Executing: "${autoRestCmd}"`)
 
