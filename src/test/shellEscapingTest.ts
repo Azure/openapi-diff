@@ -26,21 +26,28 @@ test("shell escaping with quote function", () => {
 test("autorest command construction with dangerous inputs", () => {
   // Simulate the command construction logic from processViaAutoRest
   const autoRestPath = "/usr/bin/autorest"
-  
+
   // Test with dangerous file paths
   const dangerousSwaggerPath = "/tmp/file;rm -rf /.json"
   const dangerousOutputFile = "output;evil&command"
   const dangerousTag = "tag$(evil)"
 
   // Build command like in processViaAutoRest with escaping
-  const autoRestCmd = autoRestPath + " " + quote([dangerousSwaggerPath]) + " --v2 --tag=" + quote([dangerousTag]) + " --output-artifact=swagger-document.json --output-artifact=swagger-document.map --output-file=" + quote([dangerousOutputFile])
+  const autoRestCmd =
+    autoRestPath +
+    " " +
+    quote([dangerousSwaggerPath]) +
+    " --v2 --tag=" +
+    quote([dangerousTag]) +
+    " --output-artifact=swagger-document.json --output-artifact=swagger-document.map --output-file=" +
+    quote([dangerousOutputFile])
 
   // Verify that dangerous parts are properly escaped/quoted
   // Files with spaces get quoted, dangerous chars get backslash-escaped
   assert.ok(autoRestCmd.includes("'/tmp/file;rm -rf /.json'")) // quoted because of spaces
   assert.ok(autoRestCmd.includes("output\\;evil\\&command")) // backslash-escaped
   assert.ok(autoRestCmd.includes("tag\\$\\(evil\\)")) // backslash-escaped
-  
+
   // Verify that the command structure is maintained
   assert.ok(autoRestCmd.includes("--v2"))
   assert.ok(autoRestCmd.includes("--tag="))
@@ -54,14 +61,15 @@ test("autorest command construction without tag", () => {
   const outputFolder = "/tmp/output folder"
 
   // Build command without tag (different structure)
-  const autoRestCmd = `${autoRestPath} --v2 --input-file=${quote([swaggerPath])} --output-artifact=swagger-document.json` +
+  const autoRestCmd =
+    `${autoRestPath} --v2 --input-file=${quote([swaggerPath])} --output-artifact=swagger-document.json` +
     ` --output-artifact=swagger-document.map --output-file=${quote([outputFile])} --output-folder=${quote([outputFolder])}`
 
   // Verify correct command structure for non-tagged case
   assert.ok(autoRestCmd.includes("--input-file="))
   assert.ok(!autoRestCmd.includes("--tag="))
   assert.ok(autoRestCmd.includes("--v2"))
-  
+
   // Verify spaces are properly quoted
   assert.ok(autoRestCmd.includes("'/tmp/test file.json'"))
   assert.ok(autoRestCmd.includes("'output file'"))
@@ -91,16 +99,16 @@ test("command injection prevention", () => {
 test("edge cases and special characters", () => {
   // Test empty string
   assert.strictEqual(quote([""]), "''")
-  
+
   // Test string with only spaces
   assert.strictEqual(quote(["   "]), "'   '")
-  
+
   // Test string with newlines
   const withNewlines = "file\nwith\nnewlines.json"
   const escapedNewlines = quote([withNewlines])
   // Should be safely handled
   assert.ok(typeof escapedNewlines === "string")
-  
+
   // Test unicode and special chars
   const unicodeFile = "файл.json"
   const escapedUnicode = quote([unicodeFile])
