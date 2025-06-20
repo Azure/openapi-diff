@@ -10,6 +10,7 @@ import JSON_Pointer from "json-pointer"
 import * as jsonRefs from "json-refs"
 import * as os from "os"
 import * as path from "path"
+import { quote } from "shell-quote"
 import * as sourceMap from "source-map"
 import * as util from "util"
 import { log } from "../util/logging"
@@ -232,10 +233,10 @@ export class OpenApiDiff {
     const outputFilePath = path.join(outputFolder, `${outputFileName}.json`)
     const outputMapFilePath = path.join(outputFolder, `${outputFileName}.map`)
     const autoRestCmd = tagName
-      ? `${this.autoRestPath()} ${swaggerPath} --v2 --tag=${tagName} --output-artifact=swagger-document.json` +
-        ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
-      : `${this.autoRestPath()} --v2 --input-file=${swaggerPath} --output-artifact=swagger-document.json` +
-        ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
+      ? `${this.autoRestPath()} ${quote([swaggerPath])} --v2 --tag=${quote([tagName])} --output-artifact=swagger-document.json` +
+        ` --output-artifact=swagger-document.map --output-file=${quote([outputFileName])} --output-folder=${quote([outputFolder])}`
+      : `${this.autoRestPath()} --v2 --input-file=${quote([swaggerPath])} --output-artifact=swagger-document.json` +
+        ` --output-artifact=swagger-document.map --output-file=${quote([outputFileName])} --output-folder=${quote([outputFolder])}`
 
     log.debug(`Executing: "${autoRestCmd}"`)
 
