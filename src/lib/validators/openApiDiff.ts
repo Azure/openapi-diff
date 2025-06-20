@@ -232,6 +232,7 @@ export class OpenApiDiff {
     const outputFolder = await fs.promises.mkdtemp(path.join(os.tmpdir(), "oad-"))
     const outputFilePath = path.join(outputFolder, `${outputFileName}.json`)
     const outputMapFilePath = path.join(outputFolder, `${outputFileName}.map`)
+    // quote behavior is validated in shellEscapingTest.ts
     const autoRestCmd = tagName
       ? `${this.autoRestPath()} ${quote([swaggerPath])} --v2 --tag=${quote([tagName])} --output-artifact=swagger-document.json` +
         ` --output-artifact=swagger-document.map --output-file=${quote([outputFileName])} --output-folder=${quote([outputFolder])}`
