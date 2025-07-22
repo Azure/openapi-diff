@@ -5,8 +5,9 @@ resources:
   repositories:
   - repository: azure-sdk-tools
     type: github
-    name: Azure/azure-sdk-tools
+    name: Azure/azure-sdk-tools    
     endpoint: Azure
+    ref: refs/tags/azure-sdk-tools_20250709.1
 
 extends:
   template: /eng/1es-redirect.yml
