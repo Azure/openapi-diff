@@ -1,6 +1,14 @@
 trigger:
 - main
 
+resources:
+  repositories:
+  - repository: azure-sdk-tools
+    type: github
+    name: Azure/azure-sdk-tools    
+    endpoint: Azure
+    ref: refs/tags/azure-sdk-tools_20250709.1
+
 extends:
   template: /eng/1es-redirect.yml
   parameters:
@@ -37,57 +45,8 @@ extends:
     # only include if running on `internal` build with manual queue, otherwise never include
     - ${{ if and(in(variables['Build.Reason'], 'Manual', ''), eq(variables['System.TeamProject'], 'internal'))}}:
       - stage: Publish
-        displayName: Publish
         dependsOn: Build_And_Test
-
         jobs:
-          - deployment: Publish
-            environment: 'package-publish'
-            pool:
-              name: azsdk-pool
-              image: ubuntu-24.04
-              os: linux
-
-            strategy:
-              runOnce:
-                deploy:
-                  steps:
-                  - checkout: self
-                    submodules: false
-
-                  - download: current
-                    artifact: drop
-                    timeoutInMinutes: 5
-
-                  - task: PowerShell@2
-                    inputs:
-                      filePath: '$(Build.SourcesDirectory)/eng/scripts/determine-release-tag.ps1'
-                      failOnStderr: true
-                      pwsh: true
-
-                  - pwsh: |
-                      Write-Host "Will deploy with tag of $(Tag)"
-                      Get-ChildItem "$(Pipeline.Workspace)/drop" -Recurse -Force `
-                        | Where-Object { $_.Name -like "*.tgz" } `
-                        | Copy-Item -Destination "$(Build.ArtifactStagingDirectory)"
-
-                      Get-ChildItem "$(Build.ArtifactStagingDirectory)" -Recurse -Force | % { Write-Host $_.FullName }
-                    displayName: Move artifact to $(Build.ArtifactStagingDirectory)
-
-                  - task: EsrpRelease@9
-                    displayName: 'Publish oav to ESRP'
-                    inputs:
-                      ConnectedServiceName: 'Azure SDK PME Managed Identity'
-                      ClientId: '5f81938c-2544-4f1f-9251-dd9de5b8a81b'
-                      DomainTenantId: '975f013f-7f24-47e8-a7d3-abc4752bf346'
-                      UseManagedIdentity: true
-                      KeyVaultName: 'kv-azuresdk-codesign'
-                      SignCertName: 'azure-sdk-esrp-release-certificate'
-                      Intent: 'PackageDistribution'
-                      ContentType: 'npm'
-                      FolderLocation: $(Build.ArtifactStagingDirectory)
-                      Owners: ${{ coalesce(variables['Build.RequestedForEmail'], 'azuresdk@microsoft.com') }}
-                      Approvers: 'azuresdk@microsoft.com'
-                      ServiceEndpointUrl: 'https://api.esrp.microsoft.com'
-                      MainPublisher: 'ESRPRELPACMANTEST'
-                      productstate: $(Tag)
+        - template: /eng/common/pipelines/templates/jobs/npm-publish.yml@azure-sdk-tools
+          parameters:
+            ArtifactName: drop-linux
