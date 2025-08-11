@@ -19,12 +19,12 @@ test("flags 1003 - RequestBodyFormatNoLongerSupported", async () => {
       mode: "Removal",
       old: {
         ref: `${oldFilePath}#/consumes`,
-        path: "paths./pets.post.consumes",
+        path: "paths['/pets'].post.consumes",
         location: `${oldFilePath}:7:3`
       },
       new: {
         ref: `${newFilePath}#/consumes`,
-        path: "paths./pets.post.consumes",
+        path: "paths['/pets'].post.consumes",
         location: `${newFilePath}:7:3`
       },
       type: "Warning",

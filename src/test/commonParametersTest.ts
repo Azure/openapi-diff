@@ -39,7 +39,7 @@ test("common-parameters", async () => {
       new: {},
       old: {
         location: "",
-        path: "paths./api/Operations.get.parameters",
+        path: "paths['/api/Operations'].get.parameters",
         ref: ""
       },
       type: "Error"
@@ -52,7 +52,7 @@ test("common-parameters", async () => {
       mode: "Addition",
       new: {
         location: "",
-        path: "paths./api/Operations.get.parameters",
+        path: "paths['/api/Operations'].get.parameters",
         ref: ""
       },
       old: {},

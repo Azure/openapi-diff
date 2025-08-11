@@ -39,7 +39,7 @@ test("full", async () => {
       mode: "Addition",
       new: {
         location: `${newFilePath2}:8:5`,
-        path: "paths./x",
+        path: "paths['/x']",
         ref: `${newFilePath2}#/paths/~1x`
       },
       old: {},

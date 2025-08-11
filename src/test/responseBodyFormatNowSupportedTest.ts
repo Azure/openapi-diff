@@ -19,12 +19,12 @@ test("flags 1004 - ResponseBodyFormatNowSupported", async () => {
       mode: "Addition",
       old: {
         ref: `${oldFilePath}#/produces`,
-        path: "paths./pets.get.produces",
+        path: "paths['/pets'].get.produces",
         location: `${oldFilePath}:7:3`
       },
       new: {
         ref: `${newFilePath}#/produces`,
-        path: "paths./pets.get.produces",
+        path: "paths['/pets'].get.produces",
         location: `${newFilePath}:7:3`
       },
       type: "Warning",
