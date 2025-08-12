@@ -309,7 +309,7 @@ namespace AutoRest.Swagger.Tests
             var raw = JToken.Parse(output);
             Assert.Equal(JTokenType.Object, raw.Type);
             Assert.Equal("new/added_path.json:38:15", raw["new"]["location"].Value<string>());
-            Assert.Equal("paths./api/Operations.post", raw["new"]["path"].Value<string>());
+            Assert.Equal("paths['/api/Operations'].post", raw["new"]["path"].Value<string>());
             Assert.Null(raw["old"]["location"]);
         }
 
@@ -368,7 +368,7 @@ namespace AutoRest.Swagger.Tests
             ComparisonMessage[] messages = CompareSwagger("added_readonly_required_property.json").ToArray();
             List<ComparisonMessage> addedReqPropMessages = messages.Where(
                 m => m.Severity == Category.Error && m.Id == ComparisonMessages.AddedRequiredProperty.Id).ToList();
-            Assert.Equal(0, addedReqPropMessages.Count);
+            Assert.Empty(addedReqPropMessages);
         }
 
         /// <summary>
@@ -842,21 +842,21 @@ namespace AutoRest.Swagger.Tests
         public void RemovedPropertyTest()
         {
             var messages = CompareSwagger("removed_property.json").ToArray();
-            Assert.True(messages.Where(m => m.Id == ComparisonMessages.RemovedProperty.Id).Any());
+            Assert.NotEmpty(messages.Where(m => m.Id == ComparisonMessages.RemovedProperty.Id));
         }
 
         [Fact]
         public void FormatChanged()
         {
             var messages = CompareSwagger("format_check_01.json").ToArray();
-            Assert.True(messages.Where(m => m.Id == ComparisonMessages.TypeFormatChanged.Id).Any());
+            Assert.NotEmpty(messages.Where(m => m.Id == ComparisonMessages.TypeFormatChanged.Id));
         }
 
         [Fact]
         public void FormatRemoved()
         {
             var messages = CompareSwagger("format_check_02.json").ToArray();
-            Assert.True(messages.Where(m => m.Id == ComparisonMessages.TypeFormatChanged.Id).Any());
+            Assert.NotEmpty(messages.Where(m => m.Id == ComparisonMessages.TypeFormatChanged.Id));
         }
 
         [Fact]
@@ -952,7 +952,7 @@ namespace AutoRest.Swagger.Tests
             // of Implicit and Client doesn't matter.
             //
             // Reference: https://github.com/Azure/autorest/blob/main/docs/extensions/readme.md#x-ms-parameter-location
-            Assert.Equal(0, messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id).Count());
+            Assert.Empty(messages.Where(m => m.Id == ComparisonMessages.ChangedParameterOrder.Id));
         }
 
         [Fact]
@@ -1047,11 +1047,11 @@ namespace AutoRest.Swagger.Tests
 
             foreach (var reqParamName in reqParamNames)
             {
-                Assert.True(reqParamMessageStrings.Any(str => str.Contains(reqParamName)));
+                Assert.Contains(reqParamMessageStrings, str => str.Contains(reqParamName));
             }
             foreach (var optParamName in optParamNames)
             {
-                Assert.True(optParamMessageStrings.Any(str => str.Contains(optParamName)));
+                Assert.Contains(optParamMessageStrings, str => str.Contains(optParamName));
             }
         }
     }

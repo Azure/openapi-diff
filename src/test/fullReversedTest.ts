@@ -39,7 +39,7 @@ test("full reversed", async () => {
       mode: "Removal",
       old: {
         location: `${oldFilePath2}:8:5`,
-        path: "paths./x",
+        path: "paths['/x']",
         ref: `${oldFilePath2}#/paths/~1x`
       },
       new: {},

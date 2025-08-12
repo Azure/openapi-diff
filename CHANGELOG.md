@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.0 2025-08-11
+
+- upgraded Newtonsoft.Json from 9.0.1 to 13.0.1
+
 ## 0.10.14 2025-06-19
 
 - escaped the input string when construct the autorest command

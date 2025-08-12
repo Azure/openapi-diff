@@ -36,12 +36,12 @@ test("expands allOf Models", async () => {
       message: "The new version has a different 'allOf' property than the previous one.",
       old: {
         ref: `${oldFilePath}#/paths/~1api~1Parameters/put/parameters/0/schema`,
-        path: "paths./api/Parameters.put.parameters[0].schema",
+        path: "paths['/api/Parameters'].put.parameters[0].schema",
         location: `${oldFilePath}:24:13`
       },
       new: {
         ref: `${newFilePath}#/paths/~1api~1Parameters/put/parameters/0/schema`,
-        path: "paths./api/Parameters.put.parameters[0].schema",
+        path: "paths['/api/Parameters'].put.parameters[0].schema",
         location: `${newFilePath}:24:13`
       },
       type: "Error",

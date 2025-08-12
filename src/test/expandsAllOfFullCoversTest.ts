@@ -36,12 +36,12 @@ test("expands allOf full covers", async () => {
       message: "The new version has a different 'allOf' property than the previous one.",
       old: {
         ref: `${oldFilePath}#/paths/~1api~1Parameters/put/parameters/0/schema`,
-        path: "paths./api/Parameters.put.parameters[0].schema",
+        path: "paths['/api/Parameters'].put.parameters[0].schema",
         location: `${oldFilePath}:22:13`
       },
       new: {
         ref: `${newFilePath}#/paths/~1api~1Parameters/put/parameters/0/schema`,
-        path: "paths./api/Parameters.put.parameters[0].schema",
+        path: "paths['/api/Parameters'].put.parameters[0].schema",
         location: `${newFilePath}:22:13`
       },
       type: "Error",
@@ -109,12 +109,12 @@ test("expands allOf full covers", async () => {
         "The new version lists new non-read-only properties as required: 'a'. These properties were not listed as required in the old version.",
       old: {
         ref: `${oldFilePath}#/paths/~1api~1Parameters/put/parameters/0/schema`,
-        path: "paths./api/Parameters.put.parameters[0].schema",
+        path: "paths['/api/Parameters'].put.parameters[0].schema",
         location: `${oldFilePath}:22:13`
       },
       new: {
         ref: `${newFilePath}#/paths/~1api~1Parameters/put/parameters/0/schema`,
-        path: "paths./api/Parameters.put.parameters[0].schema",
+        path: "paths['/api/Parameters'].put.parameters[0].schema",
         location: `${newFilePath}:22:13`
       },
       type: "Error",
