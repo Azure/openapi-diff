@@ -146,17 +146,19 @@ export type Options = {
  * @return {Promise} promise - A promise that resolves to the responseBody or rejects to an error.
  */
 export async function makeRequest(options: Options) {
-  const response = await fetch(options.url)
+  const { url, errorOnNon200Response } = options
+
+  const response = await fetch(url)
   const responseBody = await response.text()
 
-  if (options.errorOnNon200Response && response.status !== 200) {
+  if (errorOnNon200Response && response.status !== 200) {
     throw new Error(`StatusCode: "${response.status}", ResponseBody: "${responseBody}."`)
   }
 
   try {
-    return parseContent(options.url, responseBody)
+    return parseContent(url, responseBody)
   } catch (error) {
-    throw new Error(`An error occurred while parsing the file ${options.url}. The error is:\n ${util.inspect(error, { depth: null })}.`)
+    throw new Error(`An error occurred while parsing the file ${url}. The error is:\n ${util.inspect(error, { depth: null })}.`)
   }
 }
 
