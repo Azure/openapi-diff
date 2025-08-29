@@ -153,16 +153,11 @@ export async function makeRequest(options: Options) {
     throw new Error(`StatusCode: "${response.status}", ResponseBody: "${responseBody}."`)
   }
 
-  let res = responseBody
   try {
-    if (typeof responseBody.valueOf() === "string") {
-      res = parseContent(options.url, responseBody)
-    }
+    return parseContent(options.url, responseBody)
   } catch (error) {
     throw new Error(`An error occurred while parsing the file ${options.url}. The error is:\n ${util.inspect(error, { depth: null })}.`)
   }
-
-  return res
 }
 
 /*
