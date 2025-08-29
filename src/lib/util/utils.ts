@@ -150,13 +150,15 @@ export async function makeRequest(options: Options) {
   const responseBody = await response.text()
 
   if (options.errorOnNon200Response && response.status !== 200) {
-    throw new Error(`StatusCode: "${response.status}", ResponseBody: "${responseBody}."`)
+    const msg = `StatusCode: "${response.status}", ResponseBody: "${responseBody}."`
+    throw new Error(msg)
   }
 
   try {
     return parseContent(options.url, responseBody)
   } catch (error) {
-    throw new Error(`An error occurred while parsing the file ${options.url}. The error is:\n ${util.inspect(error, { depth: null })}.`)
+    const msg = `An error occurred while parsing the file ${options.url}. The error is:\n ${util.inspect(error, { depth: null })}.`
+    throw new Error(msg)
   }
 }
 
