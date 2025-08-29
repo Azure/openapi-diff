@@ -150,8 +150,7 @@ export async function makeRequest(options: Options) {
   const responseBody = await response.text()
   
   if (options.errorOnNon200Response && response.status !== 200) {
-    const msg = `StatusCode: "${response.status}", ResponseBody: "${responseBody}."`
-    throw new Error(msg)
+    throw new Error(`StatusCode: "${response.status}", ResponseBody: "${responseBody}."`)
   }
   
   let res = responseBody
