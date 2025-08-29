@@ -148,19 +148,18 @@ export type Options = {
 export async function makeRequest(options: Options) {
   const response = await fetch(options.url)
   const responseBody = await response.text()
-  
+
   if (options.errorOnNon200Response && response.status !== 200) {
     throw new Error(`StatusCode: "${response.status}", ResponseBody: "${responseBody}."`)
   }
-  
+
   let res = responseBody
   try {
     if (typeof responseBody.valueOf() === "string") {
       res = parseContent(options.url, responseBody)
     }
   } catch (error) {
-    const msg = `An error occurred while parsing the file ${options.url}. The error is:\n ${util.inspect(error, { depth: null })}.`
-    throw new Error(msg)
+    throw new Error(`An error occurred while parsing the file ${options.url}. The error is:\n ${util.inspect(error, { depth: null })}.`)
   }
 
   return res
