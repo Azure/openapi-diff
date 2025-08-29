@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.1 2025-08-29
+
+- replaced dependency 'request' with built-in fetch() API
+
 ## 0.11.0 2025-08-11
 
 - upgraded Newtonsoft.Json from 9.0.1 to 13.0.1
