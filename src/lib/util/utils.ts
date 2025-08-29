@@ -149,6 +149,9 @@ export async function makeRequest(options: Options) {
   const response = await fetch(options.url)
   const responseBody = await response.text()
 
+  // Callers typically use `response.ok` which allows status in the range 200-299, but this code
+  // specifically allowed only response 200 when using `request`, so we preserve the same logic
+  // when using `fetch()`.
   if (options.errorOnNon200Response && response.status !== 200) {
     const msg = `StatusCode: "${response.status}", ResponseBody: "${responseBody}."`
     throw new Error(msg)
