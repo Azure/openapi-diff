@@ -6,7 +6,6 @@ import * as fs from "fs"
 import * as YAML from "js-yaml"
 import * as jsonPointer from "json-pointer"
 import * as path from "path"
-
 import * as util from "util"
 import { log } from "./logging"
 
