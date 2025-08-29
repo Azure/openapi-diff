@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-import { execSync } from "child_process"
+import { execFileSync } from "child_process"
 import * as fs from "fs"
 import * as YAML from "js-yaml"
 import * as jsonPointer from "json-pointer"
@@ -421,8 +421,8 @@ export function gitClone(url: string, directory: string) {
   }
 
   try {
-    const cmd = `git clone ${url} ${directory}`
-    execSync(cmd, { encoding: "utf8" })
+    const [file, args] = ["git", ["clone", url, directory]]
+    execFileSync(file, args, { encoding: "utf8" })
   } catch (err) {
     throw new Error(`An error occurred while cloning git repository: ${util.inspect(err, { depth: null })}.`)
   }
