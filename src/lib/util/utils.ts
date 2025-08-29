@@ -6,7 +6,7 @@ import * as fs from "fs"
 import * as YAML from "js-yaml"
 import * as jsonPointer from "json-pointer"
 import * as path from "path"
-import request = require("request")
+
 import * as util from "util"
 import { log } from "./logging"
 
@@ -135,44 +135,38 @@ export type Options = {
   readonly url: string
 }
 
-export type Response = {
-  readonly statusCode?: unknown
-}
-
 /*
- * Makes a generic request. It is a wrapper on top of request.js library that provides a promise instead of a callback.
+ * Makes a generic request using the built-in fetch API.
  *
- * @param {object} options - The request options as described over here https://github.com/request/request#requestoptions-callback
+ * @param {object} options - The request options
+ *
+ * @param {string} options.url - The URL to request
  *
  * @param {boolean} options.errorOnNon200Response If true will reject the promise with an error if the response statuscode is not 200.
  *
  * @return {Promise} promise - A promise that resolves to the responseBody or rejects to an error.
  */
-export function makeRequest(options: Options) {
-  const promise = new Promise(function (resolve, reject) {
-    request(options, function (err: unknown, response: Response, responseBody: string) {
-      if (err) {
-        reject(err)
-      }
-      if (options.errorOnNon200Response && response.statusCode !== 200) {
-        const msg = `StatusCode: "${response.statusCode}", ResponseBody: "${responseBody}."`
-        reject(new Error(msg))
-      }
-      let res = responseBody
-      try {
-        if (typeof responseBody.valueOf() === "string") {
-          res = parseContent(options.url, responseBody)
-        }
-      } catch (error) {
-        const msg = `An error occurred while parsing the file ${options.url}. The error is:\n ${util.inspect(error, { depth: null })}.`
-        const e = new Error(msg)
-        reject(e)
-      }
+export async function makeRequest(options: Options) {
+  const response = await fetch(options.url)
+  
+  if (options.errorOnNon200Response && response.status !== 200) {
+    const responseBody = await response.text()
+    const msg = `StatusCode: "${response.status}", ResponseBody: "${responseBody}."`
+    throw new Error(msg)
+  }
+  
+  const responseBody = await response.text()
+  let res = responseBody
+  try {
+    if (typeof responseBody.valueOf() === "string") {
+      res = parseContent(options.url, responseBody)
+    }
+  } catch (error) {
+    const msg = `An error occurred while parsing the file ${options.url}. The error is:\n ${util.inspect(error, { depth: null })}.`
+    throw new Error(msg)
+  }
 
-      resolve(res)
-    })
-  })
-  return promise
+  return res
 }
 
 /*
