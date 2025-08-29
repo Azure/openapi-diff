@@ -38,7 +38,7 @@
     "@types/jest": "^29.5.12",
     "@types/js-yaml": "^3.12.1",
     "@types/json-pointer": "^1.0.30",
-    "@types/node": "^18.11.9",
+    "@types/node": "^20.0.0",
     "@types/shell-quote": "^1.7.5",
     "@types/yargs": "^13.0.0",
     "eslint": "^8.57.0",
@@ -57,7 +57,7 @@
     "url": "https://github.com/Azure/openapi-diff/issues"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "files": [
     "dist/lib",
