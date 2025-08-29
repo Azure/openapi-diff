@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.11.1 2025-08-29
+## 0.12.0 2025-08-29
 
 - replaced dependency 'request' with built-in fetch() API
+- require Node >= 20
 
 ## 0.11.0 2025-08-11
 
