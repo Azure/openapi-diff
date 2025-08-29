@@ -18,7 +18,7 @@ import { ResolveSwagger } from "../util/resolveSwagger"
 import { pathToJsonPointer } from "../util/utils"
 const _ = require("lodash")
 
-const execFile = util.promisify(child_process.execFile)
+const exec = util.promisify(child_process.exec)
 
 export type Options = {
   readonly consoleLogLevel?: unknown
@@ -319,10 +319,10 @@ export class OpenApiDiff {
       throw new Error(`File "${newSwagger}" not found.`)
     }
 
-    const [file, args] = [this.dotNetPath(), [this.openApiDiffDllPath(), "-o", oldSwagger, "-n", newSwagger]];
+    const cmd = `${this.dotNetPath()} ${this.openApiDiffDllPath()} -o ${oldSwagger} -n ${newSwagger}`
 
-    log.debug(`Executing: "${file} ${args.join(' ')}"`)
-    const { stdout } = await execFile(file, args, { encoding: "utf8", maxBuffer: 1024 * 1024 * 64 })
+    log.debug(`Executing: "${cmd}"`)
+    const { stdout } = await exec(cmd, { encoding: "utf8", maxBuffer: 1024 * 1024 * 64 })
     const resultJson = JSON.parse(stdout) as Messages
 
     const updatedJson = resultJson.map(message => ({
