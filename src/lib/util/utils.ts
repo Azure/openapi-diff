@@ -6,7 +6,6 @@ import * as fs from "fs"
 import * as YAML from "js-yaml"
 import * as jsonPointer from "json-pointer"
 import * as path from "path"
-
 import * as util from "util"
 import { log } from "./logging"
 
@@ -148,14 +147,13 @@ export type Options = {
  */
 export async function makeRequest(options: Options) {
   const response = await fetch(options.url)
+  const responseBody = await response.text()
   
   if (options.errorOnNon200Response && response.status !== 200) {
-    const responseBody = await response.text()
     const msg = `StatusCode: "${response.status}", ResponseBody: "${responseBody}."`
     throw new Error(msg)
   }
   
-  const responseBody = await response.text()
   let res = responseBody
   try {
     if (typeof responseBody.valueOf() === "string") {
