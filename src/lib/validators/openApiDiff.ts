@@ -82,10 +82,6 @@ const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): Ch
   }
 }
 
-function escape(filePath: string) {
-  return `"${filePath}"`
-}
-
 /**
  * @class
  * Open API Diff class.
@@ -158,7 +154,7 @@ export class OpenApiDiff {
       const result = path.join(__dirname, "..", "..", "..", "node_modules", "autorest", "dist", "app.js")
       if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
-        return `node ${escape(result)}`
+        return `node ${result}`
       }
     }
 
@@ -167,7 +163,7 @@ export class OpenApiDiff {
       const result = path.join(__dirname, "..", "..", "..", "..", "..", "autorest", "dist", "app.js")
       if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
-        return `node ${escape(result)}`
+        return `node ${result}`
       }
     }
 
@@ -176,7 +172,7 @@ export class OpenApiDiff {
       const result = path.resolve("node_modules/.bin/autorest")
       if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
-        return escape(result)
+        return result
       }
     }
 
@@ -192,7 +188,7 @@ export class OpenApiDiff {
   public openApiDiffDllPath(): string {
     log.silly(`openApiDiffDllPath is being called`)
 
-    return escape(path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll"))
+    return path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll")
   }
 
   /**

@@ -187,6 +187,7 @@ namespace AutoRest.Swagger.Model
             CompareXmsEnum(context,prior);
             bool relaxes = (prior.Enum != null && this.Enum == null);
             bool constrains = (prior.Enum == null && this.Enum != null);
+            bool isEnumModelAsString = (this.XmsEnum != null && this.XmsEnum.ModelAsString == true);
             if (!relaxes && !constrains)
             {
                 // It was enum and it is still enum i.e check for addition/removal
@@ -212,7 +213,9 @@ namespace AutoRest.Swagger.Model
                     IEnumerable<string> addedEnums = this.Enum.Except(prior.Enum);
                     if (addedEnums.Any())
                     {
-                        context.LogBreakingChange(ComparisonMessages.AddedEnumValue, String.Join(", ", addedEnums.ToList()));
+                        if (!isEnumModelAsString) {
+                            context.LogBreakingChange(ComparisonMessages.AddedEnumValue, String.Join(", ", addedEnums.ToList()));
+                        }
                     }
                 }
             }
