@@ -235,8 +235,8 @@ export class OpenApiDiff {
       "--v2",
       "--output-artifact=swagger-document.json",
       "--output-artifact=swagger-document.map",
-      "--output-file=${outputFileName}",
-      "--output-folder=${outputFolder}"
+      `--output-file=${outputFileName}`,
+      `--output-folder=${outputFolder}`
     ]
 
     log.debug(`Executing: "${autoRestFile} ${swaggerArgs.join(" ")} ${commonArgs.join(" ")}"`)
