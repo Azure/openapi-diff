@@ -303,7 +303,8 @@ export class OpenApiDiff {
       throw new Error(`File "${newSwagger}" not found.`)
     }
 
-    const [file, args] = [this.dotNetPath(), [this.openApiDiffDllPath(), "-o", oldSwagger, "-n", newSwagger]]
+    const file = this.dotNetPath()
+    const args = [this.openApiDiffDllPath(), "-o", oldSwagger, "-n", newSwagger]
 
     log.debug(`Executing: "${file} ${args.join(" ")}"`)
     const { stdout } = await execFile(file, args, { encoding: "utf8", maxBuffer: 1024 * 1024 * 64 })
