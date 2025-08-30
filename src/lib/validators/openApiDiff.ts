@@ -301,10 +301,10 @@ export class OpenApiDiff {
       throw new Error(`File "${newSwagger}" not found.`)
     }
 
-    const cmd = `${this.dotNetPath()} ${this.openApiDiffDllPath()} -o ${oldSwagger} -n ${newSwagger}`
+    const [file, args] = [this.dotNetPath(), [this.openApiDiffDllPath(), "-o", oldSwagger, "-n", newSwagger]]
 
-    log.debug(`Executing: "${cmd}"`)
-    const { stdout } = await exec(cmd, { encoding: "utf8", maxBuffer: 1024 * 1024 * 64 })
+    log.debug(`Executing: "${file} ${args.join(" ")}"`)
+    const { stdout } = await execFile(file, args, { encoding: "utf8", maxBuffer: 1024 * 1024 * 64 })
     const resultJson = JSON.parse(stdout) as Messages
 
     const updatedJson = resultJson.map(message => ({
