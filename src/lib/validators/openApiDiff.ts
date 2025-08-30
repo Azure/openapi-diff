@@ -239,7 +239,7 @@ export class OpenApiDiff {
       `--output-folder=${outputFolder}`
     ]
 
-    log.debug(`Executing: "${autoRestFile} ${swaggerArgs.join(" ")} ${commonArgs.join(" ")}"`)
+    log.debug(`Executing: "${autoRestFile} ${autoRestArgs.join(" ")} ${swaggerArgs.join(" ")} ${commonArgs.join(" ")}"`)
 
     const { stderr } = await execFile(autoRestFile, [...autoRestArgs, ...swaggerArgs, ...commonArgs], {
       encoding: "utf8",
