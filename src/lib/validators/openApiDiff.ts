@@ -239,9 +239,11 @@ export class OpenApiDiff {
       `--output-folder=${outputFolder}`
     ]
 
-    log.debug(`Executing: "${autoRestFile} ${autoRestArgs.join(" ")} ${swaggerArgs.join(" ")} ${commonArgs.join(" ")}"`)
+    const args = [...autoRestArgs, ...swaggerArgs, ...commonArgs]
 
-    const { stderr } = await execFile(autoRestFile, [...autoRestArgs, ...swaggerArgs, ...commonArgs], {
+    log.debug(`Executing: "${autoRestFile} ${args.join(" ")}"`)
+
+    const { stderr } = await execFile(autoRestFile, args, {
       encoding: "utf8",
       maxBuffer: 1024 * 1024 * 64,
       env: { ...process.env, NODE_OPTIONS: "--max-old-space-size=8192" }
