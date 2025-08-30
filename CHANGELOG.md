@@ -3,6 +3,7 @@
 ## 0.12.0 2025-08-29
 
 - replaced dependency 'request' with built-in fetch() API
+- replaced child_process.exec() with execFile()
 - require Node >= 20
 
 ## 0.11.0 2025-08-11
