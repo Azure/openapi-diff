@@ -16,7 +16,7 @@ import { ResolveSwagger } from "../util/resolveSwagger"
 import { pathToJsonPointer } from "../util/utils"
 const _ = require("lodash")
 
-const exec = util.promisify(child_process.exec)
+const execFile = util.promisify(child_process.execFile)
 
 export type Options = {
   readonly consoleLogLevel?: unknown
@@ -141,19 +141,19 @@ export class OpenApiDiff {
   }
 
   /**
-   * Gets path to the autorest application.
+   * Gets file and args to the autorest application.
    *
-   * @returns {string} Path to the autorest app.js file.
+   * @returns {{file: string, args: string[]}} File and args to the autorest app.js file.
    */
-  public autoRestPath(): string {
-    log.silly(`autoRestPath is being called`)
+  public autoRestFileArgs(): { file: string; args: string[] } {
+    log.silly(`autoRestFileArgs is being called`)
 
     // When oad is installed globally
     {
       const result = path.join(__dirname, "..", "..", "..", "node_modules", "autorest", "dist", "app.js")
       if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
-        return `node ${result}`
+        return { file: "node", args: [result] }
       }
     }
 
@@ -162,7 +162,7 @@ export class OpenApiDiff {
       const result = path.join(__dirname, "..", "..", "..", "..", "..", "autorest", "dist", "app.js")
       if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
-        return `node ${result}`
+        return { file: "node", args: [result] }
       }
     }
 
@@ -171,12 +171,12 @@ export class OpenApiDiff {
       const result = path.resolve("node_modules/.bin/autorest")
       if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
-        return result
+        return { file: result, args: [] }
       }
     }
 
     // Assume that autorest is in the path
-    return "autorest"
+    return { file: "autorest", args: [] }
   }
 
   /**
@@ -226,15 +226,22 @@ export class OpenApiDiff {
     const outputFolder = await fs.promises.mkdtemp(path.join(os.tmpdir(), "oad-"))
     const outputFilePath = path.join(outputFolder, `${outputFileName}.json`)
     const outputMapFilePath = path.join(outputFolder, `${outputFileName}.map`)
-    const autoRestCmd = tagName
-      ? `${this.autoRestPath()} ${swaggerPath} --v2 --tag=${tagName} --output-artifact=swagger-document.json` +
-        ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
-      : `${this.autoRestPath()} --v2 --input-file=${swaggerPath} --output-artifact=swagger-document.json` +
-        ` --output-artifact=swagger-document.map --output-file=${outputFileName} --output-folder=${outputFolder}`
 
-    log.debug(`Executing: "${autoRestCmd}"`)
+    const { file: autoRestFile, args: autoRestArgs } = this.autoRestFileArgs()
 
-    const { stderr } = await exec(autoRestCmd, {
+    const swaggerArgs = tagName ? [swaggerPath, `--tag=${tagName}`] : [`--input-file=${swaggerPath}`]
+
+    const commonArgs = [
+      "--v2",
+      "--output-artifact=swagger-document.json",
+      "--output-artifact=swagger-document.map",
+      "--output-file=${outputFileName}",
+      "--output-folder=${outputFolder}"
+    ]
+
+    log.debug(`Executing: "${autoRestFile} ${swaggerArgs.join(" ")} ${commonArgs.join(" ")}"`)
+
+    const { stderr } = await execFile(autoRestFile, [...autoRestArgs, ...swaggerArgs, ...commonArgs], {
       encoding: "utf8",
       maxBuffer: 1024 * 1024 * 64,
       env: { ...process.env, NODE_OPTIONS: "--max-old-space-size=8192" }
