@@ -143,7 +143,7 @@ export class OpenApiDiff {
   /**
    * Gets file and args to the autorest application.
    *
-   * @returns {{file: string, args: string[]}} File and args to the autorest app.js file.
+   * @returns {{ file: string; args: string[] }} File and args to the autorest app.js file.
    */
   public autoRestFileArgs(): { file: string; args: string[] } {
     log.silly(`autoRestFileArgs is being called`)
