@@ -38,7 +38,6 @@
     "@types/js-yaml": "^3.12.1",
     "@types/json-pointer": "^1.0.30",
     "@types/node": "^20.0.0",
-    "@types/shell-quote": "^1.7.5",
     "@types/yargs": "^13.0.0",
     "eslint": "^8.57.0",
     "jest": "^29.7.0",
