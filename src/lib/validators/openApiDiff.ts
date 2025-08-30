@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 import * as asyncFs from "@ts-common/fs"
-import * as jsonParser from "@ts-common/json-parser"
 import { getFilePosition } from "@ts-common/source-map"
 import * as child_process from "child_process"
 import * as fs from "fs"
