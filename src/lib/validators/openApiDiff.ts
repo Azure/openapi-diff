@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 import * as asyncFs from "@ts-common/fs"
-import * as jsonParser from "@ts-common/json-parser"
 import { getFilePosition } from "@ts-common/source-map"
 import * as child_process from "child_process"
 import * as fs from "fs"
@@ -10,7 +9,6 @@ import JSON_Pointer from "json-pointer"
 import * as jsonRefs from "json-refs"
 import * as os from "os"
 import * as path from "path"
-import { quote } from "shell-quote"
 import * as sourceMap from "source-map"
 import * as util from "util"
 import { log } from "../util/logging"
@@ -18,7 +16,7 @@ import { ResolveSwagger } from "../util/resolveSwagger"
 import { pathToJsonPointer } from "../util/utils"
 const _ = require("lodash")
 
-const exec = util.promisify(child_process.exec)
+const execFile = util.promisify(child_process.execFile)
 
 export type Options = {
   readonly consoleLogLevel?: unknown
@@ -84,28 +82,6 @@ const updateChangeProperties = (change: ChangeProperties, pf: ProcessedFile): Ch
 }
 
 /**
- * Safely escapes shell arguments for cross-platform compatibility
- * @param arg The argument to escape
- * @returns The safely escaped argument
- */
-function escapeShellArg(arg: string): string {
-  if (typeof arg !== "string") {
-    throw new Error("Argument must be a string")
-  }
-
-  if (process.platform === "win32") {
-    // For Windows cmd.exe, wrap in double quotes and escape internal quotes
-    // This handles paths with spaces and special characters safely
-    // Double quotes are escaped by doubling them in Windows
-    return `"${arg.replace(/"/g, '""')}"`
-  } else {
-    // On Unix-like systems, use shell-quote for proper escaping
-    // shell-quote handles all edge cases including spaces, special chars, etc.
-    return quote([arg])
-  }
-}
-
-/**
  * @class
  * Open API Diff class.
  */
@@ -165,19 +141,19 @@ export class OpenApiDiff {
   }
 
   /**
-   * Gets path to the autorest application.
+   * Gets file and args to the autorest application.
    *
-   * @returns {string} Path to the autorest app.js file.
+   * @returns {{ file: string; args: string[] }} File and args to the autorest app.js file.
    */
-  public autoRestPath(): string {
-    log.silly(`autoRestPath is being called`)
+  public autoRestFileArgs(): { file: string; args: string[] } {
+    log.silly(`autoRestFileArgs is being called`)
 
     // When oad is installed globally
     {
       const result = path.join(__dirname, "..", "..", "..", "node_modules", "autorest", "dist", "app.js")
       if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
-        return `node ${escapeShellArg(result)}`
+        return { file: "node", args: [result] }
       }
     }
 
@@ -186,7 +162,7 @@ export class OpenApiDiff {
       const result = path.join(__dirname, "..", "..", "..", "..", "..", "autorest", "dist", "app.js")
       if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
-        return `node ${escapeShellArg(result)}`
+        return { file: "node", args: [result] }
       }
     }
 
@@ -195,12 +171,12 @@ export class OpenApiDiff {
       const result = path.resolve("node_modules/.bin/autorest")
       if (fs.existsSync(result)) {
         log.silly(`Found autoRest:${result} `)
-        return escapeShellArg(result)
+        return { file: result, args: [] }
       }
     }
 
     // Assume that autorest is in the path
-    return "autorest"
+    return { file: "autorest", args: [] }
   }
 
   /**
@@ -211,7 +187,7 @@ export class OpenApiDiff {
   public openApiDiffDllPath(): string {
     log.silly(`openApiDiffDllPath is being called`)
 
-    return escapeShellArg(path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll"))
+    return path.join(__dirname, "..", "..", "..", "dlls", "OpenApiDiff.dll")
   }
 
   /**
@@ -250,16 +226,24 @@ export class OpenApiDiff {
     const outputFolder = await fs.promises.mkdtemp(path.join(os.tmpdir(), "oad-"))
     const outputFilePath = path.join(outputFolder, `${outputFileName}.json`)
     const outputMapFilePath = path.join(outputFolder, `${outputFileName}.map`)
-    // Cross-platform shell argument escaping - behavior is validated in shellEscapingTest.ts
-    const autoRestCmd = tagName
-      ? `${this.autoRestPath()} ${escapeShellArg(swaggerPath)} --v2 --tag=${escapeShellArg(tagName)} --output-artifact=swagger-document.json` +
-        ` --output-artifact=swagger-document.map --output-file=${escapeShellArg(outputFileName)} --output-folder=${escapeShellArg(outputFolder)}`
-      : `${this.autoRestPath()} --v2 --input-file=${escapeShellArg(swaggerPath)} --output-artifact=swagger-document.json` +
-        ` --output-artifact=swagger-document.map --output-file=${escapeShellArg(outputFileName)} --output-folder=${escapeShellArg(outputFolder)}`
 
-    log.debug(`Executing: "${autoRestCmd}"`)
+    const { file: autoRestFile, args: autoRestArgs } = this.autoRestFileArgs()
 
-    const { stderr } = await exec(autoRestCmd, {
+    const swaggerArgs = tagName ? [swaggerPath, `--tag=${tagName}`] : [`--input-file=${swaggerPath}`]
+
+    const commonArgs = [
+      "--v2",
+      "--output-artifact=swagger-document.json",
+      "--output-artifact=swagger-document.map",
+      `--output-file=${outputFileName}`,
+      `--output-folder=${outputFolder}`
+    ]
+
+    const args = [...autoRestArgs, ...swaggerArgs, ...commonArgs]
+
+    log.debug(`Executing: "${autoRestFile} ${args.join(" ")}"`)
+
+    const { stderr } = await execFile(autoRestFile, args, {
       encoding: "utf8",
       maxBuffer: 1024 * 1024 * 64,
       env: { ...process.env, NODE_OPTIONS: "--max-old-space-size=8192" }
@@ -319,10 +303,11 @@ export class OpenApiDiff {
       throw new Error(`File "${newSwagger}" not found.`)
     }
 
-    const cmd = `${this.dotNetPath()} ${this.openApiDiffDllPath()} -o ${oldSwagger} -n ${newSwagger}`
+    const file = this.dotNetPath()
+    const args = [this.openApiDiffDllPath(), "-o", oldSwagger, "-n", newSwagger]
 
-    log.debug(`Executing: "${cmd}"`)
-    const { stdout } = await exec(cmd, { encoding: "utf8", maxBuffer: 1024 * 1024 * 64 })
+    log.debug(`Executing: "${file} ${args.join(" ")}"`)
+    const { stdout } = await execFile(file, args, { encoding: "utf8", maxBuffer: 1024 * 1024 * 64 })
     const resultJson = JSON.parse(stdout) as Messages
 
     const updatedJson = resultJson.map(message => ({
