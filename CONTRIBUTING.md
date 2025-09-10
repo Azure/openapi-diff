@@ -144,18 +144,8 @@ npm list -g oad # Should denote no packages installed
 - Ensure you bumped the package version in [`openapi-diff`] `package.json`.
 - Queue a run of the [`openapi-diff` pipeline] and approve the `publish` stage. (Note: there is also the [`public.openapi-diff` pipeline] for CI checks.)
 - Verify in [`@azure/oad` versions] that the newest package version was published on npmjs.org. You can also run `npm show @azure/oad`.
-- Save it to `openapi-platform` feed via [upstream feeds of `openapi-platform`].
-  - For the desired version, you must click `Save to feed` in the context menu of the hidden triple-dot button on the right. It will reveal on hover.
-  - You may need to wait a bit until the newest version shows up in the `Upstream Versions` tab.
-- To make `openapi-alps` use the newly published package:
-  - Ensure that you update the minimum package version in relevant [`package.json`][azureSwaggerValidation package.json] files and then run `rush update` and commit the changes.
-  - ❗ Do the update even if semver rules say the new package version is in scope. E.g. if the version is `~0.10.7` but you published `0.10.8`, then still update the entry to `~0.10.8`.
-  - If you will not modify any `package.json` at all, rush will not recognize the newly published package version. This can be worked around by running  `rush update --full`, but this is discouraged.
-  - Example file: [`private/azure-swagger-validation/azureSwaggerValidation/package.json`][azureSwaggerValidation package.json].
-  - Example `openapi-alps` PR doing the package update: [#537791].
-- Redeploy relevant `openapi-alps` parts to pick up the new package, even if you didn't had to commit any changes. Follow [this doc][openapi-alps doc].
+- Create a PR to [`azure-rest-api-specs`], updating all references to `@azure/oad` in `package[-lock].json`
 
-[#537791]: https://devdiv.visualstudio.com/DevDiv/_git/openapi-alps/pullrequest/537791
 [`@azure/oad` versions]: https://www.npmjs.com/package/@azure/oad?activeTab=versions
 [`dotnet build`]: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-build
 [`dotnet restore`]: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-restore
@@ -164,9 +154,5 @@ npm list -g oad # Should denote no packages installed
 [`openapi-diff` pipeline]: https://dev.azure.com/azure-sdk/internal/_build/index?definitionId=7030
 [`openapi-diff`]: https://github.com/Azure/openapi-diff
 [`public.openapi-diff` pipeline]: https://dev.azure.com/azure-sdk/public/_build?definitionId=135&_a=summary
-[azureSwaggerValidation package.json]: https://devdiv.visualstudio.com/DevDiv/_git/openapi-alps?path=/private/azure-swagger-validation/azureSwaggerValidation/package.json&version=GC78491f959bc714d1a0d35060e58fa6c5888bb828&line=44&lineEnd=44&lineStartColumn=7&lineEndColumn=16&lineStyle=plain&_a=contents
-[openapi-alps doc]: https://dev.azure.com/azure-sdk/internal/_wiki/wikis/internal.wiki/891/openapi-alps?anchor=testing-and-deploying-changes
 [the cache]: https://docs.npmjs.com/cli/v10/configuring-npm/folders#cache
-[upstream feeds of `openapi-platform`]: https://devdiv.visualstudio.com/DevDiv/_artifacts/feed/openapi-platform/Npm/@azure%2Foad/upstreams/
-
-
+[`azure-rest-api-specs`]: https://github.com/Azure/azure-rest-api-specs
