@@ -153,8 +153,6 @@ npm list -g oad # Should denote no packages installed
 [`npm link`]: https://docs.npmjs.com/cli/v10/commands/npm-link
 [`openapi-diff` pipeline]: https://dev.azure.com/azure-sdk/internal/_build/index?definitionId=7030
 [`openapi-diff`]: https://github.com/Azure/openapi-diff
-[`azure-rest-api-specs`]: https://github.com/Azure/azure-rest-api-specs
 [`public.openapi-diff` pipeline]: https://dev.azure.com/azure-sdk/public/_build?definitionId=135&_a=summary
 [the cache]: https://docs.npmjs.com/cli/v10/configuring-npm/folders#cache
-
-
+[`azure-rest-api-specs`]: https://github.com/Azure/azure-rest-api-specs
