@@ -156,7 +156,6 @@ npm list -g oad # Should denote no packages installed
 [`azure-rest-api-specs`]: https://github.com/Azure/azure-rest-api-specs
 [`public.openapi-diff` pipeline]: https://dev.azure.com/azure-sdk/public/_build?definitionId=135&_a=summary
 [azureSwaggerValidation package.json]: https://devdiv.visualstudio.com/DevDiv/_git/openapi-alps?path=/private/azure-swagger-validation/azureSwaggerValidation/package.json&version=GC78491f959bc714d1a0d35060e58fa6c5888bb828&line=44&lineEnd=44&lineStartColumn=7&lineEndColumn=16&lineStyle=plain&_a=contents
-[openapi-alps doc]: https://dev.azure.com/azure-sdk/internal/_wiki/wikis/internal.wiki/891/openapi-alps?anchor=testing-and-deploying-changes
 [the cache]: https://docs.npmjs.com/cli/v10/configuring-npm/folders#cache
 [upstream feeds of `openapi-platform`]: https://devdiv.visualstudio.com/DevDiv/_artifacts/feed/openapi-platform/Npm/@azure%2Foad/upstreams/
 
