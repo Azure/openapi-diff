@@ -13,7 +13,7 @@
     "@ts-common/iterator": "^0.3.6",
     "@ts-common/json": "^0.3.1",
     "@ts-common/json-parser": "^0.9.0",
-    "@ts-common/source-map": "^0.5.0",
+    "@ts-common/source-map": "^1.1.0",
     "@ts-common/string-map": "^0.3.0",
     "acorn": "^5.7.4",
     "autorest": "^3.6.1",
