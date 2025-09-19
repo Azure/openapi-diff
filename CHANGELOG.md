@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.12.1 2025-09-18
+
+- removed unused dependency 'glob'
+
 ## 0.12.0 2025-08-29
 
 - replaced dependency 'request' with built-in fetch() API
