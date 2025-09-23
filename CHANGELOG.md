@@ -4,6 +4,7 @@
 
 - remove unused dependencies
   - acorn
+  - kind-of
 
 ## 0.12.1 2025-09-18
 
