@@ -22,7 +22,6 @@
     "json-refs": "^3.0.15",
     "kind-of": "^6.0.3",
     "lodash": "^4.17.21",
-    "minimist": "^1.2.8",
     "set-value": "^4.1.0",
     "source-map": "^0.7.4",
     "tslib": "^2.6.3",
