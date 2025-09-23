@@ -2,6 +2,8 @@
 
 ## 0.12.2 2025-09-22
 
+- remove unused dependencies
+  - acorn
 - pin pre-release dependencies
   - `@ts-common/fs` to `0.2.0`
   - `@ts-common/iterator` to `0.3.6`
