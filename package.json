@@ -19,7 +19,6 @@
     "js-yaml": "^3.13.1",
     "json-pointer": "0.6.2",
     "json-refs": "^3.0.15",
-    "kind-of": "^6.0.3",
     "lodash": "^4.17.21",
     "minimist": "^1.2.8",
     "set-value": "^4.1.0",
