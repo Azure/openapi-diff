@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.12.2 2025-09-22
+
+- remove unused dependencies
+  - set-value
+
 ## 0.12.1 2025-09-18
 
 - removed unused dependency 'glob'
