@@ -5,6 +5,7 @@
 - remove unused dependencies
   - acorn
   - kind-of
+  - minimist
 - pin pre-release dependencies
   - `@ts-common/fs` to `0.2.0`
   - `@ts-common/iterator` to `0.3.6`

@@ -20,7 +20,6 @@
     "json-pointer": "0.6.2",
     "json-refs": "^3.0.15",
     "lodash": "^4.17.21",
-    "minimist": "^1.2.8",
     "set-value": "^4.1.0",
     "source-map": "0.7.6",
     "tslib": "^2.6.3",
