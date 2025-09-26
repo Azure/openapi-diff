@@ -3,6 +3,7 @@
 ## 0.12.2 2025-09-22
 
 - bump dependency `js-yaml` from `^3.13.0` to `^4.1.0`
+- bump dependency `yargs` from `^13.2.2` to `^15.4.1`
 - remove unused dependencies
   - acorn
   - kind-of
