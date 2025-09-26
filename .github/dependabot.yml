@@ -5,6 +5,8 @@ updates:
     schedule:
       interval: "daily"
     ignore:
+      # dependencies
+
       # Pinned to the most popular versions
       - dependency-name: "@ts-common/fs"
       - dependency-name: "@ts-common/iterator"
@@ -12,3 +14,8 @@ updates:
       - dependency-name: "@ts-common/json-parser"
       - dependency-name: "@ts-common/source-map"
       - dependency-name: "@ts-common/string-map"
+
+      # devDependencies
+
+      # Locked to "^20.0.0" to align with our minimum node version in package.json/engines
+      - dependency-name: "@types/node"
