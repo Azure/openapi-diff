@@ -17,3 +17,8 @@ updates:
 
       # locked to ^15.4.1, since newer majors include breaking changes that may impact us
       - dependency-name: "yargs"
+
+      # devDependencies
+
+      # Locked to "^20.0.0" to align with our minimum node version in package.json/engines
+      - dependency-name: "@types/node"
