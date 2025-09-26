@@ -48,7 +48,9 @@
     "url": "https://github.com/Azure/openapi-diff/issues"
   },
   "overrides": {
-    "glob": "^9.3.5"
+    "test-exclude": {
+      "glob": "^9.3.5"
+    }
   },
   "engines": {
     "node": ">=20.0.0"
