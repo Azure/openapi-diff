@@ -2,12 +2,6 @@
 
 ## 0.12.2 2025-09-22
 
-- remove unused dependencies
-  - acorn
-  - kind-of
-  - minimist
-  - set-value
-  - yargs-parser
 - pin pre-release dependencies
   - `@ts-common/fs` to `0.2.0`
   - `@ts-common/iterator` to `0.3.6`
@@ -17,6 +11,12 @@
   - `@ts-common/string-map` to `0.3.0`
   - `json-pointer` to `0.6.2`
   - `source-map` to `0.7.6`
+- remove unused dependencies
+  - `acorn`
+  - `kind-of`
+  - `minimist`
+  - `set-value`
+  - `yargs-parser`
 
 ## 0.12.1 2025-09-18
 
