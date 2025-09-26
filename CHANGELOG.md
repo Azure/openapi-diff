@@ -3,6 +3,7 @@
 ## 0.12.2 2025-09-22
 
 - bump dependency `js-yaml` from `^3.13.0` to `^4.1.0`
+- bump dependency `yargs` from `^13.2.2` to `^15.4.1`
 - pin pre-release dependencies
   - `@ts-common/fs` to `0.2.0`
   - `@ts-common/iterator` to `0.3.6`
