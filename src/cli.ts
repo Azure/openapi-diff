@@ -7,8 +7,11 @@ import yargs from "yargs"
 import { log } from "./lib/util/logging"
 
 const defaultLogDir = log.directory
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const packageVersion = require("../package.json").version
 
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 yargs
   .version(packageVersion)
   .commandDir("lib/commands")
@@ -29,6 +32,7 @@ yargs
   .help().argv
 
 if (yargs.argv._.length === 0 && yargs.argv.h === false) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   yargs.coerce("help", function (arg) {
     return true
   }).argv

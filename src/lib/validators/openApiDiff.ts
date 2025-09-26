@@ -14,6 +14,7 @@ import * as util from "util"
 import { log } from "../util/logging"
 import { ResolveSwagger } from "../util/resolveSwagger"
 import { pathToJsonPointer } from "../util/utils"
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const _ = require("lodash")
 
 const execFile = util.promisify(child_process.execFile)
