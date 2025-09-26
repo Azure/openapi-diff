@@ -1,6 +1,6 @@
 {
   "name": "@azure/oad",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "author": {
     "name": "Microsoft Corporation",
     "email": "azsdkteam@microsoft.com",
@@ -16,7 +16,7 @@
     "@ts-common/source-map": "0.5.0",
     "@ts-common/string-map": "0.3.0",
     "autorest": "^3.6.1",
-    "js-yaml": "^3.13.1",
+    "js-yaml": "^4.1.0",
     "json-pointer": "0.6.2",
     "json-refs": "^3.0.15",
     "lodash": "^4.17.21",
@@ -29,7 +29,7 @@
     "@eslint/js": "^9.4.0",
     "@types/eslint__js": "^8.42.3",
     "@types/jest": "^30.0.0",
-    "@types/js-yaml": "^3.12.1",
+    "@types/js-yaml": "^4.0.9",
     "@types/json-pointer": "^1.0.30",
     "@types/node": "^20.0.0",
     "@types/yargs": "^13.0.0",

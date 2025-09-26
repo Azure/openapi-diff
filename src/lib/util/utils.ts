@@ -86,7 +86,7 @@ export function parseContent(filePath: string, fileContent: string) {
   if (/.*\.json$/gi.test(filePath)) {
     result = JSON.parse(fileContent)
   } else if (/.*\.ya?ml$/gi.test(filePath)) {
-    result = YAML.safeLoad(fileContent)
+    result = YAML.load(fileContent)
   } else {
     const msg =
       `We currently support "*.json" and "*.yaml | *.yml" file formats for validating swaggers.\n` +
