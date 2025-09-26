@@ -50,7 +50,7 @@
   "overrides": {
     "test-exclude": {
       "glob": "^9.3.5"
-    }
+    },
     "superagent": "^10.2.3"
   },
   "engines": {
