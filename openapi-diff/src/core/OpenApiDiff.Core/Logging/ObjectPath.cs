@@ -76,9 +76,23 @@ namespace OpenApiDiff.Core.Logging
             {
                 return null;
             }
+            
             var @ref = o["$ref"];
-            var unrefed = @ref != null ? ParseRef(@ref.Value<string>()).CompletePath(o.Root).Last().token : o;
-            return unrefed[name];
+            
+            // Handle $ref resolution based on its type
+            if (@ref != null && @ref.Type == JTokenType.String)
+            {
+                // Case 1: $ref is a string reference (e.g., "#/definitions/FieldType")
+                // Resolve the reference by parsing the path and following it to the target
+                var unrefed = ParseRef(@ref.Value<string>()).CompletePath(o.Root).Last().token;
+                return unrefed[name];
+            }
+            else
+            {
+                // Case 2: $ref is not a string (e.g., a JSON object defining a schema)
+                // or $ref doesn't exist - use the current object directly
+                return o[name];
+            }
         }
 
         private static IEnumerable<(JToken token, string name)> CompletePath(IEnumerable<Func<JToken, string>> path, JToken token)
