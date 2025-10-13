@@ -2,7 +2,7 @@
 
 # 0.12.3 2025-10-13
 
-- Only treat "$ref" as reference if value is string
+- Fix crash in logging when property named "$ref"
 
 ## 0.12.2 2025-09-22
 
