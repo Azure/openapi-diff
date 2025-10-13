@@ -166,7 +166,7 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
-        /// Verifies that if you change the type of a schema property named "$ref", it's caught.
+        /// Verifies that if you change the type of a schema property named "$ref" (unusual but valid), it's caught.
         /// </summary>
         [Fact]
         public void PropertyNamedRefTypeChanged()
