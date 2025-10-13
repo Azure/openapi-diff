@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.12.3 2025-10-13
+
+- Fix crash in logging when property named "$ref"
+
 ## 0.12.2 2025-09-22
 
 - bump dependency `js-yaml` from `^3.13.0` to `^4.1.0`
