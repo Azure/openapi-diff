@@ -166,6 +166,21 @@ namespace AutoRest.Swagger.Tests
         }
 
         /// <summary>
+        /// Verifies that if you change the type of a schema property named "$ref", it's caught.
+        /// </summary>
+        [Fact]
+        public void PropertyNamedRefTypeChanged()
+        {
+            var messages = CompareSwagger("type_changed_02.json").ToArray();
+            var missing = messages.Where(m => m.Id == ComparisonMessages.TypeChanged.Id);
+            Assert.NotEmpty(missing);
+            var error = missing.Where(err => err.NewJsonRef.StartsWith("new/type_changed_02.json#/definitions/")).FirstOrDefault();
+            Assert.NotNull(error);
+            Assert.Equal(Category.Error, error.Severity);
+            Assert.Equal("new/type_changed_02.json#/definitions/Database/properties/$ref", error.NewJsonRef);
+        }
+
+        /// <summary>
         /// Verifies that if you change the default value of a schema, it's caught.
         /// </summary>
         [Fact]
