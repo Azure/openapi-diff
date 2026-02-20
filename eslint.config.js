@@ -47,7 +47,7 @@ module.exports = tseslint.config(
       "no-useless-escape": "off",
       "prefer-const": "off",
       // New v10 recommended rule requiring "{ cause }" on re-thrown errors.  Disabled because
-      // the project targets ES2017, and TypeScript lacks the ErrorOptions type at that target level.
+      // this project targets ES2017, and TypeScript lacks the ErrorOptions type at that target level.
       "preserve-caught-error": "off"
     }
   }
