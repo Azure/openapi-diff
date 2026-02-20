@@ -45,7 +45,8 @@ module.exports = tseslint.config(
       "@typescript-eslint/restrict-template-expressions": "off",
       "no-constant-condition": "off",
       "no-useless-escape": "off",
-      "prefer-const": "off"
+      "prefer-const": "off",
+      "preserve-caught-error": "off"
     }
   }
 )

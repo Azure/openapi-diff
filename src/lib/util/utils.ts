@@ -82,18 +82,16 @@ export async function parseJson(specPath: string) {
  * @returns {object} jsonDoc - Parsed document in JSON format.
  */
 export function parseContent(filePath: string, fileContent: string) {
-  let result = null
   if (/.*\.json$/gi.test(filePath)) {
-    result = JSON.parse(fileContent)
+    return JSON.parse(fileContent)
   } else if (/.*\.ya?ml$/gi.test(filePath)) {
-    result = YAML.load(fileContent)
+    return YAML.load(fileContent)
   } else {
     const msg =
       `We currently support "*.json" and "*.yaml | *.yml" file formats for validating swaggers.\n` +
       `The current file extension in "${filePath}" is not supported.`
     throw new Error(msg)
   }
-  return result
 }
 
 /*
