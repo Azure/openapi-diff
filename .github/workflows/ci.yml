@@ -13,15 +13,17 @@ jobs:
         include:
           - os: ubuntu-latest
             target-folder: drop-linux
+            node-version: 22.x
           - os: windows-latest
             target-folder: drop
+            node-version: 18.x
 
     steps:
       - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v6
         with:
-          node-version: "20"
+          node-version: ${{ matrix.node-version }}
 
       - uses: actions/setup-dotnet@v5
         with:
@@ -35,6 +37,10 @@ jobs:
 
       - name: prettier
         run: npm run prettier
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "6"
 
       - name: test
         run: npm test
