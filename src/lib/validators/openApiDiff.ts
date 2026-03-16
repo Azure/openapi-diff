@@ -244,20 +244,14 @@ export class OpenApiDiff {
 
     log.debug(`Executing: "${autoRestFile} ${args.join(" ")}"`)
 
-    // autorest 3.8.0 emits deprecation message to stderr with exit code 0
-    let stderr: string
-    try {
-      const result = await execFile(autoRestFile, args, {
-        encoding: "utf8",
-        maxBuffer: 1024 * 1024 * 64,
-        env: { ...process.env, NODE_OPTIONS: "--max-old-space-size=8192" }
-      })
-      stderr = result.stderr
-    } catch (e) {
-      throw new Error(util.inspect(e))
-    }
+    const { stderr } = await execFile(autoRestFile, args, {
+      encoding: "utf8",
+      maxBuffer: 1024 * 1024 * 64,
+      env: { ...process.env, NODE_OPTIONS: "--max-old-space-size=8192" }
+    })
     if (stderr) {
-      log.error(`AutoRest completed with warnings on stderr: ${stderr}`)
+      // autorest 3.8.0 emits deprecation message to stderr with exit code 0
+      log.debug(`AutoRest completed with warnings on stderr: ${stderr}`)
     }
 
     const buffer = await asyncFs.readFile(outputMapFilePath)
