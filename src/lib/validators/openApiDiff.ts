@@ -250,7 +250,8 @@ export class OpenApiDiff {
       env: { ...process.env, NODE_OPTIONS: "--max-old-space-size=8192" }
     })
     if (stderr) {
-      throw new Error(stderr)
+      // autorest 3.8.0 emits deprecation message to stderr with exit code 0
+      log.debug(`AutoRest completed with warnings on stderr: ${stderr}`)
     }
 
     const buffer = await asyncFs.readFile(outputMapFilePath)
