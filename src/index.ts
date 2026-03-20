@@ -9,5 +9,4 @@ export { compare, compareTags } from "./lib/validate"
 export { OpenApiDiff, Messages, Message, ChangeProperties } from "./lib/validators/openApiDiff"
 
 // Constants
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-export const Constants = require("./lib/util/constants")
+export { Constants } from "./lib/util/constants"

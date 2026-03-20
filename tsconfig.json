@@ -22,6 +22,7 @@
 
     /* Strict Type-Checking Options */
     "strict": true,                           /* Enable all strict type-checking options. */
+    "skipLibCheck": true,                     /* Skip type checking all .d.ts files. */
     // "noImplicitAny": true,                 /* Raise error on expressions and declarations with an implied 'any' type. */
     // "strictNullChecks": true,              /* Enable strict null checks. */
     // "strictFunctionTypes": true,           /* Enable strict checking of function types. */
@@ -42,7 +43,7 @@
     // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
     // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
     // "typeRoots": [],                       /* List of folders to include type definitions from. */
-    // "types": [],                           /* Type declaration files to be included in compilation. */
+    "types": ["vitest/globals"],              /* Type declaration files to be included in compilation. */
     // "allowSyntheticDefaultImports": true,  /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
     "esModuleInterop": true,                   /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
     // "preserveSymlinks": true,              /* Do not resolve the real path of symlinks. */
@@ -56,5 +57,6 @@
     /* Experimental Options */
     // "experimentalDecorators": true,        /* Enables experimental support for ES7 decorators. */
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
-  }
+  },
+  "exclude": ["vitest.config.ts"]
 }
