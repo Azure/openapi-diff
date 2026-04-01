@@ -30,11 +30,33 @@ jobs:
       - name: npm ci
         run: npm ci
 
+      - name: test
+        run: npm test
+
       - name: lint
         run: npm run lint
 
       - name: prettier
         run: npm run prettier
 
-      - name: test
-        run: npm test
+      - if: runner.os == 'Linux'
+        name: Pack
+        run: npm pack
+
+      - if: runner.os == 'Linux'
+        name: Upload tarball
+        uses: actions/upload-artifact@v7
+        with:
+          path: "azure-oad-*.tgz"
+          archive: false
+
+      # Content copied from https://raw.githubusercontent.com/rhysd/actionlint/2ab3a12c7848f6c15faca9a92612ef4261d0e370/.github/actionlint-matcher.json
+      - if: runner.os == 'Linux'
+        name: Add ActionLint Problem Matcher
+        run: echo "::add-matcher::.github/matchers/actionlint.json"
+
+      - if: runner.os == 'Linux'
+        name: Lint workflows
+        uses: docker://rhysd/actionlint:1.7.11
+        with:
+          args: -color -verbose
