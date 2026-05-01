@@ -30,7 +30,7 @@
     "@types/jest": "^30.0.0",
     "@types/js-yaml": "^4.0.9",
     "@types/json-pointer": "^1.0.30",
-    "@types/node": "^22.0.0",
+    "@types/node": "^22.19.17",
     "@types/yargs": "^15.0.19",
     "eslint": "^10.0.0",
     "globals": "^17.3.0",
