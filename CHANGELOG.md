@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.12.5
+
+- bump minimum Node.js version from 20 to 22
+
 ## 0.12.4 2026-03-13
 
 - Only throw error on AutoRest stderr when exit code is non-zero; log warnings otherwise

@@ -27,7 +27,7 @@ Table of contents generated with yzhang.markdown-all-in-one</a></i></small>
 
 To execute any instructions in this file, first ensure you fulfill all the following prerequisites:
 
-1. Install [Node.js](https://nodejs.org/), version 14.x or higher.
+1. Install [Node.js](https://nodejs.org/), version 22.x or higher.
 1. Install [.NET runtime and SDK](https://aka.ms/dotnet-download), version 6 or higher.
 1. Install [.NET CLI tools](https://github.com/dotnet/cli/releases) version 2.0.0 or higher.
 1. Execute all commands in this file from your [`openapi-diff`] git repo local clone root dir.
