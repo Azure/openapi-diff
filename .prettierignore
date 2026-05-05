@@ -3,3 +3,4 @@
 *.jsonc
 .prettierrc
 azure-pipelines.yml
+coverage/

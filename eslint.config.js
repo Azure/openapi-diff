@@ -27,7 +27,7 @@ module.exports = tseslint.config(
   },
   {
     // Based on https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores
-    ignores: ["**/dist", "eslint.config.js"]
+    ignores: ["**/dist", "eslint.config.js", "coverage/**"]
   },
   {
     rules: {
