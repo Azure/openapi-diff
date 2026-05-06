@@ -4,11 +4,11 @@ import * as jsonPointer from "json-pointer"
 
 import { toArray } from "@ts-common/iterator"
 import { cloneDeep, Data, FilePosition, getFilePosition, getInfo, getPath, ObjectInfo } from "@ts-common/source-map"
-import * as sourceMap from "source-map"
 import * as sm from "@ts-common/string-map"
 import equal from "fast-deep-equal"
 import { readFileSync, writeFileSync } from "fs"
 import * as path from "path"
+import * as sourceMap from "source-map"
 import { pathToJsonPointer } from "./utils"
 
 /*
@@ -250,11 +250,10 @@ export class ResolveSwagger {
           if (sm.keys(schemaList).some(k => k === key)) {
             if (!this.isEqual(allOfSchema.properties[key], schemaList[key]) && !equal(allOfSchema.properties[key], schemaList[key])) {
               const allOfProp = allOfSchema.properties[key]
-              const schemaListProp = schemaList[key]
-
               const allOfPath = getPath(getInfo(allOfProp) as ObjectInfo)
               const allOfOriginalPosition = this.map.originalPositionFor(getFilePosition(allOfProp) as FilePosition)
 
+              const schemaListProp = schemaList[key]
               const schemaListPath = getPath(getInfo(schemaListProp) as ObjectInfo)
               const schemaListOriginalPosition = this.map.originalPositionFor(getFilePosition(schemaListProp) as FilePosition)
 
