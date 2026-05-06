@@ -1,0 +1,37 @@
+﻿{
+  "swagger": "2.0",
+  "info": {
+    "title": "structural-equality",
+    "version": "1.0"
+  },
+  "paths": {},
+  "definitions": {
+    "Foo": {
+      "type": "object",
+      "properties": {
+        "bar": {
+          "$ref": "#/definitions/MyObject"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/Foo2"
+        }
+      ]
+    },
+    "Foo2": {
+      "type": "object",
+      "properties": {
+        "bar": {
+          "$ref": "#/definitions/MyObject"
+        }
+      }
+    },
+    "MyObject": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}

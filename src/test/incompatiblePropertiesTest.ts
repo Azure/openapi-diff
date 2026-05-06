@@ -3,19 +3,9 @@ import * as path from "path"
 import { OpenApiDiff } from ".."
 import { fileUrl } from "./fileUrl"
 
-test("should-allow-different-names", async () => {
+test.each(["different-names", "duplicate-names", "reference-equals", "structural-equals"])("should pass for %s", async testName => {
   const diff = new OpenApiDiff({})
-  const file = `src/test/specs/incompatible-properties/different-names.json`
-  const filePath = fileUrl(path.resolve(file))
-
-  // expected to pass
-  await diff.compare(file, file)
-})
-
-test("should-allow-duplicate-names", async () => {
-  const diff = new OpenApiDiff({})
-  const file = `src/test/specs/incompatible-properties/duplicate-names.json`
-  const filePath = fileUrl(path.resolve(file))
+  const file = `src/test/specs/incompatible-properties/${testName}.json`
 
   // expected to pass
   await diff.compare(file, file)
