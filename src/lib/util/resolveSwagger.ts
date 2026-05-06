@@ -248,10 +248,10 @@ export class ResolveSwagger {
       if (allOfSchema.properties) {
         sm.keys(allOfSchema.properties).forEach(key => {
           if (sm.keys(schemaList).some(k => k === key)) {
-            const allOfProp = allOfSchema.properties[key]
-            const schemaListProp = schemaList[key]
+            if (!this.isEqual(allOfSchema.properties[key], schemaList[key]) && !equal(allOfSchema.properties[key], schemaList[key])) {
+              const allOfProp = allOfSchema.properties[key]
+              const schemaListProp = schemaList[key]
 
-            if (!this.isEqual(allOfProp, schemaListProp) && !equal(allOfProp, schemaListProp)) {
               const allOfPath = getPath(getInfo(allOfProp) as ObjectInfo)
               const allOfOriginalPosition = this.map.originalPositionFor(getFilePosition(allOfProp) as FilePosition)
 
