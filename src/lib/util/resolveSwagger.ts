@@ -4,11 +4,11 @@ import * as jsonPointer from "json-pointer"
 
 import { toArray } from "@ts-common/iterator"
 import { cloneDeep, Data, FilePosition, getFilePosition, getInfo, getPath, ObjectInfo } from "@ts-common/source-map"
+import * as sourceMap from "source-map"
 import * as sm from "@ts-common/string-map"
 import equal from "fast-deep-equal"
 import { readFileSync, writeFileSync } from "fs"
 import * as path from "path"
-import * as sourceMap from "source-map"
 import { pathToJsonPointer } from "./utils"
 
 /*
