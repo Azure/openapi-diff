@@ -8,12 +8,8 @@ steps:
     inputs:
       version: 6.x
   - template: /eng/common/pipelines/templates/steps/create-authenticated-npmrc.yml
-    parameters:
-      npmrcPath: $(Agent.TempDirectory)/test/.npmrc
   - script: npm ci
     displayName: npm ci
-    env:
-      npm_config_userconfig: "$(Agent.TempDirectory)/test/.npmrc"
   - script: npm run lint
     displayName: lint
   - script: npm run prettier
