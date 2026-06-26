@@ -7,6 +7,7 @@ steps:
   - task: UseDotNet@2
     inputs:
       version: 6.x
+  - template: /eng/common/pipelines/templates/steps/create-authenticated-npmrc.yml
   - script: npm ci
     displayName: npm ci
   - script: npm run lint
