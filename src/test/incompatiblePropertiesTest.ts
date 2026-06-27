@@ -3,6 +3,14 @@ import * as path from "path"
 import { OpenApiDiff } from ".."
 import { fileUrl } from "./fileUrl"
 
+test.each(["different-names", "duplicate-names", "reference-equals", "structural-equals"])("should pass for %s", async testName => {
+  const diff = new OpenApiDiff({})
+  const file = `src/test/specs/incompatible-properties/${testName}.json`
+
+  // expected to pass
+  await diff.compare(file, file)
+})
+
 // This test is part of regression test suite for https://github.com/Azure/azure-sdk-tools/issues/5981
 // Given a property with given type and name
 // When another property with the same name but an incompatible type is referenced
