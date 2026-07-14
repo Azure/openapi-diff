@@ -1,0 +1,18 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "common-types",
+    "version": "1.0"
+  },
+  "paths": {},
+  "definitions": {
+    "Foo": {
+      "type": "object",
+      "properties": {
+        "p1": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
