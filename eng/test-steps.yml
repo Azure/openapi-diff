@@ -4,6 +4,7 @@ parameters:
     default: "drop"
 
 steps:
+  - task: NuGetAuthenticate@1
   - task: UseDotNet@2
     inputs:
       version: 6.x
