@@ -16,7 +16,7 @@
     "@ts-common/source-map": "0.5.0",
     "@ts-common/string-map": "0.3.0",
     "autorest": "^3.8.0",
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^5.2.1",
     "json-pointer": "0.6.2",
     "json-refs": "^3.0.15",
     "lodash": "^4.17.21",
