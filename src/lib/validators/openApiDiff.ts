@@ -19,6 +19,11 @@ const _ = require("lodash")
 
 const execFile = util.promisify(child_process.execFile)
 
+const getAutoRestNpmrcPath = (): string | undefined => {
+  const candidates = [process.env.npm_config_userconfig, process.env.NPM_CONFIG_USERCONFIG]
+  return candidates.find(value => typeof value === "string" && value.trim().length > 0)
+}
+
 export type Options = {
   readonly consoleLogLevel?: unknown
   readonly logFilepath?: unknown
@@ -241,13 +246,23 @@ export class OpenApiDiff {
     ]
 
     const args = [...autoRestArgs, ...swaggerArgs, ...commonArgs]
+    const autoRestNpmrcPath = getAutoRestNpmrcPath()
+    const env = {
+      ...process.env,
+      NODE_OPTIONS: "--max-old-space-size=8192",
+      ...(autoRestNpmrcPath ? { npm_config_userconfig: autoRestNpmrcPath } : {})
+    }
+
+    if (autoRestNpmrcPath) {
+      log.debug(`Using npm user config for AutoRest: ${autoRestNpmrcPath}`)
+    }
 
     log.debug(`Executing: "${autoRestFile} ${args.join(" ")}"`)
 
     const { stderr } = await execFile(autoRestFile, args, {
       encoding: "utf8",
       maxBuffer: 1024 * 1024 * 64,
-      env: { ...process.env, NODE_OPTIONS: "--max-old-space-size=8192" }
+      env
     })
     if (stderr) {
       // autorest 3.8.0 emits deprecation message to stderr with exit code 0
