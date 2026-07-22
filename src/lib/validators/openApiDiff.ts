@@ -24,6 +24,11 @@ const getAutoRestNpmrcPath = (): string | undefined => {
   return candidates.find(value => typeof value === "string" && value.trim().length > 0)
 }
 
+const getAutoRestCoreVersion = (): string => {
+  const configuredVersion = process.env.OAD_AUTOREST_CORE_VERSION?.trim()
+  return configuredVersion?.length ? configuredVersion : "3.10.9"
+}
+
 export type Options = {
   readonly consoleLogLevel?: unknown
   readonly logFilepath?: unknown
@@ -237,8 +242,10 @@ export class OpenApiDiff {
 
     const swaggerArgs = tagName ? [swaggerPath, `--tag=${tagName}`] : [`--input-file=${swaggerPath}`]
 
+    const autoRestCoreVersion = getAutoRestCoreVersion()
+
     const commonArgs = [
-      "--v2",
+      `--version=${autoRestCoreVersion}`,
       "--output-artifact=swagger-document.json",
       "--output-artifact=swagger-document.map",
       `--output-file=${outputFileName}`,
@@ -250,12 +257,13 @@ export class OpenApiDiff {
     const env = {
       ...process.env,
       NODE_OPTIONS: "--max-old-space-size=8192",
-      ...(autoRestNpmrcPath ? { npm_config_userconfig: autoRestNpmrcPath } : {})
+      ...(autoRestNpmrcPath ? { npm_config_userconfig: autoRestNpmrcPath, NPM_CONFIG_USERCONFIG: autoRestNpmrcPath } : {})
     }
 
     if (autoRestNpmrcPath) {
       log.debug(`Using npm user config for AutoRest: ${autoRestNpmrcPath}`)
     }
+    log.debug(`Using AutoRest core version: ${autoRestCoreVersion}`)
 
     log.debug(`Executing: "${autoRestFile} ${args.join(" ")}"`)
 
