@@ -24,9 +24,24 @@ const getAutoRestNpmrcPath = (): string | undefined => {
   return candidates.find(value => typeof value === "string" && value.trim().length > 0)
 }
 
-const getAutoRestCoreVersion = (): string => {
-  const configuredVersion = process.env.OAD_AUTOREST_CORE_VERSION?.trim()
-  return configuredVersion?.length ? configuredVersion : "3.10.9"
+export const getAutoRestRegistry = (npmrcPath = getAutoRestNpmrcPath()): string | undefined => {
+  const configuredRegistry = [process.env.autorest_registry, process.env.npm_config_registry, process.env.NPM_CONFIG_REGISTRY].find(
+    value => typeof value === "string" && value.trim().length > 0
+  )
+  if (configuredRegistry) {
+    return configuredRegistry.trim()
+  }
+
+  if (!npmrcPath || !fs.existsSync(npmrcPath)) {
+    return undefined
+  }
+
+  const registryEntry = fs
+    .readFileSync(npmrcPath, "utf8")
+    .split(/\r?\n/u)
+    .map(line => line.match(/^\s*registry\s*=\s*["']?([^"'#;]+)["']?\s*(?:[#;].*)?$/iu)?.[1]?.trim())
+    .find(value => value)
+  return registryEntry
 }
 
 export type Options = {
@@ -242,10 +257,8 @@ export class OpenApiDiff {
 
     const swaggerArgs = tagName ? [swaggerPath, `--tag=${tagName}`] : [`--input-file=${swaggerPath}`]
 
-    const autoRestCoreVersion = getAutoRestCoreVersion()
-
     const commonArgs = [
-      `--version=${autoRestCoreVersion}`,
+      "--v2",
       "--output-artifact=swagger-document.json",
       "--output-artifact=swagger-document.map",
       `--output-file=${outputFileName}`,
@@ -254,16 +267,20 @@ export class OpenApiDiff {
 
     const args = [...autoRestArgs, ...swaggerArgs, ...commonArgs]
     const autoRestNpmrcPath = getAutoRestNpmrcPath()
+    const autoRestRegistry = getAutoRestRegistry(autoRestNpmrcPath)
     const env = {
       ...process.env,
       NODE_OPTIONS: "--max-old-space-size=8192",
-      ...(autoRestNpmrcPath ? { npm_config_userconfig: autoRestNpmrcPath, NPM_CONFIG_USERCONFIG: autoRestNpmrcPath } : {})
+      ...(autoRestNpmrcPath ? { npm_config_userconfig: autoRestNpmrcPath, NPM_CONFIG_USERCONFIG: autoRestNpmrcPath } : {}),
+      ...(autoRestRegistry ? { autorest_registry: autoRestRegistry } : {})
     }
 
     if (autoRestNpmrcPath) {
       log.debug(`Using npm user config for AutoRest: ${autoRestNpmrcPath}`)
     }
-    log.debug(`Using AutoRest core version: ${autoRestCoreVersion}`)
+    if (autoRestRegistry) {
+      log.debug(`Using npm registry for AutoRest core: ${autoRestRegistry}`)
+    }
 
     log.debug(`Executing: "${autoRestFile} ${args.join(" ")}"`)
 
