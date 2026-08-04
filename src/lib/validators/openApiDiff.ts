@@ -19,6 +19,31 @@ const _ = require("lodash")
 
 const execFile = util.promisify(child_process.execFile)
 
+const getAutoRestNpmrcPath = (): string | undefined => {
+  const candidates = [process.env.npm_config_userconfig, process.env.NPM_CONFIG_USERCONFIG]
+  return candidates.find(value => typeof value === "string" && value.trim().length > 0)
+}
+
+export const getAutoRestRegistry = (npmrcPath = getAutoRestNpmrcPath()): string | undefined => {
+  const configuredRegistry = [process.env.autorest_registry, process.env.npm_config_registry, process.env.NPM_CONFIG_REGISTRY].find(
+    value => typeof value === "string" && value.trim().length > 0
+  )
+  if (configuredRegistry) {
+    return configuredRegistry.trim()
+  }
+
+  if (!npmrcPath || !fs.existsSync(npmrcPath)) {
+    return undefined
+  }
+
+  const registryEntry = fs
+    .readFileSync(npmrcPath, "utf8")
+    .split(/\r?\n/u)
+    .map(line => line.match(/^\s*registry\s*=\s*["']?([^"'#;]+)["']?\s*(?:[#;].*)?$/iu)?.[1]?.trim())
+    .find(value => value)
+  return registryEntry
+}
+
 export type Options = {
   readonly consoleLogLevel?: unknown
   readonly logFilepath?: unknown
@@ -241,13 +266,28 @@ export class OpenApiDiff {
     ]
 
     const args = [...autoRestArgs, ...swaggerArgs, ...commonArgs]
+    const autoRestNpmrcPath = getAutoRestNpmrcPath()
+    const autoRestRegistry = getAutoRestRegistry(autoRestNpmrcPath)
+    const env = {
+      ...process.env,
+      NODE_OPTIONS: "--max-old-space-size=8192",
+      ...(autoRestNpmrcPath ? { npm_config_userconfig: autoRestNpmrcPath, NPM_CONFIG_USERCONFIG: autoRestNpmrcPath } : {}),
+      ...(autoRestRegistry ? { autorest_registry: autoRestRegistry } : {})
+    }
+
+    if (autoRestNpmrcPath) {
+      log.debug(`Using npm user config for AutoRest: ${autoRestNpmrcPath}`)
+    }
+    if (autoRestRegistry) {
+      log.debug(`Using npm registry for AutoRest core: ${autoRestRegistry}`)
+    }
 
     log.debug(`Executing: "${autoRestFile} ${args.join(" ")}"`)
 
     const { stderr } = await execFile(autoRestFile, args, {
       encoding: "utf8",
       maxBuffer: 1024 * 1024 * 64,
-      env: { ...process.env, NODE_OPTIONS: "--max-old-space-size=8192" }
+      env
     })
     if (stderr) {
       // autorest 3.8.0 emits deprecation message to stderr with exit code 0

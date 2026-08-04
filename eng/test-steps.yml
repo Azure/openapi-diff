@@ -8,17 +8,33 @@ steps:
   - task: UseDotNet@2
     inputs:
       version: 6.x
+
   - template: /eng/common/pipelines/templates/steps/create-authenticated-npmrc.yml
+    parameters:
+      npmrcPath: $(Agent.TempDirectory)/oad.npmrc
+
   - script: npm ci
     displayName: npm ci
+    env:
+      NPM_CONFIG_USERCONFIG: $(Agent.TempDirectory)/oad.npmrc
+
   - script: npm run lint
     displayName: lint
+
   - script: npm run prettier
     displayName: prettier
+
   - script: npm test
     displayName: test
+    env:
+      NPM_CONFIG_USERCONFIG: $(Agent.TempDirectory)/oad.npmrc
+      autorest_registry: https://packagefeedproxy.microsoft.io/npm/
+
   - script: npm pack
     displayName: pack
+    env:
+      NPM_CONFIG_USERCONFIG: $(Agent.TempDirectory)/oad.npmrc
+
   - task: CopyFiles@2
     displayName: "Copy Files to Staging"
     inputs:
