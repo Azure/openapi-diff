@@ -28,9 +28,12 @@ steps:
     displayName: test
     env:
       NPM_CONFIG_USERCONFIG: $(Agent.TempDirectory)/oad.npmrc
+      autorest_registry: https://packagefeedproxy.microsoft.io/npm/
 
   - script: npm pack
     displayName: pack
+    env:
+      NPM_CONFIG_USERCONFIG: $(Agent.TempDirectory)/oad.npmrc
 
   - task: CopyFiles@2
     displayName: "Copy Files to Staging"
