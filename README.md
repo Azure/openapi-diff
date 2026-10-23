@@ -1,6 +1,6 @@
 # ⚠️ Deprecation Notice
 
-**AutoRest and its ecosystem(including oad) was deprecated and will be retired on July 1, 2026.**
+**AutoRest and its ecosystem(including oad) is deprecated and was retired on July 1, 2026.**
 
 AutoRest is no longer under active development. No new features, language generators, or plugins will be added.
 
